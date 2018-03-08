@@ -1,6 +1,5 @@
 #!/bin/sh
 
-
 cwd=$(pwd)
 
 redir=$HOME/redir
@@ -9,7 +8,6 @@ redir=$HOME/redir
 
 rm -f $redir/env
 ln -s $cwd $redir/env
-
 
 
 #link to redir
