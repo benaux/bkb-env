@@ -15,6 +15,8 @@ use Data::Dumper;
 my $passx = qx(which pass);
 chomp $passx;
 
+my $pwstore = "$ENV{HOME}/.password-store";
+
 my $twikconf = $ENV{HOME} . "/.twik.conf";
 
 my ($Profile, $Login, $Printpw, $Index) = @ARGV;
@@ -115,6 +117,12 @@ sub get_password {
       my $pw;
       if($twikpw){
          ($pw) = qx(/usr/local/bin/twik -p "$Profile" -m "$twikpw" "$login");
+         if (-d "$pwstore/twik"){
+           #my $profiledir = "$pwstore/twik/$Profile";
+           #system("mkdir -p $profiledir") unless (-d $profiledir);
+           #system("echo $pw | gpg -a -e -r ben\@kbdir.com > $profiledir/$login");
+         }
+
       }else{
          ($pw) = qx(/usr/local/bin/twik -p "$Profile" "$login");
       }

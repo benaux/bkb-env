@@ -1,0 +1,56 @@
+#!/bin/bash
+
+profile='3U0a-bkb'
+
+parameter=$1
+
+export IFS="" #read will now preserve whitespace
+
+[ -n "$parameter" ] || {
+   read  "parameter: " parameter
+}
+
+typed_token=${parameter%.*}
+algo=${parameter##*.}
+token=${typed_token##*_}
+xprofile=${token##*:}
+
+
+[ "$xprofile" = "$profile" ] || { echo "Err: profile $xprofile in paramter $parameter invalid"; exit 1; }
+
+
+PW=$(pass show hashapass/"$profile")
+
+[ -n "$PW" ] || {
+   read -rsp "password: " PW
+}
+[ -n "$PW" ] || { echo "Err: no pw " ; exit 1; }
+
+copy () {
+  userhash="$1"
+
+  local OS=$(uname)
+  case "$OS" in
+    Darwin)
+      printf "$userhash" | pbcopy
+      ;;
+    *)
+      echo "Err: not impl yet: " $OS
+      exit 1
+      ;;
+  esac
+
+}
+
+case "$algo" in 
+  hap)
+    echo $typed_token
+    userhash="$(echo -n "$typed_token" | openssl dgst -sha1 -binary -hmac "$PW" | openssl enc -base64 | cut -c 1-16)"
+    ;;
+  *)
+    echo "Err: todo algo '$algo'"
+    exit 1
+    ;;
+esac
+
+copy "$userhash"
