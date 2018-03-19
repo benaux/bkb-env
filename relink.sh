@@ -3,11 +3,19 @@
 cwd=$(pwd)
 
 redir=$HOME/redir
+auxdir=$HOME/aux
+
+exohome=$HOME/.exo
 
 [ -d "$redir" ] || mkdir "$redir" 
+[ -d "$auxdir" ] || mkdir "$auxdir" 
+[ -d "$exohome" ] || mkdir "$exohome" 
 
 rm -f $redir/env
 ln -s $cwd $redir/env
+
+rm -f $exohome/tools
+ln -s $cwd/exotools $exohome/tools
 
 
 #link to redir

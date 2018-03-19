@@ -2,57 +2,117 @@
 
 # create and fetch passwords
 #
+our $Pwdhash = "$ENV{HOME}/tools/sw/pwdhash.py";
+our $Twik = qx(which twik);
+chomp($Twik);
+our $Twikconf = "$ENV{HOME}/.twik.conf";
+#our $Twik = "$ENV{HOME}/tools/moreutils/bin/twikpw";
+#"/usr/local/bin/twik";
+#
+my @u = split('', $ENV{USER});
+die "Err: invalid username " unless $u[0] eq $u[2];
+my $Recipient = $u[0] . $u[1] . $u[2] . '@' . $u[1] . $u[2] . 'dir.com';
 
-our $User = $ARGV[0];
+our $Userprofile = $ARGV[0];
 our $Token = $ARGV[1];
 
-our $Getpw_x = "$ENV{HOME}/tools/moreutils/bin/twikpw";
-our $Getpw_x = "/usr/local/bin/twik";
-#$ENV{HOME}/tools/moreutils/bin/twikpw";
-die "Err: not getpw under $Getpw_x" unless -f $Getpw_x;
+our ($Token, $Userprofile) = (@ARGV == 1)
+   ? $ARGV[0]
+   : reverse(@ARGV);
 
-chomp $User; chomp $Token;
-die "usage: pw user token" unless $User;
-die "usage: pw user token" unless $Token;
+chomp $Userprofile; chomp $Token;
+die "usage: pw user token | token" unless $ARGV[0];
 
 
-my $pass = $Token;
-$pass =~ s/[^\w]/_/g;
-
-my $userpass = "$User/$pass";
-
-my $path =  "$ENV{HOME}/.password-store/twik/$userpass";
-
-
-if (-f "$path.gpg"){
-   print "User/Token: $User/$Token, \n";
-   system qq(pass  --clip 'twik/$userpass')
-}else{
-   print "User/Token: $User/$Token, (userpass: $userpass) \n";
-   my ($master) = qx(pass show twik/$User);
-   chomp($master);
-   #die qq($Getpw_x -m '$master' -p '$User' '$Token');
-   system qq($Getpw_x -m '$master' -p '$User' '$Token' | pbcopy);
-   print "\n!! The pw is in the clipboard\n\n"; 
-   system qq(pass insert 'twik/$userpass');
-   system qq(echo '$Token' > $path.token);
+sub get_gpg_pass {
+  my ($pass_path, $pass_dir, $pass_token) = @_;
+  if (-f "$pass_path.gpg"){
+     print "Userprofile/Token: $pass_token \n";
+     system qq(pass --clip '$pass_dir');
+     return 1;
+  }else{
+    return 0
+  }
+}
+sub set_gpg_pass {
+  my ($pass_path, $pass_dir, $token,$pw) = @_;
+  print qq(echo "..." | gpg -e -r $Recipient  > $pass_path.gpg);
+  print ("\n");
+  system qq(echo "$pw" | gpg -e -r $Recipient  > $pass_path.gpg);
+  #system qq(pass insert '$pass_dir');
+  system qq(echo '$token' > $pass_path.token);
+  system qq(pass --clip '$pass_dir');
 }
 
 
-__END__
-user=$1
-token=$2
+my $Clean_token = $Token;
+my ($pass_dir, $pass_path);
+if($Userprofile) { # Twik
+   $Clean_token =~ s/[^\w]/_/g;
+   die "Err: not twik executable under $Twik" unless -f $Twik;
+   $pass_dir = "twik/$Userprofile/$clean_token";
+   $pass_path =  "$ENV{HOME}/.password-store/$pass_dir";
 
-[ -n "$token" ] || { echo "usage(pw): user token"; exit 1; }
+   my ($pass_token) = "$Userprofile/$Token";
+   my ($pw) = get_gpg_pass($pass_path, $pass_dir, $pass_token) ;
 
-pws=$HOME/.password-store
+   if($pw){
+     print "Msg: Password is in clipboard\n";
+   }else{
+     die "Err: no twik.conf " unless (-f $Twikconf);
+     open (my $fh, '<', $Twikconf) || die "Err: no open $Twikconf";
+     my $got_profile;
+     while(<$fh>){
+       $got_profile = 1 if($_ =~ /\[$Userprofile\]/);
+     }
+     die "Err: twik profile '$Userprofile' not exist " unless $got_profile;
 
-echo "try to fech $pws/$user/$token"
+     print "Twik: get pw of Userprofile $Userprofile \n";
+     my ($master) = qx(pass show twik/$Userprofile);
+     chomp($master);
+     my $pw = ($master)
+         ? qx($Twik -m '$master' -p '$Userprofile' '$Token')
+         : qx($Twik -p '$Userprofile' '$Token');
 
-if [ -f "$pws/$user/$token" ] ; then
-   echo "Fetch pw ($user $token) from password-store"
-   pass "$user/$token"
-else
-   echo "Create pw ($user $token) from twik"
-   $HOME/tools/moreutils/bin/getpw "$user" "$token"
-fi
+     chomp($pw);
+     #print "\n!! The pw is in the clipboard\n\n"; 
+     set_gpg_pass($pass_path, $pass_dir, $Token,$pw) ;
+  }
+}else{
+  my ($algo) = $Token =~ /\.([^.]+)$/;
+  my ($topic) = $Token =~ /^([^.]+)\:/;
+  my ($tokenname) = $Token =~ /^(.+)\.[^.]+$/; 
+  my ($user_profile) = $Token =~ /_*(\d+u\d+[a-z]-[a-z]+)\.[^.]+$/;
+  #my ($passtabv) = $Token =~ /_([^.]+)\:/;
+  chomp($algo);
+  chomp($topic);
+  chomp($user_profile);
+  die "Err: no algo in $Token" unless $algo;
+  die "Err: no topic in $Token" unless $topic;
+  die "Err: no topic in $Token" unless $user_profile;
+
+   $Clean_token =~ s/[^\w]/_/g;
+
+  if($algo eq 'pwd'){
+    die "Err: not pwdhash executable under $Pwdhash" unless -f $Pwdhash;
+    $pass_dir = "pwdhash/$user_profile/$Clean_token";
+    $pass_path =  "$ENV{HOME}/.password-store/$pass_dir";
+    my $pass_pwdir =  "$ENV{HOME}/.password-store/pwdhash/$user_profile";
+    system("mkdir -p $pass_pwdir") unless (-d $pass_pwdir);
+
+    my ($pass_token) = "$user_profile/$Token";
+    my ($pw) = get_gpg_pass($pass_path, $pass_dir, $pass_token) ;
+
+   if($pw){
+     print "Msg: Password is in clipboard\n";
+  }else{
+     my ($master) = qx(pass show pwdhash/$user_profile);
+     chomp $master;
+     #print     qq($Pwdhash -p "$master" "$tokenname");
+     my $pw = qx($Pwdhash -p "$master" "$tokenname");
+     set_gpg_pass($pass_path, $pass_dir, $Token,$pw) ;
+  }
+}
+
+}
+

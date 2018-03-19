@@ -1,3 +1,4 @@
+alias twikpw-ben 'twikpw ben_2P0a.pwc-ii'
 alias chrome "/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"
 alias rm  "rm -f"
 alias passtab-bkb_1U0a 'passtab-profile bkb_1U0a'

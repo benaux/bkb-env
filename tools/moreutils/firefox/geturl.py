@@ -1,4 +1,5 @@
-#
+#!/usr/local/bin/python3
+
 import os, sys, json, lz4.block
 file = "/Users/bkb/Library/Application Support/Firefox/Profiles/2m452fsc.default//sessionstore-backups/recovery.jsonlz4"
 f = open(file, "rb")
