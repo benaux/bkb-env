@@ -1,5 +1,5 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =8
+let g:netrw_dirhist_cnt =9
 let g:netrw_dirhist_1='/Volumes/Card/userdir/usernodes_bkb_card01/auxdir.src-store_node.pub/mobiledev/ios/nuremoting'
 let g:netrw_dirhist_2='/Users/bkb/test'
 let g:netrw_dirhist_3='/rootdir/userdir_bkb_skyfall/user-inodes_bkb_skyfall/aux.sec-data_inode.lan/lansec/ssh-files'
@@ -8,3 +8,4 @@ let g:netrw_dirhist_5='/rootdir/userdir_bkb_skyfall/user-inodes_bkb_skyfall/aux-
 let g:netrw_dirhist_6='/rootdir/userdir_bkb_skyfall/user-inodes_bkb_skyfall/bkb.dev-data_inode.pub/bkbkb.repo/sxperl/My/Lisp/Comp'
 let g:netrw_dirhist_7='/rootdir/userdir_bkb_skyfall/user-inodes_bkb_skyfall/bkb.dev-data_inode.pub/bkbkb.repo/sxperl/My/Lisp/Interp'
 let g:netrw_dirhist_8='/rootdir/userdir_bkb_skyfall/user-inodes_bkb_skyfall/bkb.dev-data_inode.pub/bkbkb.repo/sxperl/My/Lisp/Comp'
+let g:netrw_dirhist_9='/driveroot/intdrive_bkb_skyfall/nodedir_bkb_skyfall/aux-bkb.user-data.net/bkb-priv.repo/installs'
