@@ -1,0 +1,11 @@
+# ubuntu
+
+localization, change language etc: 
+
+    sudo vim /etc/default/locale 
+
+## Sound
+
+encrease the sound volume:
+    amixer -D pulse sset Master 5%+
+

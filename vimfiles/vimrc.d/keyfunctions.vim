@@ -1,7 +1,9 @@
 
 function! Vif()
     silent !clear
-    silent execute  "make -f vi.mk vif  > /dev/null &" | redraw!
+"    execute 'silent make! -f vi.mk vif 2>&1 > /dev/null \&' | redraw!
+"   silent execute  'make -s -f vi.mk vif > /dev/null 2>&1 &' | execute ':redraw!'
+   silent execute  '!(make -s -f vi.mk vif &) > /dev/null' | execute ':redraw!'
 endfunction
 
 function! Vit()

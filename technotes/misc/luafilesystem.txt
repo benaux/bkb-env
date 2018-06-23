@@ -1,0 +1,95 @@
+From <http://keplerproject.github.com/luafilesystem/examples.html>:
+
+[ ![LuaFileSystem][1] ][2]
+
+   [1]: luafilesystem.png
+   [2]: http://www.keplerproject.org
+
+**LuaFileSystem**
+
+File System Library for the Lua Programming Language
+
+# LuaFileSystem
+
+  * [Home][3]
+
+   [3]: index.html
+
+    * [Overview][4]
+    * [Status][5]
+    * [Download][6]
+    * [History][7]
+    * [Credits][8]
+    * [Contact us][9]
+
+   [4]: index.html#overview
+   [5]: index.html#status
+   [6]: index.html#download
+   [7]: index.html#history
+   [8]: index.html#credits
+   [9]: index.html#contact
+
+  * [Manual][10]
+
+   [10]: manual.html
+
+    * [Introduction][11]
+    * [Building][12]
+    * [Installation][13]
+    * [Reference][14]
+
+   [11]: manual.html#introduction
+   [12]: manual.html#building
+   [13]: manual.html#installation
+   [14]: manual.html#reference
+
+  * **Examples**
+  * [Project][15]
+
+   [15]: http://luaforge.net/projects/luafilesystem/
+
+    * [Bug Tracker][16]
+    * [Git][17]
+
+   [16]: https://github.com/keplerproject/luafilesystem/issues
+   [17]: https://github.com/keplerproject/luafilesystem
+
+  * [License][18]
+
+   [18]: license.html
+
+## Examples
+
+### Directory iterator
+
+The following example iterates over a directory and recursively lists the attributes for each file inside it.
+    
+    
+    require"lfs"
+    
+    function attrdir (path)
+        for file in lfs.dir(path) do
+            if file ~= "." and file ~= ".." then
+                local f = path..'/'..file
+                print ("\t "..f)
+                local attr = lfs.attributes (f)
+                assert (type(attr) == "table")
+                if attr.mode == "directory" then
+                    attrdir (f)
+                else
+                    for name, value in pairs(attr) do
+                        print (name, value)
+                    end
+                end
+            end
+        end
+    end
+    
+    attrdir (".")
+    
+
+[Valid XHTML 1.0!][19]
+
+   [19]: http://validator.w3.org/check?uri=referer
+
+$Id: examples.html,v 1.8 2007/12/14 15:28:04 carregal Exp $

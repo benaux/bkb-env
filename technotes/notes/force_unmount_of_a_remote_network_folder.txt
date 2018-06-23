@@ -1,0 +1,14 @@
+It is no longer possible to connect to a nas folder
+
+
+Message:
+The operation can’t be completed because the original item for “..” can’t be found.
+
+Solution:
+Sudo amount -f /Volumes/network_folder
+
+
+If a dead folder is already there:
+
+Sudo rm -rf /Volumes/network_folder
+

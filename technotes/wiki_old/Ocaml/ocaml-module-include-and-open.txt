@@ -1,0 +1,882 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-01-23T00:00:00+01:00
+
+===== ocaml-module-include-and-open =====
+Created Monday 23 January 2017
+ 
+http://stackoverflow.com/questions/9997822/ocaml-module-include-and-open
+
+====== OCaml Module : include AND open? ======
+
+
+
+
+|
+****
+
+|I'm fairly new with OCaml Module and I haven't managed to use my own module without combining both an "include" and an "open". I've tried to put the signature in a separate .mli file, without success.
+
+Below I'm indicated a minimum (not) working example, that I'm trying to compile with
+
+'''
+ocamlc -o main Robot.ml main.ml
+'''
+
+What to I need to do to only have to use "open", or only "include", but not both of them ?
+
+
+----
+
+File "Robot.ml" :
+
+'''
+module type RobotSignature =
+sig 
+   val top: unit -> unit
+end
+
+module Robot =
+struct
+   let top () = 
+      begin
+         Printf.printf "top\n"
+      end
+   (* Should not be visible from the 'main' *)
+   let dummy () = 
+      begin
+         Printf.printf "dummy\n"
+      end
+end
+'''
+
+File "main.ml" (not working) :
+
+'''
+open Robot;;
+
+top();
+'''
+
+File "main.ml" (working) :
+
+'''
+include Robot;;
+open Robot;;
+
+top();
+'''
+
+
+
+
+|
+|
+
+
+
+
+
+
+|asked Apr 3 '12 at 16:50
+
+
+
+
+
+3,96812643
+
+
+|
+
+																																																																																																														  |
+|---------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|
+****
+
+|I'm fairly new with OCaml Module and I haven't managed to use my own module without combining both an "include" and an "open". I've tried to put the signature in a separate .mli file, without success.
+
+Below I'm indicated a minimum (not) working example, that I'm trying to compile with
+
+'''
+ocamlc -o main Robot.ml main.ml
+'''
+
+What to I need to do to only have to use "open", or only "include", but not both of them ?
+
+
+----
+
+File "Robot.ml" :
+
+'''
+module type RobotSignature =
+sig 
+   val top: unit -> unit
+end
+
+module Robot =
+struct
+   let top () = 
+      begin
+         Printf.printf "top\n"
+      end
+   (* Should not be visible from the 'main' *)
+   let dummy () = 
+      begin
+         Printf.printf "dummy\n"
+      end
+end
+'''
+
+File "main.ml" (not working) :
+
+'''
+open Robot;;
+
+top();
+'''
+
+File "main.ml" (working) :
+
+'''
+include Robot;;
+open Robot;;
+
+top();
+'''
+
+
+
+
+|
+|
+
+
+
+
+
+
+|asked Apr 3 '12 at 16:50
+
+|  | |
+|Well I would normally agree but in that case the objective is to provide a simple "robot library" to teach basic programming to beginners (in particular, but not limited to OCaml). So I would prefer to avoid the Robot.top() syntax, as much as possible. –  Apr 3 '12 at 18:09
+																											   |
+||  | |
+|--|-|
+|  | |
+|Well I think it would actually make it much more understable for beginners to render the object they are acting upon explicit. Anyway you may also want to have a look at the documentation of of  Apr 3 '12 at 18:12 
+|
+
+
+
+
+
+| accepted
+|You've got two levels of Robot. Since you explicitly called your module "Robot" within the file robot.ml you'll need to open Robot and then call Robot.top(). Anything in the robot.ml file is already put implicitly inside of a Robot module.
+
+You could get rid of the extra 'module Robot' declaration in robot.ml.
+
+robot.ml would become:
+
+'''
+module type RobotSignature =
+sig 
+   val top: unit -> unit
+end
+
+
+let top () = 
+   begin
+       Printf.printf "top\n"
+   end
+'''
+
+Then it should work as you have it in your main.ml.
+
+//Update based on comment below:// If you're concerned that everything in robot.ml will now be visible when you 'open Robot' you can define a robot.mli file which specifies the functions which are available externally. For example, let's say you add a function called **helper** in robot.ml:
+
+'''
+let top () =
+  begin
+     Printf.printf "top\n"
+  end
+
+let helper () =
+  Printf.printf "helper\n"
+'''
+
+...and then you define your robot.mli as follows:
+
+'''
+val top: unit -> unit
+'''
+
+Then let's say you try to call helper from main.ml:
+
+'''
+open Robot;;
+
+top();
+(* helper will not be visible here and you'll get a compile error*)
+helper ()
+'''
+
+Then when you try to compile you'll get an error:
+
+'''
+$ ocamlc -o main robot.mli robot.ml main.ml
+File "main.ml", line 4, characters 0-6:
+Error: Unbound value helper
+'''
+
+
+|
+|
+
+
+
+
+
+
+|answered Apr 3 '12 at 17:00
+
+
+{{https://www.gravatar.com/avatar/b38376e8266417ab4576f2c68671b605}}
+
+
+
+4,21532346
+
+
+|
+|---------------------------------------------------------------|------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|
+|
+
+
+
+
+
+
+|answered Apr 3 '12 at 17:00
+
+
+{{https://www.gravatar.com/avatar/b38376e8266417ab4576f2c68671b605}}
+
+
+
+4,21532346
+
+
+|
+|
+|---------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| accepted
+|You've got two levels of Robot. Since you explicitly called your module "Robot" within the file robot.ml you'll need to open Robot and then call Robot.top(). Anything in the robot.ml file is already put implicitly inside of a Robot module.
+
+You could get rid of the extra 'module Robot' declaration in robot.ml.
+
+robot.ml would become:
+
+'''
+module type RobotSignature =
+sig 
+   val top: unit -> unit
+end
+
+
+let top () = 
+   begin
+       Printf.printf "top\n"
+   end
+'''
+
+Then it should work as you have it in your main.ml.
+
+//Update based on comment below:// If you're concerned that everything in robot.ml will now be visible when you 'open Robot' you can define a robot.mli file which specifies the functions which are available externally. For example, let's say you add a function called **helper** in robot.ml:
+
+'''
+let top () =
+  begin
+     Printf.printf "top\n"
+  end
+
+let helper () =
+  Printf.printf "helper\n"
+'''
+
+...and then you define your robot.mli as follows:
+
+'''
+val top: unit -> unit
+'''
+
+Then let's say you try to call helper from main.ml:
+
+'''
+open Robot;;
+
+top();
+(* helper will not be visible here and you'll get a compile error*)
+helper ()
+'''
+
+Then when you try to compile you'll get an error:
+
+'''
+$ ocamlc -o main robot.mli robot.ml main.ml
+File "main.ml", line 4, characters 0-6:
+Error: Unbound value helper
+'''
+
+
+|
+|
+
+
+
+
+
+
+|answered Apr 3 '12 at 17:00
+
+
+{{https://www.gravatar.com/avatar/b38376e8266417ab4576f2c68671b605}}
+
+
+
+4,21532346
+
+
+|
+|---------------------------------------------------------------|------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|
+|
+
+
+
+
+
+
+|answered Apr 3 '12 at 17:00
+
+
+{{https://www.gravatar.com/avatar/b38376e8266417ab4576f2c68671b605}}
+
+
+
+4,21532346
+
+
+|
+|
+|                                       |||  | |
+|--|-|
+|  | |
+|Indeed but now the signature has not effect as everything is visible from the main. I understood the "two levels of Robot" but had no idea how to fix it while maintaining a useful signature. –  Apr 3 '12 at 17:06
+|
+|---------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+||  | |
+|--|-|
+|  | |
+|Indeed but now the signature has not effect as everything is visible from the main. I understood the "two levels of Robot" but had no idea how to fix it while maintaining a useful signature. –  Apr 3 '12 at 17:06
+|
+||  | |
+|--|-|
+|  | |
+|If you want to ensure that only that within the Robot module is visible within main, then define a robot.mli file which only exports what you want exported (I'll edit my response above to show this). –  Apr 3 '12 at 17:10
+	  |
+
+
+
+																																																																																																																																																																																																																																																																																																 |
+
+
+
+
+
+|
+|You have two ways to do this:
+
+	* First, you can constrain your sub-structure to be of the right signature:
+'''
+module Robot : RobotSignature = struct ... end
+'''
+
+Then in ''main.ml'', you can do ''open Robot.Robot'': the first ''Robot'' means the compilation unit associated to ''robot.ml'', the second ''Robot'' is the submodule you have defined inside ''robot.ml''
+	* You can also remove one level and create ''robot.mli'' containing:
+'''
+val top: unit -> unit
+'''
+
+and ''robot.ml'' containing:
+'''
+let top () = 
+  Printf.printf "top\n"
+
+(* Should not be visible from the 'main' *)
+let dummy () = 
+  Printf.printf "dummy\n"
+'''
+
+You can compile the modules using ''ocamlc -c robot.mli && ocamlc -c robot.ml'' and then in ''main.ml'' simply use ''open Robot''.
+
+
+|
+|
+
+
+
+
+
+
+|answered Apr 3 '12 at 17:15
+
+
+{{https://www.gravatar.com/avatar/940bda3edb5d69fd4f11f3cb2fe19a8b}}
+
+
+
+4,3171130
+
+
+|
+|---------------------------------------------------------------|------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|
+|
+
+
+
+
+
+
+|answered Apr 3 '12 at 17:15
+
+
+{{https://www.gravatar.com/avatar/940bda3edb5d69fd4f11f3cb2fe19a8b}}
+
+
+
+4,3171130
+
+
+|
+|
+|------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|
+|You have two ways to do this:
+
+	* First, you can constrain your sub-structure to be of the right signature:
+'''
+module Robot : RobotSignature = struct ... end
+'''
+
+Then in ''main.ml'', you can do ''open Robot.Robot'': the first ''Robot'' means the compilation unit associated to ''robot.ml'', the second ''Robot'' is the submodule you have defined inside ''robot.ml''
+	* You can also remove one level and create ''robot.mli'' containing:
+'''
+val top: unit -> unit
+'''
+
+and ''robot.ml'' containing:
+'''
+let top () = 
+  Printf.printf "top\n"
+
+(* Should not be visible from the 'main' *)
+let dummy () = 
+  Printf.printf "dummy\n"
+'''
+
+You can compile the modules using ''ocamlc -c robot.mli && ocamlc -c robot.ml'' and then in ''main.ml'' simply use ''open Robot''.
+
+
+|
+|
+
+
+
+
+
+
+|answered Apr 3 '12 at 17:15
+
+
+{{https://www.gravatar.com/avatar/940bda3edb5d69fd4f11f3cb2fe19a8b}}
+
+
+
+4,3171130
+
+
+|
+|---------------------------------------------------------------|------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|
+|
+
+
+
+
+
+
+|answered Apr 3 '12 at 17:15
+
+
+{{https://www.gravatar.com/avatar/940bda3edb5d69fd4f11f3cb2fe19a8b}}
+
+
+
+4,3171130
+
+
+|
+|
+|                              |||  | |
+|--|-|
+|  | |
+|Or better don't ''open Robot'' but call ''Robot.top ()''. –  Apr 3 '12 at 17:59
+										  |
+|---------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+||  | |
+|--|-|
+|  | |
+|Or better don't ''open Robot'' but call ''Robot.top ()''. –  Apr 3 '12 at 17:59
+										  |
+||  | |
+|--|-|
+|  | |
+|and if '''Robot.Robot.top''' is too long for frequent usage, write '''let module R = Robot.Robot in R.top''' –  Apr 3 '12 at 20:12
+|
+
+
+
+																																																																																																																																																																																																																																								|
+
+
+
+===== Your Answer =====
+
+
+
+
+
+ 
+
+draft saved
+
+draft discarded
+
+
+
+
+
+
+
+
+==== Sign up or log in ====
+
+Sign up using Google
+
+
+Sign up using Facebook
+
+
+Sign up using Email and Password
+
+
+
+==== Post as a guest ====
+
+|Name
+
+Email
+|
+|------------|
+|Name
+
+Email
+|
+
+
+
+
+
+==== Post as a guest ====
+
+|Name
+
+Email
+|
+|------------|
+|Name
+
+Email
+|
+
+
+
+
+By posting your answer, you agree to the .
+
+
+===== Not the answer you're looking for? Browse other questions tagged module ocaml or ask your own question. =====
+
+
+
+|asked
+ |**4 years ago**
+				  |
+|-------|----------------------------------|
+|asked
+ |**4 years ago**
+				  |
+|viewed
+|**4671 times**
+				   |
+|active
+|****
+|
+
+
+
+
+
+
+=== Visit Chat ===
+
+
+
+
+=== Related ===
+
+
+7
+
+
+
+
+6
+
+
+
+
+9
+
+
+
+
+7
+
+
+
+
+9
+
+
+
+
+12
+
+
+
+
+0
+
+
+
+
+0
+
+
+
+
+1
+
+
+
+
+1
+
+
+
+
+
+=== Hot Network Questions ===
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{{:/posts/9997822/ivc/4a5c}}
+
+lang-ml
+
+
+
+
+**
+
+Technology
+Life / Arts
+Culture / Recreation
+Science
+Other
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+site design / logo © 2017 Stack Exchange Inc; user contributions licensed under 
+
+rev 2017.1.23.24754
+
+
+
+Stack Overflow works best with JavaScript enabled{{https://pixel.quantserve.com/pixel/p-c1rF4kxgLUzNc.gif}}
+

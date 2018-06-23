@@ -18,3 +18,10 @@ perl -se  '/whatever/ && print  for <>' -- -u=diamond /etc/hosts
 
 
 ### Splitting
+
+
+### search and replace
+
+in strings
+
+   echo "hello_95_.txt" | perl -ne 's/.*([0-9]+).*/\1/'

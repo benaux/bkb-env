@@ -1,0 +1,504 @@
+Perl Oneliners:
+===============
+
+
+
+Source:
+- http://www.socher.org/index.php/Main/PerlScriptsAndOneLiners
+
+
+
+### Count the number of times a specific character appears in each line
+
+-This counts the number of quotation marks in each line and prints it 
+
+
+	perl -ne '$cnt = tr/"//;print "$cnt\n}"' inputFileName.txt
+
+
+### Add string to beginning of each line
+
+- Adds string to each line, followed by tab
+
+	perl -pe 's/(.\*)/string\t$1/' inFile > outFile
+
+
+### Add newline to end of each line
+
+	Append a new line to each line
+
+    perl -pe ['s//[\\n]{.es0}/']{.st0} all.sent.classOnly &gt;
+    all.sent.classOnly.sep
+
+    </div>
+
+    </div>
+
+[]{#ntoc4}One-Liner: Print only some columns of a file
+------------------------------------------------------
+
+-   Columns separated by a space
+    <div class="sourceblock">
+
+    <div class="bash">
+
+    cut fileWithLotsOfColumns.txt -d[" "]{.st0} -f
+    [1]{.nu0},[2]{.nu0},[3]{.nu0},[4]{.nu0} &gt;
+    fileWithOnlyFirst4Cols.txt
+
+    </div>
+
+    </div>
+
+[]{#ntoc5}One-Liner: Print all columns except the first
+-------------------------------------------------------
+
+-   <div class="sourceblock">
+
+    <div class="bash">
+
+    cut -d[" "]{.st0} -f [1]{.nu0} --complement filename &gt; filename.
+
+    </div>
+
+    </div>
+
+[]{#ntoc6}One-Liner: Replace a pattern with another one **inside the file** with backup
+---------------------------------------------------------------------------------------
+
+-   Replace all occurrences of pattern1 (e.g. \[0-9\]) with pattern2
+    <div class="sourceblock">
+
+    <div class="perl">
+
+    perl -p -i.bak -w -e ['s/pattern1/pattern2/g']{.st0} inputFile
+
+    </div>
+
+    </div>
+
+[]{#ntoc7}One-Liner: Print only non-uppercase letters
+-----------------------------------------------------
+
+-   Go through file and only print words that do not have any uppercase
+    letters.
+    <div class="sourceblock">
+
+    <div class="perl">
+
+    perl -[ne]{.kw1} ['print unless m/\[A-Z\]/']{.st0} allWords.txt &gt;
+    allWordsOnlyLowercase.txt
+
+    </div>
+
+    </div>
+
+[]{#ntoc8}One-Liner: Print one word per line
+--------------------------------------------
+
+-   Go through file, split line at each space and print words one per
+    line.
+    <div class="sourceblock">
+
+    <div class="perl">
+
+    perl -[ne]{.kw1} ['print join("\\n", split(/
+    /,\$\_));print("\\n")']{.st0} someText.txt &gt; wordsPerLine.txt
+
+    </div>
+
+    </div>
+
+[]{#ntoc9}One-Liner: Kill all screen sessions (no remorse)
+----------------------------------------------------------
+
+-   Since there's no screen command that would kill all screen sessions
+    regardless of what they're doing, here's a perl one-liner that
+    really kills ALL screen sessions without remorse.
+    <div class="sourceblock">
+
+    <div class="perl">
+
+    screen -ls | perl -[ne]{.kw1} ['/(\\d+)\\./;print \$1']{.st0} |
+    xargs -l
+    [[kill]{.kw3}](http://www.perldoc.com/perl5.6/pod/func/kill.html)
+    -[9]{.nu0}
+
+    </div>
+
+    </div>
+
+-   The killall command may also do the job...
+
+[]{#ntoc10}One-Liner: Return all unique words in a text document (divided by spaces), sorted by their counts (how often they appear)
+------------------------------------------------------------------------------------------------------------------------------------
+
+-   assuming no punctuation marks:
+    <div class="sourceblock">
+
+    <div class="bash">
+
+    perl -ne ['print join("[\\n]{.es0}",
+    split(/[\\s]{.es0}+/,\$\_));print("[\\n]{.es0}")']{.st0}
+    documents.txt &gt; wordsOnePerLine.txt\
+    cat wordsOnePerLine.txt | sort | uniq -c  | sort -n &gt;
+    wordCountsSorted.txt
+
+    </div>
+
+    </div>
+
+[]{#ntoc11}One-Liner: Delete all special characters
+---------------------------------------------------
+
+-   or in other words, delete every character that is not a letter,
+    white space or line end (replace with nothing)
+    <div class="sourceblock">
+
+    <div class="perl">
+
+    perl -pne ['s/\[\^a-zA-Z\\s\]\*//g']{.st0}
+    text\_withSpecial.txt &gt; text\_lettersOnly.txt
+
+    </div>
+
+    </div>
+
+[]{#ntoc12}One-Liner: Lower case everything
+-------------------------------------------
+
+-   <div class="sourceblock">
+
+    <div class="perl">
+
+    perl -pne ['tr/\[A-Z\]/\[a-z\]/']{.st0} textWithUpperCase.txt &gt;
+    textwithoutuppercase.txt;
+
+    </div>
+
+    </div>
+
+[]{#ntoc13}One-Liner Combination: Combine lower-casing with word counting and sorting
+-------------------------------------------------------------------------------------
+
+-   <div class="sourceblock">
+
+    <div class="perl">
+
+    perl -pne ['tr/\[A-Z\]/\[a-z\]/']{.st0} sentences.txt | perl
+    -[ne]{.kw1} ['print join("\\n", split(/
+    /,\$\_));print("\\n")']{.st0} |
+    [[sort]{.kw3}](http://www.perldoc.com/perl5.6/pod/func/sort.html) |
+    uniq -c |
+    [[sort]{.kw3}](http://www.perldoc.com/perl5.6/pod/func/sort.html) -n
+
+    </div>
+
+    </div>
+
+[]{#ntoc14}One-Liner: Print only one column
+-------------------------------------------
+
+-   Print only the second column of the data when using tabular as a
+    separator
+    <div class="sourceblock">
+
+    <div class="perl">
+
+    perl -[ne]{.kw1} ['@F = split("\\t", \$\_); print
+    "\$F\[1\]";']{.st0} columnFileWithTabs.txt &gt; justSecondColumn.txt
+
+    </div>
+
+    </div>
+
+[]{#ntoc15}One-Liner: Print only text between tags
+--------------------------------------------------
+
+-   <div class="sourceblock">
+
+    <div class="perl">
+
+    perl -[ne]{.kw1} ['if
+    (m/\\&lt;a\\&gt;(.\*?)\\&lt;\\/a\\&gt;/g){print "\$1\\n"}']{.st0}
+    textFile
+
+    </div>
+
+    </div>
+
+-   The same as a script:
+-   Extracting multiple multiline patterns between a start and an end
+    tag
+    -   Here, we want to extract everything between &lt;parse&gt; and
+        &lt;/parse&gt;.
+    -   <div class="sourceblock">
+
+        <div class="perl">
+
+        [\#!/usr/bin/perl -w]{.co1}\
+        [[local]{.kw3}](http://www.perldoc.com/perl5.6/pod/func/local.html)
+        \$/;\
+        \
+        [[open]{.kw3}](http://www.perldoc.com/perl5.6/pod/func/open.html)[(]{.br0}DAT,
+        ["yourFile.xml"]{.st0}[)]{.br0} ||
+        [[die]{.kw3}](http://www.perldoc.com/perl5.6/pod/func/die.html)[(]{.br0}["Could
+        not open file!"]{.st0}[)]{.br0};\
+        [my]{.kw1} [\$content]{.re0} = [&lt;DAT&gt;]{.re4};\
+        \
+        [while]{.kw1} [(]{.br0}[\$content]{.re0} =\~
+        [[m]{.kw3}](http://www.perldoc.com/perl5.6/pod/func/m.html)/[&lt;parse&gt;]{.re4}[(]{.br0}.\*?[)]{.br0}&lt;\\/parse&gt;/sg[)]{.br0}[{]{.br0}\
+         [[print]{.kw3}](http://www.perldoc.com/perl5.6/pod/func/print.html)
+        ["\$1[\\n]{.es0}"]{.st0}\
+        [}]{.br0};
+
+        </div>
+
+        </div>
+
+[]{#ntoc16}One-Liner: Sort lines by their length
+------------------------------------------------
+
+-   <div class="sourceblock">
+
+    <div class="perl">
+
+    perl -e ['print sort {length \$a &lt;=&gt; length \$b}
+    &lt;&gt;']{.st0} textFile
+
+    </div>
+
+    </div>
+
+[]{#ntoc17}One-Liner: Print second column, unless it contains a number
+----------------------------------------------------------------------
+
+-   <div class="sourceblock">
+
+    <div class="perl">
+
+    perl -lane ['print \$F\[1\] unless \$F\[1\] =\~ m/\[0-9\]/']{.st0}
+    wordCounts.txt
+
+    </div>
+
+    </div>
+
+[]{#ntoc18}One-Liner: Trim/ Collapse white spaces and replace new lines by something else
+-----------------------------------------------------------------------------------------
+
+-   <div class="sourceblock">
+
+    <div class="perl">
+
+    echo ["The cat sat    on    the  mat\
+     asd  sad  das   "]{.st0} | perl  -[ne]{.kw1} ['s/\\n/ /; print
+    \$\_; print(";")']{.st0} | perl -[ne]{.kw1} ['s/\\s+/ /g; print
+    \$\_']{.st0}
+
+    </div>
+
+    </div>
+
+[]{#ntoc19}One-Liner: Get the average of one column from certain lines
+----------------------------------------------------------------------
+
+-   <div class="sourceblock">
+
+    <div class="perl">
+
+    [[grep]{.kw3}](http://www.perldoc.com/perl5.6/pod/func/grep.html)
+    ["another criterion"]{.st0} thisDataFile.txt |  perl -[ne]{.kw1}
+    ['@F = split(",", \$\_); print "\$F\[29\]\\n";']{.st0} | awk
+    ['{sum+=\$1} END { print "Average = ",sum/NR}']{.st0}
+
+    </div>
+
+    </div>
+
+[]{#ntoc20}One-Liner: How to sort a file by a column
+----------------------------------------------------
+
+-   Columns are separated by a space, we sort numerically (-n) and we
+    sort by the 10'th column (-k10)
+-   bash does the job here, no perl needed ;)
+-   <div class="sourceblock">
+
+    <div>
+
+    sort -t' ' -n -k10 eSet1\_both.txt\
+
+    </div>
+
+    </div>
+
+[]{#ntoc21}One-Liner: Replace specific space but also copy a group of matches
+-----------------------------------------------------------------------------
+
+-   matches a group of numbers in the beginning of a line
+-   <div class="sourceblock">
+
+    <div>
+
+    perl -p -i.bak -w -e 's/\^(\[0-9\]+) "/\$1\\t"/g' someFile.txt\
+
+    </div>
+
+    </div>
+
+[]{#ntoc22}More info
+--------------------
+
+-   <http://affy.blogspot.com/p5be/ch17.htm>
+-   <http://www.well.ox.ac.uk/~johnb/comp/perl/intro.html>
+
+[]{#ntoc23}Sending multiple commands to screen session on different machines
+----------------------------------------------------------------------------
+
+-   <div class="sourceblock">
+
+    <div class="perl">
+
+    [\#!/usr/bin/perl -w]{.co1}\
+    \
+    [\# This script creates screen sessions, ssh's to machines and
+    executes code on these machines.]{.co1}\
+    [\# parameters: -s (start) -r (run) -q (quit)]{.co1}\
+    [\# HowTo:]{.co1}\
+    [\#  1) change the executed code, property folder and prefix to your
+    values]{.co1}\
+    [\#  2) select your machines ]{.co1}\
+    [\#  3) on the machine where you want your screen sessions run to
+    start your sessions: ./clusterSubmitJobs.pl -s]{.co1}\
+    [\#  4) once you're done and want to quit all your sessions:
+    ./clusterSubmitJobs.pl -q]{.co1}\
+    [\# author: richard socher.org]{.co1}\
+    \
+    [use]{.kw2} strict;\
+    [use]{.kw2} Getopt::[Std]{.me2};\
+    [use]{.kw2} List::[Util]{.me2}
+    [[qw]{.kw3}](http://www.perldoc.com/perl5.6/pod/func/qw.html)[\[]{.br0}min
+    max[\]]{.br0};\
+    [my]{.kw1} [%options]{.re0}=[(]{.br0}[)]{.br0};\
+    getopts[(]{.br0}["srq"]{.st0},\\[%options]{.re0}[)]{.br0};\
+    \
+    [\#------------------]{.co1}\
+    [\# files to be considered]{.co1}\
+    [my]{.kw1} [\$folder]{.re0} = ['/folderWithInputFiles']{.st0};\
+    [my]{.kw1} [\$prefix]{.re0} = ['tests\_']{.st0};\
+    [my]{.kw1} [\$ext]{.re0} = ['.config']{.st0};\
+    [\# code to run with files]{.co1}\
+    [my]{.kw1} [\$code]{.re0} = ['./runMyScript.sh -configFile
+    ']{.st0};\
+    \
+    [\# deprecated by mstat]{.co1}\
+    [my]{.kw1} [@freemachines]{.re0} =
+    [(]{.br0}['machine1.yourPlace.edu']{.st0},
+    ['machine2.yourPlace.edu']{.st0}[)]{.br0};\
+    [\#-------------------]{.co1}\
+    \
+    \
+    [my]{.kw1} [\$full]{.re0} = [\$folder]{.re0} . [\$prefix]{.re0} .
+    ['\*']{.st0} . [\$ext]{.re0};\
+    [[print]{.kw3}](http://www.perldoc.com/perl5.6/pod/func/print.html)
+    ["Using files: \$full [\\n]{.es0}"]{.st0};\
+    \
+    [my]{.kw1} [@files]{.re0} = &lt;[\$full]{.re0}\*&gt;;\
+    [my]{.kw1} [\$numMachines]{.re0} = [@freemachines]{.re0};\
+    [my]{.kw1} [\$numFiles]{.re0} = [@files]{.re0};\
+    [my]{.kw1} [\$minNum]{.re0} =
+    min[(]{.br0}[\$numMachines]{.re0},[\$numFiles]{.re0}[)]{.br0};\
+    \
+    [for]{.kw1} [(]{.br0}[my]{.kw1} [\$i]{.re0} = [0]{.nu0}; [\$i]{.re0}
+    &lt; [\$minNum]{.re0}; [\$i]{.re0}++[)]{.br0} [{]{.br0}\
+      [if]{.kw1}
+    [(]{.br0}[\$options]{.re0}[{]{.br0}[[s]{.kw3}](http://www.perldoc.com/perl5.6/pod/func/s.html)[}]{.br0}[)]{.br0}[{]{.br0}\
+       
+    [[print]{.kw3}](http://www.perldoc.com/perl5.6/pod/func/print.html)
+    ["Creating screen session: freemachines\[\$i\] for [\\t]{.es0}
+    \$files\[\$i\] [\\n]{.es0}"]{.st0};\
+       
+    [[system]{.kw3}](http://www.perldoc.com/perl5.6/pod/func/system.html)[(]{.br0}["screen
+    -d -m -S \$freemachines\[\$i\]"]{.st0}[)]{.br0};\
+       
+    [[system]{.kw3}](http://www.perldoc.com/perl5.6/pod/func/system.html)[(]{.br0}["screen
+    -S \$freemachines\[\$i\] -p 0 -X stuff [\\"]{.es0}ssh
+    \$freemachines\[\$i\][\\0]{.es0}15[\\"]{.es0}"]{.st0}[)]{.br0};\
+      [}]{.br0}\
+    \
+      [if]{.kw1}
+    [(]{.br0}[\$options]{.re0}[{]{.br0}r[}]{.br0}[)]{.br0}[{]{.br0}\
+       
+    [[print]{.kw3}](http://www.perldoc.com/perl5.6/pod/func/print.html)
+    ["run: screen -S \$freemachines\[\$i\] -p 0 -X stuff
+    [\\"]{.es0}\$code \$files\[\$i\][\\"]{.es0}[\\n]{.es0}"]{.st0};\
+       
+    [[system]{.kw3}](http://www.perldoc.com/perl5.6/pod/func/system.html)[(]{.br0}["screen
+    -S \$freemachines\[\$i\] -p 0 -X stuff [\\"]{.es0}\$code
+    \$files\[\$i\][\\0]{.es0}15[\\"]{.es0}"]{.st0}[)]{.br0};\
+      [}]{.br0}\
+    \
+      [if]{.kw1}
+    [(]{.br0}[\$options]{.re0}[{]{.br0}[[q]{.kw3}](http://www.perldoc.com/perl5.6/pod/func/q.html)[}]{.br0}[)]{.br0}[{]{.br0}\
+       
+    [[print]{.kw3}](http://www.perldoc.com/perl5.6/pod/func/print.html)
+    ["screen -S \$freemachines\[\$i\] -p 0 -X stuff
+    [\\"]{.es0}exit[\\n]{.es0}"]{.st0};\
+       
+    [[system]{.kw3}](http://www.perldoc.com/perl5.6/pod/func/system.html)[(]{.br0}["screen
+    -S \$freemachines\[\$i\] -p 0 -X stuff
+    [\\"]{.es0}exit[\\0]{.es0}15[\\"]{.es0}"]{.st0}[)]{.br0};\
+       
+    [[system]{.kw3}](http://www.perldoc.com/perl5.6/pod/func/system.html)[(]{.br0}["screen
+    -S \$freemachines\[\$i\] -p 0 -X stuff
+    [\\"]{.es0}exit[\\0]{.es0}15[\\"]{.es0}"]{.st0}[)]{.br0};\
+      [}]{.br0}\
+    [}]{.br0}
+
+    </div>
+
+    </div>
+
+[]{#ntoc24}How to install new CPAN modules?
+-------------------------------------------
+
+-   <div class="sourceblock">
+
+    <div>
+
+    perl -MCPAN -e shell \# go to CPAN install mode\
+    install Bundle::CPAN \# update CPAN\
+    reload cpan\
+    install Set::Scalar\
+
+    </div>
+
+    </div>
+
+<div class="vspace">
+
+</div>
+
+<div id="message">
+
+  ------------------------------------------------------------------------------------------------------------------ --
+  Add Comment                                                                                                        
+  Sign as Author                                                                                                     
+  Enter code: *![](http://www.socher.org/index.php/Main/PerlScriptsAndOneLiners?action=captchaimage&captchakey=1)*   
+  ------------------------------------------------------------------------------------------------------------------ --
+
+\
+
+</div>
+
+</div>
+
+</div>
+
+<div id="footer">
+
+<div class="left">
+
+</div>
+
+</div>

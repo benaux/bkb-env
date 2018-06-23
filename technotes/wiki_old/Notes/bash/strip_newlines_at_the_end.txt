@@ -1,0 +1,12 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2016-12-21T12:28:00+01:00
+
+====== strip newlines at the end ======
+Created Wednesday 21 December 2016
+
+Shell: strip newlines at the end of line
+
+
+
+echo "jsdf" | perl -pe 'chomp'

@@ -1,0 +1,44 @@
+running resilio
+===============
+
+
+
+
+Running resilio as user (not rslsync user)
+------------------------------------------
+
+
+### 1. enable it: 
+systemctl --user enable resilio-sync
+
+
+### 2. start it:
+
+systemctl --user start  resilio-sync
+
+
+
+Start as rslsync user:
+----------------------
+
+
+sudo service resilio-sync start 
+
+Managing Sync
+
+systemd
+
+Enable sync service automatic startup as user rslsync:
+
+sudo systemctl enable resilio-sync
+Enable sync service as current user:
+
+edit file /usr/lib/systemd/user/resilio-sync.service and change "WantedBy=multi-user.target" to "WantedBy=default.target". Save. Then enable the service:
+
+systemctl --user enable resilio-sync
+
+
+
+
+
+

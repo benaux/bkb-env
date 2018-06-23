@@ -4,4 +4,4 @@ tools=$HOME/tools
 
 url=$($tools/moreutils/firefox/geturl.py)
 
-ssh bkb@diehard.fritz.box "\$HOME/tools/moreutils/chrome/open-url.py '$url'"
+ssh bkb@diehard.fritz.box "\$HOME/aux/tools/moreutils/chrome/open-url.py '$url'"

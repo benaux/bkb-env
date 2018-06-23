@@ -1,0 +1,16 @@
+Tar
+===
+
+
+
+Create tar with out the entire file tree 
+
+
+	tar cfvz baz.tar.gz -C foo/bar/gee baz
+
+	-C, --directory DIR
+
+
+Exclude directories
+
+	tar --exclude='./bar' --exclude='./bar2' -cvfz /backup/foo.tgz foo

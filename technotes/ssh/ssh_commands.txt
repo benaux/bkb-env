@@ -1,0 +1,10 @@
+
+
+SSH Agent
+
+set the environment variables for the agent
+eval (ssh-agent -c)
+
+
+Shows which id are loaded
+ssh-add -l

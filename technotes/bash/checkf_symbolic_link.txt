@@ -1,0 +1,12 @@
+Bash: Check if symbolic link is valid
+
+
+use -L 
+
+via: http://stackoverflow.com/questions/5767062/how-to-check-if-symlink-exists
+
+-L returns true if the "file" exists and is a symbolic link (the linked file may or may not exist). You want -f (returns true if file exists and is a regular file) or maybe just -e (returns true if file exists regardless of type).
+
+According to the GNU manpage, -h is identical to -L, but according to the BSD manpage, it should not be used:
+
+-h file       True if file exists and is a symbolic link.  This operator is retained for compatibility with previous versions of this program. Do not rely on its existence; use -L instead.

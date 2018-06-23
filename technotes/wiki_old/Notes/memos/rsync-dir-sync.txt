@@ -1,0 +1,27 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2016-12-21T12:28:00+01:00
+
+====== rsync-dir-sync ======
+Created Wednesday 21 December 2016
+
+
+I want 
+/www/bar
+
+so:
+	rsync -av ~/foo user@remote.com:/www/bar
+
+but I get:
+
+/www/bar/foo
+
+solution:
+
+	rsync -av ~/foo/ user@remote.com:/www/bar/
+
+
+
+thanks: http://stackoverflow.com/questions/20300971/rsync-copy-directory-contents-but-not-directory-itself
+
+

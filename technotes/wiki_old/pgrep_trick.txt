@@ -1,0 +1,22 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2016-12-21T12:28:00+01:00
+
+====== pgrep trick ======
+Created Wednesday 21 December 2016
+
+problem:
+
+in a script called 'check_for_urxvtd.sh' you want to check if urxvtd is running
+
+    pgrep urxvtd || echo yess
+
+it always returns positive value, even it's not running. AHHH @!#!!.
+
+
+solution:
+
+it's because the process of the bash script itself.
+Use -x to match more strict.
+
+    pgrep -x urxvtd || echo yess

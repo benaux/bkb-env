@@ -1,0 +1,8 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-01-23T15:48:49+01:00
+
+====== ocamlktop ======
+Created Monday 23 January 2017
+
+ocamlmktop -thread -o megacaml unix.cma nums.cma str.cma graphics.cma dbm.cma threads.cma -I +labltk labltk.cma bigarray.cma

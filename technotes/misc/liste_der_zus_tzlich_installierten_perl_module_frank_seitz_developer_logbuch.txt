@@ -1,0 +1,3 @@
+From [Liste der zusätzlich installierten Perl-Module - Frank Seitz' Developer Logbuch](http://fseitz.de/blog/index.php?/archives/16-Liste-der-zusaetzlich-installierten-Perl-Module.html):
+
+>  1 #!/usr/bin/env perl 2 3 use strict; 4 use warnings; 5 6 my %mod; 7 my $cmd = 'perldoc -u perllocal'; 8 open(my $fh,'-|',$cmd) or die "ERROR: open failed ($!)"; 9 while (<$fh>) { 10 if (/^=head2.*\|(.*)>/) { 11 $mod{$1} = 1; 12 } 13 } 14 close($fh) or die qq|ERROR: Command failed: "$cmd" (Exit Code: $?)\n|; 15 16 for my $mod (sort keys %mod) { 17 print "$mod\n"; 18 } 19 20 # eof 

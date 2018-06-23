@@ -1,0 +1,5 @@
+Shell: strip newlines at the end of line
+
+
+
+echo "jsdf" | perl -pe 'chomp'

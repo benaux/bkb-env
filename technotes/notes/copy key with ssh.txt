@@ -1,0 +1,1 @@
+ssh-copy-id -i ~/.ssh/Myidrsa.pub remote.server.com

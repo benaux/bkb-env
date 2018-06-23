@@ -1,0 +1,16 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2016-12-21T12:28:00+01:00
+
+====== read with default answer ======
+Created Wednesday 21 December 2016
+
+Bash: read with default answer
+
+
+   read -p "Enter: " name
+   name=${name:-Richard}
+   echo $name
+
+
+credit: http://stackoverflow.com/questions/2642585/read-a-variable-in-bash-with-a-default-value

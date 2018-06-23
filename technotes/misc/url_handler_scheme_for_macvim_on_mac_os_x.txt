@@ -1,0 +1,19 @@
+https://github.com/b4winckler/macvim/blob/master/runtime/doc/gui_mac.txt
+
+9. mvim:// URL handler    *mvim://* *macvim-url-handler*  
+
+MacVim supports a custom URL handler for "mvim://" URLs. The handler is supposed to be compatible to TextMate's URL scheme as documented at >  http://blog.macromates.com/2007/the-textmate-url-scheme/.  
+Currently, this means that the format is 
+
+>  mvim://open?<arguments> 
+
+where "arguments" can be: 
+ * url — the actual file to open (i.e. a file://... URL), if you leave   out this argument, the frontmost document is implied  
+ * * line — line number to go to (one based)  
+ * * column — column number to go to (one based) 
+ 
+  For example, the link 
+  
+  	>  mvim://open?url=file:///etc/profile&line=20 
+  	
+  		will open the file /etc/profile on line 20 when clicked in a web browser.  Note that url has to be a file:// url pointing to an existing local file.

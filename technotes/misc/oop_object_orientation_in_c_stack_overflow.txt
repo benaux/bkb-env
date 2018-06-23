@@ -1,0 +1,1265 @@
+From <http://stackoverflow.com/questions/415452/object-orientation-in-c>:
+
+[Stack Exchange][1]
+
+   [1]: http://stackexchange.com
+
+[log in][2] | [careers][3] | [chat][4] | [meta][5] | [about][6] | [faq][7]
+
+   [2]: /users/login?returnurl=%2fquestions%2f415452%2fobject-orientation-in-c
+   [3]: http://careers.stackoverflow.com
+   [4]: http://chat.stackoverflow.com
+   [5]: http://meta.stackoverflow.com
+   [6]: /about
+   [7]: /faq
+
+  
+
+
+[Stack Overflow][8]
+
+   [8]: /
+
+  * [Questions][9]
+  * [Tags][10]
+  * [Users][11]
+  * [Badges][12]
+  * [Unanswered][13]
+
+   [9]: /questions
+   [10]: /tags
+   [11]: /users
+   [12]: /badges
+   [13]: /unanswered
+
+  * [Ask Question][14]
+
+   [14]: /questions/ask
+
+# [Object-Orientation in C][15]
+
+   [15]: /questions/415452/object-orientation-in-c
+
+up vote 41 down vote [favorite][16]
+
+   [16]: # (This is a favorite question (click again to undo))
+
+**51**
+
+share [g+] share [fb] share [tw]
+
+Can someone please share a set of nifty preprocessor hacks (ANSI C89/ISO C90 compatible please) which enable some kind of ugly (but usable) object-orientation in C? I am familiar with a few different object-oriented languages, so please don't respond with answers like "Learn C++!". I have read "[Object-Oriented Programming With ANSI C][17]" (beware: **pdf**) and several other interesting solutions, but I'm mostly interested in yours :-)!
+
+   [17]: http://www.planetpdf.com/codecuts/pdfs/ooc.pdf (Object-Oriented Programming With ANSI C)
+
+* * *
+
+See also [Can you write object oriented code in C?][18]
+
+   [18]: http://stackoverflow.com/questions/351733/can-you-write-object-oriented-code-in-c (Can you write object oriented code in C?)
+
+[c][19] [oop][20] [object][21]
+
+   [19]: /questions/tagged/c (show questions tagged 'c')
+   [20]: /questions/tagged/oop (show questions tagged 'oop')
+   [21]: /questions/tagged/object (show questions tagged 'object')
+
+[link][22]|[improve this question][23]
+
+   [22]: /q/415452 (short permalink to this question)
+   [23]: /posts/415452/edit
+
+edited [Aug 11 '09 at 22:58][24]
+
+   [24]: /posts/415452/revisions (show all edits to this post)
+
+  
+
+
+community wiki
+
+  
+
+
+[6 revs, 3 users 78%  
+Anthony Cuozzo][25]
+
+   [25]: /posts/415452/revisions (show revision history for this post)
+
+Can I respond to learn D and use the c compatible abi for where you really need C. [digitalmars.com/d][26] - [Tim Matthews][27] Jan 6 '09 at 11:53
+
+   [26]: http://www.digitalmars.com/d/
+   [27]: /users/36157/tim-matthews (2575 reputation)
+
+Not really. I work with some embedded systems which only really have a C compiler available. - anon Jan 6 '09 at 21:51
+
+@Dinah: Thank you for the "See also". That post was interesting. - anon Jan 6 '09 at 22:20
+
+The interesting question seems to be why would you want a pre-processor hack of OOP on C. - [Calyth][28] Jan 8 '09 at 19:13
+
+   [28]: /users/45144/calyth (1101 reputation)
+
+1
+ 
+
+@Calyth: I find that OOP is useful and "I work with some embedded systems which only really have a C compiler available" (from above). Moreover, don't you find nifty preprocessor hacks interesting to look at? - anon Jan 9 '09 at 21:09
+
+feedback 
+
+## 10 Answers
+
+[active][29] [oldest][30] [votes][31]
+
+   [29]: /questions/415452/object-orientation-in-c?answertab=active#tab-top (Answers with the latest activity first)
+   [30]: /questions/415452/object-orientation-in-c?answertab=oldest#tab-top (Answers in the order they were provided)
+   [31]: /questions/415452/object-orientation-in-c?answertab=votes#tab-top (Answers with the highest score first)
+
+up vote 7 down vote accepted
+
+[C Object System (COS)][32] sounds promising (it's still in alpha version). It tries to keep minimal the available concepts for the sake of simplicity and flexibility: uniform object oriented programming including open classes, metaclasses, property metaclasses, generics, multimethods, delegation, ownership, exceptions, contracts and closures. There is a [draft paper][33] (PDF) that describes it.
+
+   [32]: http://sourceforge.net/projects/cos
+   [33]: http://cern.ch/laurent.deniau/html/cos-oopsla07-draft.pdf
+
+[Exception in C][34] is a C89 implementation of the TRY-CATCH-FINALLY found in other OO languages. It comes with a testsuite and some examples. 
+
+   [34]: http://cern.ch/laurent.deniau/html/exception.tgz
+
+Both by Laurent Deniau, which is working a lot on [OOP in C][35]. 
+
+   [35]: http://ldeniau.web.cern.ch/ldeniau/html/oopc.html
+
+[link][36]|[improve this answer][37]
+
+   [36]: /a/415752 (short permalink to this answer)
+   [37]: /posts/415752/edit
+
+answered Jan 6 '09 at 7:51
+
+[
+
+![][38]
+
+   [38]: http://www.gravatar.com/avatar/058ed9c852869d7557262a8d2ce8783b?s=32&d=identicon&r=PG
+
+][39]
+
+   [39]: /users/18804/philant
+
+[philant][40]  
+11.7k21145
+
+   [40]: /users/18804/philant
+
+1
+ 
+
+Very interesting! - anon Jan 6 '09 at 21:52
+
+feedback 
+
+up vote 52 down vote
+
+I would advise against preprocessor (ab)use to try and make C syntax more like that of another more object-oriented language. At the most basic level, you just use plain structs as objects and pass them around by pointers:
+    
+    struct monkey
+    {
+        float age;
+        bool is_male;
+        int happiness;
+    };
+    
+    void monkey_dance(struct monkey *monkey)
+    {
+        /* do a little dance */
+    }
+    
+
+To get things like inheritance and polymorphism, you have to work a little harder. You can do manual inheritance by having the first member of a structure be an instance of the superclass, and then you can cast around pointers to base and derived classes freely:
+    
+    struct base
+    {
+        /* base class members */
+    };
+    
+    struct derived
+    {
+        struct base super;
+        /* derived class members */
+    };
+    
+    struct derived d;
+    struct base *base_ptr = (struct base *)&d;  // upcast
+    struct derived derived_ptr = (struct derived *)base_ptr;  // downcast
+    
+
+To get polymorphism (i.e. virtual functions), you use function pointers, and optionally function pointer tables, also known as virtual tables or vtables:
+    
+    struct base;
+    struct base_vtable
+    {
+        void (*dance)(struct base *);
+        void (*jump)(struct base *, int how_high);
+    };
+    
+    struct base
+    {
+        struct base_vtable *vtable;
+        /* base members */
+    };
+    
+    void base_dance(struct base *b)
+    {
+        b->vtable->dance(b);
+    }
+    
+    void base_jump(struct base *b, int how_high)
+    {
+        b->vtable->jump(b, how_high);
+    }
+    
+    struct derived1
+    {
+        struct base super;
+        /* derived1 members */
+    };
+    
+    void derived1_dance(struct derived1 *d)
+    {
+        /* implementation of derived1's dance function */
+    }
+    
+    void derived1_jump(struct derived1 *d, int how_high)
+    {
+        /* implementation of derived 1's jump function */
+    }
+    
+    /* global vtable for derived1 */
+    struct base_vtable derived1_vtable =
+    {
+        &derived1_dance, /* you might get a warning here about incompatible pointer types */
+        &derived1_jump   /* you can ignore it, or perform a cast to get rid of it */
+    };
+    
+    void derived1_init(struct derived1 *d)
+    {
+        d->super.vtable = &derived1_vtable;
+        /* init base members d->super.foo */
+        /* init derived1 members d->foo */
+    }
+    
+    struct derived2
+    {
+        struct base super;
+        /* derived2 members */
+    };
+    
+    void derived2_dance(struct derived2 *d)
+    {
+        /* implementation of derived2's dance function */
+    }
+    
+    void derived2_jump(struct derived2 *d, int how_high)
+    {
+        /* implementation of derived2's jump function */
+    }
+    
+    struct base_vtable derived2_vtable =
+    {
+       &derived2_dance,
+       &derived2_jump
+    };
+    
+    void derived2_init(struct derived2 *d)
+    {
+        d->super.vtable = &derived2_vtable;
+        /* init base members d->super.foo */
+        /* init derived1 members d->foo */
+    }
+    
+    int main(void)
+    {
+        /* OK!  We're done with our declarations, now we can finally do some
+           polymorphism in C */
+        struct derived1 d1;
+        derived1_init(&d1);
+    
+        struct derived2 d2;
+        derived2_init(&d2);
+    
+        struct base *b1_ptr = (struct base *)&d1;
+        struct base *b2_ptr = (struct base *)&d2;
+    
+        base_dance(b1_ptr);  /* calls derived1_dance */
+        base_dance(b2_ptr);  /* calls derived2_dance */
+    
+        base_jump(b1_ptr, 42);  /* calls derived1_jump */
+        base_jump(b2_ptr, 42);  /* calls derived2_jump */
+    
+        return 0;
+    }
+    
+
+And that's how you do polymorphism in C. It ain't pretty, but it does the job. There are some sticky issues involving pointer casts between base and derived classes, which are safe as long as the base class is the first member of the derived class. Multiple inheritance is much harder - in that case, in order to case between base classes other than the first, you need to manually adjust your pointers based on the proper offsets, which is really tricky and error-prone.
+
+Another (tricky) thing you can do is change the dynamic type of an object at runtime! You just reassign it a new vtable pointer. You can even selectively change some of the virtual functions while keeping others, creating new hybrid types. Just be careful to create a new vtable instead of modifying the global vtable, otherwise you'll accidentally affect all objects of a given type.
+
+[link][41]|[improve this answer][42]
+
+   [41]: /a/415536 (short permalink to this answer)
+   [42]: /posts/415536/edit
+
+edited [Jan 6 '09 at 9:46][43]
+
+   [43]: /posts/415536/revisions (show all edits to this post)
+
+[
+
+![][44]
+
+   [44]: http://www.gravatar.com/avatar/058ed9c852869d7557262a8d2ce8783b?s=32&d=identicon&r=PG
+
+][45]
+
+   [45]: /users/18804/philant
+
+[philant][46]  
+11.7k21145
+
+   [46]: /users/18804/philant
+
+answered Jan 6 '09 at 5:09
+
+[
+
+![][47]
+
+   [47]: http://www.gravatar.com/avatar/924800e76876546c5c575c0175e1f434?s=32&d=identicon&r=PG
+
+][48]
+
+   [48]: /users/9530/adam-rosenfield
+
+[Adam Rosenfield][49]  
+95k14150249
+
+   [49]: /users/9530/adam-rosenfield
+
+3
+ 
+
+Adam, the fun of changing the global vtable of a type is to simulate duck-typing in C. :) - [jmucchiello][50] Sep 28 '09 at 14:59
+
+   [50]: /users/44065/jmucchiello (7688 reputation)
+
+Now I pity C++... Well of course the C++ syntax is clearer, but since it's not a trivial syntax, I'm mitigated. I wonder if something hybrid between C++ and C could be achieved, so void* would still be valid castable type. The part with `struct derived {struct base super;};` is obvious to guess how it works, since by the bytes order it's correct. - [jokoon][51] Jan 4 '11 at 15:41
+
+   [51]: /users/414063/jokoon (747 reputation)
+
++1 for elegant code, well written. This is exactly what I was looking for! - [Homunculus Reticulli][52] May 1 at 7:09
+
+   [52]: /users/962891/homunculus-reticulli (1089 reputation)
+
+feedback 
+
+up vote 12 down vote
+
+(ripped from [How to write production C code? [closed]][53])
+
+   [53]: http://stackoverflow.com/questions/408687/how-to-write-production-c-code-closed
+
+I once worked with a C library that was implemented in a way that struck me as quite elegant. They had written, in C, a way to define objects, then inherit from them so that they were as extensible as a C++ object. The basic idea was this:
+
+  * Each object had its own file
+  * Public functions and variables are defined in the .h file for an object
+  * Private variables and functions were only located in the .c file
+  * To "inherit" a new struct is created with the first member of the struct being the object to inherit from
+
+Inheriting is difficult to describe, but basically it was this:
+    
+    struct vehicle {
+       int power;
+       int weight;
+    }
+    
+
+Then in another file:
+    
+    struct van {
+       struct vehicle base;
+       int cubic_size;
+    }
+    
+
+Then you could have a van created in memory, and being used by code that only knew about vehicles:
+    
+    struct van my_van;
+    struct vehicle *something = &my_van;
+    vehicle_function( something );
+    
+
+It worked beautifully, and the .h files defined exactly what you should be able to do with each object.
+
+[link][54]|[improve this answer][55]
+
+   [54]: /a/415459 (short permalink to this answer)
+   [55]: /posts/415459/edit
+
+answered Jan 6 '09 at 4:28
+
+[
+
+![][56]
+
+   [56]: http://www.gravatar.com/avatar/49a3f6265e0d283700a368d413b11109?s=32&d=identicon&r=PG
+
+][57]
+
+   [57]: /users/15852/kieveli
+
+[Kieveli][58]  
+5,40411734
+
+   [58]: /users/15852/kieveli
+
+I'd like to know more about how this worked :) - [J Cooper][59] Jan 6 '09 at 4:48
+
+   [59]: /users/38803/j-cooper (5813 reputation)
+
+I really like this solution, except that all of the "object"'s internals are public. - [Software Monkey][60] Jan 6 '09 at 5:18
+
+   [60]: /users/8946/software-monkey (17702 reputation)
+
+4
+ 
+
+@Software Monkey: C has no access control. The only way to hide implementation details is to interact through opaque pointers, which can get pretty painful, since all fields would need to be accessed through accessor methods which probably can't be inlined. - [Adam Rosenfield][61] Jan 6 '09 at 5:26
+
+   [61]: /users/9530/adam-rosenfield (95015 reputation)
+
+@Adam: Compilers supporting link-time optimizations will inline them just fine... - [Christoph][62] Jan 6 '09 at 13:01
+
+   [62]: /users/48015/christoph (34384 reputation)
+
+2
+ 
+
+If you do this, you should also ensure that all the functions in the .c file that are not defined as public are defined as static so they don't end up as named functions in your object files. That ensures no one can find their names in the link phase. - [jmucchiello][63] Sep 28 '09 at 15:01
+
+   [63]: /users/44065/jmucchiello (7688 reputation)
+
+show **1** more comment
+
+feedback 
+
+up vote 6 down vote
+
+The GNOME desktop for Linux is written in object-oriented C, and it has an object model called "[GObject][64]" which supports properties, inheritance, polymorphism, as well as some other goodies like references, event handling (called "signals"), runtime typing, private data, etc.
+
+   [64]: http://library.gnome.org/devel/gobject/unstable/
+
+It includes preprocessor hacks to do things like typecasting around in the class hierarchy, etc. Here's an example class I wrote for GNOME (things like gchar are typedefs):
+
+[Class Source][65]
+
+   [65]: http://svn.gnome.org/viewvc/fast-user-switch-applet/trunk/src/fusa-user.c?view=markup
+
+[Class Header][66]
+
+   [66]: http://svn.gnome.org/viewvc/fast-user-switch-applet/trunk/src/fusa-user.h?view=markup
+
+Inside the GObject structure there's a GType integer which is used as a magic number for GLib's dynamic typing system (you can cast the entire struct to a "GType" to find it's type).
+
+[link][67]|[improve this answer][68]
+
+   [67]: /a/415534 (short permalink to this answer)
+   [68]: /posts/415534/edit
+
+edited [Jan 7 '09 at 11:50][69]
+
+   [69]: /posts/415534/revisions (show all edits to this post)
+
+  
+
+
+answered Jan 6 '09 at 5:06
+
+[
+
+![][70]
+
+   [70]: http://www.gravatar.com/avatar/e39fe523137528ba8aa4b44bcdf79d8d?s=32&d=identicon&r=PG
+
+][71]
+
+   [71]: /users/41044/james-cape
+
+[James Cape][72]  
+35117
+
+   [72]: /users/41044/james-cape
+
+unfortunately , the read me/tutorial file (wiki link) is not working and there is only reference manual for that(i am talking about GObject and not GTK). please provide some tutorial files for the same ... - [FL4SOF][73] Jan 6 '09 at 5:22
+
+   [73]: /users/34590/fl4sof (395 reputation)
+
+See [stackoverflow.com/questions/500501/…][74] - [fmark][75] Nov 6 '10 at 12:35
+
+   [74]: http://stackoverflow.com/questions/500501/material-to-learn-gobject-and-glib (material to learn gobject and glib)
+   [75]: /users/103225/fmark (7503 reputation)
+
+feedback 
+
+up vote 5 down vote
+
+If you think of methods called on objects as static methods that pass an implicit '`this`' into the function it can make thinking OO in C easier.
+
+For example:
+    
+    String s = "hi";
+    System.out.println(s.length());
+    
+
+becomes:
+    
+    string s = "hi";
+    printf(length(s)); // pass in s, as an implicit this
+    
+
+Or something like that.
+
+[link][76]|[improve this answer][77]
+
+   [76]: /a/415529 (short permalink to this answer)
+   [77]: /posts/415529/edit
+
+answered Jan 6 '09 at 5:04
+
+[
+
+![][78]
+
+   [78]: http://www.gravatar.com/avatar/d787caaf04b85641692a24099fcee990?s=32&d=identicon&r=PG
+
+][79]
+
+   [79]: /users/2598/jjnguy
+
+[jjnguy][80]♦  
+38.9k1391177
+
+   [80]: /users/2598/jjnguy
+
+2
+ 
+
+...stating the obvious... - [Artelius][81] Jan 6 '09 at 5:16
+
+   [81]: /users/31945/artelius (18176 reputation)
+
+2
+ 
+
+@Artelius: Sure, but sometimes the obvious is not, until it's stated. +1 for this. - [Software Monkey][82] Jan 6 '09 at 5:22
+
+   [82]: /users/8946/software-monkey (17702 reputation)
+
+feedback 
+
+up vote 3 down vote
+
+[ffmpeg][83] (a toolkit for video processing) is written in straight C (and assembly language), but using an object-oriented style. It's full of structs with function pointers. There are a set of factory functions that initialize the structs with the appropriate "method" pointers. 
+
+   [83]: http://www.ffmpeg.org/
+
+[link][84]|[improve this answer][85]
+
+   [84]: /a/415468 (short permalink to this answer)
+   [85]: /posts/415468/edit
+
+answered Jan 6 '09 at 4:31
+
+[
+
+![][86]
+
+   [86]: http://www.gravatar.com/avatar/6ec78954391f88681b2a5b97ef958d08?s=32&d=identicon&r=PG
+
+][87]
+
+   [87]: /users/25050/mr-fooz
+
+[Mr Fooz][88]  
+9,59611842
+
+   [88]: /users/25050/mr-fooz
+
+I'll take a look at the source in a little while. I'll respond with my impressions of it either tonight or sometime tomorrow. - anon Jan 6 '09 at 4:48
+
+i don't see any factory functions in it(ffmpeg), rather it doesnt seem to be using polymorphism/inheritance ( trivial way suggested above). - [FL4SOF][89] Jan 6 '09 at 5:39
+
+   [89]: /users/34590/fl4sof (395 reputation)
+
+avcodec_open is one factory function. It stuffs function pointers into a AVCodecContext struct (like draw_horiz_band). If you look at FF_COMMON_FRAME macro usage in avcodec.h, you'll see something akin to inheritance of data members. IMHO, ffmpeg proves to me that OOP is best done in C++, not C. - [Mr Fooz][90] Jan 6 '09 at 23:41
+
+   [90]: /users/25050/mr-fooz (9596 reputation)
+
+feedback 
+
+up vote 3 down vote
+
+Slightly off topic but the original C++ compiler, c-front, compiled C++ to C and then to assembler.  
+Preserved [here][91]
+
+   [91]: http://www.softwarepreservation.org/projects/c%5Fplus%5Fplus/cfront
+
+[link][92]|[improve this answer][93]
+
+   [92]: /a/1232248 (short permalink to this answer)
+   [93]: /posts/1232248/edit
+
+answered [Aug 5 '09 at 9:55][94]
+
+   [94]: /posts/1232248/revisions (show all edits to this post)
+
+  
+
+
+community wiki
+
+  
+
+
+[zebrabox][95]
+
+   [95]: /posts/1232248/revisions (show revision history for this post)
+
+I've actually seen it before. I believe it was a nice piece of work. - anon Aug 5 '09 at 10:11
+
+@Anthony Cuozzo : Stan Lippman wrote a great book called 'C++ - Inside the object model' where he related a lot of his experiences and design decisions in writing and maintaining c-front. It's still a good read and helped me immensely when transitioning from C to C++ many years back - [zebrabox][96] Aug 5 '09 at 10:40
+
+   [96]: /users/122755/zebrabox (2885 reputation)
+
+feedback 
+
+up vote 2 down vote
+
+I used to do this kind of thing in C, before I knew what OOP was.
+
+Following is an example, which implements a data-buffer which grows on demand, given a minimum size, increment and maximum size. This particular implementation was "element" based, which is to say it was designed to allow a list-like collection of any C type, not just a variable length byte-buffer.
+
+The idea is that the object is instantiated using the xxx_crt() and deleted using xxx_dlt(). Each of the "member" methods takes a specifically typed pointer to operate on.
+
+I implemented a linked list, cyclic buffer, and a number of other things in this manner.
+
+I must confess, I have never given any thought on how to implement inheritance with this approach. I imagine that some blend of that offered by Kieveli might be a good path.
+
+dtb.c:
+    
+    #include <limits.h>
+    #include <string.h>
+    #include <stdlib.h>
+    
+    static void dtb_xlt(void *dst, const void *src, vint len, const byte *tbl);
+    
+    DTABUF *dtb_crt(vint minsiz,vint incsiz,vint maxsiz) {
+        DTABUF          *dbp;
+    
+        if(!minsiz) { return NULL; }
+        if(!incsiz)                  { incsiz=minsiz;        }
+        if(!maxsiz || maxsiz<minsiz) { maxsiz=minsiz;        }
+        if(minsiz+incsiz>maxsiz)     { incsiz=maxsiz-minsiz; }
+        if((dbp=(DTABUF*)malloc(sizeof(*dbp))) == NULL) { return NULL; }
+        memset(dbp,0,sizeof(*dbp));
+        dbp->min=minsiz;
+        dbp->inc=incsiz;
+        dbp->max=maxsiz;
+        dbp->siz=minsiz;
+        dbp->cur=0;
+        if((dbp->dta=(byte*)malloc((vuns)minsiz)) == NULL) { free(dbp); return NULL; }
+        return dbp;
+        }
+    
+    DTABUF *dtb_dlt(DTABUF *dbp) {
+        if(dbp) {
+            free(dbp->dta);
+            free(dbp);
+            }
+        return NULL;
+        }
+    
+    vint dtb_adddta(DTABUF *dbp,const byte *xlt256,const void *dtaptr,vint dtalen) {
+        if(!dbp) { errno=EINVAL; return -1; }
+        if(dtalen==-1) { dtalen=(vint)strlen((byte*)dtaptr); }
+        if((dbp->cur + dtalen) > dbp->siz) {
+            void        *newdta;
+            vint        newsiz;
+    
+            if((dbp->siz+dbp->inc)>=(dbp->cur+dtalen)) { newsiz=dbp->siz+dbp->inc; }
+            else                                       { newsiz=dbp->cur+dtalen;   }
+            if(newsiz>dbp->max) { errno=ETRUNC; return -1; }
+            if((newdta=realloc(dbp->dta,(vuns)newsiz))==NULL) { return -1; }
+            dbp->dta=newdta; dbp->siz=newsiz;
+            }
+        if(dtalen) {
+            if(xlt256) { dtb_xlt(((byte*)dbp->dta+dbp->cur),dtaptr,dtalen,xlt256); }
+            else       { memcpy(((byte*)dbp->dta+dbp->cur),dtaptr,(vuns)dtalen);   }
+            dbp->cur+=dtalen;
+            }
+        return 0;
+        }
+    
+    static void dtb_xlt(void *dst,const void *src,vint len,const byte *tbl) {
+        byte            *sp,*dp;
+    
+        for(sp=(byte*)src,dp=(byte*)dst; len; len--,sp++,dp++) { *dp=tbl[*sp]; }
+        }
+    
+    vint dtb_addtxt(DTABUF *dbp,const byte *xlt256,const byte *format,...) {
+        byte            textÝ501¨;
+        va_list         ap;
+        vint            len;
+    
+        va_start(ap,format); len=sprintf_len(format,ap)-1; va_end(ap);
+        if(len<0 || len>=sizeof(text)) { sprintf_safe(text,sizeof(text),"STRTOOLNG: %s",format); len=(int)strlen(text); }
+        else                           { va_start(ap,format); vsprintf(text,format,ap); va_end(ap);                     }
+        return dtb_adddta(dbp,xlt256,text,len);
+        }
+    
+    vint dtb_rmvdta(DTABUF *dbp,vint len) {
+        if(!dbp) { errno=EINVAL; return -1; }
+        if(len > dbp->cur) { len=dbp->cur; }
+        dbp->cur-=len;
+        return 0;
+        }
+    
+    vint dtb_reset(DTABUF *dbp) {
+        if(!dbp) { errno=EINVAL; return -1; }
+        dbp->cur=0;
+        if(dbp->siz > dbp->min) {
+            byte *newdta;
+            if((newdta=(byte*)realloc(dbp->dta,(vuns)dbp->min))==NULL) {
+                free(dbp->dta); dbp->dta=null; dbp->siz=0;
+                return -1;
+                }
+            dbp->dta=newdta; dbp->siz=dbp->min;
+            }
+        return 0;
+        }
+    
+    void *dtb_elmptr(DTABUF *dbp,vint elmidx,vint elmlen) {
+        if(!elmlen || (elmidx*elmlen)>=dbp->cur) { return NULL; }
+        return ((byte*)dbp->dta+(elmidx*elmlen));
+        }
+    
+
+dtb.h
+    
+    typedef _Packed struct {
+        vint            min;                /* initial size                       */
+        vint            inc;                /* increment size                     */
+        vint            max;                /* maximum size                       */
+        vint            siz;                /* current size                       */
+        vint            cur;                /* current data length                */
+        void            *dta;               /* data pointer                       */
+        } DTABUF;
+    
+    #define dtb_dtaptr(mDBP)                (mDBP->dta)
+    #define dtb_dtalen(mDBP)                (mDBP->cur)
+    
+    DTABUF              *dtb_crt(vint minsiz,vint incsiz,vint maxsiz);
+    DTABUF              *dtb_dlt(DTABUF *dbp);
+    vint                dtb_adddta(DTABUF *dbp,const byte *xlt256,const void *dtaptr,vint dtalen);
+    vint                dtb_addtxt(DTABUF *dbp,const byte *xlt256,const byte *format,...);
+    vint                dtb_rmvdta(DTABUF *dbp,vint len);
+    vint                dtb_reset(DTABUF *dbp);
+    void                *dtb_elmptr(DTABUF *dbp,vint elmidx,vint elmlen);
+    
+
+PS: vint was simply a typedef of int - I used it to remind me that it's length was variable from platform to platform (for porting).
+
+[link][97]|[improve this answer][98]
+
+   [97]: /a/415543 (short permalink to this answer)
+   [98]: /posts/415543/edit
+
+edited [Aug 8 '09 at 3:04][99]
+
+   [99]: /posts/415543/revisions (show all edits to this post)
+
+  
+
+
+answered Jan 6 '09 at 5:14
+
+[
+
+![][100]
+
+   [100]: http://www.gravatar.com/avatar/0ad5f7ab8744c90bde77377d9b151957?s=32&d=identicon&r=PG
+
+][101]
+
+   [101]: /users/8946/software-monkey
+
+[Software Monkey][102]  
+17.7k34881
+
+   [102]: /users/8946/software-monkey
+
+3
+ 
+
+holy moly, this could win an obfuscated C contest! i like it! :) - [banister][103] Jul 29 '09 at 19:58
+
+   [103]: /users/66725/banister (6491 reputation)
+
+feedback 
+
+up vote 1 down vote
+
+for me object orientation in C should have these features :
+
+1) encapsulation and data hiding ( can be achieved using structs/opaque pointers)
+
+2) inheritance and support for polymorphism ( single inheritance can be achieved using structs - make sure abstract base is not instantiable)
+
+3) constructor and destructor functionality ( not easy to achieve)
+
+4) type checking (at least for user defined types as C doesn't enforce any )
+
+5) reference counting ( or some thing to implement RAAI)
+
+6) limited support for exception handling (setjmp and longjmp )
+
+on top of above it should rely on ANSI/ISO specifications and should not rely on compiler specific functionality.
+
+[link][104]|[improve this answer][105]
+
+   [104]: /a/415588 (short permalink to this answer)
+   [105]: /posts/415588/edit
+
+answered Jan 6 '09 at 5:47
+
+[
+
+![][106]
+
+   [106]: http://www.gravatar.com/avatar/a758a7a010ca85c950440c6c4e58d3c4?s=32&d=identicon&r=PG
+
+][107]
+
+   [107]: /users/34590/fl4sof
+
+[FL4SOF][108]  
+3951317
+
+   [108]: /users/34590/fl4sof
+
+For number (5) - You can't implement RAII in a language without destructors (which means RAII is not a compiler-supported technique in C or Java). - [Tom][109] Jan 6 '09 at 6:05
+
+   [109]: /users/40620/tom (5100 reputation)
+
+constructors and destructors can be written for c based object - i guess GObject does it. and ofcourse RAAI ( it is not straight forward, may be ugly and need not be pragmatic at all) - all i was looking is to identify C based semantics to acheive the above. - [FL4SOF][110] Jan 6 '09 at 6:44
+
+   [110]: /users/34590/fl4sof (395 reputation)
+
+C doesn't support destructors. You have to type _something_ in order to make them work. That means they don't clean up themselves. GObject doesn't change the language. - [Tom][111] Jan 7 '09 at 5:25
+
+   [111]: /users/40620/tom (5100 reputation)
+
+feedback 
+
+up vote 0 down vote
+
+If I were going to write OOP in C I would probably go with a pseudo-PIMPL design. Instead of passing pointers to structs, you end up passing pointers to pointers to structs. This makes the content opaque and facilitates polymorphism and inheritance. The real problem with OOP in C is what happens when variables exit scope. There's no compiler generated destructors and that can cause issues. MACROS can possibly help but it is always going to be ugly to look at.
+
+[link][112]|[improve this answer][113]
+
+   [112]: /a/415793 (short permalink to this answer)
+   [113]: /posts/415793/edit
+
+answered Jan 6 '09 at 8:15
+
+[
+
+![][114]
+
+   [114]: http://www.gravatar.com/avatar/38f06907704f73d7cc5b6618ffccc3aa?s=32&d=identicon&r=PG
+
+][115]
+
+   [115]: /users/44065/jmucchiello
+
+[jmucchiello][116]  
+7,68811429
+
+   [116]: /users/44065/jmucchiello
+
+feedback 
+
+## Your Answer
+
+ 
+
+draft saved
+
+draft discarded
+
+[log in][117]
+
+   [117]: /users/login?returnurl=%2fquestions%2f415452%2fobject-orientation-in-c
+
+or
+
+Name
+
+Email required, but never shown
+
+Home Page
+
+[discard][118]
+
+   [118]: #
+
+#### Hello World!
+
+This is a collaboratively edited question and answer site for **professional and enthusiast programmers**. It's 100% free, no registration required.
+
+[about »][119]   [faq »][120]
+
+   [119]: /about?mnu=1
+   [120]: /faq?mnu=1
+
+tagged
+
+[c][121] × 60159  
+[oop][122] × 13260  
+[object][123] × 7091  
+
+
+   [121]: /questions/tagged/c (show questions tagged 'c')
+   [122]: /questions/tagged/oop (show questions tagged 'oop')
+   [123]: /questions/tagged/object (show questions tagged 'object')
+
+asked
+
+**3 years ago**
+
+viewed
+
+**10,478 times**
+
+active
+
+**[2 years ago][124]**
+
+   [124]: ?lastactivity (2009-08-11 22:58:01Z)
+
+#### Community Bulletin
+
+[blog][125]
+
+   [125]: http://blog.stackoverflow.com
+
+[Encyclopedia Stack Exchange][126]
+
+   [126]: http://blog.stackoverflow.com/2012/05/encyclopedia-stack-exchange/
+
+  
+
+
+[blog][127]
+
+   [127]: http://blog.stackoverflow.com
+
+[Revamped Notifications][128]
+
+   [128]: http://blog.stackoverflow.com/2012/05/revamped-notifications/
+
+  
+
+
+Get the **weekly newsletter!**
+
+  * Top questions and answers
+  * Important announcements
+  * Unanswered questions
+
+see an [example newsletter][129]
+
+   [129]: http://stackexchange.com/newsletters/newsletter?site=stackoverflow.com
+
+#### Linked
+
+[Can you write object oriented code in C?][130]
+
+   [130]: /questions/351733/can-you-write-object-oriented-code-in-c
+
+[How do you implement a class in C?][131]
+
+   [131]: /questions/1403890/how-do-you-implement-a-class-in-c
+
+[How do function pointers in C work?][132]
+
+   [132]: /questions/840501/how-do-function-pointers-in-c-work
+
+[Resources for learning C program design][133]
+
+   [133]: /questions/925754/resources-for-learning-c-program-design
+
+[Is the C programming language object-oriented?][134]
+
+   [134]: /questions/3241932/is-the-c-programming-language-object-oriented
+
+[How can I simulate OO-style polymorphism in C?][135]
+
+   [135]: /questions/524033/how-can-i-simulate-oo-style-polymorphism-in-c
+
+[Material to learn GObject and Glib][136]
+
+   [136]: /questions/500501/material-to-learn-gobject-and-glib
+
+[Coding Standards for pure C (not C++)][137]
+
+   [137]: /questions/1262459/coding-standards-for-pure-c-not-c
+
+[How can Inheritance be modelled using C?][138]
+
+   [138]: /questions/1237266/how-can-inheritance-be-modelled-using-c
+
+[How could one implement C++ virtual functions in C][139]
+
+   [139]: /questions/3113583/how-could-one-implement-c-virtual-functions-in-c
+
+[What techniques/strategies do people use for building objects in C (not C++)?][140]
+
+   [140]: /questions/1225844/what-techniques-strategies-do-people-use-for-building-objects-in-c-not-c
+
+[Does C language support inheritence][141]
+
+   [141]: /questions/2985515/does-c-language-support-inheritence
+
+[C for an Object-Oriented programmer][142]
+
+   [142]: /questions/1451874/c-for-an-object-oriented-programmer
+
+[C : How do you simulate an 'instance'?][143]
+
+   [143]: /questions/1244033/c-how-do-you-simulate-an-instance
+
+[Object Oriented ANSI C?][144]
+
+   [144]: /questions/3072499/object-oriented-ansi-c
+
+[How do you do inheritance in a non-OO language?][145]
+
+   [145]: /questions/1641611/how-do-you-do-inheritance-in-a-non-oo-language
+
+[What is the best way to plan and organize development of an application in C?][146]
+
+   [146]: /questions/436446/what-is-the-best-way-to-plan-and-organize-development-of-an-application-in-c
+
+[Polymorphism in C][147]
+
+   [147]: /questions/4456685/polymorphism-in-c
+
+[Pure ANSI-C: make generic array][148]
+
+   [148]: /questions/4423036/pure-ansi-c-make-generic-array
+
+[Should object-oriented principles be applied in procedural languages?][149]
+
+   [149]: /questions/4759513/should-object-oriented-principles-be-applied-in-procedural-languages
+
+[Factory pattern implementation using ANSI C][150]
+
+   [150]: /questions/3204511/factory-pattern-implementation-using-ansi-c
+
+[see more linked questions…][151]
+
+   [151]: /search?q=url%3a%22http%3a%2f%2fstackoverflow.com%2fquestions%2f415452%2f*%22
+
+#### Related
+
+[Question about object-orientation][152]
+
+   [152]: /questions/118040/question-about-object-orientation
+
+[Can you write object oriented code in C?][153]
+
+   [153]: /questions/351733/can-you-write-object-oriented-code-in-c
+
+[Service-Orientation vs Object-Orientation - can they coexist?][154]
+
+   [154]: /questions/442815/service-orientation-vs-object-orientation-can-they-coexist
+
+[Object orientation and serialization][155]
+
+   [155]: /questions/1231569/object-orientation-and-serialization
+
+[Good reference for Object Oriented Design][156]
+
+   [156]: /questions/1349627/good-reference-for-object-oriented-design
+
+[Mapping C# object orientation with BioInformatics][157]
+
+   [157]: /questions/1460415/mapping-c-sharp-object-orientation-with-bioinformatics
+
+[what is an abstract data type in object oriented programming?][158]
+
+   [158]: /questions/1692933/what-is-an-abstract-data-type-in-object-oriented-programming
+
+[web services/object-oriented question][159]
+
+   [159]: /questions/1826087/web-services-object-oriented-question
+
+[Object Orientation, Rails][160]
+
+   [160]: /questions/1997907/object-orientation-rails
+
+[Object Oriented Metrics?][161]
+
+   [161]: /questions/2409609/object-oriented-metrics
+
+[An issue on object orientation in php][162]
+
+   [162]: /questions/2920243/an-issue-on-object-orientation-in-php
+
+[Object Oriented ANSI C?][163]
+
+   [163]: /questions/3072499/object-oriented-ansi-c
+
+[Javascript Object orientation + DOM?][164]
+
+   [164]: /questions/3654105/javascript-object-orientation-dom
+
+[Object oriented programming in C][165]
+
+   [165]: /questions/3778764/object-oriented-programming-in-c
+
+[The logic and mathematics of object orientation][166]
+
+   [166]: /questions/4698903/the-logic-and-mathematics-of-object-orientation
+
+[Pure C that mimics object-oriented programming?][167]
+
+   [167]: /questions/4896536/pure-c-that-mimics-object-oriented-programming
+
+[OOP: Is it going to far to create a phone number object, or an address object?][168]
+
+   [168]: /questions/5025191/oop-is-it-going-to-far-to-create-a-phone-number-object-or-an-address-object
+
+[What are the disadvantages/flaws/faults of Object Orientation in general?][169]
+
+   [169]: /questions/5038623/what-are-the-disadvantages-flaws-faults-of-object-orientation-in-general
+
+[Object Oriented Programming - Best Practice?][170]
+
+   [170]: /questions/5761700/object-oriented-programming-best-practice
+
+[how to model this in object oriented way][171]
+
+   [171]: /questions/6098853/how-to-model-this-in-object-oriented-way
+
+[What are the advantages or features of object oriented programming?][172]
+
+   [172]: /questions/6384188/what-are-the-advantages-or-features-of-object-oriented-programming
+
+[What is meant by the term "consumable" with regards to object orientation?][173]
+
+   [173]: /questions/7296674/what-is-meant-by-the-term-consumable-with-regards-to-object-orientation
+
+[using object in PHP without instantiating first][174]
+
+   [174]: /questions/8685901/using-object-in-php-without-instantiating-first
+
+[Is it possible to emulate object methods in C?][175]
+
+   [175]: /questions/8934567/is-it-possible-to-emulate-object-methods-in-c
+
+[Can I use C for Object Oriented Programming?][176]
+
+   [176]: /questions/9224855/can-i-use-c-for-object-oriented-programming
+
+[question feed][177]
+
+   [177]: /feeds/question/415452 (feed of this question and its answers)
+
+![][178]
+
+   [178]: /posts/415452/ivc/ba51
+
+lang-c
+
+[about][179] | [faq][180] | [blog][181] | [chat][182] | [data][183] | [podcast][184] | [shop][185] | [legal][186] | [advertising info][187] | mobile | **[contact us][188]** | **[feedback][189]**
+
+   [179]: /about
+   [180]: /faq
+   [181]: http://blog.stackexchange.com?blb=1
+   [182]: http://chat.stackoverflow.com
+   [183]: http://data.stackexchange.com
+   [184]: http://blog.stackoverflow.com/category/podcasts/
+   [185]: http://shop.stackexchange.com/
+   [186]: http://stackexchange.com/legal
+   [187]: http://engine.adzerk.net/redirect/0/2776/2751/0/4de3c60f719c4dfcb1a57531c7050090/0
+   [188]: mailto:team@stackoverflow.com
+   [189]: http://meta.stackoverflow.com
+
+■ [stackoverflow.com][190]  ■ [api/apps][191]  ■ [careers][192]  ■ [serverfault.com][193]  ■ [superuser.com][194]  ■ [meta][195]  ■ [area 51][196]  ■ [webapps][197]  ■ [gaming][198]  ■ [ubuntu][199]  ■ [webmasters][200]  ■ [cooking][201]  ■ [game development][202]  ■ [math][203]  ■ [photography][204]  ■ [stats][205]  ■ [tex][206]  ■ [english][207]  ■ [theoretical cs][208]  ■ [programmers][209]  ■ [unix][210]  ■ [apple][211]  ■ [wordpress][212]  ■ [physics][213]  ■ [home improvement][214]  ■ [gis][215]  ■ [electronics][216]  ■ [android][217]  ■ [security][218]  ■ [bicycles][219]  ■ [dba][220]  ■ [drupal][221]  ■ [sharepoint][222]  ■ [scifi & fantasy][223]  ■ [user experience][224]  ■ [skeptics][225]  ■ [rpg][226]  ■ [judaism][227] 
+
+   [190]: http://stackoverflow.com
+   [191]: http://stackapps.com
+   [192]: http://careers.stackoverflow.com
+   [193]: http://serverfault.com
+   [194]: http://superuser.com
+   [195]: http://meta.stackoverflow.com
+   [196]: http://area51.stackexchange.com
+   [197]: http://webapps.stackexchange.com
+   [198]: http://gaming.stackexchange.com
+   [199]: http://askubuntu.com
+   [200]: http://webmasters.stackexchange.com
+   [201]: http://cooking.stackexchange.com
+   [202]: http://gamedev.stackexchange.com
+   [203]: http://math.stackexchange.com
+   [204]: http://photo.stackexchange.com
+   [205]: http://stats.stackexchange.com
+   [206]: http://tex.stackexchange.com
+   [207]: http://english.stackexchange.com
+   [208]: http://cstheory.stackexchange.com
+   [209]: http://programmers.stackexchange.com
+   [210]: http://unix.stackexchange.com
+   [211]: http://apple.stackexchange.com
+   [212]: http://wordpress.stackexchange.com
+   [213]: http://physics.stackexchange.com
+   [214]: http://diy.stackexchange.com
+   [215]: http://gis.stackexchange.com
+   [216]: http://electronics.stackexchange.com
+   [217]: http://android.stackexchange.com
+   [218]: http://security.stackexchange.com
+   [219]: http://bicycles.stackexchange.com
+   [220]: http://dba.stackexchange.com
+   [221]: http://drupal.stackexchange.com
+   [222]: http://sharepoint.stackexchange.com
+   [223]: http://scifi.stackexchange.com
+   [224]: http://ux.stackexchange.com
+   [225]: http://skeptics.stackexchange.com
+   [226]: http://rpg.stackexchange.com
+   [227]: http://judaism.stackexchange.com
+
+[][228] [][229]
+
+   [228]: http://www.peer1.com/stackoverflow
+   [229]: http://creativecommons.org/licenses/by-sa/3.0/
+
+rev 2012.5.22.2655
+
+site design / logo (C) 2012 stack exchange inc; user contributions licensed under [cc-wiki][230] with [attribution required][231]
+
+   [230]: http://creativecommons.org/licenses/by-sa/3.0/
+   [231]: http://blog.stackoverflow.com/2009/06/attribution-required/
+
+Stack Overflow works best with JavaScript enabled![][232]
+
+   [232]: http://pixel.quantserve.com/pixel/p-c1rF4kxgLUzNc.gif
+

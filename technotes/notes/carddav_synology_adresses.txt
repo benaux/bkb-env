@@ -1,0 +1,4 @@
+Einfach Verbindung: http:// IP-EURER-DISKSTATION:8008/ addressbooks/ users/ <BENUTZERNAME>/ addressbook/
+
+
+HTTPS-Verbindung:  https:// IP-EURER-DISKSTATION:8443/ addressbooks/ users/ <BENUTZERNAME>/ addressbook/

@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+	<meta charset="utf-8">
+	<title>Richard Socher - Perl Scripts And One Liners</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="http://www.socher.org/pub/skins/sinorca-boot/bootstrap/css/bootstrap.min.css" media="screen"/>
+	<link rel="stylesheet" href="http://www.socher.org/pub/skins/sinorca-boot/bootstrap/css/bootstrap-responsive.min.css" media="screen"/>
+	<link rel="stylesheet" href="http://www.socher.org/pub/skins/sinorca-boot/bootstrap/css/myBootstrapOverwrites.css" media="screen"/>
+  <!--HeaderText--><style type='text/css'><!--
+  ul, ol, pre, dl, p { margin-top:0px; margin-bottom:0px; }
+  code.escaped { white-space: nowrap; }
+  .vspace { margin-top:1.33em; }
+  .indent { margin-left:40px; }
+  .outdent { margin-left:40px; text-indent:-40px; }
+  a.createlinktext { text-decoration:none; border-bottom:1px dotted gray; }
+  a.createlink { text-decoration:none; position:relative; top:-0.5em;
+    font-weight:bold; font-size:smaller; border-bottom:none; }
+  img { border:0px; }
+  
+div.sourceblock {
+	padding: 0.5em;
+	border: 1px solid #808080;
+	background-color: #F1F0ED; }
+div.sourceblock div {
+	font-family: monospace;
+	font-size: small;
+	 }
+div.sourceblock div.head, div.sourceblock div.foot {
+	font: italic medium serif;
+	padding: 0.5em;
+}
+div.codeblock {
+	padding: 0.5em;
+	border: 1px solid #808080;
+	background-color: #F1F0ED; }
+div.codeblock pre {
+	font-family: monospace;
+	font-size: small;
+	 }
+  .indent1 {margin-left:1.25em;}
+  .indent2 {margin-left:2.5em;}
+  .indent3 {margin-left:3.75em;}
+  .indent4 {margin-left:5em;}  
+
+  .toc1 {margin-left:1em;}
+  .toc2 {margin-left:2em;}
+  .toc3 {margin-left:3em;}
+  .toc4 {margin-left:4em;}  
+.editconflict { color:green; 
+  font-style:italic; margin-top:1.33em; margin-bottom:1.33em; }
+
+  table.markup { border:2px dotted #ccf; width:90%; }
+  td.markup1, td.markup2 { padding-left:10px; padding-right:10px; }
+  table.vert td.markup1 { border-bottom:1px solid #ccf; }
+  table.horiz td.markup1 { width:23em; border-right:1px solid #ccf; }
+  table.markup caption { text-align:left; }
+  div.faq p, div.faq pre { margin-left:2em; }
+  div.faq p.question { margin:1em 0 0.75em 0; font-weight:bold; }
+  div.faqtoc div.faq * { display:none; }
+  div.faqtoc div.faq p.question 
+    { display:block; font-weight:normal; margin:0.5em 0 0.5em 20px; line-height:normal; }
+  div.faqtoc div.faq p.question * { display:inline; }
+   
+    .frame 
+      { border:1px solid #cccccc; padding:4px; background-color:#f9f9f9; }
+    .lfloat { float:left; margin-right:0.5em; }
+    .rfloat { float:right; margin-left:0.5em; }
+a.varlink { text-decoration:none; }
+/* GeSHi (c) Nigel McNie 2004 (http://qbnz.com/highlighter) */
+.bash .imp {font-weight: bold; color: red;}
+.bash .kw1 {color: #b1b100;}
+.bash .kw3 {color: #000066;}
+.bash .co1 {color: #808080; font-style: italic;}
+.bash .es0 {color: #000099; font-weight: bold;}
+.bash .br0 {color: #66cc66;}
+.bash .st0 {color: #ff0000;}
+.bash .nu0 {color: #cc66cc;}
+.bash .re0 {color: #0000ff;}
+.bash .re1 {color: #0000ff;}
+.bash .re2 {color: #0000ff;}
+/* GeSHi (c) Nigel McNie 2004 (http://qbnz.com/highlighter) */
+.perl .imp {font-weight: bold; color: red;}
+.perl .kw1 {color: #b1b100;}
+.perl .kw2 {color: #000000; font-weight: bold;}
+.perl .kw3 {color: #000066;}
+.perl .co1 {color: #808080; font-style: italic;}
+.perl .coMULTI {color: #808080; font-style: italic;}
+.perl .es0 {color: #000099; font-weight: bold;}
+.perl .br0 {color: #66cc66;}
+.perl .st0 {color: #ff0000;}
+.perl .nu0 {color: #cc66cc;}
+.perl .me1 {color: #006600;}
+.perl .me2 {color: #006600;}
+.perl .re0 {color: #0000ff;}
+.perl .re4 {color: #009999;}
+
+--></style>
+  <link href='http://www.socher.org/pub/commentboxplus/commentboxplus.css' rel='stylesheet' type='text/css' />
+  <link rel='stylesheet' href='http://www.socher.org/pub/wsplus/wsplus.css' 
+    type='text/css' />
+  <!--[if IE]><style type='text/css' media='screen'>
+    body { behavior:url('http://www.socher.org/pub/wsplus/csshover.htc'); }
+    .rollover * { visibility: visible; }
+  </style><![endif]-->
+<meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
+<script type='text/JavaScript'>
+<!--
+Nix={map:null,convert:function(a){Nix.init();var s='';for(i=0;i<a.length;i++){var b=a.charAt(i);s+=((b>='A'&&b<='Z')||(b>='a'&&b<='z')?Nix.map[b]:b);}return s;},init:function(){if(Nix.map!=null)return;var map=new Array();var s='abcdefghijklmnopqrstuvwxyz';for(i=0;i<s.length;i++)map[s.charAt(i)]=s.charAt((i+13)%26);for(i=0;i<s.length;i++)map[s.charAt(i).toUpperCase()]=s.charAt((i+13)%26).toUpperCase();Nix.map=map;},decode:function(a){document.write(Nix.convert(a));}}
+//-->
+</script>
+  <meta name='robots' content='index,follow' />
+
+  </head>
+
+<body>
+<div class="container">
+
+    <!-- ##### Header ##### -->
+      <div class="masthead">
+    		<div class="nav-collapse navbar-responsive-collapse in collapse" style="height: auto;">
+				<div style="margin-top:10px">
+				<ul class='nav nav-tabs'><li class='nav nav-tabs'>  
+</li><li><a class='wikilink' href='http://www.socher.org/index.php/Main/HomePage'>Richard Socher</a>
+</li><li><a class='wikilink' href='http://www.socher.org/index.php/Main/HomePage#Publications'>Publications</a>
+</li><li><a class='wikilink' href='http://www.socher.org/index.php/DeepLearningTutorial/DeepLearningTutorial'>Deep Learning Tutorial</a>
+</li><li><a class='wikilink' href='http://www.socher.org/index.php/Main/NotesAndCodes'>Notes &amp; Misc.</a>
+</li><li><a class='wikilink' href='http://www.socher.org/index.php/Main/PhotographyAndTravel'>Photography</a>
+</li><li><script type='text/JavaScript'>
+<!--
+Nix.decode("<n pynff='heyyvax' uers='znvygb:evpuneq@fbpure.bet'>");
+//-->
+</script>Contact<script type='text/JavaScript'><!--
+Nix.decode("</n>");
+//-->
+</script> 
+</li></ul>
+
+				</div>
+      	</div>
+    	</div>
+
+   <!-- ##### Main Copy ##### -->
+ 
+   <!--PageText-->
+<div id='wikitext'>
+<p><h1>
+Info</h1><p>
+<p>I often use the following arguments to perl:
+</p><ul><li>-e 	Makes the line of code be executed instead of a script
+</li><li>-n 	Forces your line to be called in a loop. Allows you to take lines from the diamond operator (or stdin)
+</li><li>-p 	Forces your line to be called in a loop. Prints $_ at the end
+</li></ul><p class='vspace'><h1>
+Perl One-Liners</h1><p>
+<p><div class='tocstyle'>
+<span class='toc2'>
+      - <a href='#ntoc1'>One-Liner: Count the number of times a specific character appears in each line</a></span><br />
+<span class='toc2'>
+      - <a href='#ntoc2'>One-Liner: Add string to beginning of each line</a></span><br />
+<span class='toc2'>
+      - <a href='#ntoc3'>One-Liner: Add newline to end of each line</a></span><br />
+<span class='toc2'>
+      - <a href='#ntoc4'>One-Liner: Print only some columns of a file</a></span><br />
+<span class='toc2'>
+      - <a href='#ntoc5'>One-Liner: Print all columns except the first </a></span><br />
+<span class='toc2'>
+      - <a href='#ntoc6'>One-Liner: Replace a pattern with another one '''inside the file''' with backup</a></span><br />
+<span class='toc2'>
+      - <a href='#ntoc7'>One-Liner: Print only non-uppercase letters</a></span><br />
+<span class='toc2'>
+      - <a href='#ntoc8'>One-Liner:  Print one word per line</a></span><br />
+<span class='toc2'>
+      - <a href='#ntoc9'>One-Liner:  Kill all screen sessions (no remorse)</a></span><br />
+<span class='toc2'>
+      - <a href='#ntoc10'>One-Liner:  Return all unique words in a text document (divided by spaces), sorted by their counts (how often they appear)</a></span><br />
+<span class='toc2'>
+      - <a href='#ntoc11'>One-Liner:  Delete all special characters</a></span><br />
+<span class='toc2'>
+      - <a href='#ntoc12'>One-Liner:  Lower case everything</a></span><br />
+<span class='toc2'>
+      - <a href='#ntoc13'>One-Liner Combination:  Combine lower-casing with word counting and sorting</a></span><br />
+<span class='toc2'>
+      - <a href='#ntoc14'>One-Liner:  Print only one column</a></span><br />
+<span class='toc2'>
+      - <a href='#ntoc15'>One-Liner:  Print only text between tags</a></span><br />
+<span class='toc2'>
+      - <a href='#ntoc16'>One-Liner:  Sort lines by their length</a></span><br />
+<span class='toc2'>
+      - <a href='#ntoc17'>One-Liner:  Print second column, unless it contains a number</a></span><br />
+<span class='toc2'>
+      - <a href='#ntoc18'>One-Liner: Trim/ Collapse white spaces and replace new lines by something else</a></span><br />
+<span class='toc2'>
+      - <a href='#ntoc19'>One-Liner: Get the average of one column from certain lines</a></span><br />
+<span class='toc2'>
+      - <a href='#ntoc20'>One-Liner: How to sort a file by a column</a></span><br />
+<span class='toc2'>
+      - <a href='#ntoc21'>One-Liner: Replace specific space but also copy a group of matches</a></span><br />
+<span class='toc2'>
+      - <a href='#ntoc22'>More info</a></span><br />
+<span class='toc2'>
+      - <a href='#ntoc23'>Sending multiple commands to screen session on different machines</a></span><br />
+<span class='toc2'>
+      - <a href='#ntoc24'>How to install new CPAN modules?</a></span><br /></div>
+</p>
+<p class='vspace'><h2>
+<a name='ntoc1' id='ntoc1'></a>One-Liner: Count the number of times a specific character appears in each line</h2><p>
+<ul><li>This counts the number of quotation marks in each line and prints it <div class='sourceblock'><div class="bash">perl -ne <span class="st0">'$cnt = tr/&quot;//;print &quot;$cnt<span class="es0">\n</span>&quot;'</span> inputFileName.txt</div></div>
+</li></ul><p class='vspace'><h2>
+<a name='ntoc2' id='ntoc2'></a>One-Liner: Add string to beginning of each line</h2><p>
+<ul><li>Adds string to each line, followed by tab <div class='sourceblock'><div class="bash">perl -pe <span class="st0">'s/(.*)/string<span class="es0">\t</span>$1/'</span> inFile &gt; outFile</div></div>
+</li></ul><p class='vspace'><h2>
+<a name='ntoc3' id='ntoc3'></a>One-Liner: Add newline to end of each line</h2><p>
+<ul><li>Append a new line to each line <div class='sourceblock'><div class="bash">perl -pe <span class="st0">'s//<span class="es0">\n</span>/'</span> all.sent.classOnly &gt; all.sent.classOnly.sep</div></div>
+</li></ul><p class='vspace'><h2>
+<a name='ntoc4' id='ntoc4'></a>One-Liner: Print only some columns of a file</h2><p>
+<ul><li>Columns separated by a space <div class='sourceblock'><div class="bash">cut fileWithLotsOfColumns.txt -d<span class="st0">" "</span> -f <span class="nu0">1</span>,<span class="nu0">2</span>,<span class="nu0">3</span>,<span class="nu0">4</span> &gt; fileWithOnlyFirst4Cols.txt</div></div>
+</li></ul><p><h2>
+<a name='ntoc5' id='ntoc5'></a>One-Liner: Print all columns except the first </h2><p>
+<ul><li><div class='sourceblock'><div class="bash">cut -d<span class="st0">" "</span> -f <span class="nu0">1</span> --complement filename &gt; filename.</div></div>
+</li></ul><p><h2>
+<a name='ntoc6' id='ntoc6'></a>One-Liner: Replace a pattern with another one <strong>inside the file</strong> with backup</h2><p>
+<ul><li>Replace all occurrences of pattern1 (e.g. [0-9]) with pattern2  <div class='sourceblock'><div class="perl">perl -p -i.bak -w -e <span class="st0">'s/pattern1/pattern2/g'</span> inputFile</div></div>
+</li></ul><p><h2>
+<a name='ntoc7' id='ntoc7'></a>One-Liner: Print only non-uppercase letters</h2><p>
+<ul><li>Go through file and only print words that do not have any uppercase letters. <div class='sourceblock'><div class="perl">perl -<span class="kw1">ne</span> <span class="st0">'print unless m/[A-Z]/'</span> allWords.txt &gt; allWordsOnlyLowercase.txt</div></div>
+</li></ul><p><h2>
+<a name='ntoc8' id='ntoc8'></a>One-Liner:  Print one word per line</h2><p>
+<ul><li>Go through file, split line at each space and print words one per line. <div class='sourceblock'><div class="perl">perl -<span class="kw1">ne</span> <span class="st0">'print join(&quot;\n&quot;, split(/ /,$_));print(&quot;\n&quot;)'</span> someText.txt &gt; wordsPerLine.txt</div></div>
+</li></ul><p><h2>
+<a name='ntoc9' id='ntoc9'></a>One-Liner:  Kill all screen sessions (no remorse)</h2><p>
+<ul><li>Since there's no screen command that would kill all screen sessions regardless of what they're doing, here's a perl one-liner that really kills ALL screen sessions without remorse. <div class='sourceblock'><div class="perl">screen -ls | perl -<span class="kw1">ne</span> <span class="st0">'/(\d+)\./;print $1'</span> | xargs -l <a href="http://www.perldoc.com/perl5.6/pod/func/kill.html"><span class="kw3">kill</span></a> -<span class="nu0">9</span></div></div>
+</li><li>The killall command may also do the job...
+</li></ul><p class='vspace'><h2>
+<a name='ntoc10' id='ntoc10'></a>One-Liner:  Return all unique words in a text document (divided by spaces), sorted by their counts (how often they appear)</h2><p>
+<ul><li>assuming no punctuation marks: <div class='sourceblock'><div class="bash">perl -ne <span class="st0">'print join(&quot;<span class="es0">\n</span>&quot;, split(/<span class="es0">\s</span>+/,$_));print(&quot;<span class="es0">\n</span>&quot;)'</span> documents.txt &gt; wordsOnePerLine.txt<br />
+cat wordsOnePerLine.txt | sort | uniq -c&nbsp; | sort -n &gt; wordCountsSorted.txt</div></div>
+</li></ul><p><h2>
+<a name='ntoc11' id='ntoc11'></a>One-Liner:  Delete all special characters</h2><p>
+<ul><li>or in other words, delete every character that is not a letter, white space or line end (replace with nothing) <div class='sourceblock'><div class="perl">perl -pne <span class="st0">'s/[^a-zA-Z\s]*//g'</span> text_withSpecial.txt &gt; text_lettersOnly.txt</div></div>
+</li></ul><p><h2>
+<a name='ntoc12' id='ntoc12'></a>One-Liner:  Lower case everything</h2><p>
+<ul><li><div class='sourceblock'><div class="perl">perl -pne <span class="st0">'tr/[A-Z]/[a-z]/'</span> textWithUpperCase.txt &gt; textwithoutuppercase.txt;</div></div>
+</li></ul><p class='vspace'><h2>
+<a name='ntoc13' id='ntoc13'></a>One-Liner Combination:  Combine lower-casing with word counting and sorting</h2><p>
+<ul><li><div class='sourceblock'><div class="perl">perl -pne <span class="st0">'tr/[A-Z]/[a-z]/'</span> sentences.txt | perl -<span class="kw1">ne</span> <span class="st0">'print join(&quot;\n&quot;, split(/ /,$_));print(&quot;\n&quot;)'</span> | <a href="http://www.perldoc.com/perl5.6/pod/func/sort.html"><span class="kw3">sort</span></a> | uniq -c | <a href="http://www.perldoc.com/perl5.6/pod/func/sort.html"><span class="kw3">sort</span></a> -n</div></div>
+</li></ul><p class='vspace'><h2>
+<a name='ntoc14' id='ntoc14'></a>One-Liner:  Print only one column</h2><p>
+<ul><li>Print only the second column of the data when using tabular as a separator <div class='sourceblock'><div class="perl">perl -<span class="kw1">ne</span> <span class="st0">'@F = split(&quot;\t&quot;, $_); print &quot;$F[1]&quot;;'</span> columnFileWithTabs.txt &gt; justSecondColumn.txt</div></div>
+</li></ul><p><h2>
+<a name='ntoc15' id='ntoc15'></a>One-Liner:  Print only text between tags</h2><p>
+<ul><li><div class='sourceblock'><div class="perl">perl -<span class="kw1">ne</span> <span class="st0">'if (m/\&lt;a\&gt;(.*?)\&lt;\/a\&gt;/g){print &quot;$1\n&quot;}'</span> textFile</div></div>
+</li><li>The same as a script:
+</li><li>Extracting multiple multiline patterns between a start and an end tag
+<ul><li>Here, we want to extract everything between &lt;parse&gt; and &lt;/parse&gt;.
+</li><li><div class='sourceblock'><div class="perl"><span class="co1">#!/usr/bin/perl -w</span><br />
+<a href="http://www.perldoc.com/perl5.6/pod/func/local.html"><span class="kw3">local</span></a> $/;<br />
+<br />
+<a href="http://www.perldoc.com/perl5.6/pod/func/open.html"><span class="kw3">open</span></a><span class="br0">&#40;</span>DAT, <span class="st0">"yourFile.xml"</span><span class="br0">&#41;</span> || <a href="http://www.perldoc.com/perl5.6/pod/func/die.html"><span class="kw3">die</span></a><span class="br0">&#40;</span><span class="st0">"Could not open file!"</span><span class="br0">&#41;</span>;<br />
+<span class="kw1">my</span> <span class="re0">$content</span> = <span class="re4">&lt;DAT&gt;</span>;<br />
+<br />
+<span class="kw1">while</span> <span class="br0">&#40;</span><span class="re0">$content</span> =~ <a href="http://www.perldoc.com/perl5.6/pod/func/m.html"><span class="kw3">m</span></a>/<span class="re4">&lt;parse&gt;</span><span class="br0">&#40;</span>.*?<span class="br0">&#41;</span>&lt;\/parse&gt;/sg<span class="br0">&#41;</span><span class="br0">&#123;</span><br />
+&nbsp;<a href="http://www.perldoc.com/perl5.6/pod/func/print.html"><span class="kw3">print</span></a> <span class="st0">"$1<span class="es0">\n</span>"</span><br />
+<span class="br0">&#125;</span>;</div></div>
+</li></ul></li></ul><p class='vspace'><h2>
+<a name='ntoc16' id='ntoc16'></a>One-Liner:  Sort lines by their length</h2><p>
+<ul><li><div class='sourceblock'><div class="perl">perl -e <span class="st0">'print sort {length $a &lt;=&gt; length $b} &lt;&gt;'</span> textFile</div></div>
+</li></ul><p class='vspace'><h2>
+<a name='ntoc17' id='ntoc17'></a>One-Liner:  Print second column, unless it contains a number</h2><p>
+<ul><li><div class='sourceblock'><div class="perl">perl -lane <span class="st0">'print $F[1] unless $F[1] =~ m/[0-9]/'</span> wordCounts.txt</div></div>
+</li></ul><p class='vspace'><h2>
+<a name='ntoc18' id='ntoc18'></a>One-Liner: Trim/ Collapse white spaces and replace new lines by something else</h2><p>
+<ul><li><div class='sourceblock'><div class="perl">echo <span class="st0">"The cat sat&nbsp; &nbsp; on&nbsp; &nbsp; the&nbsp; mat<br />
+&nbsp;asd&nbsp; sad&nbsp; das&nbsp; &nbsp;"</span> | perl&nbsp; -<span class="kw1">ne</span> <span class="st0">'s/\n/ /; print $_; print(&quot;;&quot;)'</span> | perl -<span class="kw1">ne</span> <span class="st0">'s/\s+/ /g; print $_'</span></div></div>
+</li></ul><p class='vspace'><h2>
+<a name='ntoc19' id='ntoc19'></a>One-Liner: Get the average of one column from certain lines</h2><p>
+<ul><li><div class='sourceblock'><div class="perl"><a href="http://www.perldoc.com/perl5.6/pod/func/grep.html"><span class="kw3">grep</span></a> <span class="st0">"another criterion"</span> thisDataFile.txt |&nbsp; perl -<span class="kw1">ne</span> <span class="st0">'@F = split(&quot;,&quot;, $_); print &quot;$F[29]\n&quot;;'</span> | awk <span class="st0">'{sum+=$1} END { print &quot;Average = &quot;,sum/NR}'</span></div></div>
+</li></ul><p class='vspace'><h2>
+<a name='ntoc20' id='ntoc20'></a>One-Liner: How to sort a file by a column</h2><p>
+<ul><li>Columns are separated by a space, we sort numerically (-n) and we sort by the 10'th column (-k10)
+</li><li>bash does the job here, no perl needed ;)
+</li><li><div class='sourceblock'><div>sort -t' ' -n -k10 eSet1_both.txt<br/></div></div>
+</li></ul><p class='vspace'><h2>
+<a name='ntoc21' id='ntoc21'></a>One-Liner: Replace specific space but also copy a group of matches</h2><p>
+<ul><li>matches a group of numbers in the beginning of a line
+</li><li><div class='sourceblock'><div>perl -p -i.bak -w -e 's/^([0-9]+) "/$1\t"/g'  someFile.txt<br/></div></div>
+</li></ul><p class='vspace'><h2>
+<a name='ntoc22' id='ntoc22'></a>More info</h2><p>
+<ul><li><a class='urllink' href='http://affy.blogspot.com/p5be/ch17.htm' rel='nofollow'>http://affy.blogspot.com/p5be/ch17.htm</a>
+</li><li><a class='urllink' href='http://www.well.ox.ac.uk/~johnb/comp/perl/intro.html' rel='nofollow'>http://www.well.ox.ac.uk/~johnb/comp/perl/intro.html</a>
+</li></ul><p class='vspace'><h2>
+<a name='ntoc23' id='ntoc23'></a>Sending multiple commands to screen session on different machines</h2><p>
+<dl><dd><ul><li><div class='sourceblock'><div class="perl"><span class="co1">#!/usr/bin/perl -w</span><br />
+<br />
+<span class="co1"># This script creates screen sessions, ssh's to machines and executes code on these machines.</span><br />
+<span class="co1"># parameters: -s (start) -r (run) -q (quit)</span><br />
+<span class="co1"># HowTo:</span><br />
+<span class="co1">#&nbsp; 1) change the executed code, property folder and prefix to your values</span><br />
+<span class="co1">#&nbsp; 2) select your machines </span><br />
+<span class="co1">#&nbsp; 3) on the machine where you want your screen sessions run to start your sessions: ./clusterSubmitJobs.pl -s</span><br />
+<span class="co1">#&nbsp; 4) once you're done and want to quit all your sessions: ./clusterSubmitJobs.pl -q</span><br />
+<span class="co1"># author: richard socher.org</span><br />
+<br />
+<span class="kw2">use</span> strict;<br />
+<span class="kw2">use</span> Getopt::<span class="me2">Std</span>;<br />
+<span class="kw2">use</span> List::<span class="me2">Util</span> <a href="http://www.perldoc.com/perl5.6/pod/func/qw.html"><span class="kw3">qw</span></a><span class="br0">&#91;</span>min max<span class="br0">&#93;</span>;<br />
+<span class="kw1">my</span> <span class="re0">%options</span>=<span class="br0">&#40;</span><span class="br0">&#41;</span>;<br />
+getopts<span class="br0">&#40;</span><span class="st0">"srq"</span>,\<span class="re0">%options</span><span class="br0">&#41;</span>;<br />
+<br />
+<span class="co1">#------------------</span><br />
+<span class="co1"># files to be considered</span><br />
+<span class="kw1">my</span> <span class="re0">$folder</span> = <span class="st0">'/folderWithInputFiles'</span>;<br />
+<span class="kw1">my</span> <span class="re0">$prefix</span> = <span class="st0">'tests_'</span>;<br />
+<span class="kw1">my</span> <span class="re0">$ext</span> = <span class="st0">'.config'</span>;<br />
+<span class="co1"># code to run with files</span><br />
+<span class="kw1">my</span> <span class="re0">$code</span> = <span class="st0">'./runMyScript.sh -configFile '</span>;<br />
+<br />
+<span class="co1"># deprecated by mstat</span><br />
+<span class="kw1">my</span> <span class="re0">@freemachines</span> = <span class="br0">&#40;</span><span class="st0">'machine1.yourPlace.edu'</span>, <span class="st0">'machine2.yourPlace.edu'</span><span class="br0">&#41;</span>;<br />
+<span class="co1">#-------------------</span><br />
+<br />
+<br />
+<span class="kw1">my</span> <span class="re0">$full</span> = <span class="re0">$folder</span> . <span class="re0">$prefix</span> . <span class="st0">'*'</span> . <span class="re0">$ext</span>;<br />
+<a href="http://www.perldoc.com/perl5.6/pod/func/print.html"><span class="kw3">print</span></a> <span class="st0">"Using files: $full <span class="es0">\n</span>"</span>;<br />
+<br />
+<span class="kw1">my</span> <span class="re0">@files</span> = &lt;<span class="re0">$full</span>*&gt;;<br />
+<span class="kw1">my</span> <span class="re0">$numMachines</span> = <span class="re0">@freemachines</span>;<br />
+<span class="kw1">my</span> <span class="re0">$numFiles</span> = <span class="re0">@files</span>;<br />
+<span class="kw1">my</span> <span class="re0">$minNum</span> = min<span class="br0">&#40;</span><span class="re0">$numMachines</span>,<span class="re0">$numFiles</span><span class="br0">&#41;</span>;<br />
+<br />
+<span class="kw1">for</span> <span class="br0">&#40;</span><span class="kw1">my</span> <span class="re0">$i</span> = <span class="nu0">0</span>; <span class="re0">$i</span> &lt; <span class="re0">$minNum</span>; <span class="re0">$i</span>++<span class="br0">&#41;</span> <span class="br0">&#123;</span><br />
+&nbsp; <span class="kw1">if</span> <span class="br0">&#40;</span><span class="re0">$options</span><span class="br0">&#123;</span><a href="http://www.perldoc.com/perl5.6/pod/func/s.html"><span class="kw3">s</span></a><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="br0">&#123;</span><br />
+&nbsp; &nbsp; <a href="http://www.perldoc.com/perl5.6/pod/func/print.html"><span class="kw3">print</span></a> <span class="st0">"Creating screen session: freemachines[$i] for <span class="es0">\t</span> $files[$i] <span class="es0">\n</span>"</span>;<br />
+&nbsp; &nbsp; <a href="http://www.perldoc.com/perl5.6/pod/func/system.html"><span class="kw3">system</span></a><span class="br0">&#40;</span><span class="st0">"screen -d -m -S $freemachines[$i]"</span><span class="br0">&#41;</span>;<br />
+&nbsp; &nbsp; <a href="http://www.perldoc.com/perl5.6/pod/func/system.html"><span class="kw3">system</span></a><span class="br0">&#40;</span><span class="st0">"screen -S $freemachines[$i] -p 0 -X stuff <span class="es0">\"</span>ssh $freemachines[$i]<span class="es0">\0</span>15<span class="es0">\"</span>"</span><span class="br0">&#41;</span>;<br />
+&nbsp; <span class="br0">&#125;</span><br />
+<br />
+&nbsp; <span class="kw1">if</span> <span class="br0">&#40;</span><span class="re0">$options</span><span class="br0">&#123;</span>r<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="br0">&#123;</span><br />
+&nbsp; &nbsp; <a href="http://www.perldoc.com/perl5.6/pod/func/print.html"><span class="kw3">print</span></a> <span class="st0">"run: screen -S $freemachines[$i] -p 0 -X stuff <span class="es0">\"</span>$code $files[$i]<span class="es0">\"</span><span class="es0">\n</span>"</span>;<br />
+&nbsp; &nbsp; <a href="http://www.perldoc.com/perl5.6/pod/func/system.html"><span class="kw3">system</span></a><span class="br0">&#40;</span><span class="st0">"screen -S $freemachines[$i] -p 0 -X stuff <span class="es0">\"</span>$code $files[$i]<span class="es0">\0</span>15<span class="es0">\"</span>"</span><span class="br0">&#41;</span>;<br />
+&nbsp; <span class="br0">&#125;</span><br />
+<br />
+&nbsp; <span class="kw1">if</span> <span class="br0">&#40;</span><span class="re0">$options</span><span class="br0">&#123;</span><a href="http://www.perldoc.com/perl5.6/pod/func/q.html"><span class="kw3">q</span></a><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="br0">&#123;</span><br />
+&nbsp; &nbsp; <a href="http://www.perldoc.com/perl5.6/pod/func/print.html"><span class="kw3">print</span></a> <span class="st0">"screen -S $freemachines[$i] -p 0 -X stuff <span class="es0">\"</span>exit<span class="es0">\n</span>"</span>;<br />
+&nbsp; &nbsp; <a href="http://www.perldoc.com/perl5.6/pod/func/system.html"><span class="kw3">system</span></a><span class="br0">&#40;</span><span class="st0">"screen -S $freemachines[$i] -p 0 -X stuff <span class="es0">\"</span>exit<span class="es0">\0</span>15<span class="es0">\"</span>"</span><span class="br0">&#41;</span>;<br />
+&nbsp; &nbsp; <a href="http://www.perldoc.com/perl5.6/pod/func/system.html"><span class="kw3">system</span></a><span class="br0">&#40;</span><span class="st0">"screen -S $freemachines[$i] -p 0 -X stuff <span class="es0">\"</span>exit<span class="es0">\0</span>15<span class="es0">\"</span>"</span><span class="br0">&#41;</span>;<br />
+&nbsp; <span class="br0">&#125;</span><br />
+<span class="br0">&#125;</span></div></div>
+</li></ul></dd></dl><p class='vspace'><h2>
+<a name='ntoc24' id='ntoc24'></a>How to install new CPAN modules?</h2><p>
+<dl><dd><ul><li><div class='sourceblock'><div>perl -MCPAN -e shell # go to CPAN install mode<br/>install Bundle::CPAN # update CPAN<br/>reload cpan<br/>install Set::Scalar<br/></div></div>
+</li></ul></dd></dl><div class='vspace'></div>
+    <div id='message'><form name='cbox' class='inputform' action='http://www.socher.org/index.php/Main/PerlScriptsAndOneLiners' method='post' onsubmit='return checkform(this);'>
+    <input type='hidden' name='n' value='Main.PerlScriptsAndOneLiners' />
+    <input type='hidden' name='action' value='comment' />
+    <input type='hidden' name='order' value='' /><input type='hidden' name='accesscode' value='372' />
+    <input type='hidden' name='csum' value='Comment added' />
+    <table width='90%'><tr>
+    <th class='prompt' align='right' valign='top'>Add Comment&nbsp;</th>
+    <td><textarea class='inputtext commenttext' name='text' id='text' rows=6 cols=40></textarea>
+    </td></tr><tr><th class='prompt' align='right' valign='top'>Sign as Author&nbsp;</th>
+    <td><input class='inputbox commentauthorbox' type='text' name='author' value='' size='32' /></td></tr><tr><th class='prompt' align='right' valign='top'><input type='hidden' name='captchakey' value='0' />
+    	Enter code: <em class='access'><img src='http://www.socher.org/index.php/Main/PerlScriptsAndOneLiners?action=captchaimage&amp;captchakey=1' border='0' align='top' /> </em></th><td><input type='text' name='response' size='5' class='inputbox' /> <input type='hidden' name='access' value='372' /><input class='inputbutton commentbutton' type='submit' name='post' value=' Post ' />
+    <input class='inputbutton commentbutton' type='reset' value='Reset' /></td></tr></table><br /></form></div>
+ <script type='text/javascript' language='JavaScript1.2'>
+  function checkform ( form ) {
+   if (form.text && form.text.value == "") { window.alert( "Please enter a comment to post" ); form.text.focus(); return false; }
+   if (form.author && form.author.value == "") { window.alert( "Please enter your name as author" ); form.author.focus(); return false; }
+   if (form.response && form.response.value == "") { window.alert( "Please enter the code number" ); form.response.focus(); return false; }return true ;
+  }
+  </script>
+   
+</div>
+
+
+
+</div>
+
+    
+    <!-- ##### Footer ##### -->
+    <div id="footer">
+      <div class="left">
+		        
+        <!-- Start of StatCounter Code -->
+		<script type="text/javascript">
+		var sc_project=3328033; 
+		var sc_invisible=0; 
+		var sc_partition=36; 
+		var sc_security="2da3a8a5"; 
+		</script>
+		<script src="http://www.statcounter.com/counter/counter_xhtml.js" type="text/javascript" ></script>
+	<!-- End of StatCounter Code -->
+        
+      </div>
+
+
+    </div>
+    
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+<script type="text/javascript">
+    _uacct = "UA-861638-1";
+    urchinTracker();
+</script>
+</body>
+</html>

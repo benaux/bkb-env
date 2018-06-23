@@ -1,0 +1,20 @@
+Notes: Applescript
+==================
+
+
+
+
+## call with command line arguments 
+(cli args)
+
+	on run argv
+		....
+	end run
+
+## Put app to front
+~~~~
+   tell application "Firefox"
+      # Make Firefox frontmost.
+      activate
+~~~~
+

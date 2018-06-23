@@ -1,0 +1,780 @@
+
+[ ![bash regex =~ case insensetive, possible?][6]][7] ** bash regex =~ case insensetive, possible? **
+[ ![][8] ][9]
+
+   [6]: http://linux.unix.com/iconimages/shell-programming-scripting/bash-regex-case-insensetive-possible_ltr.gif
+   [7]: http://www.unix.com/shell-programming-scripting/110312-bash-regex-case-insensetive-possible.html
+   [8]: http://linux.unix.netdna-cdn.com/images/Facebook_Logo_170.jpg
+   [9]: https://www.facebook.com/unixlinuxhq
+
+User Name
+Remember Me?
+
+Password
+Search Forums:   
+  
+
+
+[Forums][10]
+[Register][11]
+[Forum Rules][12]
+[Linux and Unix Links][13]
+[Man Pages][14]
+[Albums][15]
+[FAQ][16]
+[Users][17]
+[Calendar][18]
+[Search][19]
+[Today's Posts][20]
+[Mark Forums Read][21]
+
+   [10]: /
+   [11]: http://www.unix.com/register.php
+   [12]: http://www.unix.com/misc.php?do=cfrules
+   [13]: /links/index.php
+   [14]: /man-page/OpenSolaris/1/man/
+   [15]: http://www.unix.com/all_albums.php
+   [16]: http://www.unix.com/faq.php
+   [17]: http://www.unix.com/members/list/
+   [18]: http://www.unix.com/calendar.php
+   [19]: http://www.unix.com/search.php
+   [20]: http://www.unix.com/search.php?do=getdaily
+   [21]: http://www.unix.com/forumdisplay.php?do=markread
+
+  
+
+
+[![][22]][23]
+[![][24]][25]
+
+   [22]: http://b.unix.com/www/delivery/avw.php?zoneid=1&n=15fbc83&cb=1236327728-1338997428-1
+   [23]: http://b.unix.com/www/delivery/ck.php?n=15fbc83&cb=1236327728-1338997428-1
+   [24]: http://b.unix.com/www/delivery/avw.php?zoneid=2&n=91ce122&cb=1236327728-1338997428-2
+   [25]: http://b.unix.com/www/delivery/ck.php?n=91ce122&cb=1236327728-1338997428-2
+
+  
+
+
+**Shell Programming and Scripting** Post questions about KSH, CSH, SH, BASH, PERL, PHP, SED, AWK and OTHER shell scripts and shell scripting languages here.
+  
+
+
+[![Closed Thread][26]][27]    
+
+   [26]: http://linux.unix.com/images/buttons/threadclosed.gif
+   [27]: http://www.unix.com/newreply.php?do=newreply&noquote=1&p=302318451
+
+Page 1 of 2
+**1**
+[2][28]
+[>][29]
+
+   [28]: http://www.unix.com/shell-programming-scripting/110312-bash-regex-case-insensetive-possible-2.html (Show results 8 to 9 of 9)
+   [29]: http://www.unix.com/shell-programming-scripting/110312-bash-regex-case-insensetive-possible-2.html (Next Page - Results 8 to 9 of 9)
+
+ 
+
+[Thread Tools][30]
+[Search this Thread][31]
+[Display Modes][32]
+
+   [30]: http://www.unix.com/shell-programming-scripting/110312-bash-regex-case-insensetive-possible.html#goto_threadtools
+   [31]: http://www.unix.com/shell-programming-scripting/110312-bash-regex-case-insensetive-possible.html#goto_threadsearch
+   [32]: http://www.unix.com/shell-programming-scripting/110312-bash-regex-case-insensetive-possible.html#goto_displaymodes
+
+    #[**1**][33]  
+
+   [33]: http://www.unix.com/302318451-post1.html
+
+![Old][34] 05-21-2009 
+
+   [34]: http://linux.unix.com/images/statusicon/post_old.gif
+
+[TehOne][35] ![TehOne is offline][36]
+
+   [35]: http://www.unix.com/members/302050025.html
+   [36]: http://linux.unix.com/images/statusicon/user_offline.gif
+
+Registered User
+
+ 
+
+Join Date: Oct 2008
+
+Posts: 81 
+
+Thanks: 0
+
+Thanked 0 Times in 0 Posts 
+
+![Question][37] **bash regex =~ case insensetive, possible?**
+
+   [37]: http://linux.unix.com/images/icons/icon5.gif
+
+* * *
+
+It can get very annoying that bash regex =~ is case-sensetive, is there a way to set it to be case-insensetive?  
+  
+  
+
+
+Code:
+    
+    if [[ "$1" =~ "(test)" ]]; then
+      echo match
+    else 
+      echo no match
+    fi
+
+  
+
+
+[Remove advertisements][38]
+
+   [38]: http://www.unix.com/register.php
+
+Sponsored Links 
+
+[![][39]][40]
+[![][41]][42]
+
+   [39]: http://b.unix.com/www/delivery/avw.php?zoneid=3&n=a9a0428&cb=553599888-1338997428-3
+   [40]: http://b.unix.com/www/delivery/ck.php?n=a9a0428&cb=553599888-1338997428-3
+   [41]: http://b.unix.com/www/delivery/avw.php?zoneid=4&n=366f805&cb=553599888-1338997428-4
+   [42]: http://b.unix.com/www/delivery/ck.php?n=366f805&cb=553599888-1338997428-4
+
+    #[**2**][43]  
+
+   [43]: http://www.unix.com/302318460-post2.html
+
+![Old][44] 05-21-2009 
+
+   [44]: http://linux.unix.com/images/statusicon/post_old.gif
+
+[![cfajohnson's Avatar][45]][46]
+
+   [45]: http://www.unix.com/customavatars/avatar302022645_4.gif
+   [46]: http://www.unix.com/members/302022645.html
+
+[cfajohnson][47] ![cfajohnson is offline][48] ![Forum Advisor][49]  
+
+   [47]: http://www.unix.com/members/302022645.html
+   [48]: http://linux.unix.com/images/statusicon/user_offline.gif
+   [49]: http://linux.unix.com/images/icons/knot.png
+
+Shell programmer, author
+
+ 
+
+Join Date: Mar 2007
+
+Location: Toronto, Canada
+
+Posts: 2,830 
+
+Thanks: 0
+
+Thanked 84 Times in 78 Posts 
+
+Quote:
+
+Originally Posted by **TehOne** [![View Post][50]][51]
+
+   [50]: http://linux.unix.com/images/buttons/viewpost.gif
+   [51]: http://www.unix.com/shell-programming-scripting/110312-bash-regex-case-insensetive-possible.html#post302318451
+
+It can get very annoying that bash regex =~ is case-sensetive, is there a way to set it to be case-insensetive?
+
+>   
+A few seconds with the _bash_ man page reveals:  
+  
+  
+
+> 
+> Code:
+>     
+>     shopt -s nocasematch
+> 
+>   
+
+
+Quote:
+
+  
+
+
+Code:
+    
+    if [[ "$1" =~ "(test)" ]]; then
+      echo match
+    else 
+      echo no match
+    fi
+
+  
+
+
+>   
+You are not testing against a regex; you are testing against a string. To test a regex, remove the quotes from the right-hand side.  
+
+
+[Remove advertisements][52]
+
+   [52]: http://www.unix.com/register.php
+
+Sponsored Links 
+
+[![][53]][54]
+[![][55]][56]
+
+   [53]: http://b.unix.com/www/delivery/avw.php?zoneid=5&n=f379bb5&cb=1147687063-1338997428-5
+   [54]: http://b.unix.com/www/delivery/ck.php?n=f379bb5&cb=1147687063-1338997428-5
+   [55]: http://b.unix.com/www/delivery/avw.php?zoneid=6&n=e82d82c&cb=1147687063-1338997428-6
+   [56]: http://b.unix.com/www/delivery/ck.php?n=e82d82c&cb=1147687063-1338997428-6
+
+    #[**3**][57]  
+
+   [57]: http://www.unix.com/302318479-post3.html
+
+![Old][58] 05-21-2009 
+
+   [58]: http://linux.unix.com/images/statusicon/post_old.gif
+
+[TehOne][59] ![TehOne is offline][60]
+
+   [59]: http://www.unix.com/members/302050025.html
+   [60]: http://linux.unix.com/images/statusicon/user_offline.gif
+
+Registered User
+
+ 
+
+Join Date: Oct 2008
+
+Posts: 81 
+
+Thanks: 0
+
+Thanked 0 Times in 0 Posts 
+
+Quote:
+
+Originally Posted by **cfajohnson** [![View Post][61]][62]
+
+   [61]: http://linux.unix.com/images/buttons/viewpost.gif
+   [62]: http://www.unix.com/shell-programming-scripting/110312-bash-regex-case-insensetive-possible.html#post302318460
+
+>   
+A few seconds with the _bash_ man page reveals:  
+  
+  
+
+> 
+> Code:
+>     
+>     shopt -s nocasematch
+> 
+>   
+
+
+>   
+You are not testing against a regex; you are testing against a string. To test a regex, remove the quotes from the right-hand side.  
+
+
+  
+It doesn't work, here's how I tested it:  
+  
+  
+
+
+Code:
+    
+    if [[ "$1" =~ "(test)" ]]; then
+      echo match with quotas
+    else
+      echo no match with quotas
+    fi
+    
+    if [[ "$1" =~ \(test\) ]]; then
+      echo match without quotas
+    else
+      echo no match without quotas
+    fi
+
+  
+  
+
+
+Code:
+    
+    [21:56:45] root:~# shopt -s nocasematch
+    [21:59:29] root:~# ./test Test
+    no match with quotas
+    no match without quotas
+
+  
+Edit:  
+  
+  
+
+
+Code:
+    
+    GNU bash, version 3.1.17(1)-release (x86_64-pc-linux-gnu)
+
+  
+
+
+* * *
+
+_ Last edited by TehOne; 05-21-2009 at 04:15 PM.. _
+
+    #[**4**][63]  
+
+   [63]: http://www.unix.com/302318487-post4.html
+
+![Old][64] 05-21-2009 
+
+   [64]: http://linux.unix.com/images/statusicon/post_old.gif
+
+[![cfajohnson's Avatar][65]][66]
+
+   [65]: http://www.unix.com/customavatars/avatar302022645_4.gif
+   [66]: http://www.unix.com/members/302022645.html
+
+[cfajohnson][67] ![cfajohnson is offline][68] ![Forum Advisor][69]  
+
+   [67]: http://www.unix.com/members/302022645.html
+   [68]: http://linux.unix.com/images/statusicon/user_offline.gif
+   [69]: http://linux.unix.com/images/icons/knot.png
+
+Shell programmer, author
+
+ 
+
+Join Date: Mar 2007
+
+Location: Toronto, Canada
+
+Posts: 2,830 
+
+Thanks: 0
+
+Thanked 84 Times in 78 Posts 
+
+>   
+
+> 
+> Code:
+>     
+>     if [[ "$1" =~ (test) ]]; then
+>       echo match
+>     else
+>       echo no match
+>     fi
+> 
+>   
+
+
+[Remove advertisements][70]
+
+   [70]: http://www.unix.com/register.php
+
+Sponsored Links 
+
+[![][71]][72]
+
+   [71]: http://b.unix.com/www/delivery/avw.php?zoneid=18&n=85d0c0a&cb=1395290710-1338997428-95
+   [72]: http://b.unix.com/www/delivery/ck.php?n=85d0c0a&cb=1395290710-1338997428-95
+
+    #[**5**][73]  
+
+   [73]: http://www.unix.com/302318497-post5.html
+
+![Old][74] 05-21-2009 
+
+   [74]: http://linux.unix.com/images/statusicon/post_old.gif
+
+[TehOne][75] ![TehOne is offline][76]
+
+   [75]: http://www.unix.com/members/302050025.html
+   [76]: http://linux.unix.com/images/statusicon/user_offline.gif
+
+Registered User
+
+ 
+
+Join Date: Oct 2008
+
+Posts: 81 
+
+Thanks: 0
+
+Thanked 0 Times in 0 Posts 
+
+Quote:
+
+Originally Posted by **cfajohnson** [![View Post][77]][78]
+
+   [77]: http://linux.unix.com/images/buttons/viewpost.gif
+   [78]: http://www.unix.com/shell-programming-scripting/110312-bash-regex-case-insensetive-possible.html#post302318487
+
+>   
+
+> 
+> Code:
+>     
+>     if [[ "$1" =~ (test) ]]; then
+>       echo match
+>     else
+>       echo no match
+>     fi
+> 
+>   
+
+
+./test: line 10: unexpected argument `(' to conditional binary operator  
+./test: line 10: syntax error near `(t'  
+./test: line 10: `if [[ "$1" =~ (test) ]]; then'  
+  
+I didn't use \( \) for no reason :>  
+  
+And I have also tested '(test)' and test
+
+[Remove advertisements][79]
+
+   [79]: http://www.unix.com/register.php
+
+Sponsored Links 
+
+[![][80]][81]
+
+   [80]: http://b.unix.com/www/delivery/avw.php?zoneid=22&n=9aa5c3b&cb=532585264-1338997428-96
+   [81]: http://b.unix.com/www/delivery/ck.php?n=9aa5c3b&cb=532585264-1338997428-96
+
+    #[**6**][82]  
+
+   [82]: http://www.unix.com/302318499-post6.html
+
+![Old][83] 05-21-2009 
+
+   [83]: http://linux.unix.com/images/statusicon/post_old.gif
+
+[![cfajohnson's Avatar][84]][85]
+
+   [84]: http://www.unix.com/customavatars/avatar302022645_4.gif
+   [85]: http://www.unix.com/members/302022645.html
+
+[cfajohnson][86] ![cfajohnson is offline][87] ![Forum Advisor][88]  
+
+   [86]: http://www.unix.com/members/302022645.html
+   [87]: http://linux.unix.com/images/statusicon/user_offline.gif
+   [88]: http://linux.unix.com/images/icons/knot.png
+
+Shell programmer, author
+
+ 
+
+Join Date: Mar 2007
+
+Location: Toronto, Canada
+
+Posts: 2,830 
+
+Thanks: 0
+
+Thanked 84 Times in 78 Posts 
+
+>   
+It works without the backslashes in bash 3.2 (released almost 3 years ago, in 1996) and later.  
+
+
+[Remove advertisements][89]
+
+   [89]: http://www.unix.com/register.php
+
+Sponsored Links 
+
+[![][90]][91]
+
+   [90]: http://b.unix.com/www/delivery/avw.php?zoneid=23&n=62375d0&cb=554316424-1338997428-97
+   [91]: http://b.unix.com/www/delivery/ck.php?n=62375d0&cb=554316424-1338997428-97
+
+    #[**7**][92]  
+
+   [92]: http://www.unix.com/302318501-post7.html
+
+![Old][93] 05-21-2009 
+
+   [93]: http://linux.unix.com/images/statusicon/post_old.gif
+
+[TehOne][94] ![TehOne is offline][95]
+
+   [94]: http://www.unix.com/members/302050025.html
+   [95]: http://linux.unix.com/images/statusicon/user_offline.gif
+
+Registered User
+
+ 
+
+Join Date: Oct 2008
+
+Posts: 81 
+
+Thanks: 0
+
+Thanked 0 Times in 0 Posts 
+
+Quote:
+
+Originally Posted by **cfajohnson** [![View Post][96]][97]
+
+   [96]: http://linux.unix.com/images/buttons/viewpost.gif
+   [97]: http://www.unix.com/shell-programming-scripting/110312-bash-regex-case-insensetive-possible.html#post302318499
+
+>   
+It works without the backslashes in bash 3.2 (released almost 3 years ago, in 1996) and later.  
+
+
+  
+
+
+Code:
+    
+    GNU bash, version 4.0.0(1)-release (x86_64-unknown-linux-gnu)
+
+  
+  
+
+
+Code:
+    
+    if [[ "$1" =~ "(test)" ]]; then
+      echo match 1
+    else
+      echo no match 1
+    fi
+    
+    if [[ "$1" =~ \(test\) ]]; then
+      echo match 2
+    else
+      echo no match 2
+    fi
+    
+    if [[ "$1" =~ '(test)' ]]; then
+      echo match 3
+    else
+      echo no match 3
+    fi
+    
+    if [[ "$1" =~ (test) ]]; then
+      echo match 4
+    else
+      echo no match 4
+    fi
+
+  
+  
+
+
+Code:
+    
+    [23:32:05] root:~# shopt -s nocasematch
+    [23:32:22] root:~# ./test Test
+    no match 1
+    no match 2
+    no match 3
+    ./test: line 22: unexpected argument `(' to conditional binary operator
+    ./test: line 22: syntax error near `(t'
+    ./test: line 22: `if [[ "$1" =~ (test) ]]; then'
+
+  
+
+
+[Remove advertisements][98]
+
+   [98]: http://www.unix.com/register.php
+
+Sponsored Links 
+
+[![][99]][100]
+[![][101]][102]
+
+   [99]: http://b.unix.com/www/delivery/avw.php?zoneid=7&n=b0dc303&cb=1824343661-1338997428-7
+   [100]: http://b.unix.com/www/delivery/ck.php?n=b0dc303&cb=1824343661-1338997428-7
+   [101]: http://b.unix.com/www/delivery/avw.php?zoneid=8&n=8cb72ce&cb=1824343661-1338997428-8
+   [102]: http://b.unix.com/www/delivery/ck.php?n=8cb72ce&cb=1824343661-1338997428-8
+
+[![Closed Thread][103]][104]
+
+   [103]: http://linux.unix.com/images/buttons/threadclosed.gif
+   [104]: http://www.unix.com/newreply.php?do=newreply&noquote=1&p=302318501
+
+Page 1 of 2
+**1**
+[2][105]
+[>][106]
+
+   [105]: http://www.unix.com/shell-programming-scripting/110312-bash-regex-case-insensetive-possible-2.html (Show results 8 to 9 of 9)
+   [106]: http://www.unix.com/shell-programming-scripting/110312-bash-regex-case-insensetive-possible-2.html (Next Page - Results 8 to 9 of 9)
+
+  
+
+
+**«** [Need help with log files and sorting][107] | [Need help ftp a file][108] **»**
+
+   [107]: http://www.unix.com/shell-programming-scripting/110250-need-help-log-files-sorting.html
+   [108]: http://www.unix.com/shell-programming-scripting/110303-need-help-ftp-file.html
+
+Thread Tools
+Search this Thread
+
+![Show Printable Version][109] [Show Printable Version][110]
+
+   [109]: http://linux.unix.com/images/buttons/printer.gif
+   [110]: http://www.unix.com/shell-programming-scripting/110312-bash-regex-case-insensetive-possible-printfriendly.html
+
+![Email this Page][111] [Email this Page][112]
+
+   [111]: http://linux.unix.com/images/buttons/sendtofriend.gif
+   [112]: http://www.unix.com/sendmessage.php?do=sendtofriend&t=110312
+
+![Subscription][113] [Subscribe to this Thread][114]
+
+   [113]: http://linux.unix.com/images/buttons/subscribe.gif
+   [114]: http://www.unix.com/subscription.php?do=addsubscription&t=110312
+
+**Search this Thread**:  
+  
+[Advanced Search][115]
+
+   [115]: http://www.unix.com/search.php?searchthreadid=110312
+
+Display Modes
+
+![Linear Mode][116] **Linear Mode**
+
+   [116]: http://linux.unix.com/images/buttons/mode_linear.gif
+
+![Hybrid Mode][117] [Switch to Hybrid Mode][118]
+
+   [117]: http://linux.unix.com/images/buttons/mode_hybrid.gif
+   [118]: http://www.unix.com/shell-programming-scripting/110312-bash-regex-case-insensetive-possible.html?mode=hybrid
+
+![Threaded Mode][119] [Switch to Threaded Mode][120]
+
+   [119]: http://linux.unix.com/images/buttons/mode_threaded.gif
+   [120]: http://www.unix.com/shell-programming-scripting/110312-bash-regex-case-insensetive-possible.html?mode=threaded#post302318451
+
+  
+
+
+[![][121]][122] More UNIX and Linux Forum Topics You Might Find Helpful
+
+   [121]: http://linux.unix.com/images/buttons/collapse_tcat.gif
+   [122]: http://www.unix.com/shell-programming-scripting/110312-bash-regex-case-insensetive-possible.html#top
+
+Thread
+Thread Starter
+Forum
+Replies
+Last Post
+
+[idiosyncratic behavior with case statement in bash][123]
+stryth
+Shell Programming and Scripting
+9
+08-25-2008 12:58 PM
+
+   [123]: http://www.unix.com/shell-programming-scripting/77962-idiosyncratic-behavior-case-statement-bash.html (Hello all, I'm a new poster with a problem that I'm not finding in the archives. 
+ 
+I'm trying to better my understanding of the behavior of case statements, in particular the word to pattern matching aspects.  According to the GNU bash reference (Bash Reference Manual) the syntax is: 
+case word in...)
+
+[How to specify 'not case sensitive' in regex (nawk, sed, patern expencions)?][124]
+alex_5161
+Shell Programming and Scripting
+4
+08-15-2008 10:42 PM
+
+   [124]: http://www.unix.com/shell-programming-scripting/77410-how-specify-not-case-sensitive-regex-nawk-sed-patern-expencions.html (Is it possible to make the search in regular exprecion or in matching parts of sed, nawk and others to IGNORE the case of the search string? 
+ 
+ I mean, like if used 'grep' with -i option: 
+  > grep -i "abc" file 
+ 
+ I would like to be able to do the same, say, by nawk: 
+  > nawk '/abc/ {print $0}'...)
+
+[anchoring regex using case and ksh][125]
+popeye
+UNIX for Dummies Questions & Answers
+2
+07-31-2008 01:07 PM
+
+   [125]: http://www.unix.com/unix-dummies-questions-answers/75255-anchoring-regex-using-case-ksh.html (Outside this process I built a file containing snmp response filtering for hostname, model type and ios version.  
+ 
+I want to get a count across the network of those devices running 11.x code, 12.0 mainline, 12.0 T train and above, 12.1 and above and OS levels.  
+ 
+This works ok .. but its cheap...)
+
+[regex test in bash][126]
+subin_bala
+Shell Programming and Scripting
+1
+04-16-2008 03:27 AM
+
+   [126]: http://www.unix.com/shell-programming-scripting/61297-regex-test-bash.html (Hi  
+ 
+I want to do a regex test and branch based on the test result, but this doesn't seems to work :confused: 
+ 
+if \) ]] 
+then 
+echo success 
+else 
+echo failed 
+fi)
+
+[A simple find and replace without using any regex (bash)][127]
+srikanths
+Shell Programming and Scripting
+2
+03-18-2008 07:08 AM
+  
+
+
+   [127]: http://www.unix.com/shell-programming-scripting/57231-simple-find-replace-without-using-any-regex-bash.html (Hi, 
+ 
+I need to do an exact find and replace (I don't want to use regular expressions because the input comes from user). I want to find a line that matches the user's input text and replace it with an empty string. 
+ 
+For example, let's say the user enters I love "Unix" and the contents of the...)
+
+  
+  
+
+
+All times are GMT -4. The time now is 11:43 AM.
+
+  
+
+
+** [![The UNIX and Linux Forums - Learn UNIX and UNIX Commands RSS Feeds][128]][129] - [Contact Us][130] - [The UNIX and Linux Forums - Learn UNIX and UNIX Commands][131] - [Archive][132] - [Botnik][133] - [Top][134] **
+
+   [128]: http://linux.unix.com/images/cinvin_forum_feed_listing/rss.gif
+   [129]: http://www.unix.com/cv_rss_feeds.php (The UNIX and Linux Forums - Learn UNIX and UNIX Commands RSS Feeds)
+   [130]: http://www.unix.com/sendmessage.php
+   [131]: http://www.unix.com/
+   [132]: http://www.unix.com/unix/linux/
+   [133]: /botnik/
+   [134]: http://www.unix.com/shell-programming-scripting/110312-bash-regex-case-insensetive-possible.html#top
+
+SEO by [vBSEO][135]
+
+   [135]: http://www.crawlability.com/vbseo/
+
+The UNIX and Linux Forums Content Copyright (C)1993-2012. All Rights Reserved.   
+> Forum Operations by <a href="http:/www.unix.com/" rel="nofollow">The UNIX and Linux Forums
+
+Powered by: [vBulletin][136], Copyright (C)2000 - 2006, Jelsoft Enterprises Limited.
+
+   [136]: http://www.anrdoezrs.net/click-2566249-1163318
+

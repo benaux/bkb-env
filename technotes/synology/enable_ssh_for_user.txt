@@ -1,0 +1,40 @@
+Synology: enable ssh for a user
+===============================
+
+
+Admin is under: http://synoIP:5000
+
+
+1. $HOME directories have to be activated
+
+Control Panel: User -> Advanced -> User Home -> Enable user home service
+
+
+2. Make usure SSH is enabled in the web gui
+
+http://synoIP:5000
+
+Control Panel -> Terminal & SNMP.
+
+And also SFTP: 
+  Control Panel -> "File Services" menu -> "FTP" tab -> "SFTP" group -> "Enable SFTP service"
+
+
+3. Enable the SSH terminal access for the user
+
+ssh root@synoip.com
+
+
+edit /etc/passw file
+
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+man:x:6:12:man:/var/cache/man:/usr/sbin/nologin
+jane:x:1000:1000:jane,,,:/home/jane:/usr/sbin/nologin
+
+to sth. like:
+
+jane:x:1000:1000:jane,,,:/home/jane:/bin/bash
+
+
+note: /bin/sh doesnt work ...
+

@@ -1,0 +1,19 @@
+-X11: Xdefaults vs Xressources
+
+
+From what understand it is not so much the name that differes, but the way the values are read:
+
+- the OLD way: each program loads '~/.Xresources' at startup
+
+- the new way: the new program 'xrdb' loads a config file once and then the values are available for all programs. The config files is named by convention '~/.Xdefaults', but it can also read an '~/.Xresources file
+
+
+
+Xinitrc
+
+~/.xinitrc is loaded by startx, that is executed by desktop environments and window managers. Here we can control 'xrdb'
+
+   [[ -f ~/.Xresources ]] && xrdb -merge ~/.Xresources
+
+
+Here we force to load the "old" Xresources file instead of Xdefaults

@@ -1,0 +1,19 @@
+# firefox
+
+## Vimperator
+
+show navigation toolbar
+    :set gui=navigation
+
+
+## Disable zooming
+
+disable super annoying mouse wheel zooming
+
+    > about:config
+    > mousewheel.with_meta.action 
+    > 0
+
+set url for new tab
+    > about:config
+    > browser.newtab.url

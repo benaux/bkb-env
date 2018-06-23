@@ -1,0 +1,397 @@
+From <http://spielwiese.la-evento.com/xelasblog/archives/23-URL-decode-und-encode-in-der-Bash.html>:
+
+# URL decode und encode in der Bash
+
+## [» xela's Linux Blog][1]
+
+   [1]: http://spielwiese.la-evento.com/xelasblog/ (zur Startseite)
+
+[direkt zum Inhalt springen][2]
+
+   [2]: #mainpane
+
+### Kalender
+
+[![Zurück][3]][4]
+**[Juni '12][5]**
+
+   [3]: /xelasblog/templates/default/img/back.png
+   [4]: http://spielwiese.la-evento.com/xelasblog/archives/2012/05.html (Zurück)
+   [5]: http://spielwiese.la-evento.com/xelasblog/archives/2012/06.html
+
+Mo
+Di
+Mi
+Do
+Fr
+Sa
+So
+
+ 
+ 
+ 
+ 
+1
+2
+3
+
+4
+5
+6
+7
+8
+9
+10
+
+11
+12
+13
+14
+15
+16
+17
+
+18
+19
+20
+21
+22
+23
+24
+
+25
+26
+27
+28
+29
+30
+ 
+
+### Suche
+
+### Archive
+
+  * [Juni 2012][6]
+  * [Mai 2012][7]
+  * [April 2012][8]
+  * [Das Neueste ...][9]
+  * [Älteres ...][10]
+
+   [6]: /xelasblog/archives/2012/06.html (Juni 2012)
+   [7]: /xelasblog/archives/2012/05.html (Mai 2012)
+   [8]: /xelasblog/archives/2012/04.html (April 2012)
+   [9]: /xelasblog/index.php?frontpage
+   [10]: http://spielwiese.la-evento.com/xelasblog/archive
+
+### Anmerkung zu Kommentaren
+
+Kommentare sind will­kommen, allerdings behalte ich mir das Recht vor, Un­sinniges oder Belei­digendes jederzeit rauszu­werfen. Schreibt Kommen­tare und Ant­worten auf Kommen­tare bitte in einem freundlichen Ton.  
+**  
+Privacy**  
+Nur "Name" und "Kommentar" sind Plicht­felder. Auch wenn eine Email-Adresse ange­geben wird, wird sie nicht im Klartext an­gezeigt. Weder sammle ich Email-Adressen, noch gebe ich sie weiter, noch mache ich sonstigen Spamblodsinn damit.
+
+### Kategorien
+
+  * [![XML][11]][12] [Bash Snippets (34)][13]
+  * [![XML][11]][14] [Fundstücke (3)][15]
+  * [![XML][11]][16] [Gimp (3)][17]
+  * [![XML][11]][18] [HTML und CSS (5)][19]
+  * [![XML][11]][20] [Off-Topic (16)][21]
+  * [![XML][11]][22] [Tolle Software (3)][23]
+
+   [11]: /xelasblog/templates/default/img/xml.gif
+   [12]: /xelasblog/feeds/categories/1-Bash-Snippets.rss
+   [13]: /xelasblog/categories/1-Bash-Snippets ()
+   [14]: /xelasblog/feeds/categories/3-Fundstuecke.rss
+   [15]: /xelasblog/categories/3-Fundstuecke ()
+   [16]: /xelasblog/feeds/categories/4-Gimp.rss
+   [17]: /xelasblog/categories/4-Gimp ()
+   [18]: /xelasblog/feeds/categories/2-HTML-und-CSS.rss
+   [19]: /xelasblog/categories/2-HTML-und-CSS ()
+   [20]: /xelasblog/feeds/categories/5-Off-Topic.rss
+   [21]: /xelasblog/categories/5-Off-Topic ()
+   [22]: /xelasblog/feeds/categories/6-Tolle-Software.rss
+   [23]: /xelasblog/categories/6-Tolle-Software ()
+
+  
+
+
+  
+[Alle Kategorien][24]
+
+   [24]: /xelasblog/index.php?frontpage (Alle Kategorien)
+
+### Translate
+
+ 
+
+### Statische Seiten
+
+[Startseite][25]  
+[Hallo Welt!][26]  
+
+
+   [25]: /xelasblog/index.php
+   [26]: /xelasblog/welcome.html (xela's Blog :: Willkommen)
+
+### Links
+
+  
+
+
+  * Eigene Links  
+
+
+    * [Spielwiese][27]
+    * [Gimp-Tutorial][28]
+    * [Quanta Plus Tutorial][29]
+    * [IE6 mit Wine][30]
+    * [ffmpeg Mini-Howto][31]
+    * [indigofloat][32]
+
+   [27]: http://spielwiese.la-evento.com/ (Spielwiese)
+   [28]: http://spielwiese.la-evento.com/gimp1.2/index.html (Gimp-Tutorial)
+   [29]: http://spielwiese.la-evento.com/quanta2/index.php (Quanta Plus Tutorial)
+   [30]: http://spielwiese.la-evento.com/ie6_mit_wine/index.html (IE6 mit Wine)
+   [31]: http://spielwiese.la-evento.com/hokuspokus/index.html (ffmpeg Mini-Howto)
+   [32]: http://www.indigofloat.at/ (indigofloat)
+
+  
+
+
+### Dienstag, 6. Januar 2009
+
+#### [URL decode und encode in der Bash][33]
+
+   [33]: /xelasblog/archives/23-URL-decode-und-encode-in-der-Bash.html
+
+Die Bash hat selbst kein _urldecode_ oder _urlencode_. Das kann aber recht einfach nachgebaut werden. Ist php installiert, hilft der Umweg uber den Aufruf der PHP-Funktionen mit "**php -r**" (=direktes Ausfuhren von PHPcode in der Shell ohne Apache o.a.).  
+  
+Beispiel zum Encodieren:  
+
+
+echo $( php -r "echo urlencode('Start: #1, Zeichen {13/24} Ende();');"; )
+
+Ergebnis: Start%3A+%231%2C+Zeichen+%7B13%2F24%7D+Ende%28%29%3B  
+  
+Beispiel zum Decodieren:  
+
+
+echo $( php -r "echo urldecode('Start%3A+%231%2C+Zeichen+%7B13%2F24%7D+Ende%28%29%3B');"; )
+
+Ergebnis: Start: #1, Zeichen {13/24} Ende();  
+  
+Das funktioniert, ist aber nicht besonders komfortabel. Wir wissen uns aber zu helfen:  
+  
+
+
+Ein kleines Bash Wrapperskript sorgt fur mehr Bequemlichkeit. Hier ein Beispiel fur urlencode. Legt das irgendwo als "urlencode.sh" in euren Pfad und macht es ausfuhrbar.  
+
+
+#!/bin/bash  
+echo $( php -r "echo urlencode(\"$1\");"; )
+
+Jetzt musst ihr nur mehr  
+
+
+urlencode.sh 'string zum encodieren'
+
+aufrufen.  
+  
+Was aber tun, wenn PHP nicht installiert ist? Da hilft **sed** beim Decodieren.  
+Die Bash, bzw. das Bashbuiltin "**echo -e**" kann hexadezimal dargestellte Zeichen umwandeln, wenn sie mit **\x **eingeleitet werden.  
+
+
+echo -e '\x22\xC3\xB6\x22'
+
+Ergebnis: "o"  
+Das bedeutet, wir mussen in den URL-Strings einfach nur die % Zeichen durch \x ersetzen und das dann an "echo -e" ubergeben:  
+
+
+echo '%22%C3%B6%22' | echo -e $(sed 's/%/\\x/g')
+
+Zu beachten: der Backslash im sed-Kommando muss wiederum durch Backslash escaped werden.  
+Zusatzlich mussen wir auch noch das + Zeichen durch Leerzeichen ersetzen:  
+
+
+echo '%22+%C3%B6+%22' | echo -e $(sed 's/+/ /g; s/%/\\x/g')
+
+Ergebnis: " o "  
+  
+Aber wo bleibt da jetzt der Komfort?  
+Kommt auch noch, wieder als Bashskript:  
+
+
+#!/bin/bash  
+# urldecode mit der bash und sed  
+# by xela  
+self=$( basename $0 )  
+urldecode(){  
+  echo -e "$(sed 's/+/ /g; s/%/\\x/g')"  
+}  
+if [ $# -eq 1 ]  
+then  
+    if [ -f $1 ]  
+    then  
+        # Argument ist eine Datei  
+        cat $1 | urldecode  
+    else  
+        # Argument ist ein String  
+        echo $1 | urldecode  
+    fi  
+else  
+    # Hilfetext  
+    echo -e "Usage: \n$self URL-String\n$self Datei"  
+fi  
+exit 0  
+ 
+
+Das Skript kann sowohl mit Strings als auch mit Dateien als Argument umgehen. Ein weiterer Vorteil dieses Skriptes ist, dass es sehr schnell ist (sed ist immer schnell). Auch große Dateien sind kein Problem.  
+Das Nachbauen von url**en**code mit Bash und sed ist aufwandiger.  
+  
+Aber naturlich hat das schon jemand gemacht, also ein sed-Skript mit Ersetzungstabelle: [www.unix.com/shell-programming-scripting/59936-url-encoding.html][34]   
+  
+Ein anderer Ansatz ist das Ersetzen mit **awk**, dieses Skript liest ausschließlich Dateien ein, direktes Übergeben von Strings ist nicht vorgesehen: [www.shelldorado.com/scripts/cmds/urlencode][35]  
+  
+Hoppla, **perl** darf ich nicht vergessen. Encode und decode uber das Ausfuhren von perl in der Shell:  
+
+
+   [34]: http://www.unix.com/shell-programming-scripting/59936-url-encoding.html
+   [35]: http://www.shelldorado.com/scripts/cmds/urlencode
+
+echo 'Start: #1, Zeichen {13/24} Ende();' | perl -MURI::Escape -lne 'print uri_escape($_)'
+
+Ergebnis: Start%3A%20%231%2C%20Zeichen%20%7B13%2F24%7D%20Ende()%3B  
+Hm. Die runden Klammern werden hier nicht escaped.  
+Andersrum, also decodieren:  
+
+
+echo '%20%7B13%2F24%7D%20Ende()%3B' | perl -MURI::Escape -lne 'print uri_unescape($_)'
+
+  
+Zum Abschluss noch eine Methode fur Unerschrockene: einfach alles als HEX ausgeben mit **od**, gefunden auf: [linux.derkeiler.com/Newsgroups/comp.os.linux.misc/2005-10/1193.html][36]  
+  
+  
+
+
+   [36]: http://linux.derkeiler.com/Newsgroups/comp.os.linux.misc/2005-10/1193.html
+
+Geschrieben von [Xela][37] in [Bash Snippets][38] um [12:35][39] | [Kommentare (4)][40] | [Trackbacks (0)][41]
+
+   [37]: http://spielwiese.la-evento.com/xelasblog/authors/1-Xela
+   [38]: http://spielwiese.la-evento.com/xelasblog/categories/1-Bash-Snippets
+   [39]: /xelasblog/archives/23-URL-decode-und-encode-in-der-Bash.html
+   [40]: /xelasblog/archives/23-URL-decode-und-encode-in-der-Bash.html#comments
+   [41]: /xelasblog/archives/23-URL-decode-und-encode-in-der-Bash.html#trackbacks
+
+  
+
+
+Trackbacks
+
+[Trackback-URL für diesen Eintrag][42]
+
+   [42]: http://spielwiese.la-evento.com/xelasblog/comment.php?type=trackback&entry_id=23 (Dieser Link ist nicht aktiv. Er enthält die Trackback-URI zu diesem Eintrag. Sie können diese URI benutzen, um Ping- und Trackbacks von Ihrem eigenen Blog zu diesem Eintrag zu schicken. Um den Link zu kopieren, klicken Sie ihn mit der rechten Maustaste an und wählen "Verknüpfung kopieren" im Internet Explorer oder "Linkadresse kopieren" in Mozilla/Firefox.)
+
+  
+
+
+Keine Trackbacks
+
+  
+
+
+Kommentare
+
+Ansicht der Kommentare: ([Linear][43] | Verschachtelt) 
+
+   [43]: /xelasblog/index.php?url=archives/23-URL-decode-und-encode-in-der-Bash.html&serendipity[cview]=linear#comments
+
+  
+
+
+urldecode in purem bash, ganz ohne sed, perl und php:  
+  
+x="%22%C3%B6%22" ; echo -e ${x//%/\\\x} 
+
+[#1][44] Nicolai Lissner  am 10.12.2009 10:24 ([Antwort][45]) 
+
+   [44]: #c30
+   [45]: #serendipity_CommentForm
+
+bloss % noch escapen: % 
+
+[#1.1][46] [hoekie][47] am 09.10.2011 22:01 ([Antwort][48]) 
+
+   [46]: #c68
+   [47]: mailto:hoekiesda[at]hotmail.com
+   [48]: #serendipity_CommentForm
+
+Hi hoekie,  
+  
+Ein konkretes Beispiel wäre prima. 
+
+[#1.1.1][49] [Xela][50] am 10.10.2011 08:51 ([Antwort][51]) 
+
+   [49]: #c69
+   [50]: mailto:alexandra.klepatsch[at]gmail.com
+   [51]: #serendipity_CommentForm
+
+"Das Skript kann sowohl mit Strings als auch mit Dateien als Argument umgehen. Ein weiterer Vorteil dieses Skriptes ist, dass es sehr schnell ist (sed ist immer schnell). Auch große Dateien sind kein Problem."  
+  
+Leider hatte ich damit doch Probleme mit großen Dateien (~2GB).  
+  
+Ich habe das hier gepostete Script dann erfolgreich folgendermaßen abgeändert:  
+  
+#!/bin/bash  
+  
+while read line  
+do  
+sed 's/+/ /g; s/%/\\\\x/g' | xargs -I @ echo -e @  
+done 
+
+[#2][52] kirdie  am 10.05.2010 15:36 ([Antwort][53]) 
+
+   [52]: #c40
+   [53]: #serendipity_CommentForm
+
+  
+
+
+Kommentar schreiben
+
+Name
+
+E-Mail
+
+Homepage - Bitte LEER lassen!
+
+Antwort zu
+[ Ursprung ]#1: Nicolai Lissner am 10.12.2009 10:24   #1.1: hoekie am 09.10.2011 22:01     #1.1.1: Xela am 10.10.2011 08:51 #2: kirdie am 10.05.2010 15:36
+
+Kommentar
+  
+
+
+Umschließende Sterne heben ein Wort hervor (*wort*), per _wort_ kann ein Wort unterstrichen werden.
+
+Standard-Text Smilies wie :-) und ;-) werden zu Bildern konvertiert.
+
+  
+Um maschinelle und automatische Übertragung von Spamkommentaren zu verhindern, bitte die Zeichenfolge im dargestellten Bild in der Eingabemaske eintragen. Nur wenn die Zeichenfolge richtig eingegeben wurde, kann der Kommentar angenommen werden. Bitte beachten Sie, dass Ihr Browser Cookies unterstützen muss, um dieses Verfahren anzuwenden.   
+![CAPTCHA][54]  
+Hier die Zeichenfolge der Spamschutz-Grafik eintragen:   
+
+
+   [54]: http://spielwiese.la-evento.com/xelasblog/plugin/captcha_82d518094bda73c2092b61593e1e1f5c (Bitte die dargestellte Zeichenfolge in die Eingabemaske eintragen!)
+
+ 
+Daten merken?    
+Bei Aktualisierung dieser Kommentare benachrichtigen
+
+ 
+
+powered by: [Serendipity Weblog][55]
+
+   [55]: http://www.s9y.org/ (Powered by Serendipity)
+

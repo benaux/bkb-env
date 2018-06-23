@@ -1,0 +1,8 @@
+Perl: slurp file into string
+
+
+   my $contents = do {
+     local $/;
+     open my $fh, $filename or die "Can't open $filename: $!";
+     <$fh>
+   };

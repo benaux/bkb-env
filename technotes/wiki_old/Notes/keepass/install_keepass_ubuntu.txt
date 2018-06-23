@@ -1,0 +1,19 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2016-12-21T12:28:00+01:00
+
+====== install keepass ubuntu ======
+Created Wednesday 21 December 2016
+
+Installing Keepass on ubuntu
+
+
+   sudo apt-get install keepass2
+
+Getting dav to work
+
+
+   sudo apt-get install mono-complete
+
+
+Protip: enable invalid certificates in Keepass -> Options -> Advanced   

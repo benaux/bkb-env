@@ -1,0 +1,8 @@
+On windows 10
+
+
+Edit C:\Windows\System32\drivers\etc\hosts
+
+Preferably with notepad++ (resolves issues with  admin rights)
+
+ -> ipconfig /flushdns

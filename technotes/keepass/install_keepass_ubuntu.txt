@@ -1,0 +1,12 @@
+Installing Keepass on ubuntu
+
+
+   sudo apt-get install keepass2
+
+Getting dav to work
+
+
+   sudo apt-get install mono-complete
+
+
+Protip: enable invalid certificates in Keepass -> Options -> Advanced   

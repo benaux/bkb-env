@@ -1,0 +1,2 @@
+chown -R http:http /volume1/web/[wordpress site]
+chmod -R 775 /volume1/web/[wordpress site]

@@ -1,0 +1,4 @@
+ssh-agent: list loaded keys
+
+
+ssh-add -L

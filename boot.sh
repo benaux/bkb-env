@@ -1,26 +1,29 @@
 #!/bin/sh
 
+# probably needs gpg
+
+pwuser='ben_2P0a.pwc'
+
 # boot different stuff like: tmux, ssh keys into cache, 
-twikpw=$HOME/dev/tools/moreutils/cipher/twikpw
+twikpw=$HOME/aux/tools/moreutils/cipher/twikpw
 [ -f "$twikpw" ] || { echo "Err: pw command in $twikpw not available"; exit 1; }
 
-pwx=$HOME/tools/utils/pw
-[ -f "$pwx" ] || { echo "Err: pw command in $pwx not available"; exit 1; }
+# pwx=$HOME/tools/utils/pw
+# [ -f "$pwx" ] || { echo "Err: pw command in $pwx not available"; exit 1; }
 
 hname=$(hostname)
 
-pwuser='bkb_H3-0c'
 
-echo "Try to get password for 'gpg/laptops', maybe cancel the gpg-agent dialog"
-${pwx} "${pwuser}-ii" 'gpg/laptops'
+echo "Try to get password for 'gpg-subkey', maybe cancel the gpg-agent dialog"
+${twikpw} "${pwuser}-ii" 'gpg-subkey'
+#${pwx} "${pwuser}-ii" 'gpg/laptops'
 [ "$?" -eq 0 ] || { echo "Err: some error with $pwx, leaving"; exit 1; }
 
 echo "Again:Try to get password for 'gpg/laptops', paste pw if necessary"
-${pwx} "${pwuser}-ii" 'gpg/laptops'
+${twikpw} "${pwuser}-ii" 'gpg-subkey'
 [ "$?" -eq 0 ] || { echo "Err: some error with $pwx, leaving"; exit 1; }
 
 echo "GPG password is in clipboard"
-
 
 
 
@@ -62,14 +65,14 @@ if [ -d "$sshome" ] ; then
       bs=$(basename $s)
       bsf=${bs%.*}
       case "$bs" in 
-         clouduser*.pub)
-            echo Password: ${pwx} "${pwuser}-ii" "ssh/clouduser"
-            ${pwx} "${pwuser}" "ssh/clouduser"
+         bkb.pub)
+            echo Password: ${twikpw} "${pwuser}-ii" "ssh-key/bkb_${hname}"
+            ${twikpw} "${pwuser}-ii" "ssh-key/bkb_${hname}"
             sshadd $sshome/$bsf
             ;;
          *.pub)
-            echo Password: ${pwx} "${pwuser}-ii" "ssh/$hname"
-            ${pwx} "${pwuser}-ii" "ssh/$hname"
+            echo Password: ${twikpw} "${pwuser}" "ssh-cokey/$bsf"
+            ${twikpw} "${pwuser}" "ssh-cokey/$bsf"
             echo ""
             echo "OK: Password in clipboard"
             sshadd $sshome/$bsf

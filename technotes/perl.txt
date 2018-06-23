@@ -1,0 +1,36 @@
+# Perl
+
+## remove all newlines
+
+    $line =~ s/\R//g;
+
+or before 5.10
+
+    $line =~ s/\015?\012?$//;
+
+
+## file slurp 
+
+    open(my $f, '<', $filename) or die "Err $filename: $!\n";
+    $string = do { local($/); <$f> };
+    close($f);
+
+
+## Print stderr and stdout to 
+
+   #use strict;
+   use warnings;
+   use IPC::Open3;
+
+   my $pid = open3(\*CHLD_IN, \*CHLD_OUT, \*CHLD_ERR, qw(sh ./test.sh jsdf));
+
+   waitpid( $pid, 0 );
+   my $child_exit_status = $? >> 8;
+   if ($child_exit_status != 0)
+   {
+       my $stderr = do { local $/; <CHLD_ERR> };
+       print "Failed command because: $stderr\n";
+   }
+   my $stdout = do { local $/; <CHLD_OUT> };
+   print "command stdout: $stdout\n";
+

@@ -1,0 +1,25 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2016-12-21T12:28:00+01:00
+
+====== xterm bigger fonts ======
+Created Wednesday 21 December 2016
+
+Xterm: bigger fonts
+
+
+
+
+xterm*font:     *-fixed-*-*-*-18-*
+
+This informs xterm to use the 'fixed' font at size 18.
+
+From here, you can either restart X or run 
+
+   xrdb -merge ~/.Xresources 
+   
+in a terminal to update the settings
+
+
+
+via: http://askubuntu.com/questions/161652/how-to-change-the-default-font-size-of-xterm

@@ -1,0 +1,239 @@
+From <http://spielwiese.la-evento.com/xelasblog/archives/23-URL-decode-und-encode-in-der-Bash.html>:
+
+
+
+
+
+## [URL decode und encode in der Bash][33]
+
+   [33]: /xelasblog/archives/23-URL-decode-und-encode-in-der-Bash.html
+
+Die Bash hat selbst kein _urldecode_ oder _urlencode_. Das kann aber recht einfach nachgebaut werden. Ist php installiert, hilft der Umweg uber den Aufruf der PHP-Funktionen mit "**php -r**" (=direktes Ausfuhren von PHPcode in der Shell ohne Apache o.a.).  
+  
+Beispiel zum Encodieren:  
+	
+
+	echo $( php -r "echo urlencode('Start: #1, Zeichen {13/24} Ende();');"; )
+
+Ergebnis: Start%3A+%231%2C+Zeichen+%7B13%2F24%7D+Ende%28%29%3B  
+  
+Beispiel zum Decodieren:  
+
+	echo $( php -r "echo urldecode('Start%3A+%231%2C+Zeichen+%7B13%2F24%7D+Ende%28%29%3B');"; )
+
+Ergebnis: Start: #1, Zeichen {13/24} Ende();  
+  
+Das funktioniert, ist aber nicht besonders komfortabel. Wir wissen uns aber zu helfen:  
+  
+
+
+Ein kleines Bash Wrapperskript sorgt fur mehr Bequemlichkeit. Hier ein Beispiel fur urlencode. Legt das irgendwo als "urlencode.sh" in euren Pfad und macht es ausfuhrbar.  
+
+
+	#!/bin/bash  
+	echo $( php -r "echo urlencode(\"$1\");"; )
+
+Jetzt musst ihr nur mehr  
+
+
+urlencode.sh 'string zum encodieren'
+
+aufrufen.  
+  
+Was aber tun, wenn PHP nicht installiert ist? Da hilft **sed** beim Decodieren.  
+Die Bash, bzw. das Bashbuiltin "**echo -e**" kann hexadezimal dargestellte Zeichen umwandeln, wenn sie mit **\x **eingeleitet werden.  
+
+
+echo -e '\x22\xC3\xB6\x22'
+
+Ergebnis: "o"  
+Das bedeutet, wir mussen in den URL-Strings einfach nur die % Zeichen durch \x ersetzen und das dann an "echo -e" ubergeben:  
+
+
+echo '%22%C3%B6%22' | echo -e $(sed 's/%/\\x/g')
+
+Zu beachten: der Backslash im sed-Kommando muss wiederum durch Backslash escaped werden.  
+Zusatzlich mussen wir auch noch das + Zeichen durch Leerzeichen ersetzen:  
+
+
+echo '%22+%C3%B6+%22' | echo -e $(sed 's/+/ /g; s/%/\\x/g')
+
+Ergebnis: " o "  
+  
+Aber wo bleibt da jetzt der Komfort?  
+Kommt auch noch, wieder als Bashskript:  
+
+
+#!/bin/bash  
+# urldecode mit der bash und sed  
+# by xela  
+self=$( basename $0 )  
+urldecode(){  
+  echo -e "$(sed 's/+/ /g; s/%/\\x/g')"  
+}  
+if [ $# -eq 1 ]  
+then  
+    if [ -f $1 ]  
+    then  
+        # Argument ist eine Datei  
+        cat $1 | urldecode  
+    else  
+        # Argument ist ein String  
+        echo $1 | urldecode  
+    fi  
+else  
+    # Hilfetext  
+    echo -e "Usage: \n$self URL-String\n$self Datei"  
+fi  
+exit 0  
+ 
+
+Das Skript kann sowohl mit Strings als auch mit Dateien als Argument umgehen. Ein weiterer Vorteil dieses Skriptes ist, dass es sehr schnell ist (sed ist immer schnell). Auch große Dateien sind kein Problem.  
+Das Nachbauen von url**en**code mit Bash und sed ist aufwandiger.  
+  
+Aber naturlich hat das schon jemand gemacht, also ein sed-Skript mit Ersetzungstabelle: [www.unix.com/shell-programming-scripting/59936-url-encoding.html][34]   
+  
+Ein anderer Ansatz ist das Ersetzen mit **awk**, dieses Skript liest ausschließlich Dateien ein, direktes Übergeben von Strings ist nicht vorgesehen: [www.shelldorado.com/scripts/cmds/urlencode][35]  
+  
+Hoppla, **perl** darf ich nicht vergessen. Encode und decode uber das Ausfuhren von perl in der Shell:  
+
+
+   [34]: http://www.unix.com/shell-programming-scripting/59936-url-encoding.html
+   [35]: http://www.shelldorado.com/scripts/cmds/urlencode
+
+echo 'Start: #1, Zeichen {13/24} Ende();' | perl -MURI::Escape -lne 'print uri_escape($_)'
+
+Ergebnis: Start%3A%20%231%2C%20Zeichen%20%7B13%2F24%7D%20Ende()%3B  
+Hm. Die runden Klammern werden hier nicht escaped.  
+Andersrum, also decodieren:  
+
+
+echo '%20%7B13%2F24%7D%20Ende()%3B' | perl -MURI::Escape -lne 'print uri_unescape($_)'
+
+  
+Zum Abschluss noch eine Methode fur Unerschrockene: einfach alles als HEX ausgeben mit **od**, gefunden auf: [linux.derkeiler.com/Newsgroups/comp.os.linux.misc/2005-10/1193.html][36]  
+  
+  
+
+
+   [36]: http://linux.derkeiler.com/Newsgroups/comp.os.linux.misc/2005-10/1193.html
+
+Geschrieben von [Xela][37] in [Bash Snippets][38] um [12:35][39] | [Kommentare (4)][40] | [Trackbacks (0)][41]
+
+   [37]: http://spielwiese.la-evento.com/xelasblog/authors/1-Xela
+   [38]: http://spielwiese.la-evento.com/xelasblog/categories/1-Bash-Snippets
+   [39]: /xelasblog/archives/23-URL-decode-und-encode-in-der-Bash.html
+   [40]: /xelasblog/archives/23-URL-decode-und-encode-in-der-Bash.html#comments
+   [41]: /xelasblog/archives/23-URL-decode-und-encode-in-der-Bash.html#trackbacks
+
+  
+
+
+Trackbacks
+
+[Trackback-URL für diesen Eintrag][42]
+
+   [42]: http://spielwiese.la-evento.com/xelasblog/comment.php?type=trackback&entry_id=23 (Dieser Link ist nicht aktiv. Er enthält die Trackback-URI zu diesem Eintrag. Sie können diese URI benutzen, um Ping- und Trackbacks von Ihrem eigenen Blog zu diesem Eintrag zu schicken. Um den Link zu kopieren, klicken Sie ihn mit der rechten Maustaste an und wählen "Verknüpfung kopieren" im Internet Explorer oder "Linkadresse kopieren" in Mozilla/Firefox.)
+
+  
+
+
+Keine Trackbacks
+
+  
+
+
+Kommentare
+
+Ansicht der Kommentare: ([Linear][43] | Verschachtelt) 
+
+   [43]: /xelasblog/index.php?url=archives/23-URL-decode-und-encode-in-der-Bash.html&serendipity[cview]=linear#comments
+
+  
+
+
+urldecode in purem bash, ganz ohne sed, perl und php:  
+  
+x="%22%C3%B6%22" ; echo -e ${x//%/\\\x} 
+
+[#1][44] Nicolai Lissner  am 10.12.2009 10:24 ([Antwort][45]) 
+
+   [44]: #c30
+   [45]: #serendipity_CommentForm
+
+bloss % noch escapen: % 
+
+[#1.1][46] [hoekie][47] am 09.10.2011 22:01 ([Antwort][48]) 
+
+   [46]: #c68
+   [47]: mailto:hoekiesda[at]hotmail.com
+   [48]: #serendipity_CommentForm
+
+Hi hoekie,  
+  
+Ein konkretes Beispiel wäre prima. 
+
+[#1.1.1][49] [Xela][50] am 10.10.2011 08:51 ([Antwort][51]) 
+
+   [49]: #c69
+   [50]: mailto:alexandra.klepatsch[at]gmail.com
+   [51]: #serendipity_CommentForm
+
+"Das Skript kann sowohl mit Strings als auch mit Dateien als Argument umgehen. Ein weiterer Vorteil dieses Skriptes ist, dass es sehr schnell ist (sed ist immer schnell). Auch große Dateien sind kein Problem."  
+  
+Leider hatte ich damit doch Probleme mit großen Dateien (~2GB).  
+  
+Ich habe das hier gepostete Script dann erfolgreich folgendermaßen abgeändert:  
+  
+#!/bin/bash  
+  
+while read line  
+do  
+sed 's/+/ /g; s/%/\\\\x/g' | xargs -I @ echo -e @  
+done 
+
+[#2][52] kirdie  am 10.05.2010 15:36 ([Antwort][53]) 
+
+   [52]: #c40
+   [53]: #serendipity_CommentForm
+
+  
+
+
+Kommentar schreiben
+
+Name
+
+E-Mail
+
+Homepage - Bitte LEER lassen!
+
+Antwort zu
+[ Ursprung ]#1: Nicolai Lissner am 10.12.2009 10:24   #1.1: hoekie am 09.10.2011 22:01     #1.1.1: Xela am 10.10.2011 08:51 #2: kirdie am 10.05.2010 15:36
+
+Kommentar
+  
+
+
+Umschließende Sterne heben ein Wort hervor (*wort*), per _wort_ kann ein Wort unterstrichen werden.
+
+Standard-Text Smilies wie :-) und ;-) werden zu Bildern konvertiert.
+
+  
+Um maschinelle und automatische Übertragung von Spamkommentaren zu verhindern, bitte die Zeichenfolge im dargestellten Bild in der Eingabemaske eintragen. Nur wenn die Zeichenfolge richtig eingegeben wurde, kann der Kommentar angenommen werden. Bitte beachten Sie, dass Ihr Browser Cookies unterstützen muss, um dieses Verfahren anzuwenden.   
+![CAPTCHA][54]  
+Hier die Zeichenfolge der Spamschutz-Grafik eintragen:   
+
+
+   [54]: http://spielwiese.la-evento.com/xelasblog/plugin/captcha_41a79f37964004260297b2d3806cb717 (Bitte die dargestellte Zeichenfolge in die Eingabemaske eintragen!)
+
+ 
+Daten merken?    
+Bei Aktualisierung dieser Kommentare benachrichtigen
+
+ 
+
+powered by: [Serendipity Weblog][55]
+
+   [55]: http://www.s9y.org/ (Powered by Serendipity)
+

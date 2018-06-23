@@ -1,0 +1,9 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-01-22T15:37:09+01:00
+
+====== bash projects ======
+Created Sunday 22 January 2017
+
+https://github.com/mietek/bashmenot
+Library of GNU bash functions https://bashmenot.mietek.io

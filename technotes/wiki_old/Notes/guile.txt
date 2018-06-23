@@ -1,0 +1,12 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-01-25T17:29:19+01:00
+
+====== guile ======
+Created Wednesday 25 January 2017
+
+
+=== Load srfi ===
+
+ (use-modules (srfi srfi-13))
+(string-concatenate '("Hello" " " "World!"))

@@ -1,0 +1,461 @@
+<!-- Plain Text Representation:
+# Getting Started
+
+We have tried to make Notebooks as simple and intuitive as possible, but because of the considerable number of options we have prepared a **[Quickstart Guide][]**, a **[Handbook as PDF][]** and a **[Handbook as eBook][]**. They will help you get started in no time. You can download each of them right away following these simple steps:
+
+- Tap the link above and Notebooks starts downloading the guide (you can tell by the spinning indicator in the status bar).
+- A few moments later you find the document at the top level of Notebooks. You can open and read the PDFs in Notebooks, but for reading the eBook, please choose your favorite eBook reader.
+
+For more documentation, please also take a look at:
+
+- The [Notebooks website](http://www.notebooksapp.com)
+- Our [Blog](http://www.notebooksapp.com/news)
+- Our [interactive FAQ](http://www.helpify.de/notebooks-for-ipad-iphone-mac-and-pc)
+
+Should you have further questions, you are welcome to contact us by [email](mailto:info@notebooksapp.com).
+
+[Quickstart Guide]: notebooks://grab/www.notebooksapp.com/Download/Quickstart.pdf
+[Handbook as PDF]: notebooks://grab/www.notebooksapp.com/Download/Notebooks%20Handbook.pdf
+[Handbook as eBook]: notebooks://grab/www.notebooksapp.com/Download/Notebooks%20Handbook.epub 
+-->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <!-- Generator: Notebooks 8.5 -->
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+  <title>Getting Started</title>
+<!-- Notebooks Default Theme 2.3 -->
+<style type="text/css">
+
+body {
+	font-family: SourceSansPro-Regular;
+	color: #000000;
+	font-size: 15px;
+	line-height: normal;
+	background-color: #ffffff;
+	background-image:url('**NotebooksBGImage**');
+	text-align: initial;
+	-webkit-hyphens: none;
+	padding: 5%;
+	margin: 0.0px 0.0px 0.0px 0.0px;
+	-webkit-text-size-adjust: none;
+}
+
+h1 {
+	font-size: 1.4em;
+	text-align: left;
+	font-weight: bold;
+	line-height: 1.5em;
+	margin: 0em 0px 1.25em 0px;
+}
+
+h2 {
+	font-size: 1.2em;
+	text-align: left;
+	font-weight: normal;
+	line-height: 1.5em;
+	margin: 2.5em 0 1em 0;
+	text-transform: uppercase;
+	border-bottom:1px solid #aaa;
+	padding-top: 0.8em;
+}
+
+h1 + h2 {
+	margin-top: 1.5em;
+}
+
+h3 {
+	font-size: 1.1em;
+	font-weight: normal;
+	margin: 2.5em 0 1em 0;
+	text-transform: uppercase;
+}
+
+h2 + h3 {
+	margin-top: 2.5em;
+}
+
+h4 {
+	font-size: 1em;
+	margin-top: 2em;
+}
+
+/* --------------------------------- */
+/* Pandoc author and date headers    */
+/* (h1.title, h2.author and h3.date) */
+
+div#header, header {
+	border-bottom: 1px solid #aaa;
+	padding-bottom: 1em;
+	margin-bottom: 2.5em;
+}
+
+.title {
+	text-align: center;
+	margin: 0em 0px 0.5em 0px;
+	border-bottom:none;
+	color: #000000;
+}
+
+.author {
+	text-align: center;
+	margin: 0em 0px 0em 0px;
+	border-bottom:none;
+	color: #000000;
+}
+
+.date {
+	text-align: center;
+	margin: 0em 0px 1.25em 0px;
+	color: #000000;
+}
+
+/* div for table of contents */
+/* with divider at top and bottom */
+div#TOC, nav#TOC {
+	border-top: 1px solid #aaa;
+	padding-top: 1.5em;
+	margin-top: 2.5em;
+	border-bottom: 1px solid #aaa;
+	padding-bottom: 1.5em;
+	margin-bottom: 2.5em;
+}
+
+/* ... unless we are following the header */
+div#header + div#TOC {
+	border-top: 0px solid #aaa;
+	padding-top: 0em;
+	margin-top: 0em;
+}
+
+/* print TOC in smaller font */
+@media print {
+	div#TOC, nav#TOC {
+		/* Don't display TOC in print */
+		/*display: none;*/
+		font-size: 0.8em;
+	}
+}
+/* --------------------------------- */
+
+a {
+	text-decoration: none !important;
+	color:#627aa7;
+}
+
+img {
+	width:auto;
+	max-width:80%;
+	height:auto;
+	background-color: #fff;
+	
+	/* drop a slight shadow */
+	-webkit-border-radius: 1px;
+	border: none;
+	overflow: hidden;
+	-webkit-box-shadow: 0 1px 3px #9e9c93;
+	
+	/* center image */
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+/* --------- Table ---------- */
+
+table {
+	font-size: 15px;
+	border-collapse: collapse;
+	margin-top:    2em;
+	border-top:    1pt solid #888;
+	border-bottom: 1pt solid #888;
+}
+
+td, th  {
+	vertical-align: top;
+	vertical-align: baseline;
+	padding-left:   1.5em;
+	padding-right:  1.5em;
+	padding-top:    0.2em;
+	padding-bottom: 0.2em;
+}
+
+thead, th {
+	border-bottom: 1pt solid #aaa;
+	padding-top:    0.4em;
+	padding-bottom: 0.4em;
+}
+
+/* --------------------------------- */
+
+hr {
+	height: 1px;
+	margin: 2em 0em 4em 0;
+	text-align: center;
+	background-color: #ddd;
+	border-width: 0;
+}
+
+blockquote {
+	font-size: 1em;
+	margin: 1px;
+	padding: 0 .75em 0 1.25em;
+	border-left: 3px solid #ddd;
+}
+
+blockquote strong {
+	font-weight: bold;
+	font-size: 1em;
+	letter-spacing: normal;
+	text-transform: none;
+}
+
+
+/* ---- List style: 1, a, i, o ---- */
+
+ul, ol {
+	padding-left: 1.5em;
+	margin-left: 1em;
+	text-indent:0em;
+}
+
+ol ol {
+	list-style-type: lower-alpha;
+	margin-left: 0em;
+}
+
+ol ol ol {
+	list-style-type: lower-roman;
+	margin-left: 0em;
+}
+
+ol ol ol ol {
+	list-style-type: circle;
+	margin-left: 0em;
+}
+
+li {
+	margin-top:0.5em;
+	margin-bottom:3px
+}
+
+/* -------- */
+
+pre {
+	line-height: 1.45em;
+	background-color: inherit;
+	margin: 2em 2em 2em 1em;
+	padding: 5px 0 5px 10px;
+	border-width: 1px;
+	border-color: #ddd;
+	border-style: solid;
+	padding:6px 10px;
+	border-radius:3px;
+	-moz-border-radius:3px;
+	-webkit-border-radius:3px;
+	width: auto;
+	white-space: pre-wrap;
+	display:block;
+}
+
+code {
+	font-size: 0.91em;
+}
+
+
+/* ---- Definition Lists ---- */
+
+dl {
+	border-top:  1pt solid #888;
+	padding-top: 0.5em;
+	border-bottom: 1pt solid #888;
+	margin-top: 2em;
+	margin-bottom: 1.5em;
+	padding-left:   1.5em;
+	padding-right:  1.5em
+}
+
+dt {
+	font-weight: bold;
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+	letter-spacing: normal;
+	text-transform: none;
+}
+
+dd {
+	margin-bottom: 0.5em;
+}
+
+dd+dt {
+	border-top:  1pt solid #ddd;
+	padding-top: 0.5em;
+}
+
+dd+dd {
+	border-top: 1px solid #ddd;
+	padding-top: 0.5em;
+}
+
+
+/* ---- Footnotes ---- */
+
+a.footnote, a.footnoteRef {
+	font-size: small;
+	vertical-align: text-top;
+}
+
+@media print {
+	a[href^="#fnref"], a.reversefootnote  {
+		display: none;
+	}
+}
+
+/* from http://css-tricks.com/examples/hrs/ */
+
+div.footnotes > hr {
+	margin-top: 4em;
+	padding: 0;
+	border: none;
+	border-top: double;
+	border-color: #eee;
+	border-width: 1pt;
+	color: #000;
+	text-align: center;
+}
+
+div.footnotes > hr:after {
+	content: "NOTES";
+	display: inline-block;
+	position: relative;
+	top: -0.8em;
+	font-size: 0.8em;
+	padding: 0 0.5em;
+	background: white;
+}
+
+
+/* ------------------------------------------------ */
+/* Custom classes
+ 
+/* use this for an empty div to enforce a pagebreak */
+/* in Markdown you just need > %pagebreak%           */
+.pagebreak {
+	page-break-before: always;
+	margin-top: 2em;
+	margin-bottom: 2em;
+	border-width: 3pt;
+	text-align: center;
+	background: #eee;
+	height: 1px;
+	color: #ccc;
+	font-size: 0.8em;
+}
+
+.pagebreak:after {
+	content: "PAGE BREAK";
+	display: inline-block;
+	position: relative;
+	top: -0.6em;
+	padding: 0 0.5em;
+	background: white;
+}
+
+@media print {
+	.pagebreak {
+		margin-top: 0em;
+		margin-bottom: 0em;
+	}
+	
+	.pagebreak:after {
+		content: "";
+		padding: 0 0em;
+	}
+}
+
+
+/* This is the caption for tables or images */
+/* in Markdown, us it like >%caption%       */
+.caption {
+	caption-side: top;
+	border: none;
+	font-size:  0.9em;
+	font-style: italic;
+	text-align: center;
+	margin-top:  0.5em;
+	margin-bottom:  0.3em;
+	padding-bottom: 0.2em;
+}
+
+/* ------------------------------------------------ */
+
+@media print  {
+	
+	body {
+		background: white;
+		padding: 0%;
+	}
+	
+	h1 {
+		page-break-before: always;
+	}
+	
+	h1:first-of-type {
+		page-break-before: avoid;
+		counter-reset: page;
+	}
+	
+	h1, h2, h3, h4, h5, h6 {
+		page-break-after:avoid;
+		page-break-inside:avoid
+	}
+	
+	blockquote, table, pre {
+		page-break-inside:avoid
+	}
+	
+	ul, ol, dl  {
+		page-break-before:avoid
+	}
+	
+	img {
+		page-break-inside:avoid;
+		page-break-after:avoid;
+	}
+	
+	a {
+		text-decoration: none !important;
+		color: #000000;
+	}
+}
+
+</style>
+</head>
+<body>
+<a name="Getting.Started"></a>
+<h1>Getting Started</h1>
+
+<p>We have tried to make Notebooks as simple and intuitive as possible, but because of the considerable number of options we have prepared a <strong><a href="notebooks://grab/www.notebooksapp.com/Download/Quickstart.pdf">Quickstart Guide</a></strong>, a <strong><a href="notebooks://grab/www.notebooksapp.com/Download/Notebooks%20Handbook.pdf">Handbook as PDF</a></strong> and a <strong><a href="notebooks://grab/www.notebooksapp.com/Download/Notebooks%20Handbook.epub">Handbook as eBook</a></strong>. They will help you get started in no time. You can download each of them right away following these simple steps:</p>
+
+<ul>
+<li>Tap the link above and Notebooks starts downloading the guide (you can tell by the spinning indicator in the status bar).</li>
+<li>A few moments later you find the document at the top level of Notebooks. You can open and read the PDFs in Notebooks, but for reading the eBook, please choose your favorite eBook reader.</li>
+</ul>
+
+
+<p>For more documentation, please also take a look at:</p>
+
+<ul>
+<li>The <a href="http://www.notebooksapp.com">Notebooks website</a></li>
+<li>Our <a href="http://www.notebooksapp.com/news">Blog</a></li>
+<li>Our <a href="http://www.helpify.de/notebooks-for-ipad-iphone-mac-and-pc">interactive FAQ</a></li>
+</ul>
+
+
+<p>Should you have further questions, you are welcome to contact us by <a href="mailto:info@notebooksapp.com">email</a>.</p>
+
+</body>
+</html>
+

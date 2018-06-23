@@ -8,15 +8,13 @@ rm -f $HOME/.tmux.conf
 rm -f $HOME/.tmux-common.conf
 ln -s $cwd/tmux-common.conf ~/.tmux-common.conf
 
-case "$os" in
-   Darwin)
-      ln -s $cwd/tmux-mac.conf $HOME/.tmux.conf
-      rm -f $
-      ;;
-   *)
-         die 'todo'
-    ;; 
-esac
+die () { echo $@; exit 1; }
 
 
+os_conf="tmux-${os}.conf" 
 
+if [ -f "$os_conf" ] ; then
+   ln -s $cwd/$os_conf $HOME/.tmux.conf
+else
+   die "todo ' $os"
+fi

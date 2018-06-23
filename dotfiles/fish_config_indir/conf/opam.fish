@@ -1,4 +1,5 @@
-set -gx OPAMPATH $HOME/.opam/4.02.3
+set -gx OPAMPATH $HOME/.opam/default
+#set -gx OPAMPATH $HOME/.opam/4.02.3
 #set -gx OPAMPATH $HOME/.opam/4.02.3+buckle-master
 
 set -gx CAML_LD_LIBRARY_PATH "$OPAMPATH/lib/stublibs"
@@ -10,7 +11,7 @@ export OPAMUTF8MSGS
 set -gx MANPATH "$OPAMPATH/man:/usr/share/man:/usr/local/share/man:/opt/X11/share/man:/usr/local/MacGPG2/share/man"
 export MANPATH
 
-set -gx BUCKLEHOME  /usr/local/lib/node_modules/bs-platform
+#set -gx BUCKLEHOME  /usr/local/lib/node_modules/bs-platform
 #set -gx BSC_LIB "/home/bkb/local/bucklescript/src/bucklescript/jscomp/stdlib/"
 # SET PATH
 for bin in $OPAMPATH/bin $BUCKLEHOME/bin

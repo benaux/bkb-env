@@ -1,0 +1,15 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2016-12-21T12:28:00+01:00
+
+====== sample over ssh ======
+Created Wednesday 21 December 2016
+
+Unison: examples ofer ssh
+
+# between  a mac a synology box and an ubuntu laptop
+
+## important is to ignore permission changes: -perms 0
+## servercommand is for the synology server
+
+unison -perms 0 -servercmd "~/local/bin/unison"  ~/aux/aux.net/library.auxbox.pub/ ssh://ronin//var/services/homes/ben/roots/userserv.ben-auxdir.priv/unison/library.auxbox.pub

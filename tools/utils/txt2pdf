@@ -1,0 +1,25 @@
+#!/bin/sh
+
+input=$1
+output=${input%.*}
+
+os=$(uname)
+
+case "$os" in
+  Darwin)
+    #No specify font:
+    #textutil -convert html $input
+
+    textutil -font 'Menlo Regular' -fontsize 13 -convert html $input 
+    cupsfilter $output.html > $output.pdf
+
+    echo "Cleaning rm -f $output.html"
+    rm -f $output.html
+
+    ;;
+  *)
+    echo "Err: todo $os"
+    exit 1
+    ;;
+esac
+

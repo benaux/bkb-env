@@ -1,0 +1,706 @@
+From <http://www.di-mgt.com.au/cprog.html>:
+
+| [Sitemap][1]
+
+   [1]: sitemap.html (Sitemap for DI Management)
+
+[DI Management Home][2] > C Programming 
+
+   [2]: index.html
+
+#  ![DI Management Services is a computer programming consultancy based in Australia][3] C Programming Language
+
+   [3]: images/dilogo.gif (DI Management Services, Australia)
+
+* * *
+
+This page is dedicated to the ANSI C Programming language. We've assembled links and copies of interesting or educational articles on C programming, look at Windows Win32 programming, and consider why we still prefer ANSI C to C++. 
+
+## Contents
+
+  * [Why we prefer C to C++][4]
+  * [Recommended books on the C Programming Language][5]
+  * [Secure Programming in C][6]
+  * [Win32 Programming using C][7]
+  * [Books on Win32 Programming][8]
+  * [Recommended sites on Win32 Programming][9]
+  * [Avoiding buffer overflows - strlcpy and strlcat][10]
+  * [More on buffer overflows - MSVC's _snprintf][11]
+  * [Some cute programs in C][12] including the first 800 digits of pi in 160 characters of code, Diffie-Hellman in 10 lines of C, and a tricky one-liner by David Korn.
+  * [Free C compilers and utilities to download][13]
+  * [Interesting articles and links on C Programming][14]
+  * [Quotes from Writing Unmaintainable Code:][15] "Testing is for cowards", "Never, Ever Do Any Performance Testing" and "Never Validate".
+  * [Comments][16]
+
+   [4]: #whywepreferc
+   [5]: #booksonc
+   [6]: #secureprog
+   [7]: #win32prog
+   [8]: #win32books
+   [9]: #progsites
+   [10]: #strlcpy
+   [11]: #snprintf
+   [12]: #cutecode
+   [13]: #programs
+   [14]: #articles
+   [15]: #unmaintainquotes
+   [16]: #makeacomment
+
+## Why we prefer C to C++    [![Top][17]][18]
+
+   [17]: images/topofpage.gif (Return to top of page)
+   [18]: #TopOfPage
+
+  * C is simpler and more compact
+  * The reference book is thinner
+  * It's usually easier to work out what the program's doing
+  * It generates smaller executables (much smaller in the case of MFC)
+  * It's more portable
+  * With good structure and coding practices, it's often just as "safe" as OOP
+  * Programs written 20 years ago are still just as valid today as they were then
+  * We're old luddites who hate learning new tricks
+
+We note that many C++ programs we come across are really just plain old C with the `printf` replaced by `cout<<`. 
+
+### Where C++ is better
+
+  * C++ gives more opportunities for obfuscation
+  * People know that **C++** is a programming language. But "**C**", well, try doing a web search on that.
+
+Grudgingly, we have to admit that there are areas where C++ may be better. For example, using the overload operators would make something like a large digit arithmetic package much simpler to use. Having constructors and destructors means you can manage memory allocation and deletion more safely. And, er..., yes, we're sure there really are more reasons. 
+
+> "C makes it easy to shoot yourself in the foot; C++ makes it harder, but when you do, it blows away your whole leg."   
+- Bjarne Stroustrup 
+
+> "If C gives you enough rope to hang yourself, then C++ gives you enough rope to bind and gag your neighborhood, rig the sails on a small ship, and still have enough rope to hang yourself from the yardarm"   
+- Anonymous quote from the The UNIX-HATERS Handbook
+
+Note how the original proposals for, say, the cryptographic algorithms AES and the new [SHA-3 competition][19] are still written in C. Besides, C++ isn't even a real OO programming language anyway. 
+
+   [19]: http://csrc.nist.gov/groups/ST/hash/sha-3/index.html
+
+**C Sharp:** You could skip C++ altogether and go straight to C#. In earlier versions of this page we may have given the impression we were completely against C# but after carrying out some projects in C# we are partially converted. Perhaps it's not just a proprietary Microsoft language after all, and there are [alternative compilers][20] out there, some not even provided by M$. C# has all the advantages of C (well, most) without the buffer overflow and garbage collection problems. We still wouldn't invest in a big project in it, though. You can find code written 30 years ago in C and it still works. Who knows, the code you write today in C# may not even work on the new version that Microsoft brings out next week. They do have a reputation in that line. And it certainly won't work on any platforms other than the big W! 
+
+   [20]: http://www.thefreecountry.com/compilers/csharp.shtml
+
+**D:** Look instead at the [D Programming Language][21]. 
+
+   [21]: http://www.digitalmars.com/d/index.html
+
+## Recommended books on the C Programming Language    [![Top][22]][23]
+
+   [22]: images/topofpage.gif (Return to top of page)
+   [23]: #TopOfPage
+
+  * The C Programming Language, Kernighan and Ritchie, 2nd Edition. Still reads well. I still have and use the first edition dated 1978. 
+  * C Puzzle Book, Alan R Feuer, Addison-Wesley, 2nd edition 1999, ISBN 0201604612. The best ever book on understanding the quirks of C and how to use pointers properly.
+  * The Practice of Programming, Kernighan and Pike, Addison-Wesley, 1999. An update of an earlier book written in the 1970s. Timeless advice, not just on C but on Java, C++ and Perl. 
+  * The Standard C Library, PJ Plauger, Prentice Hall, 1992. Literally how it all works with full source code and tests.
+
+If you read and understand the first three of these books, you will be an expert in C, I promise you. Plauger is a useful reference book that makes up the set. And better, all four of them will span no more than 4 inches on your book shelf. 
+
+For more advanced users, try C Interfaces and Implementations: techniques for creating reusable software by David R. Hanson, Addison-Wesley, 1997. The source code and sample pages are [available here][24]. 
+
+   [24]: http://sites.google.com/site/cinterfacesimplementations/
+
+## Secure Programming in C    [![Top][25]][26]
+
+   [25]: images/topofpage.gif (Return to top of page)
+   [26]: #TopOfPage
+
+For a good introduction see Secure Programming in C and C++ by Robert C. Seacord, Addison-Wesley, 2005, <[http://www.cert.org/books/secure-coding/][27]>. This not only explains clearly what the problems are but provides useful links. For a more detailed work with lots of instantly useable examples for both Windows and Unix, try Secure Programming Cookbook for C and C++ by John Viega and Matt Messier, O'Rielly Media, 2003. The authors provide more information, links and downloads on their site <[http://www.secureprogramming.com/][28]>. 
+
+   [27]: http://www.cert.org/books/secure-coding/
+   [28]: http://www.secureprogramming.com/
+
+The GIAC Secure Software Programmer (GSSP) Certification Exam was developed in a joint effort involving the SANS Institute, CERT/CC, and several US government agencies. David Ireland was one of the first seven programmers to receive the GSSP-C qualification in the C programming language, see [SANS Institute press release][29]. 
+
+   [29]: pressrelease10-9-07.pdf
+
+## Win32 Programming using C    [![Top][30]][31]
+
+   [30]: images/topofpage.gif (Return to top of page)
+   [31]: #TopOfPage
+
+**A personal story:** I struggled for months to learn Windows programming with my (then) new copy of MSVC++5. I bought lots of books and followed their examples, but just didn't seem to get it. 
+
+Once you'd set up a simple example, such as "Hello World", it was very difficult to make simple changes to create a more complicated example. The object-oriented C++ syntax combined with MFC's attempts to hide the messy bits of Win32 programming made it difficult to trace and understand. Because you'd used wizards to set it all up, you didn't understand why things did what they did. The books all relied on pages and pages of screen dumps of the setup screens to explain what had to be done in a cookbook "follow the recipe" manner. So even if you remembered it perfectly, once you changed environment, you'd be lost again. 
+
+The one thing that made it all come together was finding the GENERIC.C example in the Windows SDK (currently at [generic.c][32], unless they've moved it again - thanks, John). Here was a simple example of relatively few lines that worked. What's more, it didn't get complicated by introducing the extra complexities of C++. Better still, you didn't need to use macros to set things up and so could actually alter what you wanted to do without starting again. 
+
+   [32]: http://msdn.microsoft.com/en-us/library/aa383690.aspx
+
+The upshot is that the hardest bit about Win32 programming is the first bit. If you understand the basics of the WinMain loop, WM_CREATE, WM_PAINT, and the use of callback functions, you are a long way there. There is a standard wrapper about 30 lines long that you can use. Everything else generally comes down to finding the right Windows functions to use to do what you want (ironically, the best place to find this information and how to use it is often on a VB site!). 
+
+Personally I find that programming in plain Win32 C makes for smaller and neater programs. From what we can see, nothing fundamental has changed between Win95 and W7 from a standard programmer's point of view. Sure, there are more features and more complexity if you go looking, but the basics are unchanged. A text book on W95 is still quite valid for writing programs that will run on W7. It gets messier when you want to start using WinSock or doing fancy graphics programming. Presumably the next big change will be when the 64-bit variant supersedes the 32-bit one. 
+
+**Free software:** See our free [Wclock world time display program][33] written using straightforward ANSI C and so-called "SDK-C", i.e. the C code used in the Windows SDK. The source code is available. 
+
+   [33]: wclock/index.html
+
+## Recommended books on Win32 Programming in C    [![Top][34]][35]
+
+   [34]: images/topofpage.gif (Return to top of page)
+   [35]: #TopOfPage
+
+  * Programming in Windows, Charles Petzold, 5th ed, Microsoft Press, 1999.
+  * Windows NT Win32 API Superbible, Richard J Simon, Waite Group Press, 1997. There are variants of this book for all varieties of Windows, but they are essentially all the same.
+  * Windows Graphics Programming, Feng Yuan, Prentice Hall, 2001. The ultimate guide to Win32 GDI and DirectDraw. OK, he uses C++ and MFC, but it's not hard to extract the important bits. Very comprehensive coverage.
+
+## Recommended sites on Win32 Programming in C    [![Top][36]][37]
+
+   [36]: images/topofpage.gif (Return to top of page)
+   [37]: #TopOfPage
+
+We have found these sites to be particularly helpful for learning and understanding Win32 programming using the C programming language. 
+
+  * [theForger's Win32 API Tutorial][38]: Brook Miles's tutorial attempts to get you started developing with the Win32 API as quickly and clearly as possible. You can download the entire site with source code, or get a PDF version. Includes a Spanish translation. 
+  * [Catch22 Win32 Tutorials][39]: a collection of programming tutorials for Windows by James Brown. See especially his [Win32 Tips and Tricks][40]. 
+  * [Al's Programming Resource for Win32][41]: set of tutorials on Win32 programming by Alan Baylis. Uses the evil Flash but he does provide all the example source code separately. 
+  * [EFNet #Winprog][42]: with the primary focus on C/C++ Programming with the Win32 API or MFC. 
+  * [masmforum website][43]: Tools, toys, tutes and files for assembler programmers. Check the [Links to assembler topics][44]. 
+
+   [38]: http://winprog.org/tutorial/
+   [39]: http://www.catch22.net/tuts/
+   [40]: http://www.catch22.net/content/win32-tips-tricks-and-tutorials
+   [41]: http://www.alsprogrammingresource.com/win32_tutorials.html
+   [42]: http://www.winprog.org/faq/
+   [43]: http://www.website.masmforum.com/
+   [44]: http://www.website.masmforum.com/links.htm
+
+## Avoiding buffer overflows - strlcpy and strlcat    [![Top][45]][46]
+
+   [45]: images/topofpage.gif (Return to top of page)
+   [46]: #TopOfPage
+
+It is not wise to use the ANSI standard `strcpy` and `strcat` functions because of the possibility of unchecked buffer overflows. The `strncpy` function has the problem that it may not properly terminate the string. The following `strlcpy` and `strlcat` functions are simple implementations that overcome the problems of their original ANSI ancestors (**last updated 2011-12-11**). 
+    
+    
+    #include <string.h>
+    
+    size_t strlcpy(char *d, const char *s, size_t bufsize)
+    {
+      size_t len;
+      size_t ret;
+    
+      if (!d || !s || (int)bufsize <= 0) return 0;
+      len = strlen(s);
+      ret = len;
+      if (len >= bufsize) len = bufsize-1;
+      memcpy(d, s, len);
+      d[len] = 0;
+    
+      return ret;
+    }
+    
+    size_t strlcat(char *d, const char *s, size_t bufsize)
+    {
+      size_t len1;
+      size_t len2;
+      size_t ret;
+    
+      if (!d || !s || (int)bufsize <= 0) return 0;
+      len1 = strlen(d);
+      len2 = strlen(s);
+      ret = len1 + len2;
+      if (len1+len2 >= bufsize) 
+        len2 = bufsize - (len1 + 1);
+      if (len2 > 0) 
+      {
+        memcpy(d+len1, s, len2);
+        d[len1+len2] = 0;
+      }
+      return ret;
+    }
+    
+
+These functions are guaranteed not to cause a buffer overflow and the result is _always_ null-terminated. If there is not enough room in the destination buffer, then it truncates the output. The return value is the number of bytes it should have copied, so you have a roundabout way of checking. The value of `bufsize` is the actual allocated size of the buffer, so you can use `sizeof(buf)` (providing `buf` is not a pointer). 
+
+For more on the background to these functions see [strlcpy and strlcat - consistent, safe, string copy and concatenation][47] by Todd C. Miller and Theo de Raadt. 
+
+   [47]: http://www.courtesan.com/todd/papers/strlcpy.html
+
+The above solutions do have the disadvantage that they always do at least a double pass along the strings, and so are only half as efficient as the originals which don't. This is really only a problem for very long strings. 
+
+We've never noticed any performance issue in practice with this code. It's far, far more important that we know we can use these functions in our applications safe in the knowledge that we will not get a buffer overflow problem, and that we won't be getting people writing in to say they got a run-time error with our program and can they have their money back. If it's _really_ important that there is no truncation, then do your own pre-condition checks and call the raw `<string.h>` function. 
+
+## Avoiding buffer overflows, more
+
+To avoid the danger that you might pass too large a buffer length, try using this macro 
+    
+    
+    #include <limits.h>
+    #define ISTOOBIG(n) ((n)>(LONG_MAX>>1))
+    if (ISTOOBIG(bufsize)) return ERROR;
+    
+
+One of the dangers of using the unsigned `size_t` typedef is when you accidentally cast a negative `int` and end up unintentionally passing a very large unsigned integer as your buffer length. 
+    
+    
+    int len;
+    //...
+    len = -1;
+    //...
+    strlcpy(d, s, (size_t)len);   // cast as size_t to avoid annoying compiler warning
+    
+
+This actually passes a very large `bufsize` argument which is not detected by `if (bufsize <= 0)`. Alternatively, you could do this 
+    
+    
+    if ((int)bufsize <= 0) return ERROR;
+    
+
+## Avoiding buffer overflows, continued
+
+We use this modified version of `strlen` when stupid programmers (i.e. ourselves) might pass a null string and cause a run-time error 
+    
+    
+    size_t strllen(const char *string)
+    {
+      if (!string) return 0;
+      return strlen(string);
+    }
+    
+
+Windows programmers might refer to Microsoft's [Using the Strsafe.h Functions][48]. [As with all Microsoft's pages, it may have moved again.] We are tempted to agree with one commentator who said he'd rather learn Java than use the awfully-named functions in this library. 
+
+   [48]: http://msdn.microsoft.com/en-us/library/ms647466.aspx
+
+Users of MSVC 2005/8/10+ will no doubt be aware of the `strcpy_s` family of functions and the annoying message 
+
+> warning C4996: '_strcpy': This function or variable may be unsafe. Consider using _strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. 
+
+If you are annoyed by this, see [MSVC++: Getting rid of that _CRT_SECURE_NO_DEPRECATE warning][49]. 
+
+   [49]: msvc_no_deprecate.html
+
+And, yes, there is a IEC draft on the `*_s` functions [TC1/SC22/WG14-C][50] Specification for Secure C Library Functions dating back to 2004. This was apparently initiated _after_ Microsoft implemented their `_s` functions, but the committee then recommended something different. Anyway, they won't work if you port to GNU. A shame, because they really are good practice, even if they have some silly parameters. 
+
+   [50]: docs/wdtr24731-extns2clang-n1093.pdf
+
+## More on buffer overflows - MSVC's _snprintf function    [![Top][51]][52]
+
+   [51]: images/topofpage.gif (Return to top of page)
+   [52]: #TopOfPage
+
+The functions `sprintf` and Win32 `wsprintf` have similar problems with buffer overflow. The `snprintf` function provided in (recent) Linux implementations like GCC solves the problem admirably. In MSVC there is a similarly named `_snprintf` function that you'd expect to do the same thing, wouldn't you? Wrong! Spot the difference: 
+
+**Linux:** `int snprintf(char *str, size_t size, const char *format, ...);`   
+The **snprintf()** function will write at most size-1 of the characters printed into the output string (the size'th character then gets the terminating `\0'); if the return value is greater than or equal to the size argument, the string was too short and some of the printed characters were discarded. The output is always null-terminated. 
+
+**MSVC:** `int _snprintf(char *buffer, size_t count, const char *format [,argument] ... );`   
+**_snprintf** returns the number of bytes stored in buffer, not counting the terminating null character. If the number of bytes required to store the data exceeds count, then count bytes of data are stored in buffer and a negative value is returned. 
+
+Can you see the problem? In the Linux version, the output is always null-terminated. In MSVC, it's not. 
+
+Even more subtle is the difference between the `size` parameter in Linux and `count` parameter in MSVC. The former is the size of the output buffer _including_ the terminating null and the latter is the maximum count of characters to store, which _excludes_ the terminating null. 
+
+Here's a compromise solution we use in MSVC environments (**last updated 2011-12-11**). The output is always null-terminated and truncated if necessary. The return value is either the number of characters stored or -1 if truncation occurs. 
+    
+    
+    #include <stdarg.h>
+    #include <stdio.h>
+    #ifdef _MSC_VER
+    int slprintf(char *buffer, size_t bufsize, const char *fmt, ...)
+    {
+      va_list ap;
+      int ret;
+      
+      if ((int)bufsize <= 0) return -1;
+      va_start(ap, fmt);
+      ret = _vsnprintf(buffer, bufsize-1, fmt, ap);
+      if (ret < 0)
+        buffer[bufsize-1] = '\0';
+      va_end(ap);
+      return ret;
+    }
+    #endif
+    
+
+To be consistent when we port to a Linux GCC environment, where the return values and size parameter of `snprintf` and `vsnprintf` are different (and, sadly, better), we use the following: 
+    
+    
+    int slprintf(char *buffer, size_t bufsize, const char *fmt, ...)
+    {
+      va_list ap;
+      int ret;
+      
+      if ((int)bufsize <= 0) return -1;
+      va_start(ap, fmt);
+      ret = vsnprintf(buffer, bufsize, fmt, ap);
+      if (ret >= bufsize)
+        ret = -1;
+      va_end(ap);
+      return ret;
+    }
+    
+
+## Some cute programs in C    [![Top][53]][54]
+
+   [53]: images/topofpage.gif (Return to top of page)
+   [54]: #TopOfPage
+
+**Calculate pi to 800 digits** in 160 characters of code. Written by Dik T. Winter at CWI. 
+    
+    
+    int a=10000,b,c=2800,d,e,f[2801],g;main(){for(;b-c;)f[b++]=a/5;
+    for(;d=0,g=c*2;c-=14,printf("%.4d",e+d/a),e=d%a)for(b=c;d+=f[b]*a,
+    f[b]=d%--g,d/=g--,--b;d*=b);}
+    
+
+**Calculate the day of the week** in 45 characters of code. Written by [Mike Keith][55]. 
+    
+       [55]: http://www.cadaeic.net/
+
+
+    (d+=m<3?y--:y-2,23*m/9+d+4+y/4-y/100+y/400)%7
+    
+
+**Diffie-Helman in 10 lines of code** posted anonymously to sci.crypt and publicised by Adam Back. This actually carries out multiple precision modular exponentation using 8-bit digits. Set **S** to the number of 8-bit digits required plus 1. This example is for 1024 bits. 
+    
+    
+    #include <stdio.h>  /* Usage: dh base exponent modulus */
+    typedef unsigned char u;u m[1024],g[1024],e[1024],b[1024];int n,v,d,z,S=129;a(
+    u *x,u *y,int o){d=0;for(v=S;v--;){d+=x[v]+y[v]*o;x[v]=d;d=d>>8;}}s(u *x){for(
+    v=0;(v<S-1)&&(x[v]==m[v]);)v++;if(x[v]>=m[v])a(x,m,-1);}r(u *x){d=0;for(v=0;v<
+    S;){d|=x[v];x[v++]=d/2;d=(d&1)<<8;}}M(u *x,u *y){u X[1024],Y[1024];bcopy(x,X,S
+    );bcopy(y,Y,S);bzero(x,S);for(z=S*8;z--;){if(X[S-1]&1){a(x,Y,1);s(x);}r(X);a(Y
+    ,Y,1);s(Y);}}h(char *x,u *y){bzero(y,S);for(n=0;x[n]>0;n++){for(z=4;z--;)a(y,y
+    ,1);x[n]|=32;y[S-1]|=x[n]-48-(x[n]>96)*39;}}p(u *x){for(n=0;!x[n];)n++;for(;n<
+    S;n++)printf("%c%c",48+x[n]/16+(x[n]>159)*7,48+(x[n]&15)+7*((x[n]&15)>9));
+    printf("\n");}main(int c,char **v){h(v[1],g);h(v[2],e);h(v[3],m);bzero(b,S);b[
+    S-1]=1;for(n=S*8;n--;){if(e[S-1]&1)M(b,g);M(g,g);r(e);}p(b);}
+    
+
+Note: For strict ANSI you need to add `#include <string.h>` and substitute `memset(x,0,S)` and `memcpy(y,Y,S)` for the **bzero()** and **bcopy()** functions above (or write your own loops). 
+
+**The Best One Liner winner** in the [1987 International Obfuscated C Code Contest][56] (IOCCC), written by David Korn and judged "the best one line entry ever received". 
+    
+       [56]: http://www.ioccc.org/years.html#1987
+
+
+    main() { printf(&unix["\021%six\012\0"],(unix)["have"]+"fun"-0x60);}
+    
+
+This should compile without changes on a Unix or Cygwin system. If you are stuck, here are some [hints to help understand how it works][57]. 
+
+   [57]: src/korn_ioccc.txt
+
+## Free C compilers and utilities to download    [![Top][58]][59]
+
+   [58]: images/topofpage.gif (Return to top of page)
+   [59]: #TopOfPage
+
+  * [Pelles C][60]: Pelles C for Windows is a complete development kit for Windows and Pocket PC. 
+  * [Borland bcc32 Compiler][61]: You can still download the (old, perhaps obsolete) Borland C/C++ 5.5 command line compiler for free (you may need to fill in few forms). For a quick get-started guide see [Using the Borland 5.5 Compiler and command-line tools][62] by John Ray Thomas. For instructions on compiling and linking a Win32 program, see [Brook Miles' tutorial][63]. 
+  * [MinGW: Minimalist GNU for Windows][64]. MinGW provides a complete Open Source programming tool set which is suitable for the development of native MS-Windows applications. It includes a port of the GNU Compiler Collection (GCC), including C. 
+  * [Cygwin][65]: Cygwin is a Linux-like environment for Windows. It comes with the standard GNU gcc compiler. Particularly useful to test whether your MSVC code will compile on a Linux system without having one available. If you're a really anally-retentive C programmer, use this command to compile your code: 
+    
+       [60]: http://www.smorgasbordet.com/pellesc/
+   [61]: http://edn.embarcadero.com/article/20633
+   [62]: http://edn.embarcadero.com/article/20997
+   [63]: http://www.winprog.org/tutorial/bcpp.html
+   [64]: http://www.mingw.org/
+   [65]: http://www.cygwin.com/
+
+
+    gcc -ansi -pedantic -Wall -O foo.c -o foo
+    
+
+(that's a capital letter-O for Oscar, not zero). 
+  * [Artistic Style][66]: A Free, Fast and Small Automatic Formatter for C, C++, C#, and Java Source Code by Tal Davidson and Jim Pattee 
+  * [ITS4][67]: ITS4 (It's The Software, Stupid! -- Security Scanner) is a command-line tool that statically scans C and C++ source code for potential security vulnerabilities and works across Unix and Windows platforms. 
+  * [Free Debugging Tools, Program Checkers, Bug Trackers][68]: Christopher Heng's thefreecountry™ links to debuggers, source code checkers (like lint, that scan your source code for suspicious constructs that might be a bug waiting to happen), debugging tools (like strace that traces a system call), API wrappers (that wrap calls to system libraries so that you can check for valid parameters/arguments in system calls), as well as bug trackers which allow you to keep track of bug reports from users and the status of the bugs. There is also a good link to [free C/C++ compilers and interpreters][69]. 
+  * [Splint - Secure Programming Lint][70]: Splint is a tool for statically checking C programs for security vulnerabilities and coding mistakes. Published by the University of Virginia, Department of Computer Science. A nice utility to know about and claim you use. To be honest, we find it throws up too many false positives to be any practical use. 
+
+   [66]: http://astyle.sourceforge.net/
+   [67]: http://www.cigital.com/its4/
+   [68]: http://www.thefreecountry.com/programming/debuggers.shtml
+   [69]: http://www.thefreecountry.com/compilers/cpp.shtml
+   [70]: http://www.splint.org/
+
+## Some interesting articles    [![Top][71]][72]
+
+   [71]: images/topofpage.gif (Return to top of page)
+   [72]: #TopOfPage
+
+These are interesting articles or links on C Programming that we've stumbled across in the last few years. If there wasn't a valid link to the original site, then the articles are posted here as an educational aid. We don't intend to infringe anyone's copyright here. If you are the original author and have a problem with any of these articles being posted here, please [contact us][73] and we'll remove it or replace it with a link to your site. 
+
+   [73]: http://www.di-mgt.com.au/cgi-bin/sendanemail.cgi
+
+[Interview with Brian Kernighan][74]
+Enjoyable reading with some support for our views on C++. Plus advice on how to pronounce his name correctly. 
+
+   [74]: http://www-2.cs.cmu.edu/~mihaib/kernighan-interview/
+
+[comp.lang.c Frequently Asked Questions][75]
+Link to www version. Highly relevant. An up-to-date copy may be obtained from [ftp.eskimo.com][76] in directory u/s/scs/C-faq/. 
+
+   [75]: http://c-faq.com/
+   [76]: ftp://ftp.eskimo.com/u/s/scs/C-faq/
+
+[ANSI C Programming Lanuage][77]
+A useful short help on C Programming, including precedence and the preprocessor, by Ross L Richardson. 
+
+   [77]: http://www.utas.edu.au/infosys/info/documentation/C/C.html
+
+[ANSI C Standard Library][78]
+Summary of the ANSI C standard library functions. 
+
+   [78]: http://www.utas.edu.au/infosys/info/documentation/C/CStdLib.html
+
+[Standard C programming][79]
+This document by P.J. Plauger and Jim Brodie provides all the information you need to read and write programs in the Standard C programming language. (Thanks to Josef Liebl for this link). 
+
+   [79]: http://orgs.man.ac.uk/documentation/c/
+
+[Rationale for C90 ANSI C][80]
+A link to the original Rationale for American National Standard for Information Systems - Programming Language - C. This was included in the original ANSI standard explaining why things were done as they were. It was unfortunately dropped from the ISO standard. 
+
+   [80]: http://www.lysator.liu.se/c/rat/title.html
+
+[C99 Standard][81]
+The last public draft of the [C99 standard][82] (ISO/IEC 9899:1999) is available from the [JTC1/SC22/WG14-C][83] site as well as the Technical Corrigenda and the [Rational for the C99 standard][84]. 
+
+   [81]: http://www.open-std.org/jtc1/sc22/wg14/www/standards
+   [82]: http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1124.pdf
+   [83]: http://www.open-std.org/jtc1/sc22/wg14/
+   [84]: http://www.open-std.org/jtc1/sc22/wg14/www/C99RationaleV5.10.pdf
+
+[The C Programming Language][85]
+A useful collection of links related to the C programming language. 
+
+   [85]: http://www.grok2.com/c.html
+
+[Style in C][86]
+Rob Pike's set of essays on coding style and a "philosophy of clarity in programming" as opposed to laying down hard rules. 
+
+   [86]: src/pikestyle.html
+
+[C Traps and pitfalls][87]
+An essay by Andrew Koenig of AT&T Bell Labs written as the basis to his book C Traps and Pitfalls. "The C language is like a carving knife: ... This paper shows some of the ways C can injure the unwary, and how to avoid injury." Worth reading (and then re-reading). 
+
+   [87]: src/trapsandpitfalls.pdf
+
+[Incompatibilities Between C and C++][88]
+David R. Tribble's detailed listings of incompatibilities between ISO C and ISO C++. 
+
+   [88]: http://david.tribble.com/text/cdiffs.htm
+
+[How To Steal Code][89]
+Henry Spencer's article on inventing the wheel only once. "Never build what you can (legally) steal! Done right, it yields better programs for less work". There are some useful C programs at the end. 
+
+   [89]: src/steal_ms.htm
+
+[The Ten Commandments for C Programmers][90]
+Henry Spencer's amusing, but true, adaptation of the ten commandments for C programmers. We love number 6:  If a function be advertised to return an error code in the event of difficulties, thou shalt check for that code, yea, even though the checks triple the size of thy code and produce aches in thy typing fingers, for if thou thinkest ``it cannot happen to me'', the gods shall surely punish thee for thy arrogance. Read and take note. 
+
+   [90]: src/tencommandments.html
+
+[How to write unmaintainable code][91]
+A link to Roedy Green's very amusing article on how to guarantee a lifetime's employment by making life impossible for maintenance programmers. (He actually has to explain that it's a joke!) Although focused on Java, he gives plenty of examples in C.  If you give someone a program, you will frustrate them for a day; if you teach them how to program, you will frustrate them for a lifetime.  More quotes below. 
+
+   [91]: http://mindprod.com/unmain.html
+
+## Quotes from How to write unmaintainable code    [![Top][92]][93]
+
+   [92]: images/topofpage.gif (Return to top of page)
+   [93]: #TopOfPage
+
+> **Testing is for cowards:** A brave coder will bypass that step. Too many programmers are afraid of their boss, afraid of losing their job, afraid of customer hate mail and afraid of being sued. This fear paralyzes action, and reduces productivity. Studies have shown that eliminating the test phase means that managers can set ship dates well in advance, an obvious aid in the planning process. With fear gone, innovation and experimentation can blossom. The role of the programmer is to produce code, and debugging can be done by a cooperative effort on the part of the help desk and the legacy maintenance group. 
+
+> **Never, Ever Do Any Performance Testing:** Hey, if it isn't fast enough, just tell the customer to buy a faster machine. If you did do performance testing, you might find a bottleneck, which might lead to algorithm changes, which might lead to a complete redesign of your product. Who wants that? Besides, performance problems that crop up at the customer site mean a free trip for you to some exotic location. Just keep your shots up-to-date and your passport handy. 
+
+> **Never Validate:** Never check input data for any kind of correctness or discrepancies. It will demonstrate that you absolutely trust the company's equipment as well as that you are a perfect team player who trusts all project partners and system operators. Always return reasonable values even when data inputs are questionable or erroneous. 
+
+Quotes from How to write unmaintainable code by [Roedy Green][94]. 
+
+   [94]: http://mindprod.com/unmain.html
+
+## Contact
+
+For more information, please [send us a message][95]. To comment on this page, see [below][96]. 
+
+   [95]: http://www.di-mgt.com.au/contactmsg.php?topic=Programming
+   [96]: #makeacomment
+
+_This page last updated 11 December 2011_
+
+## Comments
+
+[Post a comment][97] on this page. 
+
+   [97]: comment_form.php?id=13925156
+
+(JavaScript is disabled in your browser: some features on the comment page will not work.)
+
+[Go to [last comment][98]] 
+
+   [98]: #end_of_comments
+
+**24** comments so far
+
+> Thank you for this great site, and for your wisdom. 
+> 
+> C is to programming what minimalism is to art. There is something peaceful or calming about a language which is transparent, honest, and succinct. It allows the programmer - the code artist - to be in control of what paint goes on the canvas.
+> 
+> And as you mention programs written in C have the quality of longevity, or to quote Christopher Alexander, a "timeless way" about them.
+> 
+> Guys, keep up the great work.
+> 
+> **Mark Horner** | Melbourne, Australia - Sun, Jan 24 2010 04:12 GMT
+
+> I never liked C until I started working on microcontrollers and I must say, I have come to discover its utility as a really powerful mid-level programming language. 
+> 
+> And it is great to find such a good site with good many excellent references.
+> 
+> **Mahder Tewolde** | New York, NY - Sat, Feb 27 2010 02:36 GMT
+
+> Wow! this is a great site!
+> 
+> "C is simpler and more compact" "The reference book is thinner"
+> 
+> I think that is so important in a programming language...
+> 
+> Good job guys.
+> 
+> **Javier** | Spain - Sat, Apr 17 2010 02:08 GMT
+
+> please you make some more easy way to express language'c'.
+> 
+> **venkatesh kumar** | - Thu, May 6 2010 05:17 GMT
+
+> C definitely is a very simple, yet powerful language. I now can create some GUI from winprog tuts, which had me cry in the beginning, but steadily making me happier all the way.
+> 
+> This article has boosted me more to work on C programming in Windows.
+> 
+> **Vijay Kanta** | Hyderabad, India - Sat, Jun 5 2010 11:20 GMT
+
+> great job !! It is just like a complete package to understand ''what is C language''. I appreciate this commendable work. Hearty congratulations 2 u guys...
+> 
+> **Pooja gupta** | Saharanpur, INDIA - Mon, Jul 12 2010 10:23 GMT
+
+> Such a great piece of information in one page. Thanks a lot for sharing it with the world !!!
+> 
+> **ganesh** | - Sat, Aug 21 2010 20:25 GMT
+
+> Regarding this part about C# applications: "it certainly won't work on any platforms other than the big W!"
+> 
+> Search for "banshee media player", widely distributed on Linux distributions and also available for Mac OS X.
+> 
+> It is written in C#. (It doesn't even have a Windows version available to download!)
+> 
+> **Daniel Earwicker** | - Mon, Nov 22 2010 14:13 GMT
+
+> Great Web site for the beginners! Thanks dear.....
+> 
+> **Kripal Singh Thakur** | Bhopal , M.P India - Fri, Feb 25 2011 14:23 GMT
+
+> Thanks God that I found you guys, for my own enlightenment in the C language Programming, your site is super to me I got what I was looking for, your site has a lot of useful information, I live in Boca Raton, Florida and I sending my greetings to your company from this part of the world
+> 
+> Thanks again, sincerely: Roberto Pizano. PD: (02-27-11)
+> 
+> **Roberto Pizano** | Boca Raton, Florida USA - Mon, Feb 28 2011 05:55 GMT
+
+> one letter and it makes such a huge difference :) Just like in C...
+> 
+> **ak** | - Wed, Apr 6 2011 17:24 GMT
+
+> My favorite quote. qood programs should be hard to read, they are hard to write.
+> 
+> **dan mccarthy** | rome ny - Mon, Jun 13 2011 19:49 GMT
+
+> PLEASE HELP ME. I WISE TO GET THREE BOOK BELOW.... * The C Programming Language, Kernighan and Ritchie, 2nd Edition. Still reads well. I still have and use the first edition dated 1978. * C Puzzle Book, Alan R Feuer, Addison-Wesley, 2nd edition 1999, ISBN 0201604612. The best ever book on understanding the quirks of C and how to use pointers properly. * The Practice of Programming, Kernighan and Pike, Addison-Wesley, 1999. An update of an earlier book written in the 1970s. Timeless advice, not just on C but on Java, C++ and Perl. * The Standard C Library, PJ Plauger, Prentice Hall, 1992. Literally how it all works with full source code and tests. PLEASE help to get these me.
+> 
+> **ZAW ZAW** | myanmar, yangon city. - Fri, Jul 8 2011 15:07 GMT
+
+> ,,,its helps me a lot specially in my computer science subject..
+> 
+> **acoustic_stryper1225** | philippnes_albay - Wed, Aug 3 2011 07:18 GMT
+
+> i find this website by Google, for me, a Chinese don't know English well too hard to learn c with English article
+> 
+> i have store this webpage as a bookmark with Firefox
+> 
+> in this can advance someone's C skill
+> 
+> upup
+> 
+> **volcanol** | china - Tue, Aug 23 2011 13:42 GMT
+
+> Where from can i download the C programming language?
+> 
+> **siddiq** | Ajman, Uae - Sat, Oct 8 2011 08:41 GMT
+
+> You folks rock and thank you for providing this info and the Reference Links! I am an SQL kind of Guy and am now learning a real Programming Language, C! Have an outstanding day and I appreciate your generosity with the info you share!!!
+> 
+> **dgt279** | Austin, Tx 78617 - Wed, Dec 28 2011 17:12 GMT
+
+> I love this site and all it stands for. Always give this link to the new C# programmers at work. Still writing Windows ansi C programs today and still loving it. I am definately an old luddite !!!.
+> 
+> **NelloOZ** | Melbourne, Australia - Fri, Dec 30 2011 02:38 GMT
+
+> Try Digital Mars C/C++ compiler for programming with ANSI C. I've learned WIN32 API with it and it's the simplest C/C++ compiler I've never seen on the Windows Platform. It's freeware.
+> 
+> **anonyme** | - Sat, Jan 28 2012 17:26 GMT
+
+> I enjoyed reading your page. Have been retired from programming for a few years and agree with most of your philosophy. C is for programmers, C++ is for the undisciplined, real programmers use assembly language.
+> 
+> **Ernie Hansen** | U.S.A - Sun, Mar 4 2012 00:24 GMT
+
+> Ernie: Good on you. Real programmers create Hollerith cards with their bare teeth.
+> 
+> **Dave** | Moderator - Mon, Mar 5 2012 13:40 GMT
+
+> YEP!
+> 
+> **Ernie Hansen** | USA - Fri, Mar 9 2012 21:37 GMT
+
+> I've been programming in C since K&R 1, and its great to read this site if only to confirm what I already knew. It's comforting.
+> 
+> Now I teach C, and this URL is going straight into the course.
+> 
+> Real programmers code down to the bare metal. Hollerith cards? Assembler? For wimps! Give me a magnifying glass and a very small magnet.
+> 
+> **Clive** | Devon, UK - Wed, Apr 4 2012 10:27 GMT
+
+> its a very good site about c language, i really want to do alot work on it;thnx alot for providing us this information
+> 
+> **Amna nawaz** | lahore PAKISTAN - Thu, Apr 12 2012 07:12 GMT
+
+[Post a comment][99] on this page. 
+
+   [99]: comment_form.php?id=13925156
+
+* * *
+
+[ ![Valid HTML 4.01 Strict][100]][101] [ ![Valid CSS][102]][103]
+
+   [100]: images/valid-html401.gif
+   [101]: http://validator.w3.org/check?uri=www.di-mgt.com.au/cprog.html
+   [102]: images/w3c-vcss.gif
+   [103]: http://jigsaw.w3.org/css-validator/validator?uri=http://www.di-mgt.com.au/cprog.html
+
+Copyright (C) 2002-11 DI Management Services Pty Limited ABN 78 083 210 584 Australia.  
+[ **www.di-mgt.com.au**][104]. All rights reserved. 
+
+   [104]: http://www.di-mgt.com.au
+
+[Home][105] | [Services][106] | [About Us][107] | [Projects][108] | [Links][109] | [Cryptography][110] | [CryptoSys API][111] | [CryptoSys PKI][112] | [DBXanalyzer][113] | [ BigDigits][114] | [Wclock][115] | [Su Doku][116] | [About This Site][117] | [Contact][118] | [Email Us][119]
+
+   [105]: index.html
+   [106]: services.html
+   [107]: profile.html
+   [108]: projects.html
+   [109]: links.html
+   [110]: crypto.html
+   [111]: http://www.cryptosys.net/
+   [112]: http://www.cryptosys.net/pki/
+   [113]: dbxanalyzer/index.html
+   [114]: bigdigits.html
+   [115]: wclock/index.html
+   [116]: sudoku.html
+   [117]: site.html
+   [118]: contact.html
+   [119]: http://www.di-mgt.com.au/contactmsg.php
+

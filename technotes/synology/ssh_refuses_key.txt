@@ -1,0 +1,7 @@
+Synology: ssh refuses key
+
+Maybe its the permission of the home folder
+
+cd /var/services/homes/
+chown <username> <username>
+chmod 755 <username>

@@ -1,0 +1,5 @@
+login as root:
+
+   if $ su doesn't work, go with:
+
+   sudo -i

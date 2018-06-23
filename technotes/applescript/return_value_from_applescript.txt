@@ -1,0 +1,4 @@
+applescript: return value
+
+
+	return "hello"

@@ -1,0 +1,11 @@
+My hardware
+
+
+
+NAS
+----
+
+	- Synology 
+	DS214se   Marvell Armada 370 88F6707   Single Core   1   Yes   Armada370 
+
+	(from: https://www.synology.com/en-us/knowledgebase/DSM/tutorial/General/What_kind_of_CPU_does_my_NAS_have)

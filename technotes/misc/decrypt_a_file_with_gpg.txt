@@ -1,0 +1,19 @@
+decrypt file with gnupg:
+
+	gpg mysecrets.txt.gpg
+	
+	> Enter passphrase:
+	
+	Output: mysecrets.txt
+
+
+Decrypt file and write output to file:
+	
+	gpg mysecrets.txt.gpg -o myblues.txt
+	
+	>Enter passphrase:
+
+Decrypt file and write output to stout:	
+
+gpg --quiet --output -  --no-use-agent  --yes --passphrase='my-password'  secrets
+.gpg 2>/dev/null

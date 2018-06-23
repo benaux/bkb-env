@@ -1,0 +1,1056 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-01-22T15:40:33+01:00
+
+====== bashmenot reference ======
+Created Sunday 22 January 2017
+
+bashmenot
+Reference GitHub
+bashmenot reference
+
+bashmenot is a library of GNU bash functions, used by Halcyon and Haskell on Heroku.
+
+This reference is a complete list of available functions and options.
+
+Environment variables
+Date formatting module
+Sorting module
+Logging module
+Expectation control module
+Platform detection module
+Line processing module
+File system module
+Hashing module
+Archiving module
+Version control module
+Package installation module
+Remote storage module
+Amazon S3 storage module
+Environment variables
+BASHMENOT_LOG_TIMESTAMP
+BASHMENOT_TIMESTAMP_EPOCH
+BASHMENOT_CURL_RETRIES
+BASHMENOT_APT_DIR
+BASHMENOT_AWS_ACCESS_KEY_ID
+BASHMENOT_AWS_SECRET_ACCESS_KEY
+BASHMENOT_S3_ENDPOINT
+BASHMENOT_NO_S3_AUTH
+BASHMENOT_DIR
+BASHMENOT_URL
+BASHMENOT_NO_SELF_UPDATE
+BASHMENOT_LOG_TIMESTAMP
+
+Default value:	0
+Type:	0 or 1
+Prefixes each logged message with the current time.
+
+BASHMENOT_TIMESTAMP_EPOCH
+
+Default value:	none
+Type:	seconds, optional
+When set, any logged timestamps will show the difference between the current time and the specified time, in seconds.
+
+BASHMENOT_CURL_RETRIES
+
+Default value:	5
+Type:	integer
+Number of times to retry a transfer failing with transient errors.
+
+BASHMENOT_APT_DIR
+
+Default value:	none
+Type:	string
+Directory in which bashmenot caches recently used apt-get files.
+
+BASHMENOT_AWS_ACCESS_KEY_ID
+
+Default value:	none
+Type:	20-character string, optional
+Amazon Web Services access key ID, used to authenticate S3 requests.
+
+BASHMENOT_AWS_SECRET_ACCESS_KEY
+
+Default value:	none
+Type:	40-character string, optional
+Amazon Web Services secret access key, used to authenticate S3 requests.
+
+BASHMENOT_S3_ENDPOINT
+
+Default value:	s3.amazonaws.com
+Type:	address
+Address of the region-specific S3 endpoint in which the referenced S3 buckets are located.
+
+Note: Currently, the following S3 regions can’t be used:
+
+China (Beijing)
+EU (Frankfurt)
+See bashmenot issue #9 for details.
+
+BASHMENOT_NO_S3_AUTH
+
+Default value:	0
+Type:	0 or 1
+Prevents bashmenot from authenticating S3 requests.
+
+BASHMENOT_DIR
+
+Default value:	variable
+Type:	read-only string
+Command-line option:	none
+Directory in which bashmenot is installed.
+
+$ source "${BASHMENOT_DIR}/src.sh"
+Automatically set by bashmenot at run-time.
+
+BASHMENOT_URL
+
+Default value:	https://github.com/mietek/bashmenot
+Type:	git URL
+URL of the git repository from which bashmenot updates itself.
+
+Defaults to the master branch. Other branches can be specified with a #branch suffix.
+
+BASHMENOT_NO_SELF_UPDATE
+
+Default value:	0
+Type:	0 or 1
+Prevents bashmenot from updating itself.
+
+Date formatting module
+Source:	date.sh
+Dependencies:	GNU date
+get_date
+get_http_date
+get_current_time
+get_date
+
+Arguments:	any*
+Wrapper for GNU date. Never fails.
+
+Uses date -u on Linux and FreeBSD, and gdate -u on other platforms, passing any additional arguments to the tool.
+
+$ get_date '+%Y-%m-%d'
+2014-11-05
+get_http_date
+
+Arguments:	any*
+Outputs a UTC date and time in RFC 2822 format. Never fails.
+
+Uses date -Ru on Linux and FreeBSD, and gdate -Ru on other platforms, passing any additional arguments to the tool.
+
+$ get_http_date
+Fri, 05 Nov 2014 23:59:59 +0000
+get_current_time
+
+Arguments:	any*
+Outputs a UTC date and time as seconds since the Unix epoch. Never fails.
+
+Uses date '+%s' -u on Linux and FreeBSD, and gdate '+%s' -u on other platforms, passing any additional arguments to the tool.
+
+$ get_current_time
+1415231999
+Sorting module
+Source:	sort.sh
+Dependencies:	GNU sort
+sort_natural
+sort0_natural
+sort_natural
+
+Arguments:	any*
+Portable natural sort. Never fails.
+
+Uses sort -V on Linux and FreeBSD, and gsort -V on other platforms, passing any additional arguments to the tool.
+
+$ echo -e "foo-1\nfoo-12\nfoo-2" | sort_natural
+foo-1
+foo-2
+foo-12
+$ echo -e "foo-1\nfoo-12\nfoo-2" | sort
+foo-1
+foo-12
+foo-2
+sort0_natural
+
+Arguments:	any*
+Portable natural sort, for input separated by NUL bytes instead of newlines. Never fails.
+
+Uses sort -Vz on Linux and FreeBSD, and gsort -Vz on other platforms, passing any additional arguments to the tool.
+
+Logging module
+Source:	log.sh
+Dependencies:	date.sh
+prefix_log
+prefix_log_begin
+log
+log_begin
+log_end
+log_indent
+log_indent_begin
+log_indent_end
+log_label
+log_indent_label
+log_debug
+log_warning
+log_error
+quote
+die
+prefix_log
+
+Arguments:	prefix any*
+Logs arguments to error output with the specified prefix. Never fails.
+
+$ prefix_log foo bar
+foobar
+prefix_log_begin
+
+Arguments:	prefix any*
+Logs arguments to error output with the specified prefix, and with a space instead of a newline at the end. Never fails.
+
+log
+
+Arguments:	any*
+Logs arguments to error output, prefixed by an arrow marker. Never fails.
+
+$ log fooing
+-----> fooing
+log_begin
+
+Arguments:	any*
+Logs arguments to error output, prefixed by an arrow marker, and with a space instead of a newline at the end. Never fails.
+
+log_end
+
+Arguments:	any*
+Logs arguments to error output, with no prefix. Never fails.
+
+To be paired with log_begin.
+
+function foo () {
+  log_begin fooing...
+  log_end fooed
+}
+$ foo
+-----> fooing... fooed
+log_indent
+
+Arguments:	any*
+Logs arguments to error output, prefixed by whitespace. Never fails.
+
+For less important messages than log.
+
+$ log_indent baring
+	   baring
+log_indent_begin
+
+Arguments:	any*
+Logs arguments to error output, prefixed by whitespace, and with a space instead of a newline at the end. Never fails.
+
+For less important messages than log_begin.
+
+log_indent_end
+
+Arguments:	any*
+Logs arguments to error output, with no prefix. Never fails.
+
+To be paired with log_indent_begin.
+
+function bar () {
+  log_indent_begin baring...
+  log_indent_end bared
+}
+$ bar
+	   baring... bared
+log_label
+
+Arguments:	label any*
+Logs arguments to error output, prefixed by an arrow marker, and with padding between label and the other arguments. Never fails.
+
+$ log_label foo: bar
+-----> foo:                                      bar
+log_indent_label
+
+Arguments:	label any*
+Logs arguments to error output, prefixed by whitespace, and with padding between label and the other arguments. Never fails.
+
+For less important messages than log_label.
+
+$ log_indent_label foo: bar
+	   foo:                                      bar
+log_debug
+
+Arguments:	any*
+Logs arguments to error output, prefixed by a debug marker. Never fails.
+
+$ log_debug foo
+   *** DEBUG: foo
+log_warning
+
+Arguments:	any*
+Logs arguments to error output, prefixed by a warning marker. Never fails.
+
+$ log_warning foo
+   *** WARNING: foo
+log_error
+
+Arguments:	any*
+Logs arguments to error output, prefixed by an error marker. Never fails.
+
+$ log_error foo
+   *** ERROR: foo
+quote
+
+Arguments:	none
+Pipes input to error output, prefixed by whitespace. Never fails.
+
+$ echo foo | quote
+	   foo
+die
+
+Arguments:	any*
+Logs an error and exits with 1 as the exit status.
+
+function foo () {
+  false || die foo
+}
+$ foo
+   *** ERROR: foo
+^D
+Expectation control module
+Source:	expect.sh
+Dependencies:	log.sh
+expect_args
+expect_vars
+expect_existing
+expect_no_existing
+expect_args
+
+Arguments:	var* -- "$@"
+First, checks the required number of arguments is available; otherwise, dies. Next, sets the specified variables to the values of the right arguments.
+
+Must be called with a literal  -- "$@" after the variable names. Argument values can be empty.
+
+function foo () {
+  local bar baz
+  expect_args bar baz -- "$@"
+  echo "${bar} ${baz}"
+}
+$ foo
+   *** ERROR: foo: Expected args: bar baz
+^D
+expect_vars
+
+Arguments:	var*
+Checks the specified variables are set and not empty; otherwise, dies.
+
+function foo () {
+  expect_vars BAR
+  echo "${BAR}"
+}
+$ foo
+   *** ERROR: foo: Expected var: BAR
+^D
+expect_existing
+
+Arguments:	thing*
+Checks the specified files or directories exist; otherwise, fails.
+
+function foo () {
+  expect_existing bar
+  cat bar
+}
+$ foo
+   *** ERROR: foo: Expected existing bar
+expect_no_existing
+
+Arguments:	thing*
+Checks the specified files or directories do not exist; otherwise, fails.
+
+function foo () {
+  expect_no_existing bar
+  touch bar
+}
+$ touch bar
+$ foo
+   *** ERROR: foo: Unexpected existing bar
+Platform detection module
+Source:	platform.sh
+Dependencies:	expect.sh
+format_platform_description
+is_debian_like
+is_redhat_like
+detect_os
+detect_arch
+detect_platform
+format_platform_description
+
+Arguments:	platform
+Outputs a user-friendly description of the specified platform identifier. Never fails.
+
+$ format_platform_description linux-ubuntu-14.04-x86_64
+Ubuntu 14.04 LTS (x86_64)
+is_debian_like
+
+Arguments:	platform
+Fails unless the specified platform identifier matches a Debian-like platform.
+
+is_redhat_like
+
+Arguments:	platform
+Fails unless the specified platform identifier matches a Red Hat-like platform.
+
+detect_os
+
+Arguments:	none
+Outputs the OS part of the host platform identifier. Never fails.
+
+$ detect_os
+linux
+detect_arch
+
+Arguments:	none
+Outputs the architecture part of the host platform identifier, or nothing. Never fails.
+
+$ detect_arch
+x86_64
+detect_platform
+
+Arguments:	none
+Outputs the host platform identifier. Never fails.
+
+$ detect_platform
+linux-ubuntu-14.04-x86_64
+Line processing module
+Source:	line.sh
+Dependencies:	expect.sh
+filter_first
+filter_not_first
+filter_last
+filter_not_last
+filter_matching
+filter_not_matching
+match_at_most_one
+match_at_least_one
+match_exactly_one
+strip_trailing_newline
+filter_first
+
+Arguments:	none
+Outputs the first line of input. Never fails.
+
+$ echo -e "foo\nbar\nbaz" | filter_first
+foo
+filter_not_first
+
+Arguments:	none
+Outputs all lines of input except the first. Never fails.
+
+$ echo -e "foo\nbar\nbaz" | filter_not_first
+bar
+baz
+filter_last
+
+Arguments:	none
+Outputs the last line of input. Never fails.
+
+$ echo -e "foo\nbar\nbaz" | filter_last
+baz
+filter_not_last
+
+Arguments:	none
+Outputs all lines of input except the last. Never fails.
+
+$ echo -e "foo\nbar\nbaz" | filter_not_last
+foo
+bar
+filter_matching
+
+Arguments:	pattern
+Outputs all lines of input which match the specified regular expression. Never fails, unless pattern is missing.
+
+pattern is an awk regular expression.
+
+$ echo -e "foo\nbar\nbaz" | filter_matching '^bar$'
+bar
+filter_not_matching
+
+Arguments:	pattern
+Outputs all lines of input which do not match the specified regular expression. Never fails, unless pattern is missing.
+
+pattern is an awk regular expression.
+
+$ echo -e "foo\nbar\nbaz" | filter_not_matching '^bar$'
+foo
+baz
+match_at_most_one
+
+Arguments:	none
+Outputs up to one line of input, when the input consists of up to one line; nothing otherwise.
+
+$ echo -n | match_at_most_one ; echo $?
+0
+$ echo foo | match_at_most_one ; echo $?
+foo
+0
+$ echo -e "foo\nbar" | match_at_most_one ; echo $?
+1
+match_at_least_one
+
+Arguments:	none
+Pipes input to output, when the input consists of one line or more; nothing otherwise.
+
+$ echo -n | match_at_least_one ; echo $?
+1
+$ echo foo | match_at_least_one ; echo $?
+foo
+0
+$ echo -e "foo\nbar" | match_at_least_one ; echo $?
+foo
+bar
+0
+match_exactly_one
+
+Arguments:	none
+Outputs one line of input; when the input consists of only one line; nothing otherwise.
+
+$ echo -n | match_exactly_one ; echo $?
+1
+$ echo foo | match_exactly_one ; echo $?
+foo
+0
+$ echo -e "foo\nbar" | match_exactly_one ; echo $?
+1
+strip_trailing_newline
+
+Arguments:	none
+Pipes input to output, removing at most one trailing newline. Never fails.
+
+$ echo foo | strip_trailing_newline ; echo
+foo
+$ echo -e "foo\n" | strip_trailing_newline
+foo
+File system module
+Source:	file.sh
+Dependencies:	expect.sh, line.sh, sort.sh
+get_tmp_file
+get_tmp_dir
+get_size
+get_modification_time
+get_dir_path
+get_dir_name
+get_link_path
+find_tree
+find_added
+find_changed
+find_not_changed
+find_removed
+compare_tree
+get_tmp_file
+
+Arguments:	base
+Outputs an absolute path to a unique temporary file.
+
+$ get_tmp_file foo
+/tmp/foo.Lzi6bRzLS0
+get_tmp_dir
+
+Arguments:	base
+Outputs an absolute path to a unique temporary directory.
+
+$ get_tmp_dir foo
+/tmp/foo.Gf9J615PeE
+get_size
+
+Arguments:	thing
+Outputs a user-friendly summary size of the data contained in the specified file or directory.
+
+$ get_size foo
+868MB
+get_modification_time
+
+Arguments:	thing
+Outputs the modification time of the specified file or directory, in seconds since the Unix epoch.
+
+Uses stat -c "%Y" on Linux, and stat -f "%m" on FreeBSD and other platforms.
+
+$ touch foo
+$ get_modification_time foo
+1415379516
+get_dir_path
+
+Arguments:	dir
+Outputs an absolute path to the specified directory, collapsing any symbolic links.
+
+$ get_dir_path .
+/foo/bar/baz
+get_dir_name
+
+Arguments:	dir
+Outputs the name of the specified directory.
+
+$ get_dir_name .
+baz
+get_link_path
+
+Arguments:	link
+TODO
+
+find_tree
+
+Arguments:	dir any*
+Outputs relative paths to found files. Never fails.
+
+Uses find, passing any additional arguments to the tool.
+
+$ mkdir foo foo/bar
+$ touch foo/bar/baz
+$ find_tree foo
+bar/baz
+find_added
+
+Arguments:	old_dir new_dir
+Outputs relative paths to files which do not exist in the old directory and exist in the new one, in natural order. Never fails.
+
+$ mkdir foo1 foo2
+$ touch foo2/bar2
+$ find_added foo1 foo2
+bar2
+find_changed
+
+Arguments:	old_dir new_dir
+Outputs relative paths to files which differ between the two directories, in natural order. Never fails.
+
+$ mkdir foo1 foo2
+$ echo bar1 >foo1/bar
+$ echo bar2 >foo2/bar
+$ find_changed foo1 foo2
+bar
+find_not_changed
+
+Arguments:	old_dir new_dir
+Outputs relative paths to files which do not differ between the two directories, in natural order. Never fails.
+
+Complementary to find_changed.
+
+$ mkdir foo1 foo2
+$ echo baz >foo1/baz
+$ echo baz >foo2/baz
+$ find_not_changed foo1 foo2
+baz
+find_removed
+
+Arguments:	old_dir new_dir
+Outputs relative paths to files which exist in the old directory and do not exist in the new one, in natural order. Never fails.
+
+$ mkdir foo1 foo2
+$ touch foo1/bar1
+$ find_removed foo1 foo2
+bar1
+compare_tree
+
+Arguments:	old_dir new_dir
+Like find_added, find_changed, find_not_changed, and find_removed combined. Never fails.
+
+Prefixes paths by + for added, * for changed, = for not changed, and - for removed.
+
+$ mkdir foo1 foo2
+$ touch foo1/bar1 foo2/bar2
+$ echo bar1 >foo1/bar
+$ echo bar2 >foo2/bar
+$ echo baz >foo1/baz
+$ echo baz >foo2/baz
+$ compare_tree foo1 foo2
+- bar1
++ bar2
+* bar
+= baz
+Hashing module
+Source:	hash.sh
+Dependencies:	expect.sh, sort.sh, OpenSSL
+get_hash
+hash_tree
+get_hash
+
+Arguments:	none
+Outputs a SHA1 digest of the input, when the input consists of at least one line; nothing otherwise.
+
+$ echo foo | do_hash
+f1d2d2f924e986ac86fdf7b36c94bcdf32beec15
+hash_tree
+
+Arguments:	dir any*
+Outputs a summary SHA1 digest of the data contained in all files found in the specified directory, when the directory contains at least one file; nothing otherwise.
+
+Uses find, passing any additional arguments to the tool. Sorts files by relative path before hashing.
+
+$ mkdir foo
+$ touch foo/bar
+$ hash_tree foo
+df1d77216a4168ceb2112b2078ebc7d5fc6ac446
+Archiving module
+Source:	tar.sh
+Dependencies:	log.sh, expect.sh, file.sh
+copy_file
+copy_dir_entry_into
+copy_dir_glob_into
+copy_dir_into
+copy_dir_over
+create_archive
+extract_archive_into
+extract_archive_over
+strip_tree
+copy_file
+
+Arguments:	src_file dst_file
+Copies the specified file over the destination file.
+
+Overwrites existing files. Creates the destination directory if needed.
+
+copy_dir_entry_into
+
+Arguments:	src_dir src_file dst_dir
+TODO
+
+copy_dir_glob_into
+
+Arguments:	src_dir src_glob dst_dir
+TODO
+
+copy_dir_into
+
+Arguments:	src_dir dst_dir
+Copies the contents of the specified directory into the destination directory.
+
+Overwrites existing files. Creates the destination directory if needed. Uses tar, passing any additional arguments to the tool.
+
+copy_dir_over
+
+Arguments:	src_dir dst_dir
+Copies the contents of the specified directory over the destination directory.
+
+Removes the destination directory. Creates the destination directory if needed. Uses tar, passing any additional arguments to the tool.
+
+create_archive
+
+Arguments:	src_dir dst_file
+Creates an archive of the contents of the specified directory.
+
+Overwrites existing files. Creates the destination directory if needed. Uses tar, passing any additional arguments to the tool.
+
+The gz, bz2, and xz compression formats are supported. The pigz, pbzip2, and pxz compression tools are used, when available.
+
+$ create_archive foo bar.tar.gz
+	   Creating bar.tar.gz... done, 8.0KB
+extract_archive_into
+
+Arguments:	src_file dst_dir
+Extracts the specified archive into the destination directory.
+
+Overwrites existing files. Creates the destination directory if needed. Uses tar, passing any additional arguments to the tool.
+
+The gz, bz2, and xz compression formats are supported. The pigz, pbzip2, and pxz compression tools are used, when available.
+
+$ extract_archive_into bar.tar.gz baz
+	   Extracting bar.tar.gz... done, 12KB
+extract_archive_over
+
+Arguments:	src_file dst_dir
+Extracts the specified archive over the destination directory.
+
+Removes the destination directory. Creates the destination directory if needed. Uses tar, passing any additional arguments to the tool.
+
+The gz, bz2, and xz compression formats are supported. The pigz, pbzip2, and pxz compression tools are used, when available.
+
+strip_tree
+
+Arguments:	dir any*
+Strips object file symbols from all files found in the specified directory. Never fails.
+
+Uses strip --strip-unneeded on Linux and FreeBSD, strip -u -r on OS X, and does nothing on other platforms. Also uses find, passing any additional arguments to the tool.
+
+Version control module
+Source:	git.sh
+Dependencies:	expect.sh, git
+validate_git_url
+git_do
+quiet_git_do
+hash_newest_git_commit
+git_clone_over
+git_update_into
+git_acquire
+git_acquire_all
+validate_git_url
+
+Arguments:	url
+Checks whether the specified URL starts with a URL scheme supported by git.
+
+$ validate_git_url https://github.com/mietek/bashmenot ; echo $?
+0
+$ validate_git_url foo ; echo $?
+1
+git_do
+
+Arguments:	work_dir cmd any*
+Wrapper for git.
+
+Used by the following functions in this module. Passes any additional arguments to the tool.
+
+quiet_git_do
+
+Arguments:	work_dir cmd any*
+Wrapper for git, ignoring all output.
+
+Passes any additional arguments to the tool.
+
+hash_newest_git_commit
+
+Arguments:	dir
+Outputs a SHA1 digest of the specified repository HEAD, when the repository is not empty; nothing otherwise. Never fails, unless dir does not exist.
+
+$ hash_newest_git_commit .
+d0ed0f48014efba06069abe3e1776a379612a0fa
+git_clone_over
+
+Arguments:	url dir
+Clones the specified repository over the destination directory, along with any submodules, and outputs the hash of the newest commit.
+
+Removes the destination directory. Creates the destination directory if needed.
+
+Defaults to the master branch. Other branches can be specified with a #branch suffix.
+
+$ git_clone_over https://github.com/mietek/bashmenot foo
+df22d6d7b0d7ca83195088206e689f6d13ac2be0
+git_update_into
+
+Arguments:	url dir
+Ensures the destination directory contains an up-to-date checkout of the specified repository, along with any submodules, and outputs the hash of the newest commit.
+
+Defaults to the master branch. Other branches can be specified with a #branch suffix.
+
+$ git_update_into https://github.com/mietek/bashmenot foo
+df22d6d7b0d7ca83195088206e689f6d13ac2be0
+git_acquire
+
+Arguments:	src_dir thing dst_dir
+TODO
+
+git_acquire_all
+
+Arguments:	src_dir things dst_dir
+TODO
+
+Package installation module
+Source:	package.sh
+Dependencies:	date.sh, sort.sh, log.sh, expect.sh, platform.sh, line.sh, file.sh
+fix_broken_links
+install_deb_package
+install_rpm_package
+install_debian_packages
+install_redhat_packages
+install_platform_packages
+fix_broken_links
+
+Arguments:	dst_dir
+TODO
+
+install_deb_package
+
+Arguments:	package_file dst_dir
+TODO
+
+install_rpm_package
+
+Arguments:	package_file dst_dir
+TODO
+
+install_debian_packages
+
+Arguments:	names dst_dir
+TODO
+
+install_redhat_packages
+
+Arguments:	names dst_dir
+TODO
+
+install_platform_packages
+
+Arguments:	specs dst_dir
+TODO
+
+Remote storage module
+Source:	curl.sh
+Dependencies:	log.sh, expect.sh, curl
+format_http_code_description
+curl_do
+curl_download
+curl_check
+curl_upload
+curl_delete
+format_http_code_description
+
+Arguments:	code
+Outputs a user-friendly description of the specified HTTP code. Never fails.
+
+$ format_http_code_description 418
+418 I'm a teapot
+curl_do
+
+Arguments:	url any*
+Wrapper for curl.
+
+Used by every function in this module. Passes any additional arguments to the tool.
+
+curl_download
+
+Arguments:	src_file_url dst_file
+Downloads the specified resource with HTTP GET.
+
+Overwrites existing files. Creates the destination directory if needed.
+
+$ curl_download httpbin.org/get foo
+	   Downloading httpbin.org/get... done
+curl_check
+
+Arguments:	src_url
+Accesses the specified resource with HTTP HEAD.
+
+$ curl_check httpbin.org/status/404
+	   Checking httpbin.org/status/404... 404 (not found)
+curl_upload
+
+Arguments:	src_file dst_file_url
+Uploads the specified file with HTTP PUT.
+
+Overwrites existing resources.
+
+$ curl_upload foo httpbin.org/put
+	   Uploading httpbin.org/put... done
+curl_delete
+
+Arguments:	dst_url
+Deletes the specified resource with HTTP DELETE.
+
+$ curl_delete httpbin.org/delete
+	   Deleting httpbin.org/delete... done
+Amazon S3 storage module
+Source:	s3.sh
+Dependencies:	log.sh, expect.sh, line.sh, date.sh, curl.sh, GNU date, curl, OpenSSL
+format_s3_url
+read_s3_listing_xml
+s3_do
+s3_download
+s3_check
+s3_upload
+s3_create
+s3_copy
+s3_delete
+curl_list_s3
+s3_list
+format_s3_url
+
+Arguments:	resource
+Outputs the S3 URL of the specified resource.
+
+References BASHMENOT_S3_ENDPOINT.
+
+$ format_s3_url /foo/bar
+https://s3.amazonaws.com/foo/bar
+read_s3_listing_xml
+
+Arguments:	none
+Parses an S3 bucket listing in XML format into a file of objects.
+
+s3_do
+
+Arguments:	url any*
+S3-specific wrapper for curl_do, supporting S3 REST authentication.
+
+Used by most functions in this module. References BASHMENOT_AWS_ACCESS_KEY_ID and BASHMENOT_AWS_SECRET_ACCESS_KEY, unless BASHMENOT_NO_S3_AUTH is set to 1. Uses curl, passing any additional arguments to the tool.
+
+s3_download
+
+Arguments:	src_bucket src_object dst_file
+Downloads the specified resource from S3 with HTTP GET.
+
+Overwrites existing files. Creates the destination directory if needed.
+
+$ s3_download foo.example.com foo/bar bar
+	   Downloading s3://foo.example.com/foo/bar... done
+s3_check
+
+Arguments:	src_bucket src_object
+Accesses the specified S3 resource with HTTP HEAD.
+
+An empty source object can be specified to access the bucket itself.
+
+$ s3_check foo.example.com no-foo
+	   Checking s3://foo.example.com/no-foo... 404 (not found)
+s3_upload
+
+Arguments:	src_file dst_bucket dst_object dst_acl
+Uploads the specified file to S3 with HTTP PUT.
+
+Overwrites existing resources. The destination resource is assigned the specified S3 ACL.
+
+Commonly used values are private and public-read.
+
+$ s3_upload foo foo.example.com bar/foo private
+	   Uploading s3://foo.example.com/bar/foo... done
+s3_create
+
+Arguments:	dst_bucket dst_acl
+Creates an S3 bucket with HTTP PUT.
+
+The destination is assigned the specified S3 ACL.
+
+$ s3_create foo.example.com private
+	   Creating s3://foo.example.com/... done
+s3_copy
+
+Arguments:	src_bucket src_object dst_bucket dst_object dst_acl
+Copies the specified resource on S3 with HTTP PUT, without downloading or uploading the resource data.
+
+The source and destination can be the same bucket or separate buckets. The destination is assigned the specified S3 ACL.
+
+$ s3_copy foo.example.com foo bar.example.com bar private
+	   Copying s3://foo.example.com/foo to s3://bar.example.com/bar... done
+s3_delete
+
+Arguments:	dst_bucket dst_object
+Deletes the specified resource from S3 with HTTP DELETE.
+
+An empty destination object can be specified to delete the bucket itself.
+
+$ s3_delete foo.example.com foo/bar
+	   Deleting s3://foo.example.com/foo/bar... 204 (no content)
+$ s3_delete foo.example.com ''
+	   Deleting s3://foo.example.com/... 204 (no content)
+curl_list_s3
+
+Arguments:	url
+Outputs the contents of a publicly-accessible S3 bucket referenced by the specified URL.
+
+$ curl_list_s3 https://s3.amazonaws.com/foo.example.com/
+	   Listing https://s3.amazonaws.com/foo.example.com/... done
+foo/bar
+bar/baz/foo
+baz
+s3_list
+
+Arguments:	src_bucket src_prefix
+Outputs the contents of the specified S3 bucket, downloaded with HTTP GET, listing the resources which start with the specified prefix.
+
+An empty prefix can be specified to list the contents of the entire bucket.
+
+$ s3_list foo.example.com foo
+	   Listing s3://foo.example.com/?prefix=foo... done
+foo/bar
+$ s3_list foo.example.com ''
+	   Listing s3://foo.example.com/... done
+foo/bar
+bar/baz/foo
+baz
+bashmenot
+Reference GitHub
+Made by Miëtek Bak. Published under the MIT X11 license.

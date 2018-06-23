@@ -1,0 +1,15 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2016-12-21T12:28:00+01:00
+
+====== upload with ssl ======
+Created Wednesday 21 December 2016
+
+Curl: upload with ssl
+
+
+-T: (target) file to be transferer
+
+-k: ignore certificate error
+
+   curl --ftp-ssl -T $dir.tar.gz.gpg -k -u "ben:$passwd" "ftp://ftp.auxdir.com/"

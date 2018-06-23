@@ -1,0 +1,426 @@
+From <http://news.ycombinator.com/>:
+
+[![][1]][2]
+**[Hacker News][3]**![][4][new][5] | [comments][6] | [ask][7] | [jobs][8] | [submit][9]
+[login][10]
+
+   [1]: http://ycombinator.com/images/y18.gif
+   [2]: http://ycombinator.com
+   [3]: news
+   [4]: http://ycombinator.com/images/s.gif
+   [5]: newest
+   [6]: newcomments
+   [7]: ask
+   [8]: jobs
+   [9]: submit
+   [10]: newslogin?whence=%6e%65%77%73
+
+1.
+[![][11]][12]
+[Confirmed: US and Israel created Stuxnet, lost control of it][13] (arstechnica.com) 
+
+   [11]: http://ycombinator.com/images/grayarrow.gif
+   [12]: vote?for=4052719&dir=up&whence=%6e%65%77%73
+   [13]: http://arstechnica.com/tech-policy/2012/06/confirmed-us-israel-created-stuxnet-lost-control-of-it/
+
+370 points by [fpp][14] 6 hours ago | [157 comments][15]
+
+   [14]: user?id=fpp
+   [15]: item?id=4052719
+
+2.
+[![][16]][17]
+[Your Startup Needs a Dashboard][18] (zemanta.com) 
+
+   [16]: http://ycombinator.com/images/grayarrow.gif
+   [17]: vote?for=4053239&dir=up&whence=%6e%65%77%73
+   [18]: http://www.zemanta.com/fruitblog/your-startup-needs-a-dashboard/
+
+84 points by [idioterna][19] 3 hours ago | [29 comments][20]
+
+   [19]: user?id=idioterna
+   [20]: item?id=4053239
+
+3.
+[![][21]][22]
+[Kindle - nookd][23] (villagecraftsmen.blogspot.com) 
+
+   [21]: http://ycombinator.com/images/grayarrow.gif
+   [22]: vote?for=4053359&dir=up&whence=%6e%65%77%73
+   [23]: http://villagecraftsmen.blogspot.com/2012/05/nookd.html
+
+73 points by [tch][24] 2 hours ago | [17 comments][25]
+
+   [24]: user?id=tch
+   [25]: item?id=4053359
+
+4.
+[![][26]][27]
+[Coding style and undoing indentation hell][28] (virtualdub.org) 
+
+   [26]: http://ycombinator.com/images/grayarrow.gif
+   [27]: vote?for=4053928&dir=up&whence=%6e%65%77%73
+   [28]: http://www.virtualdub.org/blog/pivot/entry.php?id=238
+
+24 points by [ashishgandhi][29] 1 hour ago | [10 comments][30]
+
+   [29]: user?id=ashishgandhi
+   [30]: item?id=4053928
+
+5.
+[![][31]][32]
+[New Garbage Collector - The LuaJIT wiki][33] (luajit.org) 
+
+   [31]: http://ycombinator.com/images/grayarrow.gif
+   [32]: vote?for=4053969&dir=up&whence=%6e%65%77%73
+   [33]: http://wiki.luajit.org/New-Garbage-Collector
+
+27 points by [dochtman][34] 1 hour ago | [1 comment][35]
+
+   [34]: user?id=dochtman
+   [35]: item?id=4053969
+
+6.
+[![][36]][37]
+[Netflix queue + Rotten Tomatoes = A Better Queue][38] (abetterqueue.com) 
+
+   [36]: http://ycombinator.com/images/grayarrow.gif
+   [37]: vote?for=4054008&dir=up&whence=%6e%65%77%73
+   [38]: http://abetterqueue.com/
+
+16 points by [xbryanx][39] 1 hour ago | [6 comments][40]
+
+   [39]: user?id=xbryanx
+   [40]: item?id=4054008
+
+7.
+[![][41]][42]
+[Why multi-armed bandit algorithm is not "better" than A/B testing][43] (visualwebsiteoptimizer.com) 
+
+   [41]: http://ycombinator.com/images/grayarrow.gif
+   [42]: vote?for=4052997&dir=up&whence=%6e%65%77%73
+   [43]: http://visualwebsiteoptimizer.com/split-testing-blog/multi-armed-bandit-algorithm/
+
+70 points by [paraschopra][44] 4 hours ago | [55 comments][45]
+
+   [44]: user?id=paraschopra
+   [45]: item?id=4052997
+
+8.
+[![][46]][47]
+[A room so quiet, no one can spend more than 45 minutes in it][48] (timesherald.com) 
+
+   [46]: http://ycombinator.com/images/grayarrow.gif
+   [47]: vote?for=4053296&dir=up&whence=%6e%65%77%73
+   [48]: http://www.timesherald.com/article/20120515/NEWS04/120519723/a-room-so-quiet-no-one-can-stand-it-for-more-than-45-minutes&pager=full_story
+
+56 points by [jamessun][49] 3 hours ago | [30 comments][50]
+
+   [49]: user?id=jamessun
+   [50]: item?id=4053296
+
+9.
+[![][51]][52]
+[Ask HN: Who Is Hiring? (June 2012)][53]
+
+   [51]: http://ycombinator.com/images/grayarrow.gif
+   [52]: vote?for=4053076&dir=up&whence=%6e%65%77%73
+   [53]: item?id=4053076
+
+168 points by [whoishiring][54] 4 hours ago | [110 comments][55]
+
+   [54]: user?id=whoishiring
+   [55]: item?id=4053076
+
+10.
+[Olark (YC09) is Hiring a DevOps lead in Ann Arbor, MI][56] (olark.com) 
+
+   [56]: http://www.olark.com/jobs
+
+1 hour ago
+
+11.
+[![][57]][58]
+[SQL Injection Vulnerability in Rails][59] (groups.google.com) 
+
+   [57]: http://ycombinator.com/images/grayarrow.gif
+   [58]: vote?for=4052807&dir=up&whence=%6e%65%77%73
+   [59]: https://groups.google.com/group/rubyonrails-security/browse_thread/thread/7546a238e1962f59
+
+108 points by [speleding][60] 5 hours ago | [29 comments][61]
+
+   [60]: user?id=speleding
+   [61]: item?id=4052807
+
+12.
+[![][62]][63]
+[Obama Order Sped Up Wave of Cyberattacks Against Iran][64] (nytimes.com) 
+
+   [62]: http://ycombinator.com/images/grayarrow.gif
+   [63]: vote?for=4052330&dir=up&whence=%6e%65%77%73
+   [64]: http://www.nytimes.com/2012/06/01/world/middleeast/obama-ordered-wave-of-cyberattacks-against-iran.html
+
+216 points by [joejohnson][65] 9 hours ago | [91 comments][66]
+
+   [65]: user?id=joejohnson
+   [66]: item?id=4052330
+
+13.
+[![][67]][68]
+[Apple Turns Over Its Inventory Once Every 5 Days][69] (theatlantic.com) 
+
+   [67]: http://ycombinator.com/images/grayarrow.gif
+   [68]: vote?for=4054340&dir=up&whence=%6e%65%77%73
+   [69]: http://www.theatlantic.com/technology/archive/2012/05/wow-apple-turns-over-its-inventory-once-every-5-days/257915/
+
+5 points by [avirambm][70] 12 minutes ago | [discuss][71]
+
+   [70]: user?id=avirambm
+   [71]: item?id=4054340
+
+14.
+[![][72]][73]
+[Largest-ever password study: We are all idiots][74] (venturebeat.com) 
+
+   [72]: http://ycombinator.com/images/grayarrow.gif
+   [73]: vote?for=4054337&dir=up&whence=%6e%65%77%73
+   [74]: http://venturebeat.com/2012/06/01/when-it-comes-to-passwords-we-are-idiots/
+
+5 points by [neilkelty][75] 12 minutes ago | [1 comment][76]
+
+   [75]: user?id=neilkelty
+   [76]: item?id=4054337
+
+15.
+[![][77]][78]
+[LibreOffice Has Found its Rhythm][79] (ostatic.com) 
+
+   [77]: http://ycombinator.com/images/grayarrow.gif
+   [78]: vote?for=4054319&dir=up&whence=%6e%65%77%73
+   [79]: http://ostatic.com/blog/libreoffice-has-found-its-rhythm
+
+5 points by [Garbage][80] 16 minutes ago | [discuss][81]
+
+   [80]: user?id=Garbage
+   [81]: item?id=4054319
+
+16.
+[![][82]][83]
+[Oracle v. Google - Judge Alsup Rules APIs Not Protected By Copyright][84] (groklaw.net) 
+
+   [82]: http://ycombinator.com/images/grayarrow.gif
+   [83]: vote?for=4050490&dir=up&whence=%6e%65%77%73
+   [84]: http://www.groklaw.net/article.php?story=20120531172522459
+
+626 points by [mbreese][85] 19 hours ago | [133 comments][86]
+
+   [85]: user?id=mbreese
+   [86]: item?id=4050490
+
+17.
+[![][87]][88]
+[Shortest program to print "Never gonna give you up..."][89] (stackexchange.com) 
+
+   [87]: http://ycombinator.com/images/grayarrow.gif
+   [88]: vote?for=4052674&dir=up&whence=%6e%65%77%73
+   [89]: http://codegolf.stackexchange.com/questions/6043/were-no-strangers-to-code-golf-you-know-the-rules-and-so-do-i
+
+106 points by [lini][90] 7 hours ago | [10 comments][91]
+
+   [90]: user?id=lini
+   [91]: item?id=4052674
+
+18.
+[![][92]][93]
+[The zero-day exploit market is bad for security][94] (schneier.com) 
+
+   [92]: http://ycombinator.com/images/grayarrow.gif
+   [93]: vote?for=4052956&dir=up&whence=%6e%65%77%73
+   [94]: http://www.schneier.com/blog/archives/2012/06/the_vulnerabili.html
+
+44 points by [willvarfar][95] 4 hours ago | [19 comments][96]
+
+   [95]: user?id=willvarfar
+   [96]: item?id=4052956
+
+19.
+[![][97]][98]
+[OpenCV knows where you’re looking with eye tracking][99] (hackaday.com) 
+
+   [97]: http://ycombinator.com/images/grayarrow.gif
+   [98]: vote?for=4053086&dir=up&whence=%6e%65%77%73
+   [99]: http://hackaday.com/2012/05/30/opencv-knows-where-youre-looking-with-eye-tracking/
+
+32 points by [bcl][100] 4 hours ago | [6 comments][101]
+
+   [100]: user?id=bcl
+   [101]: item?id=4053086
+
+20.
+[![][102]][103]
+[Feynman's Clock][104] (danwin.com) 
+
+   [102]: http://ycombinator.com/images/grayarrow.gif
+   [103]: vote?for=4052670&dir=up&whence=%6e%65%77%73
+   [104]: http://danwin.com/2012/06/feynmans-clock/
+
+68 points by [danso][105] 7 hours ago | [20 comments][106]
+
+   [105]: user?id=danso
+   [106]: item?id=4052670
+
+21.
+[![][107]][108]
+[Things I Should Have Known at 20][109] (inoveryourhead.net) 
+
+   [107]: http://ycombinator.com/images/grayarrow.gif
+   [108]: vote?for=4051344&dir=up&whence=%6e%65%77%73
+   [109]: http://inoveryourhead.net/
+
+332 points by [pkapur86][110] 15 hours ago | [134 comments][111]
+
+   [110]: user?id=pkapur86
+   [111]: item?id=4051344
+
+22.
+[![][112]][113]
+[Does Web economy like Airbnb create a race to the bottom in wages, services?][114] (nytimes.com) 
+
+   [112]: http://ycombinator.com/images/grayarrow.gif
+   [113]: vote?for=4053861&dir=up&whence=%6e%65%77%73
+   [114]: http://www.nytimes.com/2012/06/02/us/02iht-currents02.html
+
+8 points by [RockyMcNuts][115] 1 hour ago | [1 comment][116]
+
+   [115]: user?id=RockyMcNuts
+   [116]: item?id=4053861
+
+23.
+[![][117]][118]
+[I Don't Need Backups, I Use Raid1][119] (momjian.us) 
+
+   [117]: http://ycombinator.com/images/grayarrow.gif
+   [118]: vote?for=4052827&dir=up&whence=%6e%65%77%73
+   [119]: http://momjian.us/main/blogs/pgblog/2012.html#May_31_2012
+
+47 points by [keyist][120] 5 hours ago | [33 comments][121]
+
+   [120]: user?id=keyist
+   [121]: item?id=4052827
+
+24.
+[![][122]][123]
+[Maze Generation: Weave mazes][124] (jamisbuck.org) 
+
+   [122]: http://ycombinator.com/images/grayarrow.gif
+   [123]: vote?for=4052856&dir=up&whence=%6e%65%77%73
+   [124]: http://weblog.jamisbuck.org/2011/3/4/maze-generation-weave-mazes
+
+37 points by [llambda][125] 5 hours ago | [3 comments][126]
+
+   [125]: user?id=llambda
+   [126]: item?id=4052856
+
+25.
+[![][127]][128]
+[Show HN: I love weird socks and I'm finally launching my lifestyle business][129] (sotmclub.com) 
+
+   [127]: http://ycombinator.com/images/grayarrow.gif
+   [128]: vote?for=4053554&dir=up&whence=%6e%65%77%73
+   [129]: http://www.sotmclub.com
+
+219 points by [wolfparade][130] 2 hours ago | [66 comments][131]
+
+   [130]: user?id=wolfparade
+   [131]: item?id=4053554
+
+26.
+[![][132]][133]
+[Ask HN: Freelancer? Seeking freelancer? (June 2012)][134]
+
+   [132]: http://ycombinator.com/images/grayarrow.gif
+   [133]: vote?for=4053078&dir=up&whence=%6e%65%77%73
+   [134]: item?id=4053078
+
+59 points by [whoishiring][135] 4 hours ago | [34 comments][136]
+
+   [135]: user?id=whoishiring
+   [136]: item?id=4053078
+
+27.
+[![][137]][138]
+["I thought people had an idea first before leaving"][139] (gaborcselle.com) 
+
+   [137]: http://ycombinator.com/images/grayarrow.gif
+   [138]: vote?for=4054310&dir=up&whence=%6e%65%77%73
+   [139]: http://blog.gaborcselle.com/2012/06/i-thought-people-had-idea-first-before.html
+
+3 points by [PStamatiou][140] 17 minutes ago | [discuss][141]
+
+   [140]: user?id=PStamatiou
+   [141]: item?id=4054310
+
+28.
+[![][142]][143]
+[My GF learned to code in 3 months. This is what she came up with.][144] (nukaco.la) 
+
+   [142]: http://ycombinator.com/images/grayarrow.gif
+   [143]: vote?for=4050690&dir=up&whence=%6e%65%77%73
+   [144]: http://nukaco.la/
+
+287 points by [mntmn][145] 18 hours ago | [104 comments][146]
+
+   [145]: user?id=mntmn
+   [146]: item?id=4050690
+
+29.
+[![][147]][148]
+[Dragon has successfully achieved splashdown][149] (bbc.co.uk) 
+
+   [147]: http://ycombinator.com/images/grayarrow.gif
+   [148]: vote?for=4048634&dir=up&whence=%6e%65%77%73
+   [149]: http://www.bbc.co.uk/news/science-environment-18273811?
+
+389 points by [jgrahamc][150] 1 day ago | [108 comments][151]
+
+   [150]: user?id=jgrahamc
+   [151]: item?id=4048634
+
+30.
+[![][152]][153]
+[Google Blockly - a visual programming language][154] (code.google.com) 
+
+   [152]: http://ycombinator.com/images/grayarrow.gif
+   [153]: vote?for=4050426&dir=up&whence=%6e%65%77%73
+   [154]: http://code.google.com/p/google-blockly/
+
+228 points by [antichaos][155] 19 hours ago | [107 comments][156]
+
+   [155]: user?id=antichaos
+   [156]: item?id=4050426
+
+[More][157]
+
+   [157]: news2
+
+![][158]
+
+   [158]: http://ycombinator.com/images/s.gif
+
+  
+[Lists][159] | [RSS][160] | [Bookmarklet][161] | [Guidelines][162] | [FAQ][163] | [News News][164] | [Feature Requests][165] | [Y Combinator][166] | [Apply][167] | [Library][168]  
+  
+Search:   
+
+
+   [159]: lists
+   [160]: rss
+   [161]: http://ycombinator.com/bookmarklet.html
+   [162]: http://ycombinator.com/newsguidelines.html
+   [163]: http://ycombinator.com/newsfaq.html
+   [164]: http://ycombinator.com/newsnews.html
+   [165]: item?id=363
+   [166]: http://ycombinator.com
+   [167]: http://ycombinator.com/apply.html
+   [168]: http://ycombinator.com/lib.html
+

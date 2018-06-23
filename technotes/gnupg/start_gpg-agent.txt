@@ -1,0 +1,3 @@
+Gnupg: start the gpg-daemon
+
+   gpg-agent --daemon

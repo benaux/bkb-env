@@ -1,0 +1,31 @@
+Gcli: create a command with the scratchpad
+
+
+
+var { require } = Cu.import("resource://devtools/shared/Loader.jsm", {});
+
+var gcliInit = require('devtools/shared/gcli/commands/index');
+var { TargetFactory } = require("devtools/client/framework/target");
+
+var sysTarget= TargetFactory.forTab(Services.wm.getMostRecentWindow('navigator:browser').gBrowser.selectedTab);
+
+gcliInit.getSystem(sysTarget).then(
+    system => {
+        console.log('system:',system);
+        system.addItems([{
+            name: 'kback',
+            description: 'Show a greeting',
+            params: [{
+                name: 'name',
+                type: 'string',
+                description: 'The name to greet'
+            }],
+            returnType: 'string',
+            exec: function(args, context) {
+               context.environment.chromeWindow.close();
+                //return 'Hello, ' + args.name;
+            }
+        }]);
+    },
+    y => console.error('y:',y)
+);

@@ -1,0 +1,73 @@
+Gnupg Basics
+===========
+
+Infos
+-----
+
+
+sec => 'SECret key'
+ssb => 'Secret SuBkey'
+pub => 'PUBlic key'
+sub => 'public SUBkey'
+
+
+Constant           Character      Explanation
+─────────────────────────────────────────────────────
+PUBKEY_USAGE_SIG      S       key is good for signing
+PUBKEY_USAGE_CERT     C       key is good for certifying other signatures
+PUBKEY_USAGE_ENC      E       key is good for encryption
+PUBKEY_USAGE_AUTH     A       key is good for authentication
+
+Key creation
+-------------
+
+This is a cookbook approach which exemplifies the nice answer above. It is a distilled version of Generating More Secure GPG Keys: A Step-by-Step Guide which separates all those functions into separate keys
+
+Create primary key
+$ gpg --expert --gen-key
+(8) RSA (set your own capabilities)
+Your selection? 8
+(S) Toggle the sign capability
+Your selection? s
+(E) Toggle the encrypt capability
+Your selection? e
+(Q) Finished
+Your selection? q
+
+What keysize do you want? (2048) 4096
+Key is valid for? (0) 3y
+Is this correct? (y/N)y
+next add UID, email and passphrase.
+This generates a certify-only primary key.
+Create signing (etc.) subkeys
+$ gpg --expert --edit-key john.doe@example.com
+gpg> addkey
+(8) RSA (set your own capabilities)
+Your selection? 8
+Your selection? e
+Your selection? q
+
+What keysize do you want? (2048) 3072
+Key is valid for? (0) 6m
+Is this correct? (y/N)y
+Really create? (y/N) y
+This generates a sign-only subkey.
+(Repeat this addkey process for the Encryption and Authentication subkeys)
+[...]
+When we’re finished, we’ll save the key to our keyring.
+gpg> save
+Backup
+$ gpg -a --export-secret-key john.doe@example.com > secret_key
+$ gpg -a --gen-revoke john.doe@example.com > revocation_cert.gpg
+Removing the Primary Key
+$ gpg -a --export-secret-subkeys john.doe@example.com > secret_subkeys.gpg
+$ gpg --delete-secret-keys john.doe@example.com
+Delete this key from the keyring? (y/N) y
+This is a secret key! - really delete? (y/N) y
+$ gpg --import secret_subkeys.gpg
+This leaves them in a "laptop" state with the primary secret key missing. Transfer is done via
+$ gpg -a --export-secret-keys john.doe@example.com > laptop_keys_secret.gpg
+$ gpg -a --export john.doe@example.com > laptop_keys_public.gpg
+(transfer via USB-Stick or CD) and on the laptop
+$ gpg --import laptop_keys_public.gpg
+$ gpg --import laptop_keys_secret.gpg

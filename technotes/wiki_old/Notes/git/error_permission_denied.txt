@@ -1,0 +1,29 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2016-12-21T12:14:41+01:00
+
+====== error permission denied ======
+Created Wednesday 21 December 2016
+
+Git: Error - Permission denied
+
+
+Error: 
+
+	git push -u origin master
+	Permission denied (publickey).
+	fatal: Could not read from remote repository.
+
+	Please make sure you have the correct access rights
+	and the repository exists.
+
+
+make shure the ssh setup is working with 
+
+	git -T git@....
+
+
+
+if ssh is fine, make sure the ssh-agent is working properly, so add the key again with 
+
+	ssh-add ..key

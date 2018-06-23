@@ -1,0 +1,569 @@
+From <http://stackoverflow.com/questions/1205605/value-of-global-variable-doesnt-change-in-bash>:
+
+[Stack Exchange][1]
+
+   [1]: http://stackexchange.com
+
+[log in][2] | [careers][3] | [chat][4] | [meta][5] | [about][6] | [faq][7]
+
+   [2]: /users/login?returnurl=%2fquestions%2f1205605%2fvalue-of-global-variable-doesnt-change-in-bash
+   [3]: http://careers.stackoverflow.com
+   [4]: http://chat.stackoverflow.com
+   [5]: http://meta.stackoverflow.com
+   [6]: /about
+   [7]: /faq
+
+  
+
+
+[Stack Overflow][8]
+
+   [8]: /
+
+  * [Questions][9]
+  * [Tags][10]
+  * [Users][11]
+  * [Badges][12]
+  * [Unanswered][13]
+
+   [9]: /questions
+   [10]: /tags
+   [11]: /users
+   [12]: /badges
+   [13]: /unanswered
+
+  * [Ask Question][14]
+
+   [14]: /questions/ask
+
+# [Value of global variable doesn't change in BASH][15]
+
+   [15]: /questions/1205605/value-of-global-variable-doesnt-change-in-bash
+
+up vote -1 down vote [favorite][16]
+
+   [16]: # (This is a favorite question (click again to undo))
+
+****
+
+share [g+] share [fb] share [tw]
+
+I am working on a BASH script which has a global variable. The value of the variable changes in a function/subroutine. But the value doesnt change when I try to print that variable outside the function. The Sample code is as follows:
+    
+    #!/bin/bash
+    
+    count=
+    
+    linux_f()
+        {
+            let count=100
+        }
+    
+    linux_f
+    
+    echo $count
+    
+
+The echo statement prints blank and not 100 Why the value of the global variable doesn't traverse in the function and out.
+
+[linux][17] [bash][18] [scripting][19]
+
+   [17]: /questions/tagged/linux (show questions tagged 'linux')
+   [18]: /questions/tagged/bash (show questions tagged 'bash')
+   [19]: /questions/tagged/scripting (show questions tagged 'scripting')
+
+[link][20]|[improve this question][21]
+
+   [20]: /q/1205605 (short permalink to this question)
+   [21]: /posts/1205605/edit
+
+edited [Jul 30 '09 at 10:01][22]
+
+   [22]: /posts/1205605/revisions (show all edits to this post)
+
+  
+
+
+asked Jul 30 '09 at 9:55
+
+[
+
+![][23]
+
+   [23]: http://www.gravatar.com/avatar/d8f349792652018c93ec441c4d2cc352?s=32&d=identicon&r=PG
+
+][24]
+
+   [24]: /users/11043/viky
+
+[Viky][25]  
+188210
+
+   [25]: /users/11043/viky
+
+  
+
+
+100% accept rate
+
+Is that a typo in your script? You're setting a variable `countl` but you are trying to get the value of `count`. - [dreamlax][26] Jul 30 '09 at 9:58
+
+   [26]: /users/10320/dreamlax (24675 reputation)
+
+@dreamlax. Yeah. sorry for the typo. corrected now. - [Viky][27] Jul 30 '09 at 10:02
+
+   [27]: /users/11043/viky (188 reputation)
+
+code works after typo was fixed - [rasjani][28] Jul 31 '09 at 9:30
+
+   [28]: /users/108538/rasjani (1769 reputation)
+
+feedback 
+
+## 3 Answers
+
+[active][29] [oldest][30] [votes][31]
+
+   [29]: /questions/1205605/value-of-global-variable-doesnt-change-in-bash?answertab=active#tab-top (Answers with the latest activity first)
+   [30]: /questions/1205605/value-of-global-variable-doesnt-change-in-bash?answertab=oldest#tab-top (Answers in the order they were provided)
+   [31]: /questions/1205605/value-of-global-variable-doesnt-change-in-bash?answertab=votes#tab-top (Answers with the highest score first)
+
+up vote 2 down vote accepted
+
+Your code works for me, printing 100. This is the code I used:
+    
+    count=
+    
+    linux_f()
+        {
+            let count=100
+        }
+    
+    linux_f
+    
+    echo $count
+    
+
+**Edit:** I have tried this with version 2 of bash on MSYS and version 3 on Fedora Linux and it works on both. Are you really sure you are executing that script? Try putting an echo "this is it" in there just to make sure that something gets displayed. Other than that, I'm at a loss.
+
+[link][32]|[improve this answer][33]
+
+   [32]: /a/1205646 (short permalink to this answer)
+   [33]: /posts/1205646/edit
+
+edited [Jul 31 '09 at 8:08][34]
+
+   [34]: /posts/1205646/revisions (show all edits to this post)
+
+  
+
+
+answered Jul 30 '09 at 10:05
+
+anon  
+
+
+Tried the same thing again. not working for me. Can you tell me what might be wrong. just to clarify, i put the code in a x.sh file and then run with ./x.sh. - [Viky][35] Jul 31 '09 at 6:54
+
+   [35]: /users/11043/viky (188 reputation)
+
+just to add kernel version is 2.6.9-67.0.20.ELsmp and bash version is 3 - [Viky][36] Jul 31 '09 at 7:10
+
+   [36]: /users/11043/viky (188 reputation)
+
+Works for me on RedHat AS3 kernel 2.6.9-67.0.15.ELsmp, Bash 3.00.15. Try copying the echo statement into the function, after you set the variable and see if that outputs the correct value. - [jon-hanson][37] Jul 31 '09 at 10:29
+
+   [37]: /users/84538/jon-hanson (2990 reputation)
+
+feedback 
+
+up vote 1 down vote
+
+Perhaps because you are assigning to `countl` and not to `count`?
+
+[link][38]|[improve this answer][39]
+
+   [38]: /a/1205618 (short permalink to this answer)
+   [39]: /posts/1205618/edit
+
+answered Jul 30 '09 at 9:58
+
+[
+
+![][40]
+
+   [40]: http://www.gravatar.com/avatar/aa6a7a12f4cd03bc8c98fa8e9af9ad41?s=32&d=identicon&r=PG
+
+][41]
+
+   [41]: /users/7498/innam
+
+[innaM][42]  
+14.2k12752
+
+   [42]: /users/7498/innam
+
+@Manni. Sorry for the typo. its the same varaible - [Viky][43] Jul 30 '09 at 10:02
+
+   [43]: /users/11043/viky (188 reputation)
+
+feedback 
+
+up vote 0 down vote
+
+There is a spelling mistake in that variable assignment (inside the function). Once fixed it will work:
+    
+    [dsm@localhost:~]$ var=3
+    [dsm@localhost:~]$ echo $var
+    3
+    [dsm@localhost:~]$ function xxx(){ let var=4 ; }
+    [dsm@localhost:~]$ xxx
+    [dsm@localhost:~]$ echo $var
+    4
+    [dsm@localhost:~]$
+    
+
+And run as a script:
+    
+    [dsm@localhost:~]$ cat test.sh 
+    #!/bin/bash
+    
+    var=
+    echo "var is '$var'"
+    function xxx(){ let var=4 ; }
+    xxx
+    echo "var is now '$var'"
+    [dsm@localhost:~]$ ./test.sh #/ <-- #this is to stop the highlighter thinking we have a regexp
+    var is ''
+    var is now '4'
+    [dsm@localhost:~]$
+    
+
+[link][44]|[improve this answer][45]
+
+   [44]: /a/1205641 (short permalink to this answer)
+   [45]: /posts/1205641/edit
+
+edited [Jul 31 '09 at 7:48][46]
+
+   [46]: /posts/1205641/revisions (show all edits to this post)
+
+  
+
+
+answered Jul 30 '09 at 10:04
+
+[
+
+![][47]
+
+   [47]: http://www.gravatar.com/avatar/969abd3c7321b0f7da48b9a3add78160?s=32&d=identicon&r=PG
+
+][48]
+
+   [48]: /users/7780/dsm
+
+[dsm][49]  
+6,1571145
+
+   [49]: /users/7780/dsm
+
+I have put the code in a script. Can you try in a script. as per my understannding working on script and prompt, the behaviour might be different due to shell and subshell concept. - [Viky][50] Jul 31 '09 at 6:57
+
+   [50]: /users/11043/viky (188 reputation)
+
+Not in this case, but i edited my answer as you asked - [dsm][51] Jul 31 '09 at 7:48
+
+   [51]: /users/7780/dsm (6157 reputation)
+
+@dsm. Can you let me know what version of bash and linux you using. I am sure this is not working for me. I have Kernel version 2.6.9-67.0.20.ELsmp and bash version is 3. - [Viky][52] Aug 1 '09 at 8:45
+
+   [52]: /users/11043/viky (188 reputation)
+
+@Viky: it doesn't matter... even the most retarded shell will work as expected. Tell me one thing tho, are you expecting to see the variable set _AFTER_ your script has run? - [dsm][53] Aug 3 '09 at 8:37
+
+   [53]: /users/7780/dsm (6157 reputation)
+
+feedback 
+
+## Your Answer
+
+ 
+
+draft saved
+
+draft discarded
+
+[log in][54]
+
+   [54]: /users/login?returnurl=%2fquestions%2f1205605%2fvalue-of-global-variable-doesnt-change-in-bash
+
+or
+
+Name
+
+Email required, but never shown
+
+Home Page
+
+[discard][55]
+
+   [55]: #
+
+##  Not the answer you're looking for? Browse other questions tagged [linux][56] [bash][57] [scripting][58] or [ask your own question][59]. 
+
+   [56]: /questions/tagged/linux (show questions tagged 'linux')
+   [57]: /questions/tagged/bash (show questions tagged 'bash')
+   [58]: /questions/tagged/scripting (show questions tagged 'scripting')
+   [59]: /questions/ask
+
+#### Hello World!
+
+This is a collaboratively edited question and answer site for **professional and enthusiast programmers**. It's 100% free, no registration required.
+
+[about »][60]   [faq »][61]
+
+   [60]: /about?mnu=1
+   [61]: /faq?mnu=1
+
+tagged
+
+[linux][62] × 31931  
+[bash][63] × 12597  
+[scripting][64] × 4788  
+
+
+   [62]: /questions/tagged/linux (show questions tagged 'linux')
+   [63]: /questions/tagged/bash (show questions tagged 'bash')
+   [64]: /questions/tagged/scripting (show questions tagged 'scripting')
+
+asked
+
+**2 years ago**
+
+viewed
+
+**3,845 times**
+
+active
+
+**[2 years ago][65]**
+
+   [65]: ?lastactivity (2009-07-31 08:08:24Z)
+
+#### Community Bulletin
+
+event
+
+[2012 Community Moderator Election][66] - ends Jun 19
+
+   [66]: http://stackoverflow.com/election
+
+  
+
+
+[blog][67]
+
+   [67]: http://blog.stackoverflow.com
+
+[2012 Stack Overflow Community Moderator Election Begins][68]
+
+   [68]: http://blog.stackoverflow.com/2012/06/2012-stack-overflow-community-moderator-election-begins/
+
+  
+
+
+[blog][69]
+
+   [69]: http://blog.stackoverflow.com
+
+[Can Stack Exchange Capitalize on Hot Trends?][70]
+
+   [70]: http://blog.stackoverflow.com/2012/06/can-stack-exchange-capitalize-on-hot-trends/
+
+  
+
+
+#### Related
+
+[Determine if a function exists in bash][71]
+
+   [71]: /questions/85880/determine-if-a-function-exists-in-bash
+
+[How do I tell if a file does not exist in bash?][72]
+
+   [72]: /questions/638975/how-do-i-tell-if-a-file-does-not-exist-in-bash
+
+[bash stacktrace][73]
+
+   [73]: /questions/685435/bash-stacktrace
+
+[Split string based on delimiter in Bash?][74]
+
+   [74]: /questions/918886/split-string-based-on-delimiter-in-bash
+
+[Global environment variables in a shell script][75]
+
+   [75]: /questions/1464253/global-environment-variables-in-a-shell-script
+
+[How to get this bash script to work if the variable "fileName" contains space?][76]
+
+   [76]: /questions/2073106/how-to-get-this-bash-script-to-work-if-the-variable-filename-contains-space
+
+[Script doesn't work when executed with sudo][77]
+
+   [77]: /questions/2470000/script-doesnt-work-when-executed-with-sudo
+
+[Prevent * to be expanded in the bash script][78]
+
+   [78]: /questions/2470638/prevent-to-be-expanded-in-the-bash-script
+
+[How to store and echo multiple lines elegantly in bash?][79]
+
+   [79]: /questions/2752654/how-to-store-and-echo-multiple-lines-elegantly-in-bash
+
+[fork and exec in bash][80]
+
+   [80]: /questions/3096561/fork-and-exec-in-bash
+
+[for loop with bash from variable][81]
+
+   [81]: /questions/3977922/for-loop-with-bash-from-variable
+
+[Bash Script to allow Nagios to report ping between two other Linux machines][82]
+
+   [82]: /questions/4312176/bash-script-to-allow-nagios-to-report-ping-between-two-other-linux-machines
+
+[How to use the same bash variable between a parent shell and child shell][83]
+
+   [83]: /questions/4391456/how-to-use-the-same-bash-variable-between-a-parent-shell-and-child-shell
+
+[Bash script function return value problem][84]
+
+   [84]: /questions/4538145/bash-script-function-return-value-problem
+
+[What […] in a bash script stands for?][85]
+
+   [85]: /questions/4850096/what-in-a-bash-script-stands-for
+
+[Bash create variable then assign value to it][86]
+
+   [86]: /questions/4882745/bash-create-variable-then-assign-value-to-it
+
+[BASH File Movement][87]
+
+   [87]: /questions/6347762/bash-file-movement
+
+[Bash Sorting STDIN][88]
+
+   [88]: /questions/6486755/bash-sorting-stdin
+
+[unable to set variable in case statement bash][89]
+
+   [89]: /questions/6675879/unable-to-set-variable-in-case-statement-bash
+
+[bash script to remove directories based on modified file date][90]
+
+   [90]: /questions/7289051/bash-script-to-remove-directories-based-on-modified-file-date
+
+[bash scripting yesterdays zip file][91]
+
+   [91]: /questions/8752476/bash-scripting-yesterdays-zip-file
+
+[Bash setting a global variable inside a loop and retaining its value -- Or process substituion for dummies][92]
+
+   [92]: /questions/9012841/bash-setting-a-global-variable-inside-a-loop-and-retaining-its-value-or-proce
+
+[Bash: How to retrieve a variable value inside a background while loop][93]
+
+   [93]: /questions/9656646/bash-how-to-retrieve-a-variable-value-inside-a-background-while-loop
+
+[Bash: declaring global variable inside a function][94]
+
+   [94]: /questions/9871458/bash-declaring-global-variable-inside-a-function
+
+[Linux Bash. what is the difference between 2 lines?][95]
+
+   [95]: /questions/10065515/linux-bash-what-is-the-difference-between-2-lines
+
+[question feed][96]
+
+   [96]: /feeds/question/1205605 (feed of this question and its answers)
+
+![][97]
+
+   [97]: /posts/1205605/ivc/6cb5
+
+lang-bsh
+
+[about][98] | [faq][99] | [blog][100] | [chat][101] | [data][102] | [podcast][103] | [shop][104] | [legal][105] | [advertising info][106] | mobile | **[contact us][107]** | **[feedback][108]**
+
+   [98]: /about
+   [99]: /faq
+   [100]: http://blog.stackexchange.com?blb=1
+   [101]: http://chat.stackoverflow.com
+   [102]: http://data.stackexchange.com
+   [103]: http://blog.stackoverflow.com/category/podcasts/
+   [104]: http://shop.stackexchange.com/
+   [105]: http://stackexchange.com/legal
+   [106]: http://engine.adzerk.net/redirect/0/2776/2751/0/4de3c60f719c4dfcb1a57531c7050090/0
+   [107]: mailto:team@stackoverflow.com
+   [108]: http://meta.stackoverflow.com
+
+■ [stackoverflow.com][109]  ■ [api/apps][110]  ■ [careers][111]  ■ [serverfault.com][112]  ■ [superuser.com][113]  ■ [meta][114]  ■ [area 51][115]  ■ [webapps][116]  ■ [gaming][117]  ■ [ubuntu][118]  ■ [webmasters][119]  ■ [cooking][120]  ■ [game development][121]  ■ [math][122]  ■ [photography][123]  ■ [stats][124]  ■ [tex][125]  ■ [english][126]  ■ [theoretical cs][127]  ■ [programmers][128]  ■ [unix][129]  ■ [apple][130]  ■ [wordpress][131]  ■ [physics][132]  ■ [home improvement][133]  ■ [gis][134]  ■ [electronics][135]  ■ [android][136]  ■ [security][137]  ■ [bicycles][138]  ■ [dba][139]  ■ [drupal][140]  ■ [sharepoint][141]  ■ [scifi & fantasy][142]  ■ [user experience][143]  ■ [skeptics][144]  ■ [rpg][145]  ■ [judaism][146] 
+
+   [109]: http://stackoverflow.com
+   [110]: http://stackapps.com
+   [111]: http://careers.stackoverflow.com
+   [112]: http://serverfault.com
+   [113]: http://superuser.com
+   [114]: http://meta.stackoverflow.com
+   [115]: http://area51.stackexchange.com
+   [116]: http://webapps.stackexchange.com
+   [117]: http://gaming.stackexchange.com
+   [118]: http://askubuntu.com
+   [119]: http://webmasters.stackexchange.com
+   [120]: http://cooking.stackexchange.com
+   [121]: http://gamedev.stackexchange.com
+   [122]: http://math.stackexchange.com
+   [123]: http://photo.stackexchange.com
+   [124]: http://stats.stackexchange.com
+   [125]: http://tex.stackexchange.com
+   [126]: http://english.stackexchange.com
+   [127]: http://cstheory.stackexchange.com
+   [128]: http://programmers.stackexchange.com
+   [129]: http://unix.stackexchange.com
+   [130]: http://apple.stackexchange.com
+   [131]: http://wordpress.stackexchange.com
+   [132]: http://physics.stackexchange.com
+   [133]: http://diy.stackexchange.com
+   [134]: http://gis.stackexchange.com
+   [135]: http://electronics.stackexchange.com
+   [136]: http://android.stackexchange.com
+   [137]: http://security.stackexchange.com
+   [138]: http://bicycles.stackexchange.com
+   [139]: http://dba.stackexchange.com
+   [140]: http://drupal.stackexchange.com
+   [141]: http://sharepoint.stackexchange.com
+   [142]: http://scifi.stackexchange.com
+   [143]: http://ux.stackexchange.com
+   [144]: http://skeptics.stackexchange.com
+   [145]: http://rpg.stackexchange.com
+   [146]: http://judaism.stackexchange.com
+
+[][147] [][148]
+
+   [147]: http://www.peer1.com/stackoverflow
+   [148]: http://creativecommons.org/licenses/by-sa/3.0/
+
+rev 2012.6.6.2795
+
+site design / logo (C) 2012 stack exchange inc; user contributions licensed under [cc-wiki][149] with [attribution required][150]
+
+   [149]: http://creativecommons.org/licenses/by-sa/3.0/
+   [150]: http://blog.stackoverflow.com/2009/06/attribution-required/
+
+Stack Overflow works best with JavaScript enabled![][151]
+
+   [151]: http://pixel.quantserve.com/pixel/p-c1rF4kxgLUzNc.gif
+

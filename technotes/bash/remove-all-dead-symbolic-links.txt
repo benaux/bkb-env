@@ -1,0 +1,6 @@
+Remove all dead links
+
+find  -L . -maxdepth 1  -type l -rm -i {} \;
+
+# -L: symbolic links
+# -type l: dead links

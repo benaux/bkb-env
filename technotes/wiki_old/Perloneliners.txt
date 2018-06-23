@@ -1,0 +1,48 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-01-22T15:41:32+01:00
+
+====== Perloneliners ======
+Created Sunday 22 January 2017
+
+Links:
+http://www.catonmat.net/blog/introduction-to-perl-one-liners/
+http://www.perlhowto.com/taxonomy/term/28
+http://www.socher.org/index.php/Main/PerlScriptsAndOneLiners#ntoc15
+http://www.softpanorama.org/Scripting/Perlorama/perl_in_command_line.shtml
+https://blogs.oracle.com/ksplice/entry/the_top_10_tricks_of
+
+Perl and find
+
+find . -name '*~' -print0 | perl -0ne unlink
+
+**Perl Pie**
+
+-e means execute the following line of code.
+-i means edit in-place
+-w write warnings
+-p loop over the input file, printing each line after the script is applied to it.
+-n loop over the input file, NOT printing each line after the script is applied to it.
+
+Recursive Search and Replace
+
+
+This will replace all occurrences of oldstring with newstring in all of the files in your current directory. 
+
+**perl -p -i -e 's/oldstring/newstring/g' ***
+
+
+d
+
+4. Multiple replace operations: replace with different strings
+
+
+**perl -i -pe 's/foo/bar/g; s/baz/zab/g; s/Alice/Joan/g' file**
+
+Multiple replace operations: replace multiple patterns with the same string
+
+Replace any of foo, bar or baz with foobar
+sed -Ei 's/foo|bar|baz/foobar/g' file
+or
+**perl -i -pe 's/foo|bar|baz/foobar/g' file**
+

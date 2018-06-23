@@ -5,6 +5,7 @@
 " Initialize plugin system
 "call plug#end()
 "
+set shell=/bin/sh
 
 let mapleader=","
 let maplocalleader=","

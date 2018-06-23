@@ -1,0 +1,15 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2016-12-21T12:28:00+01:00
+
+====== start bash script in xterm with doubleclick ======
+Created Wednesday 21 December 2016
+
+Bash: start bash script in xterm window with double click
+
+if [ ! -t 0 ]; then # script is executed outside the terminal?
+  # execute the script inside a terminal window
+  x-terminal-emulator -e "$0"
+  # and abort running the rest of it
+  exit 0
+fi

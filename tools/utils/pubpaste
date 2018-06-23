@@ -1,0 +1,44 @@
+#!/usr/bin/env fish
+
+
+set syncdir $HOME/homebase/syncdir_bkb_(hostname)
+
+function die ;  echo $argv ;  exit 1; end
+
+[ -n "$syncdir" ] ; or die "Err no syncdir in $syncdir"
+[ -d "$syncdir" ] ; or die "Err no syncdir $syncdir"
+
+set pubpastedir $syncdir/*bkb*/*/*/pubpastes_*
+[ -n "$pubpastedir" ] ; or die "Err no pubpastedir in $pubpastedir"
+[ -d "$pubpastedir" ] ; or die "Err no pubpastedir $pubpastedir"
+
+set base32date (~/aux/tools/utils/base32date)
+echo $base32date
+
+#set oname (perl -e '$str=join " ", map { s/[^a-zA-Z0-9\- ]+/-/g; lc $_ ; } @ARGV ; print $str ; ' $argv)
+set oname (string replace -a -r  '[^0-9a-zA-Z- ]' '_' "$argv")
+
+set matches (string match -r '(.*)\s*--+\s*(.*)' "$argv")
+
+set title "$argv"
+set tags
+
+if [ -n "$matches" ]
+   set title $matches[2]
+   set tags $matches[3]
+end
+
+set fpath $pubpastedir/"$oname _$base32date.txt"
+
+set ddate (date +"%d.%m.%Y")
+
+if [ -f "$fpath" ] 
+  die "Err: path $fpath already exists"
+  else
+    printf "%s\n" "## $title" '' "  > $ddate" '  > by ben@srctxt.com' '' '' > "$fpath"
+
+    echo "paste stored in $fpath"
+    printf $fpath | pbcopy
+end
+
+

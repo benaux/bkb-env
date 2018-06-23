@@ -1,0 +1,8 @@
+SSH: restart sshd
+
+eg. after modifien /etc/sshd/config
+
+
+   synoservicectl --reload sshd
+
+   synoservicectl --restart sshd

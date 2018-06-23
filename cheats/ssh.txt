@@ -47,6 +47,21 @@ chmod 700 ~/.ssh && chmod 600 ~/.ssh/*
 
         ssh-add ~/.ssh/mykey
 
+### Forbids password authentication 
 
+Change in '/etc/ssh/sshd_config':
+
+	PasswordAuthentication no
+	ChallengeResponseAuthentication no
+
+Allows password authentication from all RFC1918 private IP ranges inside LAN. 
+
+	Match Address 10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
+		PasswordAuthentication yes
+
+### Restart SSHD on mac os x
+
+   sudo launchctl stop com.openssh.sshd
+   sudo launchctl start com.openssh.sshd
 
 

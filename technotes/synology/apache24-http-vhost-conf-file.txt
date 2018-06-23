@@ -1,0 +1,1 @@
+sudo vim /usr/local/etc/apache24/sites-enabled/httpd-vhost.conf

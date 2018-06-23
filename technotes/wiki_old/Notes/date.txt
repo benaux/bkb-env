@@ -1,0 +1,11 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-01-23T15:28:11+01:00
+
+====== date ======
+Created Monday 23 January 2017
+
+
+date +'%A %d %B %Y' 
+
+Monday 23 January 2017

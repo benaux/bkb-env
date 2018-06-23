@@ -1,0 +1,7 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-01-26T00:00:00+01:00
+ 
+===== calling_from_c_into_ocaml =====
+Created Thursday 26 January 2017
+ 

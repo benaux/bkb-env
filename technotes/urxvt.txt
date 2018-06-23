@@ -1,0 +1,6 @@
+urxvt
+=====
+
+
+
+https://wiki.archlinux.org/index.php/rxvt-unicode

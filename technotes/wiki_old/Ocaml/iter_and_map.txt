@@ -1,0 +1,91 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-01-26T00:00:00+01:00
+
+===== iter_and_map =====
+Created Thursday 26 January 2017
+
+from: http://www.mega-nerd.com/erikd/Blog/CodeHacking/Ocaml/iter_and_map.html
+m3ga blog
+
+
+==== Sat, 08 Jul 2006 ====
+
+=== Ocaml : Iter and Map. ===
+
+Ocaml, like most other languages has arrays for storing multiple values of the same type. Ocaml also has built in lists; lists that behave like the singly linked list that people write in lower level languages like C but without the pain.
+
+To operate on arrays in Ocaml it is certainly possible to use a **for** loop to work on each element in the array in turn just like one would do in other languages. Here's a simple example program:
+
+{{{code: lang="plaintext" linenumbers="True"
+let _ =
+    let int_array = [| 1 ; 2 ; 3 ; 7 ; 11 |] in
+    for i = 0 to Array.length int_array - 1 do
+        Printf.printf "%5d\n" int_array.(i)
+    done
+}}}
+Note : This program can be run (assuming you have ocaml installed) by simply saving the above code in a text file with a ".ml" extension and then running:
+
+{{{code: lang="plaintext" linenumbers="True"
+    ocaml <filename>
+}}}
+The astute reader will notice that the **for** loop approach used above has a couple of things that the programmer must get right. Even in this really simple example, the programmer has to know that array indices start at zero, has to know or find out the length of the array, has to subtract one from that length to avoid accessing elements beyond the last element and then has to explicitly access each element of the array.
+
+Fortunately, in functional languages like Ocaml, it is possible to avoid all of these potential causes of error by using more functional idioms like link;|Higher Order Functions (HOF).
+
+The idea behind using HOF on lists and arrays is that the programmer defines a function that operates on a single element and then applies that function to each entry one at a time. Here's a simple example program which defines a list of integers and then prints it.
+
+{{{code: lang="plaintext" linenumbers="True"
+let printline_int x =
+    Printf.printf "%5d\n" x
+
+let _ =
+    let int_array = [| 1 ; 2 ; 3 ; 7 ; 11 |] in
+    Array.iter printline_int int_array
+}}}
+
+**Array.iter** is a higher order function named **iter** in the **Array** module. It takes two paramaters, a function and an array and applies the function to each element of the array. In this particular case, the function **printline_int** will be applied to each element in **int_array** from the first to the last.
+
+However, the **printline_int** function very simple and is only used once in this very small program. It therefore makes just as much sense to make it a link;|closure like this:
+
+{{{code: lang="plaintext" linenumbers="True"
+let _ =
+    let int_array = [| 1 ; 2 ; 3 ; 7 ; 11 |] in
+    Array.iter (fun x -> Printf.printf "%5d\n" x) int_array
+}}}
+The bit enclosed within the parentheses here defines an anonymous function which takes a single parameter **x** and then defines the body of the function on the right hand side of the arrow.
+
+However, even for this most recent example there's a more compact way to write it. Because the anonymous function's parameter is the last token in the function body it can also be written like this:
+
+{{{code: lang="plaintext" linenumbers="True"
+let _ =
+    let int_array = [| 1 ; 2 ; 3 ; 7 ; 11 |] in
+    Array.iter (Printf.printf "%5d\n") int_array
+}}}
+In this example, the bit within the parentheses is a partially applied function; a function which needs one or more extra parameters to complete the call. In this case the bit within the parentheses behaves just like the **printline_int** function in the earlier example.
+
+All of the **Array.iter** examples above apply a function to the elements of the array and that function has no return value. In Ocaml, a function without a return value is said to return **unit** (much like **void** in C, C++, and Java etc).
+
+So here's another example where we take the original array, add one to each element to create a new array and then print out the new array:
+
+{{{code: lang="plaintext" linenumbers="True"
+let _ =
+    let int_array = [| 1 ; 2 ; 3 ; 7 ; 11 |] in
+    let plus_one = Array.map (fun x -> x + 1) int_array in
+    Array.iter (Printf.printf "%5d\n") plus_one
+}}}
+**Array.map** is much like **Array.iter**. The big difference is that the function that is passed to **Array.map** and applied to each element in the array must return a value. In this case, the anonymous function simply takes an int parameter and returns an int. However, it could just as easily take an int and return some other type. Here's an example where the anonymous function takes an int and returns a float:
+
+{{{code: lang="plaintext" linenumbers="True"
+let _ =
+    let int_array = [| 1 ; 2 ; 3 ; 7 ; 11 |] in
+    let exp_val = Array.map (fun x -> exp (float_of_int x)) int_array in
+    Array.iter (Printf.printf "%10.2f\n") exp_val
+}}}
+There are equivalent functions to the ones above which work on lists, called unsurprisingly **List.iter** and **List.map**. There are also other interesting functions like **iteri** (arrays only), **filter** (lists only), **fold_left** and **fold_right** (both arrays and lists) and a couple of others. They are all powerful tools which allow algorithms to be implemented in Ocaml more succinctly and with less chance of error than with imperative programming languages.
+
+
+
+
+
+

@@ -1,0 +1,15 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2016-12-21T12:28:00+01:00
+
+====== gpg-and-gpg-agent ======
+Created Wednesday 21 December 2016
+
+the combination or fish shell and gpg-agent is constant source of frustration
+
+also it doesn't interest me. so I always throw some commands around until it works. something among the lines of
+
+keychain --nogui --clear 
+  keychain --eval   --quiet -Q ~/.ssh/auxsend_acer.rsa 35827ADE
+  keychain --quiet --nogui ~/.ssh/auxsend_acer.rsa 35827ADE
+

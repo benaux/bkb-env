@@ -1,0 +1,1345 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-01-26T00:00:00+01:00
+ 
+===== lists =====
+Created Thursday 26 January 2017
+ 
+===== Lists, Vectors, Strings, Top =====
+===== Lists =====
+
+
+
+
+
+A //pair} (sometimes called a @dfn{dotted pair//) is a data structure
+with two fields called the //car} and @dfn{cdr// fields (for
+historical reasons).  Pairs are created by the procedure //cons//.
+The car and cdr fields are accessed by the procedures //car// and
+//cdr//.  The car and cdr fields are assigned by the procedures
+//set-car!} and @code{set-cdr!//.
+
+
+Pairs are used primarily to represent //lists//.  A list can be
+defined recursively as either the empty list or a pair whose cdr is
+a list.  More precisely, the set of lists is defined as the smallest set
+//X// such that
+
+
+
+The empty list is in //X//.
+
+
+If //list} is in @var{X//, then any pair whose cdr field contains
+//list} is also in @var{X//.
+@end itemize
+
+
+
+
+The objects in the car fields of successive pairs of a list are the
+//elements// of the list.  For example, a two-element list is a pair
+whose car is the first element and whose cdr is a pair whose car is the
+second element and whose cdr is the empty list.  The //length// of a
+list is the number of elements, which is the same as the number of
+pairs.  The //empty list// is a special object of its own type (it is
+not a pair); it has no elements and its length is zero.@footnote{The
+above definitions imply that all lists have finite length and are
+terminated by the empty list.}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+The most general notation (external representation) for Scheme pairs is
+the ``dotted'' notation //(//c1} . @var{c2})// where @var{c1// is
+the value of the car field and //c2// is the value of the cdr field.
+For example, //(4 . 5)} is a pair whose car is @code{4// and whose
+cdr is //5}.  Note that @code{(4 . 5)// is the external
+representation of a pair, not an expression that evaluates to a pair.
+
+
+
+
+
+
+A more streamlined notation can be used for lists: the elements of the
+list are simply enclosed in parentheses and separated by spaces.  The
+empty list is written //()//.  For example, the following are
+equivalent notations for a list of symbols:
+
+{{{code: lang="plaintext" linenumbers="True"
+
+(a b c d e)
+(a . (b . (c . (d . (e . ())))))
+
+}}}
+
+
+Whether a given pair is a list depends upon what is stored in the cdr
+field.  When the //set-cdr!// procedure is used, an object can be a
+list one moment and not the next:
+
+{{{code: lang="plaintext" linenumbers="True"
+
+(define x (list 'a 'b 'c))
+(define y x)
+y                                       @result{} (a b c)
+(list? y)                               @result{} #t
+(set-cdr! x 4)                          @result{} @r{unspecified}
+x                                       @result{} (a . 4)
+(eqv? x y)                              @result{} #t
+y                                       @result{} (a . 4)
+(list? y)                               @result{} #f
+(set-cdr! x x)                          @result{} @r{unspecified}
+(list? y)                               @result{} #f
+
+}}}
+
+
+
+A chain of pairs that doesn't end in the empty list is called an
+//improper list//.  Note that an improper list is not a list.  The
+list and dotted notations can be combined to represent improper lists,
+as the following equivalent notations show:
+
+{{{code: lang="plaintext" linenumbers="True"
+
+(a b c . d)
+(a . (b . (c . d)))
+
+}}}
+
+
+
+
+
+
+
+
+
+
+Within literal expressions and representations of objects read by the
+//read} procedure, the forms @code{'//datum////,
+//`//datum}}, @code{,@var{datum}}, and @code{,@@@var{datum////
+denote two-element lists whose first elements are the symbols
+//quote}, @code{quasiquote}, @code{unquote//, and
+//unquote-splicing//, respectively.  The second element in each case
+is //datum//.  This convention is supported so that arbitrary Scheme
+programs may be represented as lists.  Among other things, this permits
+the use of the //read// procedure to parse Scheme programs.
+
+@menu
+* Pairs::                       
+* Construction of Lists::       
+* Selecting List Components::   
+* Cutting and Pasting Lists::   
+* Filtering Lists::             
+* Searching Lists::             
+* Mapping of Lists::            
+* Reduction of Lists::          
+* Miscellaneous List Operations::  
+@end menu
+
+===== Pairs, Construction of Lists, Lists, Lists =====
+===== Pairs =====
+
+This section describes the simple operations that are available for
+constructing and manipulating arbitrary graphs constructed from pairs.
+
+==== (pair? object) ====
+
+Returns //#t} if @var{object// is a pair; otherwise returns
+//#f//.
+
+{{{code: lang="plaintext" linenumbers="True"
+
+(pair? '(a . b))                        @result{} #t
+(pair? '(a b c))                        @result{} #t
+(pair? '())                             @result{} #f
+(pair? '#(a b))                         @result{} #f
+
+}}}
+
+
+==== (cons obj1 obj2) ====
+
+
+Returns a newly allocated pair whose car is //obj1// and whose cdr is
+//obj2//.  The pair is guaranteed to be different (in the sense of
+//eqv?//) from every previously existing object.
+
+{{{code: lang="plaintext" linenumbers="True"
+
+(cons 'a '())                           @result{} (a)
+(cons '(a) '(b c d))                    @result{} ((a) b c d)
+(cons "a" '(b c))                       @result{} ("a" b c)
+(cons 'a 3)                             @result{} (a . 3)
+(cons '(a b) 'c)                        @result{} ((a b) . c)
+
+}}}
+
+
+==== (xcons obj1 obj2) ====
+(@acronym{SRFI} 1) Returns a newly allocated pair whose car is
+//obj2} and whose cdr is @var{obj1//.
+
+{{{code: lang="plaintext" linenumbers="True"
+(xcons '(b c) 'a)                       @result{} (a b c)
+}}}
+
+
+==== (car pair) ====
+
+
+Returns the contents of the car field of //pair//.  Note that it is an
+error to take the //car// of the empty list.
+
+{{{code: lang="plaintext" linenumbers="True"
+
+(car '(a b c))                          @result{} a
+(car '((a) b c d))                      @result{} (a)
+(car '(1 . 2))                          @result{} 1
+(car '())                               @error{} Illegal datum
+
+}}}
+
+
+==== (cdr pair) ====
+Returns the contents of the cdr field of //pair//.  Note that it is an
+error to take the //cdr// of the empty list.
+
+{{{code: lang="plaintext" linenumbers="True"
+
+(cdr '((a) b c d))                      @result{} (b c d)
+(cdr '(1 . 2))                          @result{} 2
+(cdr '())                               @error{} Illegal datum
+
+}}}
+
+
+==== (car+cdr pair) ====
+(@acronym{SRFI} 1) The fundamental pair deconstructor:
+
+{{{code: lang="plaintext" linenumbers="True"
+(lambda (p) (values (car p) (cdr p)))
+}}}
+
+{{{code: lang="plaintext" linenumbers="True"
+
+(receive (a b) (car+cdr (cons 1 2))
+  (write-line a)
+  (write-line b))
+@print{} 1
+@print{} 2
+
+}}}
+
+
+==== (set-car! pair object) ====
+Stores //object} in the car field of @var{pair//.  The value returned
+by //set-car!// is unspecified.
+
+{{{code: lang="plaintext" linenumbers="True"
+
+(define (f) (list 'not-a-constant-list))
+(define (g) '(constant-list))
+(set-car! (f) 3)                        @result{} @r{unspecified}
+(set-car! (g) 3)                        @error{} Illegal datum
+
+}}}
+
+
+==== (set-cdr! pair object) ====
+Stores //object} in the cdr field of @var{pair//.  The value returned
+by //set-cdr!// is unspecified.
+
+
+==== (caar pair) ====
+@deffnx procedure cadr pair
+@deffnx procedure cdar pair
+@deffnx procedure cddr pair
+@deffnx procedure caaar pair
+@deffnx procedure caadr pair
+@deffnx procedure cadar pair
+@deffnx procedure caddr pair
+@deffnx procedure cdaar pair
+@deffnx procedure cdadr pair
+@deffnx procedure cddar pair
+@deffnx procedure cdddr pair
+@deffnx procedure caaaar pair
+@deffnx procedure caaadr pair
+@deffnx procedure caadar pair
+@deffnx procedure caaddr pair
+@deffnx procedure cadaar pair
+@deffnx procedure cadadr pair
+@deffnx procedure caddar pair
+@deffnx procedure cadddr pair
+@deffnx procedure cdaaar pair
+@deffnx procedure cdaadr pair
+@deffnx procedure cdadar pair
+@deffnx procedure cdaddr pair
+@deffnx procedure cddaar pair
+@deffnx procedure cddadr pair
+@deffnx procedure cdddar pair
+@deffnx procedure cddddr pair
+These procedures are compositions of //car} and @code{cdr//; for
+example, //caddr// could be defined by
+
+{{{code: lang="plaintext" linenumbers="True"
+(define caddr (lambda (x) (car (cdr (cdr x)))))
+}}}
+
+
+==== (general-car-cdr object path) ====
+This procedure is a generalization of //car} and @code{cdr//.
+//Path} encodes a particular sequence of //car// and @code{cdr//
+operations, which //general-car-cdr} executes on @var{object//.
+//Path// is an exact non-negative integer that encodes the operations
+in a bitwise fashion: a zero bit represents a //cdr// operation, and
+a one bit represents a //car//.  The bits are executed LSB to MSB,
+and the most significant one bit, rather than being interpreted as an
+operation, signals the end of the sequence.@footnote{Note that
+//path// is restricted to a machine-dependent range, usually the size
+of a machine word.  On many machines, this means that the maximum length
+of //path// will be 30 operations (32 bits, less the sign bit and the
+``end-of-sequence'' bit).}
+
+For example, the following are equivalent:
+{{{code: lang="plaintext" linenumbers="True"
+
+(general-car-cdr //object// #b1011)
+(cdr (car (car //object//)))
+
+}}}
+
+Here is a partial table of path/operation equivalents:
+
+{{{code: lang="plaintext" linenumbers="True"
+
+#b10    cdr
+#b11    car
+#b100   cddr
+#b101   cdar
+#b110   cadr
+#b111   caar
+#b1000  cdddr
+
+}}}
+
+
+==== (tree-copy tree) ====
+
+
+(@acronym{SRFI} 1) This copies an arbitrary //tree// constructed
+from pairs, copying both the car and cdr elements of every pair.  This
+could have been defined by
+
+{{{code: lang="plaintext" linenumbers="True"
+
+(define (tree-copy tree)
+  (let loop ((tree tree))
+    (if (pair? tree)
+        (cons (loop (car tree)) (loop (cdr tree)))
+        tree)))
+
+}}}
+
+
+===== Construction of Lists, Selecting List Components, Pairs, Lists =====
+===== Construction of Lists =====
+
+
+==== (list object @dots{}) ====
+Returns a list of its arguments.
+
+{{{code: lang="plaintext" linenumbers="True"
+
+(list 'a (+ 3 4) 'c)                    @result{} (a 7 c)
+(list)                                  @result{} ()
+
+}}}
+
+These expressions are equivalent:
+
+{{{code: lang="plaintext" linenumbers="True"
+
+(list //obj1} @var{obj2} @dots{} @var{objN//)
+(cons //obj1} (cons @var{obj2} @dots{} (cons @var{objN} '()) @dots{//))
+
+}}}
+
+
+==== (make-list k [element]) ====
+(@acronym{SRFI} 1) This procedure returns a newly allocated list of
+length //k}, whose elements are all @var{element//.  If
+//element// is not supplied, it defaults to the empty list.
+
+{{{code: lang="plaintext" linenumbers="True"
+(make-list 4 'c)                        @result{} (c c c c)
+}}}
+
+
+==== (cons* object object @dots{}) ====
+
+(@acronym{SRFI} 1) //cons*} is similar to @code{list//, except that
+//cons*// conses together the last two arguments rather than
+consing the last argument with the empty list.  If the last argument
+is not a list the result is an improper list.  If the last argument is
+a list, the result is a list consisting of the initial arguments and
+all of the items in the final argument.  If there is only one
+argument, the result is the argument.
+
+{{{code: lang="plaintext" linenumbers="True"
+
+(cons* 'a 'b 'c)                        @result{} (a b . c)
+(cons* 'a 'b '(c d))                    @result{} (a b c d)
+(cons* 'a)                              @result{} a
+
+}}}
+
+These expressions are equivalent:
+
+{{{code: lang="plaintext" linenumbers="True"
+
+(cons* //obj1} @var{obj2} @dots{} @var{objN-1} @var{objN//)
+(cons //obj1} (cons @var{obj2} @dots{} (cons @var{objN-1} @var{objN}) @dots{//))
+
+}}}
+
+
+==== (list-tabulate k init-proc) ====
+@deffnx procedure make-initialized-list k init-proc
+Returns a //k}-element list.  Element @var{i// of the list, where 0
+<= //i} < @var{k}, is produced by (@var{init-proc} @var{i//).  No
+guarantee is made about the dynamic order in which //init-proc// is
+applied to these indices.
+
+{{{code: lang="plaintext" linenumbers="True"
+(list-tabulate 4 values) => (0 1 2 3)
+}}}
+
+//list-tabulate} is defined by @acronym{SRFI// 1.
+
+
+==== (list-copy list) ====
+(@acronym{SRFI} 1) Returns a newly allocated copy of //list//.  This
+copies each of the pairs comprising //list//.  This could have been
+defined by
+
+{{{code: lang="plaintext" linenumbers="True"
+
+(define (list-copy list)
+  (if (null? list)
+      '()
+      (cons (car list)
+            (list-copy (cdr list)))))
+
+}}}
+
+
+==== (iota count [start [step]]) ====
+(@acronym{SRFI} 1) Returns a list containing the elements
+
+{{{code: lang="plaintext" linenumbers="True"
+(//start} @var{start}+@var{step} @dots{} @var{start}+(@var{count}-1)*@var{step//)
+}}}
+
+//Count} must be an exact non-negative integer, while @var{start//
+and //step} can be any numbers.  The @var{start} and @var{step//
+parameters default to 0 and 1, respectively.
+
+{{{code: lang="plaintext" linenumbers="True"
+
+(iota 5) @result{} (0 1 2 3 4)
+(iota 5 0 -0.1) @result{} (0 -0.1 -0.2 -0.3 -0.4)
+
+}}}
+
+
+==== (vector->list vector) ====
+@deffnx procedure subvector->list vector start end
+
+
+//vector->list// returns a newly allocated list of the elements of
+//vector//.@* //subvector->list// returns a newly allocated list of
+the elements of the given subvector.  The inverse of //vector->list//
+is //list->vector//.
+
+{{{code: lang="plaintext" linenumbers="True"
+(vector->list '#(dah dah didah))        @result{} (dah dah didah)
+}}}
+
+
+==== (string->list string) ====
+@deffnx procedure substring->list string start end
+
+
+//string->list// returns a newly allocated list of the character
+elements of //string//.@*
+//substring->list// returns a newly allocated list of the character
+elements of the given substring.  The inverse of //string->list// is
+//list->string//.
+
+{{{code: lang="plaintext" linenumbers="True"
+
+(string->list "abcd")                   @result{} (#\a #\b #\c #\d)
+(substring->list "abcdef" 1 3)          @result{} (#\b #\c)
+
+}}}
+
+
+===== Selecting List Components, Cutting and Pasting Lists, Construction of Lists, Lists =====
+===== Selecting List Components =====
+
+
+
+==== (list? object) ====
+
+
+Returns //#t} if @var{object// is a list, otherwise returns
+//#f//.  By definition, all lists have finite length and are
+terminated by the empty list.  This procedure returns an answer even for
+circular structures.
+
+
+
+Any //object// satisfying this predicate will also satisfy exactly one
+of //pair?} or @code{null?//.
+
+{{{code: lang="plaintext" linenumbers="True"
+
+(list? '(a b c))                        @result{} #t
+(list? '())                             @result{} #t
+(list? '(a . b))                        @result{} #f
+(let ((x (list 'a)))
+  (set-cdr! x x)
+  (list? x))                            @result{} #f
+
+}}}
+
+
+==== (circular-list? object) ====
+(@acronym{SRFI} 1) Returns //#t} if @var{object// is a circular
+list, otherwise returns //#f//.
+
+{{{code: lang="plaintext" linenumbers="True"
+
+(dotted-list? (list 'a 'b 'c))          @result{} #f
+(dotted-list? (cons* 'a 'b 'c))         @result{} #t
+(dotted-list? (circular-list 'a 'b 'c)) @result{} #f
+
+}}}
+
+
+==== (dotted-list? object) ====
+(@acronym{SRFI} 1) Returns //#t} if @var{object// is an improper
+list, otherwise returns //#f//.
+
+{{{code: lang="plaintext" linenumbers="True"
+
+(circular-list? (list 'a 'b 'c))        @result{} #f
+(circular-list? (cons* 'a 'b 'c))       @result{} #f
+(circular-list? (circular-list 'a 'b 'c)) @result{} #t
+
+}}}
+
+
+==== (length list) ====
+Returns the length of //list}.  Signals an error if @var{list// isn't
+a proper list.
+
+{{{code: lang="plaintext" linenumbers="True"
+
+(length '(a b c))                       @result{} 3
+(length '(a (b) (c d e)))               @result{} 3
+(length '())                            @result{} 0
+(length (circular-list 'a 'b 'c))       @error{}
+
+}}}
+
+
+==== (length+ clist) ====
+(@acronym{SRFI} 1) Returns the length of //clist//, if it is a proper
+list.  Returns //#f} if @var{clist// is a circular list.  Otherwise
+signals an error.
+
+{{{code: lang="plaintext" linenumbers="True"
+
+(length+ (list 'a 'b 'c))               @result{} 3
+(length+ (cons* 'a 'b 'c))              @error{}
+(length+ (circular-list 'a 'b 'c))      @result{} #f
+
+}}}
+
+
+==== (null? object) ====
+
+
+Returns //#t} if @var{object// is the empty list; otherwise returns
+//#f//.
+
+{{{code: lang="plaintext" linenumbers="True"
+
+(null? '(a . b))                        @result{} #f
+(null? '(a b c))                        @result{} #f
+(null? '())                             @result{} #t
+
+}}}
+
+
+==== (list-ref list k) ====
+
+
+
+Returns the //k}th element of @var{list//, using zero-origin indexing.
+The //valid indexes// of a list are the exact non-negative integers
+less than the length of the list.  The first element of a list has index
+//0}, the second has index @code{1//, and so on.
+
+{{{code: lang="plaintext" linenumbers="True"
+
+(list-ref '(a b c d) 2)                 @result{} c
+(list-ref '(a b c d)
+          (inexact->exact (round 1.8)))
+     @result{} c
+
+}}}
+
+
+//(list-ref //list} @var{k//)// is equivalent to @code{(car
+(list-tail //list} @var{k}))//.
+
+
+==== (first list) ====
+@deffnx procedure second list
+@deffnx procedure third list
+@deffnx procedure fourth list
+@deffnx procedure fifth list
+@deffnx procedure sixth list
+@deffnx procedure seventh list
+@deffnx procedure eighth list
+@deffnx procedure ninth list
+@deffnx procedure tenth list
+Returns the specified element of //list//.  It is an error if
+//list// is not long enough to contain the specified element (for
+example, if the argument to //seventh// is a list that contains only
+six elements).
+
+
+===== Cutting and Pasting Lists, Filtering Lists, Selecting List Components, Lists =====
+===== Cutting and Pasting Lists =====
+
+
+
+==== (sublist list start end) ====
+//Start} and @var{end// must be exact integers satisfying
+
+{{{code: lang="plaintext" linenumbers="True"
+0 <= //start} <= @var{end} <= (length @var{list//)
+}}}
+
+//sublist// returns a newly allocated list formed from the elements
+of //list} beginning at index @var{start// (inclusive) and ending at
+//end// (exclusive).
+
+
+==== (list-head list k) ====
+Returns a newly allocated list consisting of the first //k// elements of
+//list}.  @var{K// must not be greater than the length of
+//list//.
+
+We could have defined //list-head// this way:
+
+{{{code: lang="plaintext" linenumbers="True"
+
+(define (list-head list k)
+  (sublist list 0 k))
+
+}}}
+
+
+==== (list-tail list k) ====
+Returns the sublist of //list} obtained by omitting the first @var{k//
+elements.  The result, if it is not the empty list, shares structure
+with //list}.  @var{K// must not be greater than the length of
+//list//.
+
+
+==== (append list @dots{}) ====
+
+Returns a list consisting of the elements of the first //list//
+followed by the elements of the other //list//s.
+
+{{{code: lang="plaintext" linenumbers="True"
+
+(append '(x) '(y))                      @result{} (x y)
+(append '(a) '(b c d))                  @result{} (a b c d)
+(append '(a (b)) '((c)))                @result{} (a (b) (c))
+(append)                                @result{} ()
+
+}}}
+
+The resulting list is always newly allocated, except that it shares
+structure with the last //list// argument.  The last argument may
+actually be any object; an improper list results if the last argument is
+not a proper list.
+
+{{{code: lang="plaintext" linenumbers="True"
+
+(append '(a b) '(c . d))                @result{} (a b c . d)
+(append '() 'a)                         @result{} a
+
+}}}
+
+
+==== (append! list @dots{}) ====
+Returns a list that is the argument //list//s concatenated together.
+The arguments are changed rather than copied.  (Compare this with
+//append//, which copies arguments rather than destroying them.)  For
+example:
+
+{{{code: lang="plaintext" linenumbers="True"
+
+(define x '(a b c))
+(define y '(d e f))
+(define z '(g h))
+(append! x y z)                         @result{} (a b c d e f g h)
+x                                       @result{} (a b c d e f g h)
+y                                       @result{} (d e f g h)
+z                                       @result{} (g h)
+
+}}}
+
+
+==== (last-pair list) ====
+Returns the last pair in //list//, which may be an improper list.
+//last-pair// could have been defined this way:
+
+{{{code: lang="plaintext" linenumbers="True"
+
+(define last-pair
+  (lambda (x)
+    (if (pair? (cdr x))
+        (last-pair (cdr x))
+        x)))
+
+}}}
+
+
+==== (except-last-pair list) ====
+@deffnx procedure except-last-pair! list
+These procedures remove the last pair from //list}.  @var{List// may
+be an improper list, except that it must consist of at least one pair.
+//except-last-pair} returns a newly allocated copy of @var{list//
+that omits the last pair.  //except-last-pair!// destructively
+removes the last pair from //list} and returns @var{list//.  If the
+cdr of //list// is not a pair, the empty list is returned by either
+procedure.
+
+
+===== Filtering Lists, Searching Lists, Cutting and Pasting Lists, Lists =====
+===== Filtering Lists =====
+
+
+
+==== (filter predicate list) ====
+(@acronym{SRFI} 1) Returns a newly allocated copy of //list//
+containing only the elements satisfying //predicate//.
+//Predicate// must be a procedure of one argument.
+
+{{{code: lang="plaintext" linenumbers="True"
+(filter odd? '(1 2 3 4 5)) @result{} (1 3 5)
+}}}
+
+
+
+The non-standard procedure //keep-matching-items// (and its alias
+//list-transform-positive//) are the same except that its arguments
+are reversed.
+
+
+==== (remove predicate list) ====
+(@acronym{SRFI} 1) Like //filter//, except that the returned list
+contains only those elements @emph{not} satisfying //predicate//.
+
+{{{code: lang="plaintext" linenumbers="True"
+(remove odd? '(1 2 3 4 5)) @result{} (2 4)
+}}}
+
+
+
+The non-standard procedure //delete-matching-items// (and its alias
+//list-transform-negative//) are the same except that its arguments
+are reversed.
+
+
+==== (partition predicate list) ====
+(@acronym{SRFI} 1) Partitions the elements of //list// with
+//predicate//, and returns two values: the list of in-elements and
+the list of out-elements.  The //list// is not disordered---elements
+occur in the result lists in the same order as they occur in the
+argument //list//. The dynamic order in which the various
+applications of //predicate// are made is not specified.  One of
+the returned lists may share a common tail with the argument
+//list//.
+
+{{{code: lang="plaintext" linenumbers="True"
+
+(partition symbol? '(one 2 3 four five 6)) => 
+    (one four five)
+    (2 3 6)
+
+}}}
+
+
+==== (filter! predicate list) ====
+@deffnx procedure remove! predicate list
+@deffnx procedure partition! predicate list
+(@acronym{SRFI} 1) Linear-update variants of //filter//,
+//remove} and @code{partition//. These procedures are allowed, but
+not required, to alter the cons cells in the argument //list// to
+construct the result lists.
+
+
+
+The non-standard procedures //keep-matching-items!// and
+//delete-matching-items!// bear a similar relationship to
+//keep-matching-items} and @code{delete-matching-items//,
+respectively.
+
+
+==== (delq element list) ====
+@deffnx procedure delv element list
+@deffnx procedure delete element list
+
+
+
+Returns a newly allocated copy of //list// with all entries equal to
+//element} removed.  //delq// uses @code{eq?// to compare
+//element} with the entries in @var{list//, //delv// uses
+//eqv?}, and @code{delete} uses @code{equal?//.
+
+
+==== (delq! element list) ====
+@deffnx procedure delv! element list
+@deffnx procedure delete! element list
+
+
+
+Returns a list consisting of the top-level elements of //list// with
+all entries equal to //element// removed.  These procedures are like
+//delq}, @code{delv}, and @code{delete// except that they
+destructively modify //list}.  //delq!// uses @code{eq?// to
+compare element with the entries in //list//, //delv!// uses
+//eqv?}, and @code{delete!} uses @code{equal?//.  Because the result
+may not be //eq?} to @var{list//, it is desirable to do something
+like //(set! x (delete! x))//.
+
+{{{code: lang="plaintext" linenumbers="True"
+
+(define x '(a b c b))
+(delete 'b x)                           @result{} (a c)
+x                                       @result{} (a b c b)
+
+(define x '(a b c b))
+(delete! 'b x)                          @result{} (a c)
+x                                       @result{} (a c)
+@r{;; Returns correct result:}
+(delete! 'a x)                          @result{} (c)
+
+@r{;; Didn't modify what x points to:}
+x                                       @result{} (a c)
+
+}}}
+
+
+==== (delete-member-procedure deletor predicate) ====
+
+
+
+
+Returns a deletion procedure similar to //delv} or @code{delete!//.
+//Deletor// should be one of the procedures //list-deletor// or
+//list-deletor!}.  @var{Predicate// must be an equivalence predicate.
+The returned procedure accepts exactly two arguments: first, an object
+to be deleted, and second, a list of objects from which it is to be
+deleted.  If //deletor// is //list-deletor//, the procedure
+returns a newly allocated copy of the given list in which all entries
+equal to the given object have been removed.  If //deletor// is
+//list-deletor!//, the procedure returns a list consisting of the
+top-level elements of the given list with all entries equal to the given
+object removed; the given list is destructively modified to produce the
+result.  In either case //predicate// is used to compare the given
+object to the elements of the given list.
+
+Here are some examples that demonstrate how
+//delete-member-procedure// could have been used to implement
+//delv} and @code{delete!//:
+
+{{{code: lang="plaintext" linenumbers="True"
+
+(define delv
+  (delete-member-procedure list-deletor eqv?))
+(define delete!
+  (delete-member-procedure list-deletor! equal?))
+
+}}}
+
+
+==== (list-deletor predicate) ====
+@deffnx procedure list-deletor! predicate
+These procedures each return a procedure that deletes elements from
+lists.  //Predicate// must be a procedure of one argument.  The
+returned procedure accepts exactly one argument, which must be a proper
+list, and applies //predicate// to each of the elements of the
+argument, deleting those for which it is true.
+
+The procedure returned by //list-deletor// deletes elements
+non-destructively, by returning a newly allocated copy of the argument
+with the appropriate elements removed.  The procedure returned by
+//list-deletor!// performs a destructive deletion.
+
+
+===== Searching Lists, Mapping of Lists, Filtering Lists, Lists =====
+===== Searching Lists =====
+
+
+==== (find predicate list) ====
+(@acronym{SRFI} 1) Returns the first element in //list// for which
+//predicate// is true; returns //#f// if it doesn't find such an
+element.  //Predicate// must be a procedure of one argument.
+
+{{{code: lang="plaintext" linenumbers="True"
+(find even? '(3 1 4 1 5 9)) => 4
+}}}
+
+Note that //find// has an ambiguity in its lookup semantics---if
+//find} returns @code{#f//, you cannot tell (in general) if it
+found a //#f} element that satisfied @var{predicate//, or if it did
+not find any element at all.  In many situations, this ambiguity
+cannot arise---either the list being searched is known not to contain
+any //#f// elements, or the list is guaranteed to have an element
+satisfying //predicate//.  However, in cases where this ambiguity
+can arise, you should use //find-tail// instead of
+//find}---@code{find-tail// has no such ambiguity:
+
+{{{code: lang="plaintext" linenumbers="True"
+
+(cond ((find-tail pred lis)
+        => (lambda (pair) @dots{})) ; Handle (CAR PAIR)
+      (else @dots{})) ; Search failed.
+
+}}}
+
+
+
+
+The non-standard //find-matching-item// procedure (and its alias
+//list-search-positive//) works identically except that its
+argument order is reversed.  //list-search-negative// is similar to
+//list-search-positive// but the sense of the predicate is
+reversed.
+
+
+==== (find-tail predicate list) ====
+(@acronym{SRFI} 1) Returns the first pair of //list// whose car
+satisfies //predicate//; returns //#f// if there's no such pair.
+//find-tail// can be viewed as a general-predicate variant of
+//memv//.
+
+
+==== (memq object list) ====
+@deffnx procedure memv object list
+@deffnx procedure member object list
+
+
+
+These procedures return the first pair of //list// whose car is
+//object}; the returned pair is always one from which @var{list// is
+composed.  If //object} does not occur in @var{list//, //#f//
+(n.b.: not the empty list) is returned.  //memq} uses @code{eq?// to
+compare //object} with the elements of @var{list//, while //memv//
+uses //eqv?} and @code{member} uses @code{equal?//.@footnote{Although
+they are often used as predicates, //memq}, @code{memv//, and
+//member// do not have question marks in their names because they
+return useful values rather than just //#t} or @code{#f}.//
+
+{{{code: lang="plaintext" linenumbers="True"
+
+(memq 'a '(a b c))                      @result{} (a b c)
+(memq 'b '(a b c))                      @result{} (b c)
+(memq 'a '(b c d))                      @result{} #f
+(memq (list 'a) '(b (a) c))             @result{} #f
+(member (list 'a) '(b (a) c))           @result{} ((a) c)
+(memq 101 '(100 101 102))               @result{} @r{unspecified}
+(memv 101 '(100 101 102))               @result{} (101 102)
+
+}}}
+
+
+==== (member-procedure predicate) ====
+Returns a procedure similar to //memq}, except that @var{predicate//,
+which must be an equivalence predicate, is used instead of //eq?//.
+This could be used to define //memv// as follows:
+
+{{{code: lang="plaintext" linenumbers="True"
+(define memv (member-procedure eqv?))
+}}}
+
+
+@need 1000
+===== Mapping of Lists, Reduction of Lists, Searching Lists, Lists =====
+===== Mapping of Lists =====
+
+
+==== (map procedure list list @dots{}) ====
+//Procedure// must be a procedure taking as many arguments as there
+are //list}s.  If more than one @var{list// is given, then they must
+all be the same length.  //map} applies @var{procedure// element-wise
+to the elements of the //list//s and returns a list of the results, in
+order from left to right.  The dynamic order in which //procedure// is
+applied to the elements of the //list//s is unspecified; use
+//for-each// to sequence side effects.
+
+{{{code: lang="plaintext" linenumbers="True"
+
+(map cadr '((a b) (d e) (g h)))           @result{} (b e h)
+(map (lambda (n) (expt n n)) '(1 2 3 4))  @result{} (1 4 27 256)
+(map + '(1 2 3) '(4 5 6))                 @result{} (5 7 9)
+(let ((count 0))
+  (map (lambda (ignored)
+         (set! count (+ count 1))
+         count)
+       '(a b c)))                         @result{} @r{unspecified}
+
+}}}
+
+
+==== (map* initial-value procedure list1 list2 @dots{}) ====
+Similar to //map//, except that the resulting list is terminated by
+//initial-value// rather than the empty list.  The following are
+equivalent:
+
+{{{code: lang="plaintext" linenumbers="True"
+
+(map //procedure} @var{list} @var{list} @dots{//)
+(map* '() //procedure} @var{list} @var{list} @dots{//)
+
+}}}
+
+
+==== (append-map procedure list list @dots{}) ====
+@deffnx procedure append-map* initial-value procedure list list @dots{}
+
+
+Similar to //map} and @code{map*//, respectively, except that the
+results of applying //procedure} to the elements of @var{list//s are
+concatenated together by //append} rather than by @code{cons//.  The
+following are equivalent, except that the former is more efficient:
+
+{{{code: lang="plaintext" linenumbers="True"
+
+(append-map //procedure} @var{list} @var{list} @dots{//)
+(apply append (map //procedure} @var{list} @var{list} @dots{//))
+
+}}}
+
+
+==== (append-map! procedure list list @dots{}) ====
+@deffnx procedure append-map*! initial-value procedure list list @dots{}
+
+
+Similar to //map} and @code{map*//, respectively, except that the
+results of applying //procedure} to the elements of @var{list//s are
+concatenated together by //append!} rather than by @code{cons//.  The
+following are equivalent, except that the former is more efficient:
+
+{{{code: lang="plaintext" linenumbers="True"
+
+(append-map! //procedure} @var{list} @var{list} @dots{//)
+(apply append! (map //procedure} @var{list} @var{list} @dots{//))
+
+}}}
+
+
+==== (for-each procedure list list @dots{}) ====
+The arguments to //for-each} are like the arguments to @code{map//,
+but //for-each} calls @var{procedure// for its side effects rather
+than for its values.  Unlike //map}, @code{for-each// is guaranteed
+to call //procedure} on the elements of the @var{list//s in order from
+the first element to the last, and the value returned by //for-each//
+is unspecified.
+
+{{{code: lang="plaintext" linenumbers="True"
+
+(let ((v (make-vector 5)))
+  (for-each (lambda (i)
+              (vector-set! v i (* i i)))
+            '(0 1 2 3 4))
+  v)                            @result{} #(0 1 4 9 16)
+
+}}}
+
+
+===== Reduction of Lists, Miscellaneous List Operations, Mapping of Lists, Lists =====
+===== Reduction of Lists =====
+
+
+==== (reduce-left procedure initial list) ====
+Combines all the elements of //list// using the binary operation
+//procedure//.  For example, using //+// one can add up all the
+elements:
+
+{{{code: lang="plaintext" linenumbers="True"
+(reduce-left + 0 list-of-numbers)
+}}}
+
+The argument //initial} is used only if @var{list// is empty; in this
+case //initial// is the result of the call to //reduce-left//.  If
+//list// has a single argument, it is returned.  Otherwise, the arguments
+are reduced in a left-associative fashion.  For example:
+
+{{{code: lang="plaintext" linenumbers="True"
+
+(reduce-left + 0 '(1 2 3 4))            @result{} 10
+(reduce-left + 0 '(1 2))                @result{} 3
+(reduce-left + 0 '(1))                  @result{} 1
+(reduce-left + 0 '())                   @result{} 0
+(reduce-left + 0 '(foo))                @result{} foo
+(reduce-left list '() '(1 2 3 4))       @result{} (((1 2) 3) 4)
+
+}}}
+
+
+==== (reduce-right procedure initial list) ====
+Like //reduce-left// except that it is right-associative.
+
+{{{code: lang="plaintext" linenumbers="True"
+(reduce-right list '() '(1 2 3 4))      @result{} (1 (2 (3 4)))
+}}}
+
+
+==== (fold-right procedure initial list) ====
+Combines all of the elements of //list// using the binary operation
+//procedure}.  Unlike //reduce-left// and @code{reduce-right//,
+//initial// is always used:
+
+{{{code: lang="plaintext" linenumbers="True"
+
+(fold-right + 0 '(1 2 3 4))             @result{} 10
+(fold-right + 0 '(foo))                 @error{} Illegal datum
+(fold-right list '() '(1 2 3 4))        @result{} (1 (2 (3 (4 ()))))
+
+}}}
+
+//Fold-right// has interesting properties because it establishes a
+homomorphism between (//cons}, @code{()}) and (@var{procedure//,
+//initial//).  It can be thought of as replacing the pairs in the
+spine of the list with //procedure// and replacing the //()// at
+the end with //initial//.  Many of the classical list-processing
+procedures can be expressed in terms of //fold-right//, at least for
+the simple versions that take a fixed number of arguments:
+
+{{{code: lang="plaintext" linenumbers="True"
+
+(define (copy-list list)
+  (fold-right cons '() list))
+
+(define (append list1 list2)
+  (fold-right cons list2 list1))
+
+(define (map p list) 
+  (fold-right (lambda (x r) (cons (p x) r)) '() list))
+
+(define (reverse items)
+  (fold-right (lambda (x r) (append r (list x))) '() items))
+
+}}}
+
+
+==== (fold-left procedure initial list) ====
+Combines all the elements of //list// using the binary operation
+//procedure}.  Elements are combined starting with @var{initial// and
+then the elements of //list// from left to right.  Whereas
+//fold-right// is recursive in nature, capturing the essence of
+//cdr}-ing down a list and then computing a result, @var{fold-left//
+is iterative in nature, combining the elements as the list is traversed.
+
+{{{code: lang="plaintext" linenumbers="True"
+
+(fold-left list '() '(1 2 3 4))         @result{} ((((() 1) 2) 3) 4)
+
+(define (length list)
+  (fold-left (lambda (sum element) (+ sum 1)) 0 list))
+
+(define (reverse items)
+  (fold-left (lambda (x y) (cons y x)) () items))
+
+}}}
+
+
+==== (any predicate list list @dots{}) ====
+(@acronym{SRFI} 1) Applies //predicate} across the @var{list//s,
+returning true if //predicate// returns true on any application.
+
+If there are @math{n} list arguments //list1} @dots{}  @var{listn//,
+then //predicate} must be a procedure taking @math{n// arguments and
+returning a boolean result.
+
+//any} applies @var{predicate// to the first elements of the
+//list// parameters.  If this application returns a true value,
+//any// immediately returns that value.  Otherwise, it iterates,
+applying //predicate} to the second elements of the @var{list//
+parameters, then the third, and so forth.  The iteration stops when a
+true value is produced or one of the lists runs out of values; in the
+latter case, //any} returns @code{#f//.  The application of
+//predicate} to the last element of the @var{list//s is a tail call.
+
+Note the difference between //find} and @code{any}---@code{find//
+returns the element that satisfied the predicate; //any// returns
+the true value that the //predicate// produced.
+
+Like //every}, @code{any//'s name does not end with a question
+mark---this is to indicate that it does not return a simple boolean
+(//#t} or @code{#f//), but a general value.
+
+{{{code: lang="plaintext" linenumbers="True"
+
+(any integer? '(a 3 b 2.7))   => #t
+(any integer? '(a 3.1 b 2.7)) => #f
+(any < '(3 1 4 1 5)
+       '(2 7 1 8 2)) => #t
+
+}}}
+
+
+The non-standard procedure //there-exists?// is similar, except
+that it takes a single list and a predicate argument, in that order.
+
+
+==== (every predicate list list @dots{}) ====
+(@acronym{SRFI} 1) Applies //predicate} across the @var{list//s,
+returning true if //predicate// returns true on every application.
+
+If there are @math{n} list arguments //list1} @dots{}  @var{listn//,
+then //predicate} must be a procedure taking @math{n// arguments and
+returning a boolean result.
+
+//every} applies @var{predicate// to the first elements of the
+//list// parameters.  If this application returns false,
+//every// immediately returns false.  Otherwise, it iterates,
+applying //predicate} to the second elements of the @var{list//
+parameters, then the third, and so forth.  The iteration stops when a
+false value is produced or one of the //list//s runs out of values.
+In the latter case, //every// returns the true value produced by
+its final application of //predicate//.  The application of
+//predicate} to the last element of the @var{list//s is a tail call.
+
+If one of the //list}s has no elements, //every// simply returns @code{#t//.
+
+Like //any}, @code{every//'s name does not end with a question
+mark---this is to indicate that it does not return a simple boolean
+(//#t} or @code{#f//), but a general value.
+
+
+
+The non-standard procedure //for-all?// is similar, except
+that it takes a single list and a predicate argument, in that order.
+
+
+===== Miscellaneous List Operations,  , Reduction of Lists, Lists =====
+===== Miscellaneous List Operations =====
+
+==== (circular-list object @dots{}) ====
+@deffnx procedure make-circular-list k [element]
+
+
+
+
+These procedures are like //list} and @code{make-list//,
+respectively, except that the returned lists are circular.
+//circular-list// could have been defined like this:
+
+{{{code: lang="plaintext" linenumbers="True"
+
+(define (circular-list . objects)
+  (append! objects objects))
+
+}}}
+
+//circular-list} is compatible with @acronym{SRFI// 1, but extended
+so that it can be called with no arguments.
+
+
+==== (reverse list) ====
+
+Returns a newly allocated list consisting of the top-level elements of
+//list// in reverse order.
+
+{{{code: lang="plaintext" linenumbers="True"
+
+(reverse '(a b c))                  @result{} (c b a)
+(reverse '(a (b c) d (e (f))))      @result{} ((e (f)) d (b c) a)
+
+}}}
+
+
+==== (reverse! list) ====
+Returns a list consisting of the top-level elements of //list// in
+reverse order.  //reverse!} is like @code{reverse//, except that it
+destructively modifies //list//.  Because the result may not be
+//eqv?} to @var{list//, it is desirable to do something like
+//(set! x (reverse! x))//.
+
+
+==== (sort sequence procedure) ====
+@deffnx procedure merge-sort sequence procedure
+@deffnx procedure quick-sort sequence procedure
+
+//Sequence} must be either a list or a vector.  @var{Procedure// must be a
+procedure of two arguments that defines a //total ordering// on the
+elements of //sequence}.  In other words, if @var{x} and @var{y// are two
+distinct elements of //sequence//, then it must be the case that
+
+{{{code: lang="plaintext" linenumbers="True"
+
+(and (//procedure} @var{x} @var{y//)
+     (//procedure} @var{y} @var{x//))
+     @result{} #f
+
+}}}
+
+If //sequence// is a list (vector), //sort// returns a newly
+allocated list (vector) whose elements are those of //sequence//,
+except that they are rearranged to be sorted in the order defined by
+//procedure}.  So, for example, if the elements of @var{sequence// are
+numbers, and //procedure// is //<//, then the resulting elements
+are sorted in monotonically nondecreasing order.  Likewise, if
+//procedure// is //>//, the resulting elements are sorted in
+monotonically nonincreasing order.  To be precise, if //x// and
+//y} are any two adjacent elements in the result, where @var{x//
+precedes //y//, it is the case that
+
+{{{code: lang="plaintext" linenumbers="True"
+
+(//procedure} @var{y} @var{x//)
+     @result{} #f
+
+}}}
+
+Two sorting algorithms are implemented: //merge-sort// and
+//quick-sort}.  The procedure @code{sort// is an alias for
+//merge-sort//.
+
+See also the definition of //sort!//.
+

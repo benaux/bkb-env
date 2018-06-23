@@ -164,7 +164,7 @@ def console_main():
     password = None
     if args != []:
         domain = sys.argv[1]
-        if sys.argv[2]:
+        if len(sys.argv) >= 3:
             password = sys.argv[2]
     elif options.clipboard_domain:
         domain = Popen(["pbpaste"], stdout=PIPE).communicate()[0]

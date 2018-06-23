@@ -1,0 +1,32 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-01-23T09:57:49+01:00
+
+====== Ocamlscript ======
+Created Monday 23 January 2017
+
+{{{code: lang="sh" linenumbers="True"
+ocaml str.cma  -I ~/.ocamllib/ prelude.cmo read.ml
+}}}
+
+
+{{{code: lang="objective-caml" linenumbers="True"
+#load "prelude.cmo";;
+
+open Prelude
+
+let rec read_all rdr =  
+   let ln = rdr() in
+	  match ln with
+	  | Some s -> print_endline s; read_all (rdr);
+	  | None -> print_endline "ff" 
+;;
+
+
+let _  = 
+   let read_next = line_reader("input.txt") in 
+   read_all read_next;
+;;
+}}}
+
+

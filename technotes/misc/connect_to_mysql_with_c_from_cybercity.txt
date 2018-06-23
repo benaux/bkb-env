@@ -1,0 +1,224 @@
+
+
+# Howto: Connect MySQL server using C program API under Linux or UNIX
+
+
+
+   [8]: http://www.cyberciti.biz/tips/about-us
+   [9]: http://www.cyberciti.biz/tips/linux-unix-connect-mysql-c-api-program.html#comments
+
+[![][10]][11]
+
+   [10]: http://files.cyberciti.biz/cbzcache/3rdparty/mysqllogo.gif
+   [11]: /tips/category/mysql/ (See all MySQL Database Server related tips/articles)
+
+From my mailbag:
+
+> How do I write a C program to connect MySQL database server?
+
+MySQL database does support C program API just like [PHP][12] or [perl][13].
+
+   [12]: http://www.cyberciti.biz/faq/how-to-connect-to-my-mysql-database-server-using-command-line-and-php/
+   [13]: http://www.cyberciti.biz/faq/how-to-access-mysql-database-using-perl/
+
+The C API code is distributed with MySQL. It is included in the mysqlclient library and allows C programs to access a database.
+
+Many of the clients in the MySQL source distribution are written in C. If you are looking for examples that demonstrate how to use the C API, take a look at these clients. You can find these in the clients directory in the MySQL source distribution.
+
+### Requirements
+
+Make sure you have development environment installed such as gcc, mysql development package etc. Following is the list summarize the list of packages to compile program:
+
+  * **mysql**: MySQL client programs and shared library
+  * **mysqlclient**: Backlevel MySQL shared libraries (old libs)
+  * **mysql-devel**: Files for development of MySQL applications (a must have)
+  * **mysql-server**: Mysql server itself
+  * **gcc, make and other development libs**: GNU C compiler
+
+### Sample C Program
+
+Following instructions should work on any Linux distro or UNIX computer. Here is the small program that connects to mysql server and list tables from mysql database.([download link][14]):
+    
+       [14]: http://www.cyberciti.biz/files/mysql-c-api.c.txt
+
+_/* Simple C program that connects to MySQL Database server*/_
+    **#include** <mysql.h>
+    **#include** <stdio.h>
+    **main**() {
+       MYSQL *conn;
+       MYSQL_RES *res;
+       MYSQL_ROW row;
+       char *server = "localhost";
+       char *user = "root";
+       char *password = "PASSWORD"; _/* set me first */_
+       char *database = "mysql";
+       conn = **mysql_init**(NULL);
+       _/* Connect to database */_
+       **if** (!**mysql_real_connect**(conn, server,
+             user, password, database, 0, NULL, 0)) {
+          **fprintf**(stderr, "%s\n", **mysql_error**(conn));
+          **exit**(1);
+       }
+       _/* send SQL query */_
+       **if** (**mysql_query**(conn, "show tables")) {
+          **fprintf**(stderr, "%s\n", **mysql_error**(conn));
+          **exit**(1);
+       }
+       res = **mysql_use_result**(conn);
+       _/* output table name */_
+       **printf**("MySQL Tables in mysql database:\n");
+       **while** ((row = **mysql_fetch_row**(res)) != NULL)
+          **printf**("%s \n", row[0]);
+       _/* close connection */_
+       **mysql_free_result**(res);
+       **mysql_close**(conn);
+    }
+    
+
+### How do I compile and link program against MySQL libs?
+
+MySQL comes with a special script called mysql_config. It provides you with useful information for compiling your MySQL client and connecting it to MySQL database server. You need to use following two options.  
+Pass **--libs** option - Libraries and options required to link with the MySQL client library.
+
+`$ mysql_config --libs`  
+Output:
+    
+    -L/usr/lib64/mysql -lmysqlclient -lz -lcrypt -lnsl -lm -L/usr/lib64 -lssl -lcrypto
+
+Pass **--cflags** option - Compiler flags to find include files and critical compiler flags and defines used when compiling the libmysqlclient library.  
+`$ mysql_config --cflags`  
+Output:
+    
+    -I/usr/include/mysql -g -pipe -m64 -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -fno-strict-aliasing
+
+You need to pass above option to GNU C compiler i.e. gcc. So to compile above program, enter:  
+`$ **gcc -o output-file $(mysql_config --cflags) mysql-c-api.c $(mysql_config --libs)**`  
+Now execute program:  
+`$ ./output-file`  
+Output:
+    
+    MySQL Tables in mysql database:
+    columns_priv
+    db
+    func
+    help_category
+    help_keyword
+    help_relation
+    help_topic
+    host
+    tables_priv
+    time_zone
+    time_zone_leap_second
+    time_zone_name
+    time_zone_transition
+    time_zone_transition_type
+    user 
+
+### References:
+
+  * [MySQL C API][15] - A must read - official MySQL C API documentation
+
+   [15]: http://dev.mysql.com/doc/refman/5.0/en/c.html
+
+  * [Tweet][16]
+  * googletag.display('div-gpt-ad-1338629990428-3');
+
+   [16]: https://twitter.com/share
+   [17]: http://www.cyberciti.biz/tips/top-linux-monitoring-tools.html
+   [18]: http://www.cyberciti.biz/tips/linux-security.html
+   [19]: /tips/linux-iptables-examples.html
+   [20]: http://s0.cyberciti.org/static/legacy/i/new_post.png
+   [21]: http://www.cyberciti.biz/tips/my-10-unix-command-line-mistakes.html
+   [22]: /tips/php-security-best-practices-tutorial.html
+   [23]: http://www.cyberciti.biz/tips/linux-laptop.html
+   [24]: http://www.cyberciti.biz/tips/download-email-client-for-linux-mac-osx-windows.html
+   [25]: http://www.cyberciti.biz/tips/linux-unix-bsd-openssh-server-best-practices.html
+   [26]: http://www.cyberciti.biz/tips/open-source-project-management-software.html
+   [27]: http://s0.cyberciti.org/images/ads/468x60_VL12AFF7.jpg (Use code VL12AFF7 to get 20% discount)
+   [28]: #respond
+   [29]: #comment-139862 (Permalink to this comment)
+   [30]: #comment-139964 (Permalink to this comment)
+   [31]: #comment-140124 (Permalink to this comment)
+   [32]: #comment-140125 (Permalink to this comment)
+   [33]: #comment-140456 (Permalink to this comment)
+   [34]: #comment-140459 (Permalink to this comment)
+   [35]: #comment-140699 (Permalink to this comment)
+   [36]: #comment-140700 (Permalink to this comment)
+   [37]: http://dev.mysql.com/doc/refman/5.0/en/mysql-real-connect.html
+   [38]: #comment-141435 (Permalink to this comment)
+   [39]: #comment-141828 (Permalink to this comment)
+   [40]: #comment-142015 (Permalink to this comment)
+   [41]: #comment-142082 (Permalink to this comment)
+   [42]: #comment-142822 (Permalink to this comment)
+   [43]: #comment-142982 (Permalink to this comment)
+   [44]: http://danga.com/memcached/apis.bml
+   [45]: #comment-143298 (Permalink to this comment)
+   [46]: #comment-143388 (Permalink to this comment)
+   [47]: #comment-143432 (Permalink to this comment)
+   [48]: #comment-143453 (Permalink to this comment)
+   [49]: #comment-143676 (Permalink to this comment)
+   [50]: #comment-144857 (Permalink to this comment)
+   [51]: #comment-145271 (Permalink to this comment)
+   [52]: #comment-146229 (Permalink to this comment)
+   [53]: #comment-146778 (Permalink to this comment)
+   [54]: http://dev.mysql.com/doc/refman/5.0/en/resetting-permissions.html
+   [55]: #comment-147504 (Permalink to this comment)
+   [56]: #comment-148389 (Permalink to this comment)
+   [57]: #comment-148390 (Permalink to this comment)
+   [58]: #comment-148479 (Permalink to this comment)
+   [59]: #comment-148563 (Permalink to this comment)
+   [60]: #comment-148618 (Permalink to this comment)
+   [61]: #comment-148911 (Permalink to this comment)
+   [62]: #comment-149244 (Permalink to this comment)
+   [63]: #comment-149875 (Permalink to this comment)
+   [64]: #comment-150750 (Permalink to this comment)
+   [65]: #comment-151013 (Permalink to this comment)
+   [66]: #comment-151097 (Permalink to this comment)
+   [67]: #comment-151104 (Permalink to this comment)
+   [68]: #comment-151122 (Permalink to this comment)
+   [69]: #comment-151840 (Permalink to this comment)
+   [70]: #comment-151841 (Permalink to this comment)
+   [71]: #comment-152732 (Permalink to this comment)
+   [72]: #comment-152855 (Permalink to this comment)
+   [73]: #comment-153945 (Permalink to this comment)
+   [74]: #comment-156164 (Permalink to this comment)
+   [75]: #comment-156177 (Permalink to this comment)
+   [76]: #comment-156783 (Permalink to this comment)
+   [77]: #comment-156785 (Permalink to this comment)
+   [78]: #comment-158682 (Permalink to this comment)
+   [79]: #comment-158788 (Permalink to this comment)
+   [80]: #comment-159297 (Permalink to this comment)
+   [81]: #comment-159910 (Permalink to this comment)
+   [82]: #comment-161011 (Permalink to this comment)
+   [83]: #comment-163003 (Permalink to this comment)
+   [84]: #comment-164598 (Permalink to this comment)
+   [85]: #comment-169824 (Permalink to this comment)
+   [86]: #comment-170336 (Permalink to this comment)
+   [87]: #comment-170349 (Permalink to this comment)
+   [88]: #comment-170457 (Permalink to this comment)
+   [89]: #comment-170458 (Permalink to this comment)
+   [90]: #comment-170853 (Permalink to this comment)
+   [91]: #comment-170854 (Permalink to this comment)
+   [92]: #comment-171640 (Permalink to this comment)
+   [93]: #comment-172628 (Permalink to this comment)
+   [94]: #comment-172641 (Permalink to this comment)
+   [95]: #comment-172884 (Permalink to this comment)
+   [96]: #comment-172917 (Permalink to this comment)
+   [97]: #comment-172949 (Permalink to this comment)
+   [98]: #comment-172982 (Permalink to this comment)
+   [99]: #comment-173361 (Permalink to this comment)
+   [100]: #comment-173408 (Permalink to this comment)
+   [101]: #comment-173410 (Permalink to this comment)
+   [102]: #comment-173411 (Permalink to this comment)
+   [103]: #comment-174903 (Permalink to this comment)
+   [104]: #comment-175030 (Permalink to this comment)
+   [105]: #comment-175414 (Permalink to this comment)
+   [106]: #comment-175641 (Permalink to this comment)
+   [107]: #comment-175713 (Permalink to this comment)
+   [108]: mailto:sabarinathan67@gmail.com
+   [109]: #comment-179184 (Permalink to this comment)
+   [110]: #comment-179185 (Permalink to this comment)
+   [111]: #comment-179586 (Permalink to this comment)
+
+  *[May 31, 2007]: 2007-05-31
+  *[October 8, 2007]: 2007-10-08

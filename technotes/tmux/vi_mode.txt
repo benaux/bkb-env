@@ -1,0 +1,21 @@
+Vi Mode in Tmux
+---------------
+
+In version 2.3 and below, the syntax is different:
+
+   list-keys -t vi-copy
+
+This will bring up a complete list of the vi-like functionality available to you in this mode.
+
+Copy paste:
+
+   bind-key -t vi-copy 'v' begin-selection
+   bind-key -t vi-copy 'y' copy-selection
+
+
+move like in vim use hjkl, Ctrl+D/Ctrl+U(PageDown/Up) in the tmux scroll mode. Even more, you can use / to search
+
+   setw -g mode-keys vi
+   set -g status-keys vi
+   bind-key -t vi-edit Up   history-up
+   bind-key -t vi-edit Down history-down

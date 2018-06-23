@@ -1,0 +1,73 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-01-25T18:17:08+01:00
+
+====== Scheme ======
+Created Wednesday 25 January 2017
+
+===== Tools =====
+
+=== scmindent ===
+https://github.com/ds26gte/scmindent
+
+==== Libraries ====
+
+=== gambit-match-structure ===
+https://github.com/dminor/gambit-match-structure
+
+=== gerbil scheme: ===
+ https://github.com/vyzo/gerbil
+
+=== clj-scheme ===
+Clojure features implemented on top of Gambit Scheme and wrappers to C-libraries. https://github.com/caiorss/clj-scheme
+
+===== Languages =====
+
+==== scheme2lua ====
+https://github.com/Dockheas23/scheme2lua
+
+
+
+==== Named let ====
+
+{{{code: lang="scheme" linenumbers="True"
+(define (named_let)
+  (let sum (( x 5  )) ; initial value
+	(if (zero? x)
+	  0
+	  (+ x (sum (- x 1))))))
+  
+(display (named_let))
+}}}
+
+=> 15
+
+==== Letrec ====
+{{{code: lang="scheme" linenumbers="True"
+(define (letrec_sum)
+  (letrec (( sum ( lambda (x)
+	(if (zero? x)
+	  0
+	  (+ x (sum (- x 1)))))))
+   (sum 5)))
+	                          
+(display (letrec_sum))				 
+}}}
+
+
+{{{code: lang="texinfo" linenumbers="True"
+(define (my-proc)
+   (letrec ((local-proc-1 (lambda ()
+                             ...
+                             (local-proc-2)
+                             ...))
+            (local-proc-2 (lambda ()
+                             ...
+                             (local-proc-1)
+                             ...)))
+      (local-proc-1))) ; start off mutual recursion by calling local-proc-1
+}}}
+
+
+     
+

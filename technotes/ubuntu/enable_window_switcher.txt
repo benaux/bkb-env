@@ -1,0 +1,9 @@
+Ubuntu: enable window switcher in compiz
+
+
+
+
+via: http://askubuntu.com/questions/237355/no-application-switcher-in-compiz-settings-manager
+
+
+sudo apt-get install compiz-plugins-extra

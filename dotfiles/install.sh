@@ -3,7 +3,7 @@
 cwd=$(pwd)
 
 
-redir=$HOME/redir
+redir=$HOME/homebase/redir
 [ -d "$redir" ] || mkdir -p "$redir" 
 
 trash=$HOME/trash

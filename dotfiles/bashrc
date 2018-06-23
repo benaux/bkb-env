@@ -1,6 +1,13 @@
 # ~/.bashrc:  
 # - configurations for interactive Bash usage , aliases, favorite editor, config the bash prompt
 # - executed by bash for interactive non-login shells.
+
+PATH=/bin
+for p in /usr/local/bin /usr/bin /usr/sbin /sbin $HOME/aux/tools/utils $HOME/aux/tools/moreutils/bin; do
+  [ -d "$p" ] && PATH=$PATH:$p
+done
+export PATH 
+
 #
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples

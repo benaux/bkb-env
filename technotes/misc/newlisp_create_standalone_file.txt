@@ -1,0 +1,7 @@
+From [Web λ.0 - Functional programming for the Web: newLISP - Lisp for the masses](file:///Volumes/data/dataroot/imacdisc01/userdata/live/ben-jakob-libs/modulelib/ocaml/foo/Web____0___Functional_programming_for_the_Web__newLISP___Lisp_for_the_masses_/index.html):
+
+> 
+> 
+> (load "/usr/share/newlisp/util/link.lsp")
+> 
+> (link "/usr/bin/newlisp" "mycode.bin" "mycode.lsp")

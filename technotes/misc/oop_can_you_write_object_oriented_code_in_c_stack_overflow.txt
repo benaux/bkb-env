@@ -1,0 +1,2089 @@
+From <http://stackoverflow.com/questions/351733/can-you-write-object-oriented-code-in-c>:
+
+
+# [Can you write object oriented code in C?][15]
+
+
+
+Can you write object oriented code in C? Especially with regard to polymorphism.
+
+* * *
+
+See also: [http://stackoverflow.com/questions/415452/object-orientation-in-c][17]
+
+   [17]: http://stackoverflow.com/questions/415452/object-orientation-in-c
+
+
+
+@Camilo Martin: I intentionally asked _can_ not _should_. I'm not actually interested in using OOP in C. However, by seeing OO solutions in C, I/we stand to learn more about the limits and/or flexibility of C and also about creative ways to implement and use polymorphism. - [Dinah][28] Nov 24 '10 at 16:17
+
+   [28]: /users/356/dinah (9695 reputation)
+
+OO is just a pattern. Check here, it can even be done in **.bat Files:** [dirk.rave.org/chap9.txt][29] (any pattern can be applied to any programming language if you are interested enough, I think). This is good food for thought, though. And probably a lot can be learnt from applying such patterns we take for granted on languages that don't have them. - [Camilo Martin][30] Nov 24 '10 at 19:47
+
+   [29]: http://dirk.rave.org/chap9.txt
+   [30]: /users/124119/camilo-martin (1942 reputation)
+
+2
+ 
+
+GTK - 'scuse me, GObject - is actually a pretty good example of OOP (sorta) in C. So, to answer @Camilo, for C interpoliability. - [new123456][31] Dec 14 '10 at 22:59
+
+   [31]: /users/144734/new123456 (481 reputation)
+
+feedback 
+
+## 30 Answers
+
+[active][32] [oldest][33] [votes][34]
+
+   [32]: /questions/351733/can-you-write-object-oriented-code-in-c?answertab=active#tab-top (Answers with the latest activity first)
+   [33]: /questions/351733/can-you-write-object-oriented-code-in-c?answertab=oldest#tab-top (Answers in the order they were provided)
+   [34]: /questions/351733/can-you-write-object-oriented-code-in-c?answertab=votes#tab-top (Answers with the highest score first)
+
+up vote 70 down vote accepted
+
+Yes. In fact Axel Schreiner provides [his book][35] for free which covers the subject quite thoroughly. 
+
+   [35]: http://www.planetpdf.com/codecuts/pdfs/ooc.pdf
+
+[link][36]|[improve this answer][37]
+
+   [36]: /a/351756 (short permalink to this answer)
+   [37]: /posts/351756/edit
+
+edited [Mar 28 at 1:57][38]
+
+   [38]: /posts/351756/revisions (show all edits to this post)
+
+[
+
+![][39]
+
+   [39]: http://www.gravatar.com/avatar/d7903d8d8a0ef0b446d12906bc32dae8?s=32&d=identicon&r=PG
+
+][40]
+
+   [40]: /users/356/dinah
+
+[Dinah][41]  
+9,695116083
+
+   [41]: /users/356/dinah
+
+answered Dec 9 '08 at 4:12
+
+[
+
+![][42]
+
+   [42]: http://www.gravatar.com/avatar/9ef4398dea4d31268bbb3f8b9850abec?s=32&d=identicon&r=PG
+
+][43]
+
+   [43]: /users/43312/mepcotterell
+
+[mepcotterell][44]  
+1,740818
+
+   [44]: /users/43312/mepcotterell
+
+thanks for the link... looks like some exercise for the brain cells is in the offing. - [Gishu][45] Dec 9 '08 at 8:38
+
+   [45]: /users/1695/gishu (34721 reputation)
+
+7
+ 
+
+While the concepts in this book are solids, you'll lose type safety. - [diapir][46] Jun 30 '09 at 20:29
+
+   [46]: /users/108172/diapir (475 reputation)
+
+3
+ 
+
+Before what we know as design patterns, was the design pattern known as "object orientation"; same with garbage collection, and other such. They are so ingrained now, we tend to forget, when they were first being devised, it was in much the same way as with what we think of as design patterns today - [George Jempty][47] Aug 27 '10 at 22:46
+
+   [47]: /users/34806/george-jempty (2355 reputation)
+
+2
+ 
+
+The link to the book is broken. Does anybody know alternate location? Tried googling for it without success :( - [varun][48] Mar 4 at 18:06
+
+   [48]: /users/92710/varun (86 reputation)
+
+@varun: found it! - [Dinah][49] Mar 28 at 1:57
+
+   [49]: /users/356/dinah (9695 reputation)
+
+feedback 
+
+up vote 54 down vote
+
+Since you're talking about polymorphism then yes, you can, we were doing that sort of stuff years before C++ came about.
+
+Basically you use a `struct` to hold both the data and a list of function pointers to point to the relevant functions for that data.
+
+So, in a communications class, you would have an open, read, write and close call which would be maintained as four function pointers in the structure, alongside the data for an object, something like:
+    
+    typedef struct {
+        int (*open)(void *self, char *fspec);
+        int (*close)(void *self);
+        int (*read)(void *self, void *buff, size_t max_sz, size_t *p_act_sz);
+        int (*write)(void *self, void *buff, size_t max_sz, size_t *p_act_sz);
+        // And data goes here.
+    } tCommClass;
+    
+    tCommClass commRs232;
+    commRs232.open = &rs232Open;
+    : :
+    commRs232.write = &rs232Write;
+    
+    tCommClass commTcp;
+    commTcp.open = &tcpOpen;
+    : :
+    commTcp.write = &tcpWrite;
+    
+
+Of course, those code segments above would actually be in a "constructor" such as `rs232Init()`.
+
+When you 'inherit' from that class, you just change the pointers to point to your own functions. Everyone that called those functions would do it through the function pointers, giving you your polymorphism:
+    
+    int stat = (commTcp.open)(commTcp, "bigiron.box.com:5000");
+    
+
+Sort of like a manual vtable.
+
+You could even have virtual classes by setting the pointers to NULL -the behaviour would be slightly different to C++ (a core dump at run-time rather than an error at compile time).
+
+Here's a piece of sample code that demonstrates it. First the top-level class structure:
+    
+    #include <stdio.h>
+    
+    // The top-level class.
+    
+    typedef struct _tCommClass {
+        int (*open)(struct _tCommClass *self, char *fspec);
+    } tCommClass;
+    
+
+Then we have the functions for the TCP 'subclass':
+    
+    // Function for the TCP 'class'.
+    
+    static int tcpOpen (tCommClass *tcp, char *fspec) {
+        printf ("Opening TCP: %s\n", fspec);
+        return 0;
+    }
+    static int tcpInit (tCommClass *tcp) {
+        tcp->open = &tcpOpen;
+        return 0;
+    }
+    
+
+And the HTML one as well:
+    
+    // Function for the HTML 'class'.
+    
+    static int htmlOpen (tCommClass *html, char *fspec) {
+        printf ("Opening HTML: %s\n", fspec);
+        return 0;
+    }
+    static int htmlInit (tCommClass *html) {
+        html->open = &htmlOpen;
+        return 0;
+    }
+    
+
+And finally a test program to show it in action:
+    
+    // Test program.
+    
+    int main (void) {
+        int status;
+        tCommClass commTcp, commHtml;
+    
+        // Same 'base' class but initialised to different sub-classes.
+    
+        tcpInit (&commTcp);
+        htmlInit (&commHtml);
+    
+        // Called in exactly the same manner.
+    
+        status = (commTcp.open)(&commTcp, "bigiron.box.com:5000");
+        status = (commHtml.open)(&commHtml, "http://www.microsoft.com");
+    
+        return 0;
+    }
+    
+
+This produces the output:
+    
+    Opening TCP: bigiron.box.com:5000
+    Opening HTML: http://www.microsoft.com
+    
+
+so you can see that the different functions are being called, depending on the sub-class.
+
+[link][50]|[improve this answer][51]
+
+   [50]: /a/351745 (short permalink to this answer)
+   [51]: /posts/351745/edit
+
+edited [Jan 20 at 13:00][52]
+
+   [52]: /posts/351745/revisions (show all edits to this post)
+
+  
+
+
+answered Dec 9 '08 at 4:06
+
+[
+
+![][53]
+
+   [53]: http://www.gravatar.com/avatar/90577b5275e1d208483b844f91a4be3a?s=32&d=identicon&r=PG
+
+][54]
+
+   [54]: /users/14860/paxdiablo
+
+[paxdiablo][55]  
+206k25280617
+
+   [55]: /users/14860/paxdiablo
+
+8
+ 
+
+Encapsulation is pretty easy, polymorphism is doable - but inheritence is tricky - [Martin Beckett][56] Jul 19 '10 at 16:10
+
+   [56]: /users/10897/martin-beckett (43684 reputation)
+
+1
+ 
+
++1 for "...slightly different...(core dump at run-time rather than error at compile time)" - [Michael Mior][57] Oct 12 '10 at 20:06
+
+   [57]: /users/123695/michael-mior (7763 reputation)
+
+2
+ 
+
+lwn.net recently published an article titled [Object Oriented design Patterns in the kernel][58] on the subject of stucts similar to the above answer - that is, a struct containing function pointers, or a pointer to a struct that has functions that take a pointer to the struct with the data we are working with as a parameter. - [misterMatt][59] Jun 5 '11 at 0:51
+
+   [58]: http://lwn.net/SubscriberLink/444910/a13771395ae01342/
+   [59]: /users/107498/mistermatt (105 reputation)
+
+feedback 
+
+up vote 22 down vote
+
+Namespaces are often done by doing:
+    
+    stack_push(thing *)
+    
+
+instead of
+    
+    stack::push(thing *)
+    
+
+To make a c struct into something like a c++ class you can turn:
+    
+    class stack {
+         public:
+            stack();
+            void push(thing *);
+            thing * pop();
+            static int this_is_here_as_an_example_only;
+         private:
+            ...
+    };
+    
+
+Into
+    
+    struct stack {
+         struct stack_type * my_type;
+         // put the stuff that you put after private: here
+    };
+    struct stack_type {
+         void (* construct)(struct stack * this); // this takes uninitialized memory
+         struct stack * (* operator_new)(); // this allocates a new struct, passes it to construct, and then returns it
+         void (*push)(struct stack * this, thing * t); // pushing t onto this stack
+         thing * (*pop)(struct stack * this); // pops the top thing off the stack and returns it
+         int this_is_here_as_an_example_only;
+    }Stack = {
+        .construct = stack_construct,
+        .operator_new = stack_operator_new,
+        .push = stack_push,
+        .pop = stack_pop
+    };
+     // all of these functions are assumed to be defined somewhere else
+    
+
+and do:
+    
+    struct stack * st = Stack.operator_new(); // make a new stack
+    if (!st) {
+       // do something about it
+    } else {
+       // you can use the stack
+       stack_push(st, thing0); // This is a non-virtual call
+       Stack.push(st, thing1); // This is like casting *st to a Stack (which it already is) and doing the push
+       st->my_type.push(st, thing2); // This is a virtual call
+    }
+    
+
+I didn't do the destructor or delete, but it follows the same pattern.
+
+this_is_here_as_an_example_only is like a static class variable -- shared among all instances of a type. All methods are really static, except that some take a this *
+
+[link][60]|[improve this answer][61]
+
+   [60]: /a/2733004 (short permalink to this answer)
+   [61]: /posts/2733004/edit
+
+edited [Apr 28 '10 at 21:50][62]
+
+   [62]: /posts/2733004/revisions (show all edits to this post)
+
+  
+
+
+answered Apr 28 '10 at 20:42
+
+[
+
+![][63]
+
+   [63]: http://www.gravatar.com/avatar/e9d84c403343c5d7cb9d6abdb26a9a81?s=32&d=identicon&r=PG
+
+][64]
+
+   [64]: /users/299301/nategoose
+
+[nategoose][65]  
+6,216713
+
+   [65]: /users/299301/nategoose
+
+You missed `struct` in front of `stack` in the `operator_new` - [Chris Lutz][66] Apr 28 '10 at 21:40
+
+   [66]: /users/60777/chris-lutz (25180 reputation)
+
+1
+ 
+
+@Chris Lutz: Thanks. Fixed. - [nategoose][67] Apr 28 '10 at 21:50
+
+   [67]: /users/299301/nategoose (6216 reputation)
+
+feedback 
+
+up vote 19 down vote
+
+I've seen it done. I wouldn't recommend it. C++ originally started this way as a preprocessor that produced C code as an intermediate step.
+
+Essentially what you end up doing is create a dispatch table for all of your methods where you store your function references. Deriving a class would entail copying this dispatch table and replacing the entries that you wanted to override, with your new "methods" having to call the original method if it wants to invoke the base method. Eventually, you end up rewriting C++.
+
+[link][68]|[improve this answer][69]
+
+   [68]: /a/351737 (short permalink to this answer)
+   [69]: /posts/351737/edit
+
+answered Dec 9 '08 at 4:04
+
+[
+
+![][70]
+
+   [70]: http://www.gravatar.com/avatar/00aa1356e6f90fca08b36fb3c8d230c5?s=32&d=identicon&r=PG
+
+][71]
+
+   [71]: /users/12950/tvanfosson
+
+[tvanfosson][72]  
+181k21240422
+
+   [72]: /users/12950/tvanfosson
+
+1
+ 
+
+"Eventually, you end up rewriting C++" I wondered if/feared that would be the case. - [Dinah][73] Apr 14 '10 at 15:53
+
+   [73]: /users/356/dinah (9695 reputation)
+
+8
+ 
+
+Or, you might end up rewriting Objective C, which would be a much more attractive outcome. - [Amigable Clark Kant][74] Nov 5 '10 at 12:15
+
+   [74]: /users/193892/amigable-clark-kant (4968 reputation)
+
+1
+ 
+
+There is the class-less flavour of OOP, such as [in Javascript][75], where the guru says: "We don't need classes to make lots of similar objects." But I fear this is not easy to achieve in C. Not (yet) in a position to tell, though. (Is there a clone() routine to clone a struct?) - [Lumi][76] Jun 11 '11 at 21:32
+
+   [75]: http://javascript.crockford.com/prototypal.html
+   [76]: /users/269126/lumi (4398 reputation)
+
+feedback 
+
+up vote 14 down vote
+
+If you are convinced that an OOP approach is superior for the problem you are trying to solve, why would you be trying to solve it with a non-OOP language? It seems like you're using the wrong tool for the job. Use C++ or some other object-oriented C variant language.
+
+If you are asking because you are starting to code on an already existing large project written in C, then you shouldn't try to force your own (or anyone else's) OOP paradigms into the project's infrastructure. Follow the guidelines that are already present in the project. In general, clean APIs and isolated libraries and modules will go a long way towards having a clean OOP-**ish** design.
+
+If, after all this, you really are set on doing OOP C, read [this][77] (PDF).
+
+   [77]: http://www.cs.rit.edu/~ats/books/ooc.pdf
+
+[link][78]|[improve this answer][79]
+
+   [78]: /a/2732624 (short permalink to this answer)
+   [79]: /posts/2732624/edit
+
+edited [Apr 28 '10 at 19:49][80]
+
+   [80]: /posts/2732624/revisions (show all edits to this post)
+
+  
+
+
+answered Apr 28 '10 at 19:43
+
+[
+
+![][81]
+
+   [81]: http://www.gravatar.com/avatar/c2bada18aa1d16592ca1135c65e5372e?s=32&d=identicon&r=PG
+
+][82]
+
+   [82]: /users/266567/rarrrarrrarr
+
+[RarrRarrRarr][83]  
+1,21838
+
+   [83]: /users/266567/rarrrarrrarr
+
+11
+ 
+
+Not really answering the question... - [Brian Postow][84] Apr 28 '10 at 21:29
+
+   [84]: /users/53491/brian-postow (2974 reputation)
+
+1
+ 
+
+@Brian, the link to the PDF would appear to answer the question directly, although I haven't had time to check for myself. - [Mark Ransom][85] Apr 28 '10 at 21:40
+
+   [85]: /users/5987/mark-ransom (72270 reputation)
+
+2
+ 
+
+The link to the PDF appears to be an entire textbook on the subject... A beautiful proof, but it doesn't fit into the margin... - [Brian Postow][86] Apr 28 '10 at 22:46
+
+   [86]: /users/53491/brian-postow (2974 reputation)
+
+2
+ 
+
+yes, answer the question. it's perfectly valid to ask how to use a language in a particular way. there was no request for opinions on other languages.... - [Tim Ring][87] Apr 28 '10 at 23:50
+
+   [87]: /users/3685/tim-ring (697 reputation)
+
+4
+ 
+
+@Brian & Tim Ring: The question asked for _book recommendations_ on a topic; I gave him a link to a _book_ that specifically addresses this topic. I also gave my opinion on why the approach to the problem may not be optimal (which I think many people on here seem to agree with, based on votes and other comments/answers). Do you have any suggestions for improving my answer? - [RarrRarrRarr][88] Apr 29 '10 at 0:16
+
+   [88]: /users/266567/rarrrarrrarr (1218 reputation)
+
+show **1** more comment
+
+feedback 
+
+up vote 11 down vote
+
+Sure that is possible. This is what GObject, the framework where all of gtk+ and gnome are based on, does. Read this: [http://en.wikipedia.org/wiki/GObject][89].
+
+   [89]: http://en.wikipedia.org/wiki/GObject
+
+[link][90]|[improve this answer][91]
+
+   [90]: /a/351765 (short permalink to this answer)
+   [91]: /posts/351765/edit
+
+edited [Dec 9 '08 at 4:23][92]
+
+   [92]: /posts/351765/revisions (show all edits to this post)
+
+  
+
+
+answered Dec 9 '08 at 4:16
+
+[
+
+![][93]
+
+   [93]: http://www.gravatar.com/avatar/2385676760fc16f76a43f3319faaa843?s=32&d=identicon&r=PG
+
+][94]
+
+   [94]: /users/34509/johannes-schaub-litb
+
+[Johannes Schaub - litb][95]  
+156k20307603
+
+   [95]: /users/34509/johannes-schaub-litb
+
+feedback 
+
+up vote 11 down vote
+
+I believe that besides being useful in its own right, implementing OOP in C is an excellent way to **learn** OOP and understand its inner workings. Experience of many programmers has shown that to use a technique efficiently and confidently, a programmer must understand how the underlying concepts are ultimately implemented. Emulating classes, inheritance, and polymorphism in C teaches just this. 
+
+To answer the original question, here are a couple resources that teach how to do OOP in C:
+
+EmbeddedGurus.com blog post "Object-based programming in C" shows how to implement classes and single inheritance in portable C: [http://embeddedgurus.com/state-space/2008/01/object-based-programming-in-c/][96]
+
+   [96]: http://embeddedgurus.com/state-space/2008/01/object-based-programming-in-c/
+
+Application Note ""C+"—Object Oriented Programming in C" shows how to implement classes, single inheritance, and late binding (polymorphism) in C using preprocessor macros: [http://www.state-machine.com/resources/cplus_3.0_manual.pdf][97], the example code is available from [http://www.state-machine.com/resources/cplus_3.0.zip][98]
+
+   [97]: http://www.state-machine.com/resources/cplus_3.0_manual.pdf
+   [98]: http://www.state-machine.com/resources/cplus_3.0.zip
+
+[link][99]|[improve this answer][100]
+
+   [99]: /a/2734032 (short permalink to this answer)
+   [100]: /posts/2734032/edit
+
+edited [Apr 29 '10 at 1:37][101]
+
+   [101]: /posts/2734032/revisions (show all edits to this post)
+
+  
+
+
+answered Apr 29 '10 at 0:25
+
+[
+
+![][102]
+
+   [102]: http://www.gravatar.com/avatar/1d103f1f89e20bf8a366502efb466b94?s=32&d=identicon&r=PG
+
+][103]
+
+   [103]: /users/453340/miro
+
+[Miro][104]  
+57937
+
+   [104]: /users/453340/miro
+
+feedback 
+
+up vote 8 down vote
+
+Check out [GObject][105]. It's meant to be OO in C and one implementation of what you're looking for. If you really want OO though, go with C++ or some other OOP language. GObject can be really tough to work with at times if you're used to dealing with OO languages, but like anything, you'll get used to the conventions and flow.
+
+   [105]: http://library.gnome.org/devel/gobject/stable/
+
+[link][106]|[improve this answer][107]
+
+   [106]: /a/2732689 (short permalink to this answer)
+   [107]: /posts/2732689/edit
+
+answered Apr 28 '10 at 19:53
+
+[
+
+![][108]
+
+   [108]: http://www.gravatar.com/avatar/95964d9b844cacb9401adaae80972425?s=32&d=identicon&r=PG
+
+][109]
+
+   [109]: /users/263895/sb
+
+[SB.][110]  
+8,0571021
+
+   [110]: /users/263895/sb
+
+feedback 
+
+up vote 8 down vote
+
+There are several techniques that canbe used. The most important one is more how to split the project. We use in our project an interface that is declared in a .h file and the implementation of the object in a .c file. The important part is that all modules that include the .h file see only an object as a `void *`, the .c file is the only module who knows the internas of the structure.
+
+Something like that for a class we name FOO as example:
+
+in the .h file
+    
+    #ifndef FOO_H_
+    #define FOO_H_
+    
+    ... 
+     typedef struct FOO_type FOO_type;     /* That's all the rest of the program knows about FOO */
+    
+    /* Declaration of accessors, functions */
+     FOO_type *FOO_new(void);
+     void FOO_free(FOO_type *this);
+     ...
+     void FOO_dosomething(FOO_type *this, param ...):
+     char *FOO_getName(FOO_type *this, etc);
+    #endif
+    
+
+The C implementation file will be something like that
+    
+    #include <stdlib.h>
+    ...
+    #include "FOO.h"
+    
+    struct FOO_type {
+      whatever...
+    };
+    
+    
+     FOO_type *FOO_new(void)
+     {
+        FOO_type *this = calloc(1, sizeof (FOO_type));
+    
+        ...
+        FOO_dosomething(this, );
+        return this;        
+     }
+    
+
+So I give explicitly the pointer to an object to every function of that module. A C++ compiler does it implicitely, in C we write it explicitly out.
+
+I use really `this` in my programs, to make sure that my program does not compile in C++ and it has the fine property of being in another color in my syntax highlighting editor.
+
+The fields of the FOO_struct can be modified in one module and another module doesn't even need to be recompiled to be still usable. 
+
+With that style I handle already a big part of the advantages of OOP (data encapsulation). By using function pointers, it's even easy to implement something like inheritance, but honestly, it's really only rarely useful. 
+
+[link][111]|[improve this answer][112]
+
+   [111]: /a/2732876 (short permalink to this answer)
+   [112]: /posts/2732876/edit
+
+edited [Nov 7 '10 at 18:32][113]
+
+   [113]: /posts/2732876/revisions (show all edits to this post)
+
+  
+
+
+answered Apr 28 '10 at 20:26
+
+[
+
+![][114]
+
+   [114]: http://www.gravatar.com/avatar/335d838c5a8327a03c271eb9629ee8ff?s=32&d=identicon&r=PG
+
+][115]
+
+   [115]: /users/146377/tristopia
+
+[tristopia][116]  
+2,541813
+
+   [116]: /users/146377/tristopia
+
+3
+ 
+
+If you do `typedef struct FOO_type FOO_type` instead of a typedef to void in the header you get the added benefit of type checking, while still not exposing your structure. - [Scott Wales][117] Apr 29 '10 at 0:38
+
+   [117]: /users/208625/scott-wales (3189 reputation)
+
+Thank you, good tip, that was indeed a problem I had. - [tristopia][118] Apr 29 '10 at 7:43
+
+   [118]: /users/146377/tristopia (2541 reputation)
+
+feedback 
+
+up vote 7 down vote
+
+Object oriented C, can be done, I've seen that type of code in production in Korea, and it was the most horrible monster I'd seen in years (this was like last year(2007) that I saw the code). So yes it can be done, and yes people have done it before, and still do it even in this day and age. But I'd recommend C++ or Objective-C, both are languages born from C, with the purpose of providing object orientation with different paradigms. 
+
+[link][119]|[improve this answer][120]
+
+   [119]: /a/351751 (short permalink to this answer)
+   [120]: /posts/351751/edit
+
+answered Dec 9 '08 at 4:09
+
+[
+
+![][121]
+
+   [121]: http://www.gravatar.com/avatar/104a70579080479a7469762f8a11b426?s=32&d=identicon&r=PG
+
+][122]
+
+   [122]: /users/15124/robert-gould
+
+[Robert Gould][123]  
+20.2k1675171
+
+   [123]: /users/15124/robert-gould
+
+feedback 
+
+up vote 7 down vote
+
+You may find it helpful to look at Apple's documentation for its Core Foundation set of APIs. It is a pure C API, but many of the types are bridged to Objective-C object equivalents.
+
+You may also find it helpful to look at the design of Objective-C itself. It's a bit different from C++ in that the object system is defined in terms of C functions, e.g. `objc_msg_send` to call a method on an object. The compiler translates the square bracket syntax into those function calls, so you don't have to know it, but considering your question you may find it useful to learn how it works under the hood.
+
+[link][124]|[improve this answer][125]
+
+   [124]: /a/2732721 (short permalink to this answer)
+   [125]: /posts/2732721/edit
+
+answered Apr 28 '10 at 19:58
+
+[
+
+![][126]
+
+   [126]: http://www.gravatar.com/avatar/ab1d14914503d2d7f3279c3f2db4c245?s=32&d=identicon&r=PG
+
+][127]
+
+   [127]: /users/10947/benzado
+
+[benzado][128]  
+15.5k34065
+
+   [128]: /users/10947/benzado
+
+feedback 
+
+up vote 6 down vote
+
+Trivial example with a Animal and Dog, what you do is mirror C++'s vtable mechanism (largely anyway). You also separate allocation and instantiation (Animal_Alloc, Animal_New) so we don't call malloc() multiple times. We must also explicitly pass the this pointer around.
+
+If you were to do non virtual functions, that's trival. You just don't add them to the vtable and static functions don't require a this pointer. Multiple inheritance generally requires multiple vtables to resolve ambiguities. 
+
+Also, you should be able to use setjmp/longjmp to do exception handling.
+    
+    struct Animal_Vtable{
+    	typedef void (*Walk_Fun)(struct Animal *a_This);
+    	typedef struct Animal * (*Dtor_Fun)(struct Animal *a_This);
+    
+    	Walk_Fun Walk;
+    	Dtor_Fun Dtor;
+    };
+    
+    struct Animal{
+    	Animal_Vtable vtable;
+    
+    	char *Name;
+    };
+    
+    struct Dog{
+    	Animal_Vtable vtable;
+    
+    	char *Name; // mirror member variables for easy access
+    	char *Type;
+    };
+    
+    void Animal_Walk(struct Animal *a_This){
+    	printf("Animal (%s) walking\n", a_This->Name);
+    }
+    
+    struct Animal* Animal_Dtor(struct Animal *a_This){
+    	printf("animal::dtor\n");
+    	return a_This;
+    }
+    
+    Animal *Animal_Alloc(){
+    	return (Animal*)malloc(sizeof(Animal));
+    }
+    
+    Animal *Animal_New(Animal *a_Animal){
+    	a_Animal->vtable.Walk = Animal_Walk;
+    	a_Animal->vtable.Dtor = Animal_Dtor;
+    	a_Animal->Name = "Anonymous";
+    	return a_Animal;
+    }
+    
+    void Animal_Free(Animal *a_This){
+    	a_This->vtable.Dtor(a_This);
+    
+    	free(a_This);
+    }
+    
+    void Dog_Walk(struct Dog *a_This){
+    	printf("Dog walking %s (%s)\n", a_This->Type, a_This->Name);
+    }
+    
+    Dog* Dog_Dtor(struct Dog *a_This){
+    	// explicit call to parent destructor
+    	Animal_Dtor((Animal*)a_This);
+    
+    	printf("dog::dtor\n");
+    
+    	return a_This;
+    }
+    
+    Dog *Dog_Alloc(){
+    	return (Dog*)malloc(sizeof(Dog));
+    }
+    
+    Dog *Dog_New(Dog *a_Dog){
+    	// explict call to parent constructor
+    	Animal_New((Animal*)a_Dog);
+    
+    	a_Dog->Type = "Dog type";
+    	a_Dog->vtable.Walk = (Animal_Vtable::Walk_Fun) Dog_Walk;
+    	a_Dog->vtable.Dtor = (Animal_Vtable::Dtor_Fun) Dog_Dtor;
+    
+    	return a_Dog;
+    }
+    
+    int main(int argc, char **argv){
+    	/* 
+    	base class: 
+    	Animal *a_Animal = Animal_New(Animal_Alloc());
+    	*/
+    	Animal *a_Animal = (Animal*)Dog_New(Dog_Alloc());
+    
+    	a_Animal->vtable.Walk(a_Animal);
+    
+    	Animal_Free(a_Animal);
+    }
+    
+
+PS. This is tested on a C++ compiler, but it should be easy to make it work on a C compiler.
+
+[link][129]|[improve this answer][130]
+
+   [129]: /a/352364 (short permalink to this answer)
+   [130]: /posts/352364/edit
+
+answered Dec 9 '08 at 10:45
+
+[
+
+![][131]
+
+   [131]: http://www.gravatar.com/avatar/d2b23571aacbfc9147e634ee7154a502?s=32&d=identicon&r=PG
+
+][132]
+
+   [132]: /users/31486/jasper-bekkers
+
+[Jasper Bekkers][133]  
+4,1121027
+
+   [133]: /users/31486/jasper-bekkers
+
+feedback 
+
+up vote 6 down vote
+
+The C stdio FILE sub-library is an excellent example of how to create abstraction, encapsulation, and modularity in unadulterated C. 
+
+Inheritance and polymorphism - the other aspects often considered essential to OOP - do not necessarily provide the productivity gains they promise and [reasonable][134] [arguments][135] have [been made][136] that they can actually hinder development and thinking about the problem domain.
+
+   [134]: http://www.faqs.org/docs/artu/unix_and_oo.html
+   [135]: http://codingexperiments.com/why-i-dislike-c/
+   [136]: http://en.wikipedia.org/wiki/Circle-ellipse_problem
+
+[link][137]|[improve this answer][138]
+
+   [137]: /a/2734564 (short permalink to this answer)
+   [138]: /posts/2734564/edit
+
+answered Apr 29 '10 at 3:09
+
+[
+
+![][139]
+
+   [139]: http://www.gravatar.com/avatar/b512058437c392e361e5378fa39a2f63?s=32&d=identicon&r=PG
+
+][140]
+
+   [140]: /users/282912/msw
+
+[msw][141]  
+15.3k11433
+
+   [141]: /users/282912/msw
+
+feedback 
+
+up vote 5 down vote
+
+Yes, you can. People were writing Object Oriented C before C++ or Objective C came on the scene. Both C++ and Objective C were, in parts, attempts to take some of the OO concepts used in C and formalize them as part of the language. 
+
+Here's a really simple program that shows how you can make something that looks-like/is a method call (there are better ways to do this, this is just proof the language supports the concepts)
+    
+    #include<stdio.h>
+    
+    struct foobarbaz{
+        int one;
+        int two;
+        int three;
+        int (*exampleMethod)(int, int);
+    };
+    
+    int addTwoNumbers(int a, int b){
+        return a+b;
+    }
+    
+    int main()
+    {  
+        //define the function pointer    
+        int (*pointerToFunction)(int, int) = addTwoNumbers;         
+    
+        //lets make sure we can call the pointer
+        int test = (*pointerToFunction)(12,12); 
+        printf ("test: %u \n",  test);
+    
+        //now, define an instance of our struct
+        //and add some default values
+        struct foobarbaz fbb;
+        fbb.one   = 1;
+        fbb.two   = 2;
+        fbb.three = 3;   
+    
+        //now add a "method"
+        fbb.exampleMethod = addTwoNumbers;
+    
+        //try calling the method
+        int test2 = fbb.exampleMethod(13,36);    
+        printf ("test2: %u \n",  test2);   
+    
+        printf("\nDone\n");
+        return 0;
+    }
+    
+
+[link][142]|[improve this answer][143]
+
+   [142]: /a/351766 (short permalink to this answer)
+   [143]: /posts/351766/edit
+
+answered Dec 9 '08 at 4:17
+
+[
+
+![][144]
+
+   [144]: http://www.gravatar.com/avatar/e5abe1d27b286199c319b0cbe75596c3?s=32&d=identicon&r=PG
+
+][145]
+
+   [145]: /users/4668/alan-storm
+
+[Alan Storm][146]  
+41.7k1681162
+
+   [146]: /users/4668/alan-storm
+
+feedback 
+
+up vote 5 down vote
+
+You might want to look at the answers to this question: [What techniques/strategies do people use for building objects in C (not C++)?][147]
+
+   [147]: http://stackoverflow.com/questions/1225844/what-techniques-strategies-do-people-use-for-building-objects-in-c-not-c
+
+[link][148]|[improve this answer][149]
+
+   [148]: /a/2733555 (short permalink to this answer)
+   [149]: /posts/2733555/edit
+
+answered Apr 28 '10 at 22:31
+
+[
+
+![][150]
+
+   [150]: http://www.gravatar.com/avatar/b039a6683550d74705f9d00dcd24b6b7?s=32&d=identicon&r=PG
+
+][151]
+
+   [151]: /users/52210/dale-hagglund
+
+[Dale Hagglund][152]  
+4,033517
+
+   [152]: /users/52210/dale-hagglund
+
+feedback 
+
+up vote 5 down vote
+
+This has been interesting to read. I have been pondering the same question myself, and the benefits of thinking about it are this:
+
+  * Trying to imagine how to implement OOp concepts in a non-oop language helps me understand the strengths of the OOp language (in my case, C++). This helps give me better judgement about whether to use C or C++ for a given type of application -- where the benefits of one out-weighs the other.
+
+  * In my browsing the web for information and opinions on this I found an author who was writing code for an embedded processor and only had a C compiler available: [http://www.eetimes.com/discussion/other/4024626/Object-Oriented-C-Creating-Foundation-Classes-Part-1][153] In his case, analyzing and adapting OOP concepts in plain C was a valid pursuit. It appears he was open to sacrificing some OOP concepts due to the performance overhead hit resulting from attempting to implement them in C.
+
+   [153]: http://www.eetimes.com/discussion/other/4024626/Object-Oriented-C-Creating-Foundation-Classes-Part-1
+
+The lesson I've taken is, yes it can be done to a certain degree, and yes, there are some good reasons to attempt it.
+
+In the end the machine is twiddling stack pointer bits, making the program counter jump around and calculating memory access operations. From the efficiency standpoint, the less of these calculations done by your program, the better... but sometimes we have to pay this tax simply so we can organize our program in a way that makes it least susceptible to human error. The OOP language compiler strives to optimize both aspects. The programmer has to be much more careful implementing these concepts in a language like C.
+
+[link][154]|[improve this answer][155]
+
+   [154]: /a/6378494 (short permalink to this answer)
+   [155]: /posts/6378494/edit
+
+edited [Jun 17 '11 at 12:16][156]
+
+   [156]: /posts/6378494/revisions (show all edits to this post)
+
+[
+
+![][157]
+
+   [157]: http://www.gravatar.com/avatar/d7903d8d8a0ef0b446d12906bc32dae8?s=32&d=identicon&r=PG
+
+][158]
+
+   [158]: /users/356/dinah
+
+[Dinah][159]  
+9,695116083
+
+   [159]: /users/356/dinah
+
+answered Jun 16 '11 at 20:56
+
+[
+
+![][160]
+
+   [160]: http://www.gravatar.com/avatar/e2be53edce5ad6eb366a91d38699ee31?s=32&d=identicon&r=PG
+
+][161]
+
+   [161]: /users/802290/rjb
+
+[RJB][162]  
+6111
+
+   [162]: /users/802290/rjb
+
+feedback 
+
+up vote 4 down vote
+
+You can fake it using function pointers, and in fact, I think it is theoretically possible to compile C++ programs into C.
+
+However, it rarely makes sense to force a paradigm on a language rather than to pick a language that uses a paradigm.
+
+[link][163]|[improve this answer][164]
+
+   [163]: /a/351743 (short permalink to this answer)
+   [164]: /posts/351743/edit
+
+answered Dec 9 '08 at 4:05
+
+[
+
+![][165]
+
+   [165]: http://www.gravatar.com/avatar/ad19b9146f4ffd608bf137323f68de0c?s=32&d=identicon&r=PG
+
+][166]
+
+   [166]: /users/23072/uri
+
+[Uri][167]  
+40k573187
+
+   [167]: /users/23072/uri
+
+3
+ 
+
+The very first C++ compiler did exactly that - it converted the C++ code into equivalent (but ugly and non-human-readable) C code, which was then compiled by the C compiler. - [Adam Rosenfield][168] Dec 9 '08 at 6:05
+
+   [168]: /users/9530/adam-rosenfield (95005 reputation)
+
+EDG, Cfront and some others are still capable of doing this. With a very good reason: not every platform has a C++ compiler. - [Jasper Bekkers][169] Dec 9 '08 at 9:50
+
+   [169]: /users/31486/jasper-bekkers (4112 reputation)
+
+For some reason I thought that C-front only supported certain C++ extensions (e.g., references) but not full OOP / dynamic dispatch emulation. - [Uri][170] Dec 9 '08 at 20:15
+
+   [170]: /users/23072/uri (39989 reputation)
+
+1
+ 
+
+You can also do the same thing with LLVM and the C backend. - [Zifre][171] Mar 31 '09 at 17:47
+
+   [171]: /users/83871/zifre (10672 reputation)
+
+feedback 
+
+up vote 4 down vote
+
+There is an example of inheritance using C in Jim Larson's 1996 talk given at the [Section 312 Programming Lunchtime Seminar][172] here: [High and Low-Level C][173].
+
+   [172]: http://www.jetcafe.org/~jim/index.html
+   [173]: http://www.jetcafe.org/~jim/highlowc.html
+
+[link][174]|[improve this answer][175]
+
+   [174]: /a/351757 (short permalink to this answer)
+   [175]: /posts/351757/edit
+
+edited [Dec 9 '08 at 4:50][176]
+
+   [176]: /posts/351757/revisions (show all edits to this post)
+
+  
+
+
+answered Dec 9 '08 at 4:12
+
+[
+
+![][177]
+
+   [177]: http://www.gravatar.com/avatar/69c9c303f0e3c546dd4e11cbd1c36322?s=32&d=identicon&r=PG
+
+][178]
+
+   [178]: /users/1491/judge-maygarden
+
+[Judge Maygarden][179]  
+11.2k12047
+
+   [179]: /users/1491/judge-maygarden
+
+feedback 
+
+up vote 4 down vote
+
+Of course, it just won't be a pretty as using a language with built in support. I've even written "object oriented assembler".
+
+[link][180]|[improve this answer][181]
+
+   [180]: /a/417694 (short permalink to this answer)
+   [181]: /posts/417694/edit
+
+answered Jan 6 '09 at 18:51
+
+[
+
+![][182]
+
+   [182]: http://www.gravatar.com/avatar/333b8a55b9164038b686c9751006674d?s=32&d=identicon&r=PG
+
+][183]
+
+   [183]: /users/22704/darron
+
+[Darron][184]  
+8,77821138
+
+   [184]: /users/22704/darron
+
+feedback 
+
+up vote 4 down vote
+
+[Object Oriented Programming in C][185] by Laurent Deniau
+
+   [185]: http://ldeniau.web.cern.ch/ldeniau/html/oopc.html
+
+[link][186]|[improve this answer][187]
+
+   [186]: /a/702193 (short permalink to this answer)
+   [187]: /posts/702193/edit
+
+answered Mar 31 '09 at 17:42
+
+John  
+
+
+feedback 
+
+up vote 4 down vote
+
+> Which articles or books are good to use OOP concepts in C?
+
+Dave Hanson's [C Interfaces and Implementations][188] is _excellent_ on encapsulation and naming and very good on use of function pointers. Dave does not try to simulate inheritance.
+
+   [188]: http://www.cs.princeton.edu/software/cii/
+
+[link][189]|[improve this answer][190]
+
+   [189]: /a/2734471 (short permalink to this answer)
+   [190]: /posts/2734471/edit
+
+answered Apr 29 '10 at 2:38
+
+[
+
+![][191]
+
+   [191]: http://www.gravatar.com/avatar/7dd45a27a5616b8a5608b84007e4e08f?s=32&d=identicon&r=PG
+
+][192]
+
+   [192]: /users/41661/norman-ramsey
+
+[Norman Ramsey][193]  
+82.1k14140301
+
+   [193]: /users/41661/norman-ramsey
+
+feedback 
+
+up vote 3 down vote
+
+One thing you might want to do is look into the implementation of the Xt toolkit for xwindows. Sure it is getting long in the tooth but many of the structures used were designed to work in an OO fashion within traditional C. Generally this means adding an extra layer of indirection here and there and designing structures to lay over each other.
+
+You can really do lots in the way of OO situated in C this way, even though it feels like it some times, OO concepts did not spring fully formed from the mind of `#include<favorite_OO_Guru.h>` they really constituted many of the established best practice of the time. OO languages and systems only distilled and amplified parts of the programing zeitgeist of the day.
+
+[link][194]|[improve this answer][195]
+
+   [194]: /a/2733194 (short permalink to this answer)
+   [195]: /posts/2733194/edit
+
+edited [Jul 19 '10 at 16:07][196]
+
+   [196]: /posts/2733194/revisions (show all edits to this post)
+
+[
+
+![][197]
+
+   [197]: http://www.gravatar.com/avatar/d7903d8d8a0ef0b446d12906bc32dae8?s=32&d=identicon&r=PG
+
+][198]
+
+   [198]: /users/356/dinah
+
+[Dinah][199]  
+9,695116083
+
+   [199]: /users/356/dinah
+
+answered Apr 28 '10 at 21:17
+
+[
+
+![][200]
+
+   [200]: http://www.gravatar.com/avatar/0ee686cc30cd34737b296f2715ea729c?s=32&d=identicon&r=PG
+
+][201]
+
+   [201]: /users/321496/ukko
+
+[Ukko][202]  
+1,380415
+
+   [202]: /users/321496/ukko
+
+feedback 
+
+up vote 3 down vote
+
+I propose to use Objective-C, which is a superset of C. 
+
+While Objective-C is 30 years old, it allows to write elegant code.
+
+[http://en.wikipedia.org/wiki/Objective-C][203]
+
+   [203]: http://en.wikipedia.org/wiki/Objective-C
+
+[link][204]|[improve this answer][205]
+
+   [204]: /a/3588601 (short permalink to this answer)
+   [205]: /posts/3588601/edit
+
+answered Aug 27 '10 at 22:42
+
+[
+
+![][206]
+
+   [206]: http://www.gravatar.com/avatar/2df2dcbb2cc4d6ad0f0f50f58efc5f41?s=32&d=identicon&r=PG
+
+][207]
+
+   [207]: /users/433392/steap
+
+[SteAp][208]  
+2,7621418
+
+   [208]: /users/433392/steap
+
+feedback 
+
+up vote 3 down vote
+
+A little ooc code to add
+    
+    #include <stdio.h>
+    
+    struct Node {
+        int somevar;
+    };
+    
+    void print() {
+        printf("Hello from Object-Oriented C method!");
+    };
+    
+    struct Tree {
+        struct Node * NIL;
+        void (*FPprint)(void);  
+        struct Node *root;
+        struct Node NIL_t;
+     } TreeA = {&TreeA.NIL_t,print};
+    
+    
+    
+    
+    int main()
+    {
+    
+        struct Tree TreeB;
+        TreeB = TreeA;
+        TreeB.FPprint();
+        return 0;
+    }
+    
+
+[link][209]|[improve this answer][210]
+
+   [209]: /a/7263545 (short permalink to this answer)
+   [210]: /posts/7263545/edit
+
+answered Aug 31 '11 at 21:18
+
+[
+
+![][211]
+
+   [211]: http://www.gravatar.com/avatar/88df4fd9e84b24c6b7fc2243ffadbe71?s=32&d=identicon&r=PG
+
+][212]
+
+   [212]: /users/922475/annoying-squid
+
+[annoying_squid][213]  
+1416
+
+   [213]: /users/922475/annoying-squid
+
+feedback 
+
+up vote 3 down vote
+
+I've been digging this for one year,
+
+for the GObject sys is hard to use with pure c, I tried to write some nice marcos to ease the oo style with c.
+    
+    #include "OOStd.h"
+    
+    CLASS(Animal){
+            char *name;
+            STATIC(Animal);
+            vFn talk;
+    };
+    static int Animal_load(Animal *THIS,void *name){
+            THIS->name=name;
+            return 0;
+    }
+    ASM(Animal,Animal_load,NULL,NULL,NULL)
+    
+    CLASS_EX(Cat,Animal){
+            STATIC_EX(Cat,Animal);
+    };
+    static void Meow(Animal *THIS){
+            printf("Meow!My name is %s!\n",THIS->name);
+    }
+    
+    static int Cat_loadSt(StAnimal *THIS,void *PARAM){
+            THIS->talk=(void *)Meow;
+            return 0;
+    }
+    ASM_EX(Cat,Animal,NULL,NULL,Cat_loadSt,NULL)
+    
+    
+    CLASS_EX(Dog,Animal){
+            STATIC_EX(Dog,Animal);
+    };
+    static void Woof(Animal *THIS){
+            printf("Woof!My name is %s!\n",THIS->name);
+    }
+    static int Dog_loadSt(StAnimal *THIS,void *PARAM){
+            THIS->talk=(void *)Woof;
+            return 0;
+    }
+    ASM_EX(Dog,Animal,NULL,NULL,Dog_loadSt,NULL)
+    
+    int main(){
+            Animal *animals[4000];
+            StAnimal *f;
+            int i=0;
+            for(i=0;i<4000;i++)
+            {
+                    if(i%2==0) animals[i]=NEW(Dog,"Jack");
+                    else animals[i]=NEW(Cat,"Lily");
+            };
+            f=ST(animals[0]);
+            for(i=0;i<4000;++i){
+                    f->talk(animals[i]);
+            }
+            for(i=0;i<4000;++i){
+                    DELETE0(animals[i]);
+            }
+            return 0;
+    }
+    
+
+here is my project site (I dont have enough time to write en. doc,however the doc in chinese is much better)
+
+[OOC-GCC][214]
+
+   [214]: http://code.google.com/p/ooc-gcc/
+
+[link][215]|[improve this answer][216]
+
+   [215]: /a/8385007 (short permalink to this answer)
+   [216]: /posts/8385007/edit
+
+edited [Dec 5 '11 at 12:08][217]
+
+   [217]: /posts/8385007/revisions (show all edits to this post)
+
+  
+
+
+answered Dec 5 '11 at 12:02
+
+[
+
+![][218]
+
+   [218]: http://www.gravatar.com/avatar/fe1c6e6929241d03061c837e3621225f?s=32&d=identicon&r=PG
+
+][219]
+
+   [219]: /users/1081454/dameng
+
+[dameng][220]  
+334
+
+   [220]: /users/1081454/dameng
+
+the **CLASS STATIC ASM NEW DELETE ST ...** are macros in the OOC-GCC - [dameng][221] Dec 5 '11 at 12:06
+
+   [221]: /users/1081454/dameng (33 reputation)
+
+feedback 
+
+up vote 2 down vote
+
+OOP is only a paradigm which place datas as more important than code in programs. OOP is not a language. So, like plain C is a simple language, OOP in plain C is simple too.
+
+[link][222]|[improve this answer][223]
+
+   [222]: /a/8874437 (short permalink to this answer)
+   [223]: /posts/8874437/edit
+
+answered Jan 15 at 23:50
+
+[
+
+![][224]
+
+   [224]: http://www.gravatar.com/avatar/9106340a33a2407d63d22e6275300d33?s=32&d=identicon&r=PG
+
+][225]
+
+   [225]: /users/1151013/anonyme
+
+[anonyme][226]  
+211
+
+   [226]: /users/1151013/anonyme
+
+feedback 
+
+up vote 2 down vote
+
+The answer to question is 'Yes' you can. 
+
+**Object Oriented C (ooc) kit is for those who want to program in an object orieneted manner, but sticks on the good old C as well. ooc implements classes, single and multiple inheritance, exception handling.**
+
+**Features**
+
+•Uses only C macros and functions, no language extensions required! (ANSI-C)
+
+•Easy to read source code for your application. Care was taken to make things as simple as possible.
+
+•Single inheritance of classes
+
+•Multiple inheritance by interfaces and mixins (since version 1.3)
+
+•Implementing exceptions (in pure C!)
+
+•Virtual functions for classes
+
+•External tool for easy class implementation
+
+For more datails please visit [http://ooc-coding.sourceforge.net/][227]
+
+   [227]: http://ooc-coding.sourceforge.net/
+
+[link][228]|[improve this answer][229]
+
+   [228]: /a/9885827 (short permalink to this answer)
+   [229]: /posts/9885827/edit
+
+answered Mar 27 at 8:27
+
+[
+
+![][230]
+
+   [230]: http://www.gravatar.com/avatar/8201f50dbf5eb1530429008e0668baa4?s=32&d=identicon&r=PG
+
+][231]
+
+   [231]: /users/1312147/sachin-mhetre
+
+[Sachin Mhetre][232]  
+1,2451522
+
+   [232]: /users/1312147/sachin-mhetre
+
+feedback 
+
+up vote 1 down vote
+
+Yes, but I have never seen anyone attempt to implement any sort of polymorphism with C.
+
+[link][233]|[improve this answer][234]
+
+   [233]: /a/351744 (short permalink to this answer)
+   [234]: /posts/351744/edit
+
+answered Dec 9 '08 at 4:06
+
+[
+
+![][235]
+
+   [235]: http://www.gravatar.com/avatar/e446cf71b3e1ad658922459cc97f50a2?s=32&d=identicon&r=PG
+
+][236]
+
+   [236]: /users/1311247/paul-morel
+
+[Paul Morel][237]  
+37219
+
+   [237]: /users/1311247/paul-morel
+
+1
+ 
+
+You need to look around more :) For instance, Microsoft's Direct X has a polymorphic C interface. - [AShelly][238] Dec 9 '08 at 19:09
+
+   [238]: /users/10396/ashelly (10885 reputation)
+
+3
+ 
+
+Look into linux kernel implementation for example. It is very common and widely used practice in C. - [Ilya ][239] Dec 12 '08 at 3:02
+
+   [239]: /users/6807/ilya (1963 reputation)
+
+1
+ 
+
+also glib is polymorphic, or can be used in a way that allows polymorphism (it's like C++ you have to explicitly say which calls are virtual) - [Spudd86][240] Aug 31 '10 at 18:44
+
+   [240]: /users/150577/spudd86 (1404 reputation)
+
+feedback 
+
+up vote 1 down vote
+
+I think that the first thing to say is that (IMHO at least) C's implementation of function pointers is REALLY hard to use. I would jump through a WHOLE lot of hoops to avoid function pointers... 
+
+that said, I think that what other people have said is pretty good. you have structures, you have modules, instead of `foo->method(a,b,c)`, you end up with `method(foo,a,b,c)` If you have more than one type with a "method" method, then you can prefix it with the type, so `FOO_method(foo,a,b,c)`, as others have said... with good use of .h files you can get private and public, etc. 
+
+Now, there are a few things that this technique WON'T give you. It won't give you private data fields. that, I think, you have to do with willpower and good coding hygiene... Also, there isn't an easy way to do inheritance with this. 
+
+Those are the easy parts at least...the rest, I think is a 90/10 kind of situation. 10% of the benefit will require 90% of the work... 
+
+[link][241]|[improve this answer][242]
+
+   [241]: /a/2733309 (short permalink to this answer)
+   [242]: /posts/2733309/edit
+
+answered Apr 28 '10 at 21:37
+
+[
+
+![][243]
+
+   [243]: http://www.gravatar.com/avatar/c79083b696c8a63b10dc59b286a24ef6?s=32&d=identicon&r=PG
+
+][244]
+
+   [244]: /users/53491/brian-postow
+
+[Brian Postow][245]  
+2,97412450
+
+   [245]: /users/53491/brian-postow
+
+1
+ 
+
+Single inheritance (without polymorphism, though) can be quite easily implemented with this technique as well. All you need to to is embed the superclass as the first member of the subclass. By the C Standard, the whole structure must necessarily be aligned with the first member, so any method designed for foo (method(foo, a, b, c)) will work when a bar pointer is passed instead (bar being a subclass of foo). This is inheritance. - [Miro][246] Apr 29 '10 at 0:31
+
+   [246]: /users/453340/miro (579 reputation)
+
+@miro. Wow. that's ... that's a serious kludge right there... - [Brian Postow][247] Apr 29 '10 at 13:29
+
+   [247]: /users/53491/brian-postow (2974 reputation)
+
+not really... it's used all over the place... glib is pretty much built on this idea, Linux kernel (extensively), also it's essentially the same thing that happens when you use an object oriented language, the compiler uses the same object layout that is described above (multiple inheritance complicates this slightly though, one of the superclasses must be at an offset from the object start) - [Spudd86][248] Aug 31 '10 at 18:49
+
+   [248]: /users/150577/spudd86 (1404 reputation)
+
+you can get private data by passing pointers to things that are declared, but not defined anywhere outside the implementation specifics. So the `foo` parameter is a `struct foo *` that nobody has to know what's really in it. - [awoodland][249] Aug 23 '11 at 20:45
+
+   [249]: /users/168175/awoodland (20278 reputation)
+
+feedback 
+
+up vote -4 down vote
+
+technically no.
+
+practically yes.
+
+[link][250]|[improve this answer][251]
+
+   [250]: /a/351900 (short permalink to this answer)
+   [251]: /posts/351900/edit
+
+answered Dec 9 '08 at 5:52
+
+[
+
+![][252]
+
+   [252]: http://www.gravatar.com/avatar/2172dd626721fc49fc3e63ba1226ed26?s=32&d=identicon&r=PG
+
+][253]
+
+   [253]: /users/43260/botty
+
+[botty][254]  
+452
+
+   [254]: /users/43260/botty
+
+1
+ 
+
+I'm guessing people downvoted your answer because it lacks any details. Add some details and convince me you have some substance to back your point up. - [awoodland][255] Aug 23 '11 at 20:46
+
+   [255]: /users/168175/awoodland (20278 reputation)
+
+feedback 
+
+## Your Answer
+
+ 
+
+draft saved
+
+draft discarded
+
+[log in][256]
+
+   [256]: /users/login?returnurl=%2fquestions%2f351733%2fcan-you-write-object-oriented-code-in-c
+
+or
+
+Name
+
+Email required, but never shown
+
+Home Page
+
+[discard][257]
+
+   [257]: #
+
+##  Not the answer you're looking for? Browse other questions tagged [c][258] [oop][259] [object][260] or [ask your own question][261]. 
+
+   [258]: /questions/tagged/c (show questions tagged 'c')
+   [259]: /questions/tagged/oop (show questions tagged 'oop')
+   [260]: /questions/tagged/object (show questions tagged 'object')
+   [261]: /questions/ask
+
+#### Hello World!
+
+This is a collaboratively edited question and answer site for **professional and enthusiast programmers**. It's 100% free, no registration required.
+
+[about »][262]   [faq »][263]
+
+   [262]: /about?mnu=1
+   [263]: /faq?mnu=1
+
+tagged
+
+[c][264] × 60156  
+[oop][265] × 13259  
+[object][266] × 7091  
+
+
+   [264]: /questions/tagged/c (show questions tagged 'c')
+   [265]: /questions/tagged/oop (show questions tagged 'oop')
+   [266]: /questions/tagged/object (show questions tagged 'object')
+
+asked
+
+**3 years ago**
+
+viewed
+
+**20,428 times**
+
+active
+
+**[1 month ago][267]**
+
+   [267]: ?lastactivity (2012-03-28 01:57:18Z)
+
+#### Community Bulletin
+
+[blog][268]
+
+   [268]: http://blog.stackoverflow.com
+
+[Encyclopedia Stack Exchange][269]
+
+   [269]: http://blog.stackoverflow.com/2012/05/encyclopedia-stack-exchange/
+
+  
+
+
+[blog][270]
+
+   [270]: http://blog.stackoverflow.com
+
+[Revamped Notifications][271]
+
+   [271]: http://blog.stackoverflow.com/2012/05/revamped-notifications/
+
+  
+
+
+#### Linked
+
+[Object-Orientation in C][272]
+
+   [272]: /questions/415452/object-orientation-in-c
+
+[How do you implement a class in C?][273]
+
+   [273]: /questions/1403890/how-do-you-implement-a-class-in-c
+
+[What's the difference between a procedural program and an object oriented program?][274]
+
+   [274]: /questions/530741/whats-the-difference-between-a-procedural-program-and-an-object-oriented-progra
+
+[How do function pointers in C work?][275]
+
+   [275]: /questions/840501/how-do-function-pointers-in-c-work
+
+[Object oriented programming in C][276]
+
+   [276]: /questions/2181079/object-oriented-programming-in-c
+
+[Struggling with C coming from Object Oriented land?][277]
+
+   [277]: /questions/674722/struggling-with-c-coming-from-object-oriented-land
+
+[Is the C programming language object-oriented?][278]
+
+   [278]: /questions/3241932/is-the-c-programming-language-object-oriented
+
+[How can I simulate OO-style polymorphism in C?][279]
+
+   [279]: /questions/524033/how-can-i-simulate-oo-style-polymorphism-in-c
+
+[How can Inheritance be modelled using C?][280]
+
+   [280]: /questions/1237266/how-can-inheritance-be-modelled-using-c
+
+[Should I learn to implement OOP in C? Are there projects that use OOP in C?][281]
+
+   [281]: /questions/3325306/should-i-learn-to-implement-oop-in-c-are-there-projects-that-use-oop-in-c
+
+[How could one implement C++ virtual functions in C][282]
+
+   [282]: /questions/3113583/how-could-one-implement-c-virtual-functions-in-c
+
+[What techniques/strategies do people use for building objects in C (not C++)?][283]
+
+   [283]: /questions/1225844/what-techniques-strategies-do-people-use-for-building-objects-in-c-not-c
+
+[C as an object oriented language][284]
+
+   [284]: /questions/2352413/c-as-an-object-oriented-language
+
+[What are the lengths/limits C preprocessor as a language creation tool? Where can I learn more about these?][285]
+
+   [285]: /questions/2784742/what-are-the-lengths-limits-c-preprocessor-as-a-language-creation-tool-where-ca
+
+[C for an Object-Oriented programmer][286]
+
+   [286]: /questions/1451874/c-for-an-object-oriented-programmer
+
+[Object oriented programming in C][287]
+
+   [287]: /questions/3778764/object-oriented-programming-in-c
+
+[Need to Write C code from C++ Code?][288]
+
+   [288]: /questions/3678419/need-to-write-c-code-from-c-code
+
+[Object Oriented ANSI C?][289]
+
+   [289]: /questions/3072499/object-oriented-ansi-c
+
+[How to define constructor in C][290]
+
+   [290]: /questions/6205190/how-to-define-constructor-in-c
+
+[How do you do inheritance in a non-OO language?][291]
+
+   [291]: /questions/1641611/how-do-you-do-inheritance-in-a-non-oo-language
+
+[What is the best way to plan and organize development of an application in C?][292]
+
+   [292]: /questions/436446/what-is-the-best-way-to-plan-and-organize-development-of-an-application-in-c
+
+[see more linked questions…][293]
+
+   [293]: /search?q=url%3a%22http%3a%2f%2fstackoverflow.com%2fquestions%2f351733%2f*%22
+
+#### Related
+
+[Object-Orientation in C][294]
+
+   [294]: /questions/415452/object-orientation-in-c
+
+[How can I simulate OO-style polymorphism in C?][295]
+
+   [295]: /questions/524033/how-can-i-simulate-oo-style-polymorphism-in-c
+
+[Does C's FILE have an object-oriented interface?][296]
+
+   [296]: /questions/1041521/does-cs-file-have-an-object-oriented-interface
+
+[Object Oriented pattern in C?][297]
+
+   [297]: /questions/1201521/object-oriented-pattern-in-c
+
+[Good reference for Object Oriented Design][298]
+
+   [298]: /questions/1349627/good-reference-for-object-oriented-design
+
+[C for an Object-Oriented programmer][299]
+
+   [299]: /questions/1451874/c-for-an-object-oriented-programmer
+
+[Object oriented programming in C][300]
+
+   [300]: /questions/2181079/object-oriented-programming-in-c
+
+[Redundant imports in object-oriented code][301]
+
+   [301]: /questions/2373053/redundant-imports-in-object-oriented-code
+
+[Object Oriented Metrics?][302]
+
+   [302]: /questions/2409609/object-oriented-metrics
+
+[Getting my head around object oriented programming][303]
+
+   [303]: /questions/2852395/getting-my-head-around-object-oriented-programming
+
+[Object Oriented ANSI C?][304]
+
+   [304]: /questions/3072499/object-oriented-ansi-c
+
+[Python Object Oriented Design; Return, Set Instance Variable Or Both][305]
+
+   [305]: /questions/3462645/python-object-oriented-design-return-set-instance-variable-or-both
+
+[Experiment: Object Oriented C?][306]
+
+   [306]: /questions/4103704/experiment-object-oriented-c
+
+[Use object oriented on JavaScript][307]
+
+   [307]: /questions/4419005/use-object-oriented-on-javascript
+
+[Object oriented problem C#][308]
+
+   [308]: /questions/4845903/object-oriented-problem-c-sharp
+
+[Pure C that mimics object-oriented programming?][309]
+
+   [309]: /questions/4896536/pure-c-that-mimics-object-oriented-programming
+
+[Object Oriented Programming - Best Practice?][310]
+
+   [310]: /questions/5761700/object-oriented-programming-best-practice
+
+[Object Oriented Programming Nth Child][311]
+
+   [311]: /questions/5934897/object-oriented-programming-nth-child
+
+[how to model this in object oriented way][312]
+
+   [312]: /questions/6098853/how-to-model-this-in-object-oriented-way
+
+[What are the advantages or features of object oriented programming?][313]
+
+   [313]: /questions/6384188/what-are-the-advantages-or-features-of-object-oriented-programming
+
+[Object oriented code,in non-object oriented language][314]
+
+   [314]: /questions/6952000/object-oriented-code-in-non-object-oriented-language
+
+[When is it appropriate to use C as object oriented language?][315]
+
+   [315]: /questions/8333789/when-is-it-appropriate-to-use-c-as-object-oriented-language
+
+[Is it possible to emulate object methods in C?][316]
+
+   [316]: /questions/8934567/is-it-possible-to-emulate-object-methods-in-c
+
+[Objects in object oriented programming in objective c][317]
+
+   [317]: /questions/9107494/objects-in-object-oriented-programming-in-objective-c
+
+[Can I use C for Object Oriented Programming?][318]
+
+   [318]: /questions/9224855/can-i-use-c-for-object-oriented-programming
+
+[question feed][319]
+
+   [319]: /feeds/question/351733 (feed of this question and its answers)
+
+![][320]
+
+   [320]: /posts/351733/ivc/8d10
+
+lang-c
+
+[about][321] | [faq][322] | [blog][323] | [chat][324] | [data][325] | [podcast][326] | [shop][327] | [legal][328] | [advertising info][329] | mobile | **[contact us][330]** | **[feedback][331]**
+
+   [321]: /about
+   [322]: /faq
+   [323]: http://blog.stackexchange.com?blb=1
+   [324]: http://chat.stackoverflow.com
+   [325]: http://data.stackexchange.com
+   [326]: http://blog.stackoverflow.com/category/podcasts/
+   [327]: http://shop.stackexchange.com/
+   [328]: http://stackexchange.com/legal
+   [329]: http://engine.adzerk.net/redirect/0/2776/2751/0/4de3c60f719c4dfcb1a57531c7050090/0
+   [330]: mailto:team@stackoverflow.com
+   [331]: http://meta.stackoverflow.com
+
+■ [stackoverflow.com][332]  ■ [api/apps][333]  ■ [careers][334]  ■ [serverfault.com][335]  ■ [superuser.com][336]  ■ [meta][337]  ■ [area 51][338]  ■ [webapps][339]  ■ [gaming][340]  ■ [ubuntu][341]  ■ [webmasters][342]  ■ [cooking][343]  ■ [game development][344]  ■ [math][345]  ■ [photography][346]  ■ [stats][347]  ■ [tex][348]  ■ [english][349]  ■ [theoretical cs][350]  ■ [programmers][351]  ■ [unix][352]  ■ [apple][353]  ■ [wordpress][354]  ■ [physics][355]  ■ [home improvement][356]  ■ [gis][357]  ■ [electronics][358]  ■ [android][359]  ■ [security][360]  ■ [bicycles][361]  ■ [dba][362]  ■ [drupal][363]  ■ [sharepoint][364]  ■ [scifi & fantasy][365]  ■ [user experience][366]  ■ [skeptics][367]  ■ [rpg][368]  ■ [judaism][369] 
+
+   [332]: http://stackoverflow.com
+   [333]: http://stackapps.com
+   [334]: http://careers.stackoverflow.com
+   [335]: http://serverfault.com
+   [336]: http://superuser.com
+   [337]: http://meta.stackoverflow.com
+   [338]: http://area51.stackexchange.com
+   [339]: http://webapps.stackexchange.com
+   [340]: http://gaming.stackexchange.com
+   [341]: http://askubuntu.com
+   [342]: http://webmasters.stackexchange.com
+   [343]: http://cooking.stackexchange.com
+   [344]: http://gamedev.stackexchange.com
+   [345]: http://math.stackexchange.com
+   [346]: http://photo.stackexchange.com
+   [347]: http://stats.stackexchange.com
+   [348]: http://tex.stackexchange.com
+   [349]: http://english.stackexchange.com
+   [350]: http://cstheory.stackexchange.com
+   [351]: http://programmers.stackexchange.com
+   [352]: http://unix.stackexchange.com
+   [353]: http://apple.stackexchange.com
+   [354]: http://wordpress.stackexchange.com
+   [355]: http://physics.stackexchange.com
+   [356]: http://diy.stackexchange.com
+   [357]: http://gis.stackexchange.com
+   [358]: http://electronics.stackexchange.com
+   [359]: http://android.stackexchange.com
+   [360]: http://security.stackexchange.com
+   [361]: http://bicycles.stackexchange.com
+   [362]: http://dba.stackexchange.com
+   [363]: http://drupal.stackexchange.com
+   [364]: http://sharepoint.stackexchange.com
+   [365]: http://scifi.stackexchange.com
+   [366]: http://ux.stackexchange.com
+   [367]: http://skeptics.stackexchange.com
+   [368]: http://rpg.stackexchange.com
+   [369]: http://judaism.stackexchange.com
+
+[][370] [][371]
+
+   [370]: http://www.peer1.com/stackoverflow
+   [371]: http://creativecommons.org/licenses/by-sa/3.0/
+
+rev 2012.5.22.2655
+
+site design / logo (C) 2012 stack exchange inc; user contributions licensed under [cc-wiki][372] with [attribution required][373]
+
+   [372]: http://creativecommons.org/licenses/by-sa/3.0/
+   [373]: http://blog.stackoverflow.com/2009/06/attribution-required/
+
+Stack Overflow works best with JavaScript enabled![][374]
+
+   [374]: http://pixel.quantserve.com/pixel/p-c1rF4kxgLUzNc.gif
+

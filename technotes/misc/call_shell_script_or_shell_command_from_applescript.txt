@@ -1,0 +1,13 @@
+
+do shell script "command1; command2"
+
+set variableName to do shell script "command1; command2"
+do shell script "/path/to/yourscript.sh"
+
+
+Get results back:
+
+    set filesLists to do shell script "ls"
+    
+    
+

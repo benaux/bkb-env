@@ -1,0 +1,661 @@
+From <http://charsequence.blogspot.in/2012/04/scripting-clojure-with-leiningen-2.html>:
+
+#  [Char Sequence][1]
+
+   [1]: http://charsequence.blogspot.in/
+
+Life in general, Software in particular
+
+## Sunday, April 22, 2012
+
+###  Scripting Clojure with Leiningen 2 
+
+_[2012-May-14] Update: Fixed shebang for more Unix variants_  
+  
+What would it take to write scripts in [Clojure][2] (and run them on a terminal) the way we write them in Python, Ruby or Groovy? To pipe scripts together to accomplish bigger tasks? What would it take to throw in argument handling and transitive dependency management capabilities to such scripts? This post attempts to answer some of these questions while illustrating how to use the [Leiningen][3] plugin [lein-exec][4] to write Clojure scripts.  
+  
+In particular, I assume you have **Leiningen 2** and **lein-exec 0.2.0** installed. The [shebang][5] feature may require that you use a [*nix][6] environment.  
+  
+Command-line eval  
+  
+Let us begin with evaluating tiny Clojure S-expressions on the command line.  
+  
+
+    
+       [2]: http://clojure.org/
+   [3]: http://leiningen.org/
+   [4]: https://github.com/kumarshantanu/lein-exec
+   [5]: http://en.wikipedia.org/wiki/Shebang_(Unix)#Examples
+   [6]: http://en.wikipedia.org/wiki/*nix
+
+$ lein2 exec -e "(println \"40 and 50 make\" (+ 40 50))"
+    40 and 50 make 90
+    
+    
+
+  
+Since the plugin can also evaluate the content from STDIN, we can also do the same thing as above by piping the Clojure code to the plugin:  
+  
+
+    
+    $ echo "(println \"40 and 50 make\" (+ 40 50))" | lein2 exec
+    40 and 50 make 90
+    
+    
+
+  
+While clojure.core vars are available, vars from other namespaces may need an explicit reference:  
+  
+
+    
+    $ lein2 exec -e "(use 'clojure.pprint) (pprint (map inc (range 10)))"
+    (1 2 3 4 5 6 7 8 9 10)
+    
+    
+
+  
+You would need similar _quoting_ when writing the Clojure scripts due to the fact that S-expressions and scripts are simply evaluated by lein-exec.  
+  
+Scripting  
+  
+So, let's start with the first script as a file called fib10.clj that simply prints out first 10 numbers in the Fibonacci series:  
+  
+
+    
+    ;; Taken from http://j.mp/IiT8UK
+    (def fib-seq
+      ((fn rfib [a b]
+        (lazy-seq (cons a (rfib b (+ a b)))))
+        0 1))
+    
+    (println (take 10 fib-seq))
+    
+    
+
+  
+We can run it using lein-exec:  
+  
+
+    
+    $ lein2 exec fib10.clj
+    (0 1 1 2 3 5 8 13 21 34)
+    
+    
+
+  
+OK, that is fine and dandy but how do we run fib10.clj as an executable? Here's how - you edit the file and put a shebang on the first line:  
+  
+
+    
+    #!/bin/bash lein-exec
+    
+    ;; Taken from http://j.mp/IiT8UK
+    (def fib-seq
+      ((fn rfib [a b]
+        (lazy-seq (cons a (rfib b (+ a b)))))
+        0 1))
+    
+    (println (take 10 fib-seq))
+    
+    
+
+  
+Now you can run the fib10.clj as an executable:  
+  
+
+    
+    $ chmod a+x fib10.clj
+    $ ./fib10.clj
+    (0 1 1 2 3 5 8 13 21 34)
+    
+    
+
+  
+Handling arguments  
+  
+Scripts often need to work with command-line arguments. While using lein-exec arguments are always passed as string via the clojure.core/*command-line-args* dynamic var - first argument is the name of the script followed by the arguments to the script. Below is an example that takes name and scores and prints out name and average:  
+  
+
+    
+    #!/bin/bash lein-exec
+    
+    (defn err-println "println for STDERR"
+      [& args]
+      (binding [*out* *err*]
+        (apply println args)))
+    
+    (defn parse-int "Parse string as an integer. Abort if invalid."
+      [n]
+      (try (Integer/parseInt n)
+        (catch NumberFormatException e
+          (err-println (str \' n \')
+                       "is not a valid integer")
+          (System/exit 1))))
+    
+    (defn avg "Given a sequence of numbers return their average."
+      [nseq]
+      (double (/ (apply + nseq) (count nseq))))
+    
+    (if (>= (count *command-line-args*) 3)
+      (println (second *command-line-args*)
+               (avg (map parse-int (drop 2 *command-line-args*))))
+      (do (err-println "Usage:" (first *command-line-args*)
+                       "name score [score2 ..]")
+        (System/exit 1)))
+    
+    
+
+  
+Upon running the script we can inspect how it responds to different input arguments:   
+  
+
+    
+    $ chmod a+x ./avg.clj
+    $ ./avg.clj
+    Usage: ./avg.clj name score [score2 ..]
+    $ ./avg.clj "Nick Foster"
+    Usage: ./avg.clj name score [score2 ..]
+    $ ./avg.clj "Nick Foster" 45 78 65
+    Nick Foster 62.66666666666667
+    $ ./avg.clj "Nick Foster" notnum 45 78 65
+    'notnum' is not a valid integer
+    
+    
+
+  
+Pipeline  
+  
+[Pipeline][7] is a very powerful concept that enables us to chain simple tasks using their STDIN and STDOUT to build more sophisticated tasks. As we would see below, it is entirely possible to build pipe together scripts written in Clojure by simply reading input from STDIN and writing result to STDOUT:  
+  
+
+    
+       [7]: http://en.wikipedia.org/wiki/Pipeline_(Unix)
+
+#!/bin/bash lein-exec
+    
+    (loop []
+      (let [c (.read *in*)]
+        (when (>= c 0)
+          (if (and (>= c (int \A)) (<= c (int \Z)))
+            (print (Character/toLowerCase (char c)))
+            (print (char c)))
+          (recur))))
+    
+    
+
+  
+This script lcase.clj converts the input fed via STDIN to lowercase. Let us see it in action:  
+  
+
+    
+    $ chmod a+x ./lcase.clj
+    $ echo "5 Quick brown foxes Jumped over 7 lazy dogs" | ./lcase.clj 
+    5 quick brown foxes jumped over 7 lazy dogs
+    $ tree | ./lcase.clj
+    ..result omitted..
+    $ ls -l ~ | ./lcase.clj
+    ..result omitted..
+    
+    
+
+  
+Transitive dependencies  
+  
+Scripting with Clojure is fun! It would only be nicer to have the power of transitive dependency management baked into it. Well, [pomegranate][8] that is part of Leiningen 2 already makes that possible. lein-exec wraps pomegranate API to provide its own simpler API. The example below shows how to create a demo web service using lein-exec's _deps_ function and [Ring][9]:  
+  
+
+    
+       [8]: https://github.com/cemerick/pomegranate
+   [9]: https://github.com/mmcgrana/ring
+
+#!/bin/bash lein-exec
+    
+    (use '[leiningen.exec :only  (deps)])
+    (deps '[[ring "1.0.1"]])
+    
+    (defn handler
+      [request]
+      {:status 200
+       :headers {}
+       :body "Hello from Ring!"})
+    
+    (use 'ring.adapter.jetty)
+    (run-jetty handler {:port 3000})
+    
+    
+
+  
+The _deps_ function above from leiningen.exec namespace, which is in the lein-exec plugin itself. Here we pull the dpendency ring 1.0.1 which depends on a number of components under it. All those dependencies are pulled in as you run this script. Upon running something this is what you see:  
+  
+
+    
+    $ chmod a+x ring.clj
+    $ ./ring.clj
+    2012-04-22 17:55:35.814:INFO::Logging to STDERR via org.mortbay.log.StdErrLog
+    2012-04-22 17:55:35.815:INFO::jetty-6.1.25
+    2012-04-22 17:55:35.824:INFO::Started SocketConnector@0.0.0.0:3000
+    
+    
+
+  
+Depending on whether ring is already downloaded to your local Maven repo, you may see the script downloading them first if they don't already exist.  
+  
+Working in project context  
+  
+At times you may want to run a script in the context of a project, so that the code being evaluated has access to the project CLASSPATH and other project resources. All of the above usages of lein-exec support an additional switch _-p_ that does the same thing in project scope.  
+  
+
+    
+    $ lein2 exec -ep "(use 'foo.bar) (baz :qux)"
+    ..result omitted..
+    $ cat foo.clj | lein2 exec -p
+    .. result omitted..
+    $ lein2 exec -p foo.clj
+    .. result omitted..
+    
+    
+
+  
+The examples above are applicable when you run them in a project. If you use -p outside of a project it will complain about missing project!  
+  
+Caveats  
+  
+While the ability to script in Clojure is fascinating with all the shebang operator, pipeline and dependency management, it's important to know its limitations:  
+  
+
+
+  * As widely known, JVM startup time is a pain even though Leiningen works hard to reduce it.
+  * Eval'd code runs in the same JVM that runs Leiningen. There's no easy way to customize that.
+  * Currently, the _deps_ function pulls in dependencies only from Maven Central and Clojars.
+  * When you run lein-exec in project context, the project map is not accessible to the eval'd code.
+
+  
+Few of these limitations may be addressed in future versions.  
+  
+  
+I think many Clojure beginners may see scripting as a good way to learn the language and explore Clojure libraries. At the same time, some of the Clojure app/tool projects may find it easy to distribute the app via a script instead of a full blown JAR with instructions on how to run it. Whatever is your impression, feedback and ideas, please share it in comments. You may like to follow me on Twitter: **@kumarshantanu**  
+  
+Happy scripting with Clojure!  
+  
+
+
+Posted by  [ Shantanu Kumar ][10] at [7:26 PM][11] [ ![][12] ][13] [ ![][14] ][15]
+
+   [10]: http://www.blogger.com/profile/05850495396182844220 (author profile)
+   [11]: http://charsequence.blogspot.in/2012/04/scripting-clojure-with-leiningen-2.html (permanent link)
+   [12]: http://img1.blogblog.com/img/icon18_email.gif
+   [13]: http://www.blogger.com/email-post.g?blogID=4035567729001522718&postID=1703464932469708013 (Email Post)
+   [14]: http://img2.blogblog.com/img/icon18_edit_allbkg.gif
+   [15]: http://www.blogger.com/post-edit.g?blogID=4035567729001522718&postID=1703464932469708013&from=pencil (Edit Post)
+
+Labels: [clojure][16], [leiningen][17], [scripting][18]
+
+   [16]: http://charsequence.blogspot.in/search/label/clojure
+   [17]: http://charsequence.blogspot.in/search/label/leiningen
+   [18]: http://charsequence.blogspot.in/search/label/scripting
+
+####  9 comments: 
+
+  1. ![][19]
+
+   [19]: http://img2.blogblog.com/img/b36-rounded.png
+
+[autodidakto][20][April 22, 2012 9:25 PM][21]
+
+   [20]: http://www.blogger.com/profile/00949921661734606975
+   [21]: http://charsequence.blogspot.com/2012/04/scripting-clojure-with-leiningen-2.html?showComment=1335110100298#c2603437780944564420
+
+Thanks for this. I agree with you that scripting is a good way to learn and play with the language and distribute useful code. No sense in letting the "scripting languages" have all the fun. NewLisp takes this approach, and I don't see why Clojure can't be there too. There should be more resources like this article.
+
+[Reply][22][Delete][23]
+
+   [22]: javascript:;
+   [23]: http://www.blogger.com/delete-comment.g?blogID=4035567729001522718&postID=2603437780944564420
+
+  2. ![][24]
+
+   [24]: http://img1.blogblog.com/img/anon36.png
+
+Anonymous[April 23, 2012 1:05 AM][25]
+
+   [25]: http://charsequence.blogspot.com/2012/04/scripting-clojure-with-leiningen-2.html?showComment=1335123308986#c4724354558296000831
+
+"Node.js is the pragmatic choice for ClojureScript command line apps. One of Clojure's weaknesses was that the JVM was not a great choice for these types of scripts. ClojureScript + Node.js effectively solves this problem."  
+http://news.ycombinator.com/item?id=2787950
+
+[Reply][26][Delete][27]
+
+   [26]: javascript:;
+   [27]: http://www.blogger.com/delete-comment.g?blogID=4035567729001522718&postID=4724354558296000831
+
+[Replies][28]
+
+   [28]: javascript:;
+
+    1. ![][29]
+
+   [29]: http://4.bp.blogspot.com/_leypuKrkrlM/SgsXpaJhqkI/AAAAAAAAASI/MIjG3rI_9Zo/S45/ep.jpg
+
+[Shantanu Kumar][30][April 23, 2012 9:12 PM][31]
+
+   [30]: http://www.blogger.com/profile/05850495396182844220
+   [31]: http://charsequence.blogspot.com/2012/04/scripting-clojure-with-leiningen-2.html?showComment=1335195777902#c8461959828518217017
+
+While that is a good argument in general, I think when one is heavily invested in the JVM or depends on certain Java libraries or simply does not want to consider anything other than the JVM s/he doesn't have any choice but to use the JVM.
+
+[Delete][32]
+
+   [32]: http://www.blogger.com/delete-comment.g?blogID=4035567729001522718&postID=8461959828518217017
+
+[Reply][33]
+
+   [33]: javascript:;
+
+  3. ![][34]
+
+   [34]: http://img1.blogblog.com/img/openid36-rounded.png
+
+[nodename.com][35][April 23, 2012 9:42 AM][36]
+
+   [35]: http://nodename.com/
+   [36]: http://charsequence.blogspot.com/2012/04/scripting-clojure-with-leiningen-2.html?showComment=1335154361615#c8365795094017715322
+
+Most of this works in Cygwin. The problems I have found are:  
+  
+Cygwin shebang seems not to understand "lein exec" so I wrote a short script leinexec:  
+lein exec $*  
+  
+Cygwin bash seems confused about quoted arguments like "Nick Foster".  
+  
+I'm sure I'll explore the Node option once I get more into ClojureScript but this is more direct. Great for making little Clojure tools quickly (even if they may start up a bit slowly)! Thanks!
+
+[Reply][37][Delete][38]
+
+   [37]: javascript:;
+   [38]: http://www.blogger.com/delete-comment.g?blogID=4035567729001522718&postID=8365795094017715322
+
+[Replies][39]
+
+   [39]: javascript:;
+
+    1. ![][40]
+
+   [40]: http://4.bp.blogspot.com/_leypuKrkrlM/SgsXpaJhqkI/AAAAAAAAASI/MIjG3rI_9Zo/S45/ep.jpg
+
+[Shantanu Kumar][41][April 23, 2012 9:05 PM][42]
+
+   [41]: http://www.blogger.com/profile/05850495396182844220
+   [42]: http://charsequence.blogspot.com/2012/04/scripting-clojure-with-leiningen-2.html?showComment=1335195326816#c1273178950445714864
+
+Thanks for the info! Can you please list a sample script that works with Cygwin? I will update the post accordingly and look into how to make it better for the next release of lein-exec.
+
+[Delete][43]
+
+   [43]: http://www.blogger.com/delete-comment.g?blogID=4035567729001522718&postID=1273178950445714864
+
+    2. ![][44]
+
+   [44]: http://img1.blogblog.com/img/openid36-rounded.png
+
+[nodename.com][45][May 6, 2012 11:20 AM][46]
+
+   [45]: http://nodename.com/
+   [46]: http://charsequence.blogspot.com/2012/04/scripting-clojure-with-leiningen-2.html?showComment=1336283438747#c5466098410046133996
+
+I tried everything in your post except "Working in project context." Apart from the two problems I noted above, the only other thing that did not work is the pipe example with tree, because I don't have tree in Cygwin.
+
+[Delete][47]
+
+   [47]: http://www.blogger.com/delete-comment.g?blogID=4035567729001522718&postID=5466098410046133996
+
+    3. ![][48]
+
+   [48]: http://4.bp.blogspot.com/_leypuKrkrlM/SgsXpaJhqkI/AAAAAAAAASI/MIjG3rI_9Zo/S45/ep.jpg
+
+[Shantanu Kumar][49][May 14, 2012 9:29 PM][50]
+
+   [49]: http://www.blogger.com/profile/05850495396182844220
+   [50]: http://charsequence.blogspot.com/2012/04/scripting-clojure-with-leiningen-2.html?showComment=1337011149807#c6503304399965241097
+
+Thanks for the feedback; I have updated the lein-exec project on Github with two scripts `lein-exec` and `lein-exec-p` that you can download and use for shebang. I have also updated this blog post to reflect that. Since you don't have `tree` in Cygwin, you can try the example with the `ls` command or whatever that produces uppercase characters in result.
+
+[Delete][51]
+
+   [51]: http://www.blogger.com/delete-comment.g?blogID=4035567729001522718&postID=6503304399965241097
+
+[Reply][52]
+
+   [52]: javascript:;
+
+  4. ![][53]
+
+   [53]: http://img1.blogblog.com/img/anon36.png
+
+Anonymous[April 23, 2012 6:40 PM][54]
+
+   [54]: http://charsequence.blogspot.com/2012/04/scripting-clojure-with-leiningen-2.html?showComment=1335186609508#c1571851557716456927
+
+Shebang lines are not required to support arguments at all. It is totally acceptable for a unix to stop reading your shebang line after "/bin/sh". Next try please.
+
+[Reply][55][Delete][56]
+
+   [55]: javascript:;
+   [56]: http://www.blogger.com/delete-comment.g?blogID=4035567729001522718&postID=1571851557716456927
+
+[Replies][57]
+
+   [57]: javascript:;
+
+    1. ![][58]
+
+   [58]: http://4.bp.blogspot.com/_leypuKrkrlM/SgsXpaJhqkI/AAAAAAAAASI/MIjG3rI_9Zo/S45/ep.jpg
+
+[Shantanu Kumar][59][April 23, 2012 9:09 PM][60]
+
+   [59]: http://www.blogger.com/profile/05850495396182844220
+   [60]: http://charsequence.blogspot.com/2012/04/scripting-clojure-with-leiningen-2.html?showComment=1335195554308#c3409997676958837333
+
+I have heard of that but didn't run into yet. Can you please let me know which Unix variants don't accept arguments on shebang? This info will help me test/fix it for the next release of lein-exec.
+
+[Delete][61]
+
+   [61]: http://www.blogger.com/delete-comment.g?blogID=4035567729001522718&postID=3409997676958837333
+
+[Reply][62]
+
+   [62]: javascript:;
+
+[Add comment][63]
+
+   [63]: javascript:;
+
+[Load more...][64]
+
+   [64]: javascript:;
+
+[][65]
+
+   [65]: http://www.blogger.com/comment-iframe.g?blogID=4035567729001522718&postID=1703464932469708013
+
+#### 
+
+[ ][66]
+
+   [66]: 
+
+[Older Post][67] [Home][68]
+
+   [67]: http://charsequence.blogspot.in/2010/11/my-notes-from-thedeadline-presentations.html (Older Post)
+   [68]: http://charsequence.blogspot.in/
+
+Subscribe to: [Post Comments (Atom)][69]
+
+   [69]: http://charsequence.blogspot.com/feeds/1703464932469708013/comments/default
+
+## Disqus for Char Sequence
+
+[ ![][70] ][71]
+
+   [70]: http://img1.blogblog.com/img/icon18_wrench_allbkg.png
+   [71]: http://www.blogger.com/rearrange?blogID=4035567729001522718&widgetType=HTML&widgetId=HTML3&action=editWidget&sectionId=main (Edit)
+
+## Tweets by me - [My Twitter page][72]
+
+   [72]: http://twitter.com/kumarshantanu
+
+## Twitter Updates
+
+[][73]
+
+   [73]: http://twitter.com/kumarshantanu
+
+[ ![][74] ][75]
+
+   [74]: http://img1.blogblog.com/img/icon18_wrench_allbkg.png
+   [75]: http://www.blogger.com/rearrange?blogID=4035567729001522718&widgetType=HTML&widgetId=HTML2&action=editWidget&sectionId=sidebar-right-1 (Edit)
+
+## About Me
+
+[![My Photo][76]][77]
+
+   [76]: http://2.bp.blogspot.com/_leypuKrkrlM/SgsXfeC3BII/AAAAAAAAARw/XLWPFbdaquU/S220/ep.jpg
+   [77]: http://www.blogger.com/profile/05850495396182844220
+
+[ Shantanu Kumar ][78]
+    [My Bitbucket profile][79] [My Github profile][80]
+[View my complete profile][78]
+
+   [78]: http://www.blogger.com/profile/05850495396182844220
+   [79]: http://bitbucket.org/kumarshantanu/
+   [80]: http://github.com/kumarshantanu/
+
+[ ![][81] ][82]
+
+   [81]: http://img1.blogblog.com/img/icon18_wrench_allbkg.png
+   [82]: http://www.blogger.com/rearrange?blogID=4035567729001522718&widgetType=Profile&widgetId=Profile1&action=editWidget&sectionId=sidebar-right-2-1 (Edit)
+
+## Blog Archive
+
+  * [ ▼  ][83] [2012][84] (1)
+
+   [83]: javascript:void(0)
+   [84]: http://charsequence.blogspot.in/search?updated-min=2012-01-01T00:00:00%2B05:30&updated-max=2013-01-01T00:00:00%2B05:30&max-results=1
+
+    * [ ▼  ][85] [April][86] (1)
+
+   [85]: javascript:void(0)
+   [86]: http://charsequence.blogspot.in/2012_04_01_archive.html
+
+      * [Scripting Clojure with Leiningen 2][87]
+
+   [87]: http://charsequence.blogspot.in/2012/04/scripting-clojure-with-leiningen-2.html
+
+  * [ ►  ][88] [2010][89] (7)
+
+   [88]: javascript:void(0)
+   [89]: http://charsequence.blogspot.in/search?updated-min=2010-01-01T00:00:00%2B05:30&updated-max=2011-01-01T00:00:00%2B05:30&max-results=7
+
+    * [ ►  ][90] [November][91] (1)
+
+   [90]: javascript:void(0)
+   [91]: http://charsequence.blogspot.in/2010_11_01_archive.html
+
+      * [My notes from "TheDeadline" presentations][92]
+
+   [92]: http://charsequence.blogspot.in/2010/11/my-notes-from-thedeadline-presentations.html
+
+    * [ ►  ][93] [September][94] (1)
+
+   [93]: javascript:void(0)
+   [94]: http://charsequence.blogspot.in/2010_09_01_archive.html
+
+      * [Interactive Web Development with Clojure][95]
+
+   [95]: http://charsequence.blogspot.in/2010/09/interactive-web-development-with.html
+
+    * [ ►  ][96] [July][97] (1)
+
+   [96]: javascript:void(0)
+   [97]: http://charsequence.blogspot.in/2010_07_01_archive.html
+
+      * [Setup Emacs for development with Clojure/Leiningen...][98]
+
+   [98]: http://charsequence.blogspot.in/2010/07/setup-emacs-for-development-with.html
+
+    * [ ►  ][99] [June][100] (2)
+
+   [99]: javascript:void(0)
+   [100]: http://charsequence.blogspot.in/2010_06_01_archive.html
+
+      * [Setup Leiningen on Windows][101]
+      * [Mars Rover solution in Clojure][102]
+
+   [101]: http://charsequence.blogspot.in/2010/06/setup-leiningen-on-windows.html
+   [102]: http://charsequence.blogspot.in/2010/06/mars-rover-solution-in-clojure.html
+
+    * [ ►  ][103] [February][104] (1)
+
+   [103]: javascript:void(0)
+   [104]: http://charsequence.blogspot.in/2010_02_01_archive.html
+
+      * [Data immutability in Java][105]
+
+   [105]: http://charsequence.blogspot.in/2010/02/data-immutability-in-java.html
+
+    * [ ►  ][106] [January][107] (1)
+
+   [106]: javascript:void(0)
+   [107]: http://charsequence.blogspot.in/2010_01_01_archive.html
+
+      * [Replacing application properties with Groovy scrip...][108]
+
+   [108]: http://charsequence.blogspot.in/2010/01/replacing-application-properties-with.html
+
+  * [ ►  ][109] [2009][110] (7)
+
+   [109]: javascript:void(0)
+   [110]: http://charsequence.blogspot.in/search?updated-min=2009-01-01T00:00:00%2B05:30&updated-max=2010-01-01T00:00:00%2B05:30&max-results=7
+
+    * [ ►  ][111] [October][112] (5)
+
+   [111]: javascript:void(0)
+   [112]: http://charsequence.blogspot.in/2009_10_01_archive.html
+
+      * [Comparing XML payloads during testing (Java)][113]
+      * [Collections.synchronizedXxx() methods are bad for ...][114]
+      * [Detecting NullPointerException with Transparent ch...][115]
+      * [Thread-safe Time vs Frequency keeper (Java)][116]
+      * [Fun with Iterators - UnionIterator][117]
+
+   [113]: http://charsequence.blogspot.in/2009/10/comparing-xml-payloads-during-testing.html
+   [114]: http://charsequence.blogspot.in/2009/10/collectionssynchronizedxxx-methods-do.html
+   [115]: http://charsequence.blogspot.in/2009/10/detecting-nullpointerexception-with.html
+   [116]: http://charsequence.blogspot.in/2009/10/thread-safe-time-vs-frequency-keeper.html
+   [117]: http://charsequence.blogspot.in/2009/10/fun-with-iterators-iteratorunion.html
+
+    * [ ►  ][118] [September][119] (1)
+
+   [118]: javascript:void(0)
+   [119]: http://charsequence.blogspot.in/2009_09_01_archive.html
+
+      * [Watch your Java compiler][120]
+
+   [120]: http://charsequence.blogspot.in/2009/09/watch-your-java-compiler.html
+
+    * [ ►  ][121] [August][122] (1)
+
+   [121]: javascript:void(0)
+   [122]: http://charsequence.blogspot.in/2009_08_01_archive.html
+
+      * [Almost literals - Initializing Java collections][123]
+
+   [123]: http://charsequence.blogspot.in/2009/08/almost-literals-initializing-java.html
+
+[ ![][124] ][125]
+
+   [124]: http://img1.blogblog.com/img/icon18_wrench_allbkg.png
+   [125]: http://www.blogger.com/rearrange?blogID=4035567729001522718&widgetType=BlogArchive&widgetId=BlogArchive1&action=editWidget&sectionId=sidebar-right-2-2 (Edit)
+
+## Followers
+
+  *[7:26 PM]: 2012-04-22T19:26:00+05:30

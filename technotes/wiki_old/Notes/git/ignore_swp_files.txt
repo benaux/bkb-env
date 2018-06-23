@@ -1,0 +1,11 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2016-12-21T12:20:01+01:00
+
+====== ignore swp files ======
+Created Wednesday 21 December 2016
+
+Git: Ignore Vims temporary swp files
+
+*.swp
+*.swo

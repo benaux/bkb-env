@@ -1,0 +1,22 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2016-12-21T12:21:16+01:00
+
+====== multiple users github ======
+Created Wednesday 21 December 2016
+
+Git: multiple users on github
+
+
+
+# ~/.ssh/config
+Host github.com-activehacker
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/id_rsa_activehacker
+
+
+
+# .git/config
+[remote "origin"]
+        url = git@github.com-activehacker:activehacker/gfs.git

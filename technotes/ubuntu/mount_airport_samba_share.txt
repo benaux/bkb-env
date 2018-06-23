@@ -1,0 +1,4 @@
+Ubuntu: mount airport samba share
+
+
+sudo mount.cifs //myserver.fritz.box/mysharer ~/mymountpoint -o username=username,password=password,sec=ntlm,uid=user

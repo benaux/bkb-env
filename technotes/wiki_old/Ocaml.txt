@@ -1,0 +1,10 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-01-23T14:03:52+01:00
+
+====== Ocaml ======
+Created Monday 23 January 2017
+
+**Ocaml Interface**
+
+ocamlc -i some.ml > some.mli

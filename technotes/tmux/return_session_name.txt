@@ -1,0 +1,4 @@
+Tmux: return session name etc
+
+
+tmux display-message -p '#S'

@@ -1,0 +1,11 @@
+ ssh 192.168.1.100
+
+$ export DISPLAY=:0
+
+
+$ firefox "www.shellhacks.com"
+
+
+Use nohup to prevent a process from being stopped after closing SSH session:
+$ nohup firefox "www.shellhacks.com"
+

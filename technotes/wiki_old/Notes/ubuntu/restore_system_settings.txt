@@ -1,0 +1,25 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2016-12-21T12:28:00+01:00
+
+====== restore system settings ======
+Created Wednesday 21 December 2016
+
+Ubuntu: restore system settings
+
+Problem: suddendly the System Settings gui is missing
+
+
+Solution:
+  
+Try first with :
+
+   sudo apt-get install unity-control-center
+
+
+
+Worst case
+
+
+   sudo apt-get install ubuntu-desktop
+

@@ -1,0 +1,8 @@
+Unison: examples ofer ssh
+
+# between  a mac a synology box and an ubuntu laptop
+
+## important is to ignore permission changes: -perms 0
+## servercommand is for the synology server
+
+unison -perms 0 -servercmd "~/local/bin/unison"  ~/aux/aux.net/library.auxbox.pub/ ssh://ronin//var/services/homes/ben/roots/userserv.ben-auxdir.priv/unison/library.auxbox.pub

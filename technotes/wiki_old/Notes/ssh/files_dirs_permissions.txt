@@ -1,0 +1,25 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2016-12-21T12:28:00+01:00
+
+====== files dirs permissions ======
+Created Wednesday 21 December 2016
+
+SSH: Files, Dirs and Permissions
+
+
+
+chmod 0750 ~/    # yeah thats the (questionable) convention
+
+   chmod 700 ~/.ssh 
+   chmod 600 ~/.ssh/*
+
+
+on the server:
+
+   chmod 600 ~/.ssh/authorized_keys 
+
+   chmod 700 ~/.ssh/
+
+
+Note: if this is not correctly set, one error might be that the keys are not recognized (loaded)(k

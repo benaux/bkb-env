@@ -1,0 +1,215 @@
+installing urxvt on mac os x
+
+
+rxvt-unicode was installed with 'brew'
+
+
+problem: couldnt run 'dialog' on urxvt terminal, Error
+
+	Error opening terminal: rxvt-unicode-256color.
+
+
+
+Solution:
+
+step 1:
+- there is no terminfo in $(brew --prefix)/share/terminfo/src/rxvt-unicode.terminfo
+
+-get rxvt-unicode from sources, eg: https://github.com/exg/rxvt-unicode
+
+- or the file here http://cvs.schmorp.de/rxvt-unicode/doc/etc/rxvt-unicode.terminfo
+
+- or in my attachements: <file://../attm/rxvt-unicode.terminfo>
+
+step 2: 
+run tic -x $(brew --prefix)/share/terminfo/src/rxvt-unicode.terminfo
+
+Note:
+
+( Further tips: https://unix.stackexchange.com/questions/196488/set-urxvt-to-work-with-256-colors )
+
+Most info comes from https://github.com/Homebrew/homebrew-x11/issues/146, see below
+
+-----
+
+Skip to content
+Features
+Business
+Explore
+Pricing
+This repository
+Sign in or Sign up
+
+16
+59
+
+    80
+
+Homebrew/homebrew-x11
+Code
+Issues 0
+Pull requests 0
+Projects 0
+Pulse
+Graphs
+rxvt-unicode-256color terminfo missing #146
+Closed
+stephen304 opened this Issue Oct 20, 2015 · 3 comments
+Assignees
+
+@apjanke apjanke
+Labels
+None yet
+Projects
+None yet
+Milestone
+No milestone
+3 participants
+@stephen304
+@apjanke
+@MikeMcQuaid
+@stephen304
+stephen304 commented Oct 20, 2015
+
+I installed via brew install homebrew/x11/rxvt-unicode and I start the terminal with urvxt. If I try to use nano or certain other tools, I get
+
+Error opening terminal: rxvt-unicode-256color.
+
+I don't see an rxvt-unicode-256color file in /usr/share/terminfo. It has
+
+./72/rxvt
+./72/rxvt+pcfkeys
+./72/rxvt-16color
+./72/rxvt-256color
+./72/rxvt-88color
+./72/rxvt-basic
+./72/rxvt-color
+./72/rxvt-cygwin
+./72/rxvt-cygwin-native
+./72/rxvt-xpm
+
+@apjanke
+Contributor
+apjanke commented Feb 21, 2016
+
+Looks like a bug in the formula and/or how Homebrew handles terminfo entries.
+
+(The following is my similar issue, migrated from Homebrew/legacy-homebrew#49397.)
+
+The rxvt-unicode distribution generates a terminfo entry for itself. But when installed via Homebrew, that terminfo entry does not get installed on the system. (At least not for me.) This is a bummer, because OS X does not ship with rxvt-unicode entries by default. (Because the upstream terminfo does not include rxvt-unicode entries, I suspect.) It would be convenient if the terminfo entries were included with the installation.
+Diagnosis
+
+The rxvt-unicode formula looks like it's trying to build the terminfo entries, but they don't show up on my system.
+
+
+  def install
+    args = %W[
+      ...
+      --with-term=rxvt-unicode-256color
+      --with-terminfo=/usr/share/terminfo
+      ...
+    ]
+
+Here's what happens during the make install for rxvt-unicode. (I did this myself from the 9.21 source distribution.)
+
+$ make -n install
+for I in src doc; do (cd $I; /Library/Developer/CommandLineTools/usr/bin/make install) || exit 1; done
+/usr/local/bin/ginstall -c -d /usr/local/bin
+/usr/local/bin/ginstall -c -m 755 rxvt  /usr/local/bin/urxvt
+/usr/local/bin/ginstall -c -m 755 rxvtc /usr/local/bin/urxvtc
+...
+/usr/local/bin/ginstall -c -m 644 rxvt.7.man  /usr/local/share/man/man7/urxvt.7
+/usr/bin/tic ./etc/rxvt-unicode.terminfo
+
+That tic call compiles the terminfo entry from the source that was generated during make. But on OS X 10.9, when I run tic as a non-root user, it compiles the entry to $HOME/.terminfo by default. (Despite the fact that man tic says it goes to /usr/share by default.) So when building a bottle, the compiled terminfo entry ends up in the sandboxed home directory and does not get picked up by the bottle.
+
+Also, the .terminfo file seems to be in ./doc/etc inside the build directory, instead of ./etc, so the tic call seems to fail anyway. Otherwise, I would expect the entry to show up in my ~/.terminfo when doing brew install -s rvxt-unicode from source, but it doesn't.
+
+[~/tmp/urxvt/rxvt-unicode-9.21]
+$ find . -name '*.terminfo'
+./doc/etc/rxvt-unicode.terminfo
+
+What to do
+
+I think we should pick up the terminfo and termcap source files as part of the installation for rxvt-unicode. And possibly compile the terminfo entry to ${prefix}/share and pick it up as part of the installation, too. Most users won't pick up that terminfo database location automatically, but at least it will be there if they want to configure it in. And with the sources available, it'll be easy for them to compile it to their user terminfo database.
+
+That --with-terminfo=/usr/share/terminfo in the formula should probably be using #{prefix}, too.
+@apjanke apjanke referenced this issue in Homebrew/legacy-homebrew Feb 21, 2016
+Closed
+rxvt-unicode does not include terminfo entry #49397
+@apjanke apjanke self-assigned this Feb 21, 2016
+@apjanke apjanke added upstream issue and removed upstream issue labels Feb 21, 2016
+@apjanke
+Contributor
+apjanke commented Feb 24, 2016
+
+Okay. I've got a formula modification that installs terminfo files. It's on my urxvt-install-terminfo branch.
+
+Learned a couple things, too. The --with-term and --with-terminfo arguments are correct as is: they determine the $TERM and $TERMINFO environment variables that urxvt will set upon startup. Pointing $TERMINFO to the system /usr/share/terminfo makes sense.
+Installing the files
+
+The formula change was pretty easy. It just adds this.
+
+    # urxvt compiles its terminfo to ~/.terminfo, which gets lost in the sandbox
+    system "/usr/bin/tic", "-x", "-o", "#{share}/terminfo",
+      "doc/etc/rxvt-unicode.terminfo"
+    chmod 0644, "doc/etc/rxvt-unicode.terminfo"
+    (pkgshare/"terminfo/src").install "doc/etc/rxvt-unicode.terminfo"
+
+Maybe it would look better with the source entry under just #{pkgshare}/src instead of #{pkgshare}/terminfo/src or #{pkgshare}/src/terminfo.
+Using the files
+Brew-controlled terminfo database
+
+Getting to use the installed entries is harder. This installs to the Homebrew-controlled terminfo database at $HOMEBREW_PREFIX/share/terminfo. That's not in your $TERMINFO by default, and you can't just repoint $TERMINFO at it, or you'll lose the system terminfo database.
+
+To use it, you need to switch to using the multi-entry $TERMINFO_DIRS path, and add the brewed terminfo database to it, so it looks something like $HOME/.terminfo:$(brew --prefix)/share/terminfo:/usr/share/terminfo.
+
+I'm doing it with this code in my ~/.zshrc. Should work for .bashrc, too.
+
+if type brew &>/dev/null; then
+  HOMEBREW_PREFIX=$(brew --prefix)
+fi
+
+# Convert TERMINFO to a multi-entry path and pick up Homebrew's terminfo
+# TODO: detect whether $TERMINFO_DIRS is supported on this system
+() {
+  if [[ -z $TERMINFO_DIRS ]]; then
+    export TERMINFO_DIRS=~/.terminfo
+    if [[ -n $HOMEBREW_PREFIX ]]; then
+      TERMINFO_DIRS="$TERMINFO_DIRS:$HOMEBREW_PREFIX/share/terminfo"
+    fi
+    if [[ -n $TERMINFO ]]; then
+      TERMINFO_DIRS="$TERMINFO_DIRS:$TERMINFO"
+      TERMINFO=""
+    fi
+    # Include the default location
+    TERMINFO_DIRS="$TERMINFO_DIRS:" 
+  fi
+}
+
+That's kind of unwieldy. A simplistic version that would work for most people would just be something like this:
+
+export TERMINFO_DIRS="~/.terminfo:$(brew --prefix)/share/terminfo:$TERMINFO:"
+unset TERMINFO
+
+I think this needs to be configured in user profile files like the bash and zsh completion paths are. So we could include a similar Caveats section in formulae which install terminfo entries. Start with a caveat in just this formula, and make a reusable stanza in core brew if that works out.
+User-level terminfo entries
+
+Alternately, you can just compile the entry to your personal ~/.terminfo database, and that $TERMINFO_DIRS configuration won't be necessary. To do this, run tic after installing urxvt:
+
+tic -x $(brew --prefix)/share/terminfo/src/rxvt-unicode.terminfo
+
+You'll need to do that once per user, and do it again after upgrading rxvt-unicode to pick up any changes to the terminfo entry (which do happen sometimes).
+@MikeMcQuaid
+Owner
+MikeMcQuaid commented Aug 10, 2016
+
+We'll accept PRs for this but we're not actively working on it at this time.
+@MikeMcQuaid MikeMcQuaid closed this Aug 10, 2016
+to join this conversation on GitHub. Already have an account? Sign in to comment
+
+    Contact GitHub API Training Shop Blog About 
+
+    © 2017 GitHub, Inc. Terms Privacy Security Status Help 
+
+

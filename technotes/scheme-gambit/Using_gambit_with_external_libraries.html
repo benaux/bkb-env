@@ -1,0 +1,388 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="en" dir="ltr">
+<head>
+<title>Using Gambit with External Libraries - Gambit wiki</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="MediaWiki 1.16.4" />
+<link rel="shortcut icon" href="/wiki/favicon.ico" />
+<link rel="search" type="application/opensearchdescription+xml" href="/wiki/opensearch_desc.php" title="Gambit wiki (en)" />
+<link rel="alternate" type="application/atom+xml" title="Gambit wiki Atom feed" href="/wiki/index.php?title=Special:RecentChanges&amp;feed=atom" />
+<link rel="stylesheet" href="/wiki/skins/common/shared.css?270" media="screen" />
+<link rel="stylesheet" href="/wiki/skins/common/commonPrint.css?270" media="print" />
+<link rel="stylesheet" href="/wiki/skins/monobook/main.css?270" media="screen" />
+<!--[if lt IE 5.5000]><link rel="stylesheet" href="/wiki/skins/monobook/IE50Fixes.css?270" media="screen" /><![endif]-->
+<!--[if IE 5.5000]><link rel="stylesheet" href="/wiki/skins/monobook/IE55Fixes.css?270" media="screen" /><![endif]-->
+<!--[if IE 6]><link rel="stylesheet" href="/wiki/skins/monobook/IE60Fixes.css?270" media="screen" /><![endif]-->
+<!--[if IE 7]><link rel="stylesheet" href="/wiki/skins/monobook/IE70Fixes.css?270" media="screen" /><![endif]-->
+<link rel="stylesheet" href="/wiki/index.php?title=MediaWiki:Common.css&amp;usemsgcache=yes&amp;ctype=text%2Fcss&amp;smaxage=18000&amp;action=raw&amp;maxage=18000" />
+<link rel="stylesheet" href="/wiki/index.php?title=MediaWiki:Print.css&amp;usemsgcache=yes&amp;ctype=text%2Fcss&amp;smaxage=18000&amp;action=raw&amp;maxage=18000" media="print" />
+<link rel="stylesheet" href="/wiki/index.php?title=MediaWiki:Monobook.css&amp;usemsgcache=yes&amp;ctype=text%2Fcss&amp;smaxage=18000&amp;action=raw&amp;maxage=18000" />
+<link rel="stylesheet" href="/wiki/index.php?title=-&amp;action=raw&amp;maxage=18000&amp;gen=css" />
+<script>
+var skin="monobook",
+stylepath="/wiki/skins",
+wgUrlProtocols="http\\:\\/\\/|https\\:\\/\\/|ftp\\:\\/\\/|irc\\:\\/\\/|gopher\\:\\/\\/|telnet\\:\\/\\/|nntp\\:\\/\\/|worldwind\\:\\/\\/|mailto\\:|news\\:|svn\\:\\/\\/",
+wgArticlePath="/wiki/index.php/$1",
+wgScriptPath="/wiki",
+wgScriptExtension=".php",
+wgScript="/wiki/index.php",
+wgVariantArticlePath=false,
+wgActionPaths={},
+wgServer="http://gambitscheme.org",
+wgCanonicalNamespace="",
+wgCanonicalSpecialPageName=false,
+wgNamespaceNumber=0,
+wgPageName="Using_Gambit_with_External_Libraries",
+wgTitle="Using Gambit with External Libraries",
+wgAction="view",
+wgArticleId=80,
+wgIsArticle=true,
+wgUserName=null,
+wgUserGroups=null,
+wgUserLanguage="en",
+wgContentLanguage="en",
+wgBreakFrames=false,
+wgCurRevisionId=2674,
+wgVersion="1.16.4",
+wgEnableAPI=true,
+wgEnableWriteAPI=true,
+wgSeparatorTransformTable=["", ""],
+wgDigitTransformTable=["", ""],
+wgMainPageTitle="Main Page",
+wgFormattedNamespaces={"-2": "Media", "-1": "Special", "0": "", "1": "Talk", "2": "User", "3": "User talk", "4": "Gambit wiki", "5": "Gambit wiki talk", "6": "File", "7": "File talk", "8": "MediaWiki", "9": "MediaWiki talk", "10": "Template", "11": "Template talk", "12": "Help", "13": "Help talk", "14": "Category", "15": "Category talk", "100": "Documentation", "101": "Documentation talk", "102": "Script", "103": "Script talk"},
+wgNamespaceIds={"media": -2, "special": -1, "": 0, "talk": 1, "user": 2, "user_talk": 3, "gambit_wiki": 4, "gambit_wiki_talk": 5, "file": 6, "file_talk": 7, "mediawiki": 8, "mediawiki_talk": 9, "template": 10, "template_talk": 11, "help": 12, "help_talk": 13, "category": 14, "category_talk": 15, "documentation": 100, "documentation_talk": 101, "script": 102, "script_talk": 103, "image": 6, "image_talk": 7},
+wgSiteName="Gambit wiki",
+wgCategories=["FFI"],
+wgRestrictionEdit=[],
+wgRestrictionMove=[];
+</script><script src="/wiki/skins/common/wikibits.js?270"></script>
+<script src="/wiki/skins/common/ajax.js?270"></script>
+<script src="/wiki/index.php?title=-&amp;action=raw&amp;gen=js&amp;useskin=monobook&amp;270"></script>
+
+</head>
+<body class="mediawiki ltr ns-0 ns-subject page-Using_Gambit_with_External_Libraries skin-monobook">
+<div id="globalWrapper">
+<div id="column-content"><div id="content" >
+	<a id="top"></a>
+	
+	<h1 id="firstHeading" class="firstHeading">Using Gambit with External Libraries</h1>
+	<div id="bodyContent">
+		<h3 id="siteSub">From Gambit wiki</h3>
+		<div id="contentSub"></div>
+		<div id="jump-to-nav">Jump to: <a href="#column-one">navigation</a>, <a href="#searchInput">search</a></div>
+		<!-- start content -->
+<table id="toc" class="toc"><tr><td><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#The_return_strategy_required_by_Gambit_apps_on_Scheme-.3EC-.3EScheme_calls"><span class="tocnumber">1</span> <span class="toctext">The return strategy required by Gambit apps on Scheme-&gt;C-&gt;Scheme calls</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Ensuring_singlethreaded_behaviour"><span class="tocnumber">2</span> <span class="toctext">Ensuring singlethreaded behaviour</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Export_and_import_C_symbols"><span class="tocnumber">3</span> <span class="toctext">Export and import C symbols</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Using_gsc_to_compile_and_link_a_dynamically_loadable_object_file_that_uses_external_libraries"><span class="tocnumber">4</span> <span class="toctext">Using gsc to compile and link a dynamically loadable object file that uses external libraries</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Accessing_Scheme_vectors_within_a_C_function"><span class="tocnumber">5</span> <span class="toctext">Accessing Scheme vectors within a C function</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Practices_in_FFI_development"><span class="tocnumber">6</span> <span class="toctext">Practices in FFI development</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#Garbage_collect_foreign_c_objects"><span class="tocnumber">7</span> <span class="toctext">Garbage collect foreign c objects</span></a></li>
+</ul>
+</td></tr></table><script>if (window.showTocToggle) { var tocShowText = "show"; var tocHideText = "hide"; showTocToggle(); } </script>
+<h2> <span class="mw-headline" id="The_return_strategy_required_by_Gambit_apps_on_Scheme-.3EC-.3EScheme_calls"> The return strategy required by Gambit apps on Scheme-&gt;C-&gt;Scheme calls </span></h2>
+<p>How Gambit integrates the Scheme heap with the C stack is described in the section "19.7 Continuations and the C-interface" in the manual, and also in section 3 of the paper <a href="http://www.iro.umontreal.ca/~feeley/papers/FeeleySW00.pdf" class="external text" rel="nofollow">A Portable Implementation of First-Class Continuations for Unrestricted Interoperaibility with C in a Multithreaded Scheme</a>. Here is a clarification though, which was detailed 28 march 2011 on the mailing list:
+</p><p>If you have several C stack frames (produced by a Scheme-&gt;C call which made a C-&gt;Scheme call that made a Scheme-&gt;C call in turn) at the same time, you must return them in the same sequence as you'd have needed to do ordinarily in C, i.e. from the last to the first in sequence.
+</p><p>I.e., if you have the Scheme procedures A, C, E and G, and the C procedures b, d and f, and they invoke each other A -&gt; b -&gt; C -&gt; d -&gt; E -&gt; f -&gt; G, then you must ensure that G will return to f, f to E, E to d, d to C, C to b and b to A.
+</p><p>If you return them in another order - i.e. for example G to d etc. - there will be a runtime error, which terminates the application silently.
+</p><p>Note that anytime during a program's execution in the Scheme world, Gambit's thread multitasker may switch the running thread. If several threads do Scheme-&gt;C-&gt;Scheme calls at the same time, then in the ordinary case, thread switching may happen such that the C stack is rewinded invalidly (i.e. in another order than as described above), which at some point (not necessarily on the first invalid return) will cause the abovementioned runtime error. You can fix this by
+</p>
+<ul><li> keeping all Scheme-&gt;C-&gt;Scheme calls in your app to one thread in total,
+</li><li> by rewriting your code to do what you wanted to achieve through making a C-&gt;Scheme call some other way instead (for instance by using advanced C programming techniques that are beyond the scope of this document),
+</li><li> or by going with the "Ensuring singlethreaded behavior" described below.
+</li></ul>
+<p>(Advanced note: Actually Gambit allows you to skip returning procedures, i.e. A -&gt; b -&gt; C -&gt; d -&gt; E, and then E returns directly to b, works. On the call to b, d's C stack frame is rewinded though, and returning to d would cause the abovementioned runtime error. This works because Gambit on the call to b makes a longjump that simply disposes of d's stack frame. This strategy could cause stack memory leaks though.
+If you by any reason explore how use of this side of the FFI can be made use of, please document it here and on the mailing list.)
+</p>
+<h2> <span class="mw-headline" id="Ensuring_singlethreaded_behaviour"> Ensuring singlethreaded behaviour </span></h2>
+<p>In certain situations, it's vital to ensure a single thread of execution.
+</p><p>One way may be to create one thread to which you send closures containing code to be executed, and which returns the responses through a mailbox mechanism, there's an example implementation in the Gambit manual.
+</p><p>Ways to get Gambit execute completely single-threaded is:
+</p>
+<ul><li> Use (thread-quantum-set! (current-thread) +inf.0)
+</li></ul>
+<ul><li> Use (##disable-interrupts) and (##enable-interrupts) in Scheme or ___EXT(___disable_interrupts)() and ___EXT(___enable_interrupts)() from C.
+</li></ul>
+<p>Please note that Gambit's I/O system makes use of the scheduler, and threading routines do this also, so don't do read, write, thread-sleep!, thread-yield! etc. in code you intended to execute single-threaded.
+</p>
+<h2> <span class="mw-headline" id="Export_and_import_C_symbols"> Export and import C symbols </span></h2>
+<p>Gambit's gambit.h provides helper macros for exporting functions and variables. They are  ___EXPORT_FUNC(type,name) and ___EXPORT_DATA(type,name), and are used like ___EXPORT_FUNC(int,five) () { return 5; } . Grep lib/*.c of the Gambit sources for EXP_FUNC and EXP_DATA to see examples.
+</p><p>On Windows, exporting and importing functions and variables from C code may be particularly tricky. Check out the Microsoft-provided __declspec(dllexport) and __declspec(dllimport).
+</p>
+<h2> <span class="mw-headline" id="Using_gsc_to_compile_and_link_a_dynamically_loadable_object_file_that_uses_external_libraries"> Using gsc to compile and link a dynamically loadable object file that uses external libraries </span></h2>
+<p>Here is an example of building a dynamically loadable Gambit object file that uses <a href="http://www.fftw.org" class="external text" rel="nofollow">FFTW</a>.  This example is on Red Hat Enterprise Linux 4.2 on x86-64.
+</p><p>The program uses the FFTW version 2 API, so we downloaded fftw-2.1.5.tar.gz, untarred it and configured it with
+</p>
+<pre>
+./configure --enable-shared --prefix=/export/users/lucier/local/fftw-2.1.5
+</pre>
+<p>You need the <tt>--enable-shared</tt> option because shared Gambit modules must be linked to shared external libraries.  I set the <tt>--prefix</tt> to install the final FFTW libraries and header files in my home directory.
+</p><p>The file <tt>fftbasics.scm</tt> provides the basic interface between the Scheme code and FFTW; it is as follows:
+</p>
+<pre>
+(c-declare
+&quot;
+#include \&quot;fftw.h\&quot;
+
+fftwnd_plan p;
+
+&quot;)
+
+(define fftw2d_create_plan_backward
+  (c-lambda ()
+            void
+            &quot;p = fftw2d_create_plan(64,
+                                    64,
+                                    FFTW_BACKWARD,
+                                    FFTW_ESTIMATE | FFTW_IN_PLACE);
+            &quot;))
+
+(define fftw2d_create_plan_forward
+  (c-lambda ()
+            void
+            &quot;p = fftw2d_create_plan(64,
+                                    64,
+                                    FFTW_FORWARD,
+                                    FFTW_ESTIMATE | FFTW_IN_PLACE);
+            &quot;))
+
+;;; Both forward and backward ffts, depends on which way the plan was created.
+
+(define fftwc
+  (c-lambda (scheme-object)
+            void
+            &quot;
+int j; double *fp = (double *)((___WORD)___BODY_AS(___arg1,___tSUBTYPED));
+  fftwnd_one(p,
+             (fftw_complex *)(fp),
+             NULL);
+  for (j = 0; j &lt; 64 * 64 * 2; j++)
+    fp[j] *= .015625;
+&quot;))
+</pre>
+<p>We need to pass special options to gsc to compile this file, namely
+</p>
+<pre>
+gsc -cc-options &quot;-I/export/users/lucier/local/fftw-2.1.5/include&quot; \
+    -ld-options &quot;-L/export/users/lucier/local/fftw-2.1.5/lib/ -Wl,-rpath,/export/users/lucier/local/fftw-2.1.5/lib/ -lfftw&quot; fftbasic.scm
+</pre>
+<p>The first option (<tt>-I/export/users/lucier/local/fftw-2.1.5/include</tt>) tells gcc where to find the header file <tt>fftw.h</tt> at compile time.  The second option (<tt>-L/export/users/lucier/local/fftw-2.1.5/lib/</tt>) tells the linker where to find the FFTW library (<tt>-lfftw</tt>) at link time (i.e., when building the file <tt>fftwbasic.o1</tt> from <tt>fftwbasic.o</tt>), and the third option (<tt>-Wl,-rpath,/export/users/lucier/local/fftw-2.1.5/lib/</tt>) tells the dynamic loader <tt>ldd</tt> where to find the FFTW library when <tt>fftwbasic.o1</tt> is loaded into gsc.
+</p><p><b>Aside</b>: Note that if the headers and libraries are in a standard place known to gcc, and the location of the shared library is already in the path of the dynamic loader, then these options may not be necessary.  In many GNU/Linux systems, for examples, nearly all packages are installed in <tt>/usr/{bin,include,lib}</tt>, and you may not need to pass these special options to gsc.
+</p><p>Then we can do
+</p>
+<pre>
+euler-316% gsc
+Gambit v4.2.8
+
+&gt; (load &quot;fftbasic&quot;)
+&quot;/export/users/lucier/programs/gambc-v4_2_8/test-load-options/fftbasic.o1&quot;
+&gt; fftwc
+#&lt;procedure #2 fftwc&gt;
+&gt;
+*** EOF again to exit
+</pre>
+<p>We can check that <tt>fftbasic.o1</tt> links to the right libraries:
+</p>
+<pre>
+euler-317% ldd fftbasic.o1
+        libfftw.so.2 =&gt; /export/users/lucier/local/fftw-2.1.5/lib/libfftw.so.2 (0x0000002a9565a000)
+        libc.so.6 =&gt; /lib64/tls/libc.so.6 (0x0000002a957aa000)
+        libm.so.6 =&gt; /lib64/tls/libm.so.6 (0x0000002a959df000)
+        /lib64/ld-linux-x86-64.so.2 (0x000000552aaaa000)
+</pre>
+<p>Finally, recall from the the <a href="http://www.iro.umontreal.ca/~gambit/doc/gambit-c.html#SEC21" class="external text" rel="nofollow">Gambit manual</a> that anything you can do with gsc on the command line you can do with one of the gsc-specific scheme procedures <tt>compile-file</tt>, <tt>compile-file-to-c</tt>, <tt>link-incremental</tt>, or <tt>link-flat</tt>.  Thus, one could build <tt>fftbasic.o1</tt> by
+</p>
+<pre>
+euler-352% gsc
+Gambit v4.2.8
+
+&gt; (compile-file &quot;fftbasic.scm&quot; cc-options: &quot;-I/export/users/lucier/local/fftw-2.1.5/include&quot;
+ ld-options: &quot;-L/export/users/lucier/local/fftw-2.1.5/lib/ -Wl,-rpath,/export/users/lucier/local/fftw-2.1.5/lib/ -lfftw&quot;)
+#t
+&gt; (load &quot;fftbasic&quot;)
+&quot;/export/users/lucier/programs/gambc-v4_2_8/test-load-options/fftbasic.o1&quot;
+&gt; fftwc
+#&lt;procedure #2 fftwc&gt;
+</pre>
+<p><br />
+</p>
+<h2> <span class="mw-headline" id="Accessing_Scheme_vectors_within_a_C_function"> Accessing Scheme vectors within a C function </span></h2>
+<p>Example. Get the pointer to the beginning of a u8vector Scheme object:
+</p>
+<pre>
+(define ffi-with-scheme-vectors
+  (c-lambda (scheme-object int)&nbsp;; scheme-object&nbsp;: the vector , int&nbsp;: the vector size
+            void
+            &quot;
+//void *u8vectorptr = ___CAST(void*,&amp;___FETCH_U8(___BODY(___arg1),___INT(0)));
+//void *u8vectorptr = ___CAST(void*,&amp;___FETCH_U8(___arg1,0));
+//void *u8vectorptr = ___CAST(void*,___BODY(___arg1));
+//void *u8vectorptr = ___CAST(___U8*,___BODY_AS(___arg1,___tSUBTYPED));
+
+// Of course, you can cast directly to uchar* if you plan to work with that
+unsigned char *u8vectorptr = ___CAST(___U8*,___BODY_AS(___arg1,___tSUBTYPED));
+
+/* Then here do your work with *u8vectorptr, you have its size as the ___arg2 argument */
+            &quot;))
+</pre>
+<p>(Note: There are macros also to get vector length. Note that some of the vector-related deal with vector size in bytes not elements, and that they may return the length as a Gambit fixnum so you need to run it through the ___INT macro to get it in C int format.)
+</p><p>Look for examples in "gambit.h"
+</p><p>Caveat: the C compiler does not know that the GC might move objects, so the C code must be written to avoid calling the GC either directly or indirectly. Remember that the pointer is only to be kept until the next return to Scheme.
+</p>
+<h2> <span class="mw-headline" id="Practices_in_FFI_development"> Practices in FFI development </span></h2>
+<p>(There are a couple of posts from September 2008 in the mailing list archive on this subject. Someone please cut and paste them over here.)
+</p>
+<pre>  <a href="https://mercure.iro.umontreal.ca/pipermail/gambit-list/2008-September/002572.html" class="external free" rel="nofollow">https://mercure.iro.umontreal.ca/pipermail/gambit-list/2008-September/002572.html</a>
+</pre>
+<h2> <span class="mw-headline" id="Garbage_collect_foreign_c_objects"> Garbage collect foreign c objects </span></h2>
+<p>For more information see Wills in section Weak references from the gambit <a href="http://www.iro.umontreal.ca/~gambit/doc/gambit-c.html#Weak-references" class="external text" rel="nofollow">user documentation</a>.
+</p><p>Here is a self-explanatory and simple example, using malloc and free functions letting the gambit to control the lifetime.
+</p><p>In a file:
+</p>
+<pre>
+;; gc-ffi.scm
+
+(c-declare &quot;#include &lt;stdlib.h&gt;&quot;)
+(define malloc (c-lambda (int) (pointer void) &quot;malloc&quot;))
+(define free (c-lambda ((pointer void)) void &quot;free&quot;))
+
+(define (make-memory bytes)
+  (let ((mem (malloc bytes)))
+    (make-will mem (lambda (obj) (display &quot;free function called\n&quot;) (free obj)))
+    mem))
+</pre>
+<p><br />
+in gsc:
+</p>
+<pre>
+&gt; (compile-file &quot;gc-ffi&quot;)
+#t
+&gt; (load &quot;gc-ffi&quot;)        
+&quot;/home/user/gc-ffi.o1&quot;
+&gt; (define x (make-memory 10))
+&gt; (##gc)&nbsp;;; Make the garbage collection run
+&gt; (define x 'other-thing)
+&gt; (##gc)                 
+free function called
+</pre>
+<p>The most important function here is <b>make-will</b>, it enables to call a function when some object is not more strongly referenced.
+</p>
+<!-- 
+NewPP limit report
+Preprocessor node count: 95/1000000
+Post-expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key gambit_wiki_v2-gambit_wiki2_v2_:pcache:idhash:80-0!1!0!!en!2!edit=0 and timestamp 20170918195443 -->
+<div class="printfooter">
+Retrieved from "<a href="http://gambitscheme.org/wiki/index.php/Using_Gambit_with_External_Libraries">http://gambitscheme.org/wiki/index.php/Using_Gambit_with_External_Libraries</a>"</div>
+		<div id='catlinks' class='catlinks'><div id="mw-normal-catlinks"><a href="/wiki/index.php/Special:Categories" title="Special:Categories">Category</a>: <span dir='ltr'><a href="/wiki/index.php?title=Category:FFI&amp;action=edit&amp;redlink=1" class="new" title="Category:FFI (page does not exist)">FFI</a></span></div></div>		<!-- end content -->
+				<div class="visualClear"></div>
+	</div>
+</div></div>
+<div id="column-one">
+	<div id="p-cactions" class="portlet">
+		<h5>Views</h5>
+		<div class="pBody">
+			<ul>
+				 <li id="ca-nstab-main" class="selected"><a href="/wiki/index.php/Using_Gambit_with_External_Libraries" title="View the content page [c]" accesskey="c">Page</a></li>
+				 <li id="ca-talk" class="new"><a href="/wiki/index.php?title=Talk:Using_Gambit_with_External_Libraries&amp;action=edit&amp;redlink=1" title="Discussion about the content page [t]" accesskey="t">Discussion</a></li>
+				 <li id="ca-viewsource"><a href="/wiki/index.php?title=Using_Gambit_with_External_Libraries&amp;action=edit" title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></li>
+				 <li id="ca-history"><a href="/wiki/index.php?title=Using_Gambit_with_External_Libraries&amp;action=history" title="Past revisions of this page [h]" accesskey="h">History</a></li>
+			</ul>
+		</div>
+	</div>
+	<div class="portlet" id="p-personal">
+		<h5>Personal tools</h5>
+		<div class="pBody">
+			<ul>
+				<li id="pt-login"><a href="/wiki/index.php?title=Special:UserLogin&amp;returnto=Using_Gambit_with_External_Libraries" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li>
+			</ul>
+		</div>
+	</div>
+	<div class="portlet" id="p-logo">
+		<a style="background-image: url(/wiki/skins/common/images/gambit-logo.png);" href="/wiki/index.php/Main_Page" title="Visit the main page"></a>
+	</div>
+	<script type="text/javascript"> if (window.isMSIE55) fixalpha(); </script>
+	<div class='generated-sidebar portlet' id='p-overview'>
+		<h5>overview</h5>
+		<div class='pBody'>
+			<ul>
+				<li id="n-Main-Page"><a href="/wiki/index.php/Main_Page">Main Page</a></li>
+				<li id="n-External-links"><a href="/wiki/index.php/External_links">External links</a></li>
+			</ul>
+		</div>
+	</div>
+	<div class='generated-sidebar portlet' id='p-download'>
+		<h5>download</h5>
+		<div class='pBody'>
+			<ul>
+				<li id="n-Gambit-system"><a href="/wiki/index.php/Distributions">Gambit system</a></li>
+				<li id="n-Packages"><a href="/wiki/index.php/Packages">Packages</a></li>
+			</ul>
+		</div>
+	</div>
+	<div class='generated-sidebar portlet' id='p-documentation'>
+		<h5>documentation</h5>
+		<div class='pBody'>
+			<ul>
+				<li id="n-All"><a href="/wiki/index.php/Documentation">All</a></li>
+				<li id="n-Manual"><a href="http://www.iro.umontreal.ca/~gambit/doc/gambit.html">Manual</a></li>
+				<li id="n-Manual-in-PDF"><a href="http://www.iro.umontreal.ca/~gambit/doc/gambit.pdf">Manual in PDF</a></li>
+			</ul>
+		</div>
+	</div>
+	<div class='generated-sidebar portlet' id='p-contributing'>
+		<h5>contributing</h5>
+		<div class='pBody'>
+			<ul>
+				<li id="n-How-to-contribute"><a href="/wiki/index.php/How_to_contribute">How to contribute</a></li>
+				<li id="n-Changelog"><a href="https://github.com/feeley/gambit/commits">Changelog</a></li>
+				<li id="n-Bug-reports"><a href="https://github.com/feeley/gambit/issues">Bug reports</a></li>
+				<li id="n-Chat-room"><a href="https://gitter.im/feeley/gambit">Chat room</a></li>
+				<li id="n-Mailing-list"><a href="https://webmail.iro.umontreal.ca/mailman/listinfo/gambit-list">Mailing-list</a></li>
+				<li id="n-Mailing-list-archive"><a href="https://webmail.iro.umontreal.ca/pipermail/gambit-list/">Mailing-list archive</a></li>
+			</ul>
+		</div>
+	</div>
+	<div id="p-search" class="portlet">
+		<h5><label for="searchInput">Search</label></h5>
+		<div id="searchBody" class="pBody">
+			<form action="/wiki/index.php" id="searchform">
+				<input type='hidden' name="title" value="Special:Search"/>
+				<input id="searchInput" title="Search Gambit wiki" accesskey="f" type="search" name="search" />
+				<input type='submit' name="go" class="searchButton" id="searchGoButton"	value="Go" title="Go to a page with this exact name if exists" />&nbsp;
+				<input type='submit' name="fulltext" class="searchButton" id="mw-searchButton" value="Search" title="Search the pages for this text" />
+			</form>
+		</div>
+	</div>
+	<div class="portlet" id="p-tb">
+		<h5>Toolbox</h5>
+		<div class="pBody">
+			<ul>
+				<li id="t-whatlinkshere"><a href="/wiki/index.php/Special:WhatLinksHere/Using_Gambit_with_External_Libraries" title="List of all wiki pages that link here [j]" accesskey="j">What links here</a></li>
+				<li id="t-recentchangeslinked"><a href="/wiki/index.php/Special:RecentChangesLinked/Using_Gambit_with_External_Libraries" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li>
+<li id="t-specialpages"><a href="/wiki/index.php/Special:SpecialPages" title="List of all special pages [q]" accesskey="q">Special pages</a></li>
+				<li id="t-print"><a href="/wiki/index.php?title=Using_Gambit_with_External_Libraries&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li>				<li id="t-permalink"><a href="/wiki/index.php?title=Using_Gambit_with_External_Libraries&amp;oldid=2674" title="Permanent link to this revision of the page">Permanent link</a></li>			</ul>
+		</div>
+	</div>
+</div><!-- end of the left (by default at least) column -->
+<div class="visualClear"></div>
+<div id="footer">
+	<div id="f-poweredbyico"><a href="http://www.mediawiki.org/"><img src="/wiki/skins/common/images/poweredby_mediawiki_88x31.png" height="31" width="88" alt="Powered by MediaWiki" /></a></div>
+	<ul id="f-list">
+		<li id="lastmod"> This page was last modified on 3 May 2014, at 14:15.</li>
+		<li id="viewcount">This page has been accessed 39,953 times.</li>
+		<li id="privacy"><a href="/wiki/index.php/Gambit_wiki:Privacy_policy" title="Gambit wiki:Privacy policy">Privacy policy</a></li>
+		<li id="about"><a href="/wiki/index.php/Gambit_wiki:About" title="Gambit wiki:About">About Gambit wiki</a></li>
+		<li id="disclaimer"><a href="/wiki/index.php/Gambit_wiki:General_disclaimer" title="Gambit wiki:General disclaimer">Disclaimers</a></li>
+	</ul>
+</div>
+</div>
+
+<script>if (window.runOnloadHook) runOnloadHook();</script>
+<!-- Served in 0.332 secs. --></body></html>

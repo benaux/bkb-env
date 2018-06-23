@@ -1,0 +1,13 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2016-12-21T12:17:45+01:00
+
+====== git add remote origin ======
+Created Wednesday 21 December 2016
+
+Git: Add a remote origin
+
+git remote add origin ben@git.server.com:/home/ben/code/foobar.git
+
+
+

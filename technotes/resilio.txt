@@ -1,0 +1,33 @@
+# Resilio sync
+
+Can be run in 2 variants: system wide or user scoped
+
+Getting started (as user):
+
+edit file /usr/lib/systemd/user/resilio-sync.service and change "WantedBy=multi-user.target" to "WantedBy=default.target". Save. Then enable the service
+
+	systemctl --user enable resilio-sync
+	systemctl --user start  resilio-sync
+
+other modes:
+	start / stop
+	enable / disable
+	status
+
+Run as system user:
+
+	sudo service resilio-sync start 
+
+Error:
+	"resilio-sync.service: Unit entered failed state"
+
+Reason: wrong permission in ~/.config/resilio-sync
+
+Correct perms: drwxr-xr-x  3 bkb bkb 4096 Mai 22 17:10 resilio-sync
+
+Try that if problems with resilio-sync:
+
+	systemctl --user disable resilio-sync
+	systemctl disable resilio-sync
+	systemctl --user enable resilio-sync
+

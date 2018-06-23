@@ -15,10 +15,10 @@ set -l cabalbins $HOME/.cabal/bin
 set -l gambitbin /usr/local/Gambit/bin 
 set -l dotnetbin /usr/local/share/dotnet/
 set -l buildbin $HOME/builds/bin
+set -l npmbin $HOME/.npm-global/bin
+set -l guixbin $HOME/.guix-profile/bin
 
-
-set -l langbins $monobin $gobin $rustbin $racketbin $nodebin $nimbins $cabalbins $gambitbini $dotnetbin $buildbin
-
+set -l langbins $monobin $gobin $rustbin $racketbin $nodebin $nimbins $cabalbins $gambitbini $dotnetbin $buildbin $npmbin $guixbin
 
 for bin in $langbins
    test -d $bin ; and set -gx PATH $bin $PATH

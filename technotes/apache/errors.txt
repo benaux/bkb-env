@@ -1,0 +1,21 @@
+Apache Errors
+=============
+
+
+-----
+https://wiki.apache.org/httpd/PcfgOpenfile
+
+## (13)Permission denied: /home/user/htdocs/test.html/.htaccess pcfg_openfile: unable to check htaccess file, ensure it is readable
+
+Apache httpd allows the use of distributed configuration files (usually called .htaccess) that control the configuration for different parts of the filesystem. When configured to use these configuration files, httpd must check for them in each directory along the path to the requested file. If it cannot check for any reasons, it must deny access to avoid revealing content that should be protected by an unreadable .htaccess file.
+
+The above error message indicates that httpd is unable to check whether an .htaccess file exists. This is often caused by too-strict file-system permissions on the directory (as shown by the (13)Permission denied part of the message). Some possible solutions:
+
+    Just ask httpd to stop looking for .htaccess files by setting AllowOverride None in httpd.conf for the relevant directories.
+
+    Fix the file-system permissions on the directory path (often /home/user). chmod 755 is usually sufficient, and you can set stricter permissions if httpd is configured to run under the user or group that owns the directory. 
+
+In some cases, this error can also be caused by special file-systems that return unexpected errors on attempted directory access. For example, some file-systems allow files to be treated as directories in certain cases. If httpd believes that a file is actually a directory, it will try to look inside for an .htaccess file. If it gets a permission denied error in return, it will deny access. This type of situation is usually a faulty file-system behavior and cannot be fixed within Apache. In this case your only choice is to turn off .htaccess processing as in the first solution above. 
+
+
+-------

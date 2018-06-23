@@ -1,0 +1,13 @@
+Bash: sha1 encryption
+
+
+
+echo -n "value" | openssl sha1 -hmac "key"
+
+echo -n "foobar" | openssl dgst -sha256
+
+
+echo -n foobar | sha256sum
+
+
+echo -n "foobar" | shasum -a 256

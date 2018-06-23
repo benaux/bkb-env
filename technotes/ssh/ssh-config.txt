@@ -1,0 +1,5 @@
+# Default GitHub user
+Host github.com
+ HostName github.com
+ PreferredAuthentications publickey
+ IdentityFile ~/.ssh/personalid

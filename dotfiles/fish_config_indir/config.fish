@@ -1,5 +1,6 @@
 #" fish_vi_modl
 #
+set -gx INFOPATH "/home/bkb/.guix-profile/share/info" $INFOPATH
 set FUNCTIONS $HOME/.config/fish/functions
 
 if [ -d $FUNCTIONS ] 

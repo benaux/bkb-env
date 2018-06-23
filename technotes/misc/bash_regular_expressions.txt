@@ -1,0 +1,697 @@
+From <http://www.linuxjournal.com/content/bash-regular-expressions>:
+
+[Skip to Navigation][3]
+
+   [1]: http://pixel.quantserve.com/pixel/p-a3K3N6enFe9wA.gif
+   [2]: http://www.quantcast.com/p-a3K3N6enFe9wA
+   [3]: #navigation
+
+[Click to subscribe][4]
+
+   [4]: http://www.linuxjournal.com/subscribe
+
+[Login][5]
+
+   [5]: /user
+
+[![Linux Journal][6]][7]
+
+   [6]: /files/linuxjournal.com/ufiles/logo-lj.jpg
+   [7]: / (Home)
+
+[Home][8] › 
+
+   [8]: /
+
+# Bash Regular Expressions
+
+May 26, 2008  By [Mitch Frazier][9]
+
+   [9]: /users/mitch-frazier (View user profile.)
+
+ in
+
+  * [Software][10]
+
+   [10]: /taxonomy/term/17 ()
+
+When working with regular expressions in a shell script the norm is to use _grep_ or _sed_ or some other external command/program. Since version 3 of bash (released in 2004) there is another option: bash's built-in regular expression comparison operator "=~". 
+
+Bash's regular expression comparison operator takes a string on the left and an extended regular expression on the right. It returns 0 (success) if the regular expression matches the string, otherwise it returns 1 (failure). 
+
+In addition to doing simple matching, bash regular expressions support sub-patterns surrounded by parenthesis for capturing parts of the match. The matches are assigned to an array variable BASH_REMATCH. The entire match is assigned to BASH_REMATCH[0], the first sub-pattern is assigned to BASH_REMATCH[1], etc.. 
+
+The following example script takes a regular expression as its first argument and one or more strings to match against. It then cycles through the strings and outputs the results of the match process: 
+    
+    #!/bin.bash
+    
+    if [[ $# -lt 2 ]]; then
+        echo "Usage: $0 PATTERN STRINGS..."
+        exit 1
+    fi
+    regex=$1
+    shift
+    echo "regex: $regex"
+    echo
+    
+    while [[ $1 ]]
+    do
+        if [[ $1 =~ $regex ]]; then
+            echo "$1 matches"
+            i=1
+            n=${#BASH_REMATCH[*]}
+            while [[ $i -lt $n ]]
+            do
+                echo "  capture[$i]: ${BASH_REMATCH[$i]}"
+                let i++
+            done
+        else
+            echo "$1 does not match"
+        fi
+        shift
+    done
+    
+
+Assuming the script is saved in "bashre.sh", the following sample shows its output: 
+    
+    
+      # sh bashre.sh 'aa(b{2,3}[xyz])cc' aabbxcc aabbcc
+      regex: aa(b{2,3}[xyz])cc
+    
+      aabbxcc matches
+        capture[1]: bbx
+      aabbcc does not match
+    
+
+______________________ 
+
+Mitch Frazier is an Associate Editor for _Linux Journal_. 
+
+  * [Login to save this as favorite][11]
+  * [![del.icio.us][12]][13]
+  * [![Digg][14]][15]
+  * [![Facebook][16]][17]
+  * [![Reddit][18]][19]
+  * [![SlashDot][20]][21]
+  * [![StumbleUpon][22]][23]
+  * [![Post to Twitter][24]][25]
+
+   [11]: /u?destination=node%2F1006996
+   [12]: /sites/linuxjournal.com/modules/service_links/images/delicious.png ()
+   [13]: http://del.icio.us/post?url=http%3A%2F%2Fwww.linuxjournal.com%2Fcontent%2Fbash-regular-expressions&title=Bash+Regular+Expressions (Bookmark this post on del.icio.us.)
+   [14]: /sites/linuxjournal.com/modules/service_links/images/digg.png ()
+   [15]: http://digg.com/submit?phase=2&url=http%3A%2F%2Fwww.linuxjournal.com%2Fcontent%2Fbash-regular-expressions&title=Bash+Regular+Expressions (Digg this post on digg.com)
+   [16]: /sites/linuxjournal.com/modules/service_links/images/facebook.png ()
+   [17]: http://www.facebook.com/sharer.php?u=http%3A%2F%2Fwww.linuxjournal.com%2Fcontent%2Fbash-regular-expressions&t=Bash+Regular+Expressions (Share on Facebook.)
+   [18]: /sites/linuxjournal.com/modules/service_links/images/reddit.png ()
+   [19]: http://reddit.com/submit?url=http%3A%2F%2Fwww.linuxjournal.com%2Fcontent%2Fbash-regular-expressions&title=Bash+Regular+Expressions (Submit this post on reddit.com.)
+   [20]: /sites/linuxjournal.com/modules/service_links/images/slashdot.png ()
+   [21]: http://slashdot.org/bookmark.pl?url=http%3A%2F%2Fwww.linuxjournal.com%2Fcontent%2Fbash-regular-expressions&title=Bash+Regular+Expressions (Bookmark this post on SlashDot)
+   [22]: /sites/linuxjournal.com/modules/service_links/images/stumbleit.png ()
+   [23]: http://www.stumbleupon.com/submit?url=http%3A%2F%2Fwww.linuxjournal.com%2Fcontent%2Fbash-regular-expressions&title=Bash+Regular+Expressions (Thumb this up at StumbleUpon)
+   [24]: /sites/linuxjournal.com/modules/tweet/twitter.png (Post to Twitter)
+   [25]: http://twitter.com/home?status=+Bash+Regular+Expressions%3A+http%3A/%2Fwww.linuxjournal.com/content/bash-regular-expressions
+
+## Comments
+
+## Comment viewing options
+
+Flat list - collapsedFlat list - expandedThreaded list - collapsedThreaded list - expanded
+
+Date - newest firstDate - oldest first
+
+10 comments per page30 comments per page50 comments per page70 comments per page90 comments per page150 comments per page200 comments per page250 comments per page300 comments per page
+
+Select your preferred way to display the comments and click "Save settings" to activate your changes.
+
+###  [bash-regular-expressions][26]
+
+   [26]: /content/bash-regular-expressions#comment-352939
+
+![Anonymous's picture][27]
+
+   [27]: /files/linuxjournal.com/images/personicon.jpg (Anonymous's picture)
+
+Submitted by Anonymous (not verified) on Thu, 06/17/2010 - 22:53. 
+
+if [[ $1 =~ $regex ]]; then  
+this is not working in Fedora Core 10, does anybody help ?
+
+###  [More Details][28]
+
+   [28]: /content/bash-regular-expressions#comment-352963
+
+[![Mitch Frazier's picture][29]][30]
+
+   [29]: http://www.linuxjournal.com/files/linuxjournal.com/ufiles/pictures/picture-801406.jpg (Mitch Frazier's picture)
+   [30]: /users/mitch-frazier (View user profile.)
+
+Submitted by [Mitch Frazier][31] on Fri, 06/18/2010 - 12:23. 
+
+   [31]: /users/mitch-frazier (View user profile.)
+
+What command line did you use to invoke the script? What version of bash did you use (bash --version)?
+
+Mitch Frazier is an Associate Editor for _Linux Journal_.
+
+###  [\w is a word doesnt work in][32]
+
+   [32]: /content/bash-regular-expressions#comment-352297
+
+![Anonymous's picture][33]
+
+   [33]: /files/linuxjournal.com/images/personicon.jpg (Anonymous's picture)
+
+Submitted by Anonymous (not verified) on Thu, 05/27/2010 - 09:05. 
+
+\w is a word doesnt work in bash regexp ?
+
+###  [\w is not supposed to "work"][34]
+
+   [34]: /content/bash-regular-expressions#comment-354384
+
+![Anonymous's picture][35]
+
+   [35]: /files/linuxjournal.com/images/personicon.jpg (Anonymous's picture)
+
+Submitted by Anonymous (not verified) on Mon, 08/02/2010 - 21:55. 
+
+\w is a perl regex atom. bash uses POSIX extended regex instead.
+
+man 7 regex for details
+
+###  [bash-regular-expressions][36]
+
+   [36]: /content/bash-regular-expressions#comment-332287
+
+![kenb's picture][37]
+
+   [37]: /files/linuxjournal.com/images/personicon.jpg (kenb's picture)
+
+Submitted by kenb (not verified) on Fri, 01/30/2009 - 14:28. 
+
+I wrote the suggested bash script and got the demonstrated result. However when I invoked:  
+sh bashre.sh 'aa(b{2,3}[xyz])cc' aabbxcc aabbcc aabbyccaabbbzcc  
+I expected to get two matches with the last parameter but I only got one. I'm surprised  
+that I'm the only one so what did I do wrong?  
+regex: aa(b{2,3}[xyz])cc
+
+aabbxcc matches  
+capture[1]: bbx  
+aabbcc does not match  
+aabbyccaabbbzcc matches  
+capture[1]: bby
+
+###  [Substring matches][38]
+
+   [38]: /content/bash-regular-expressions#comment-350544
+
+![Anonymous's picture][39]
+
+   [39]: /files/linuxjournal.com/images/personicon.jpg (Anonymous's picture)
+
+Submitted by Anonymous (not verified) on Thu, 04/08/2010 - 16:56. 
+
+Your regular expression has only a single pair of parentheses, so you will not have more than one substring saved in BASH_REMATCH. If you had two pairs of parentheses in your regular expression, you could have two substrings saved in BASH_REMATCH, etc. Here's an example with three pairs of parentheses:
+    
+    
+    $ sh bashre.sh '((aa(b{2,3}[xyz])cc)+)' aabbxcc aabbcc aabbyccaabbbzcc
+    regex: ((aa(b{2,3}[xyz])cc)+)
+    
+    aabbxcc matches
+      capture[1]: aabbxcc
+      capture[2]: aabbxcc
+      capture[3]: bbx
+    aabbcc does not match
+    aabbyccaabbbzcc matches
+      capture[1]: aabbyccaabbbzcc
+      capture[2]: aabbbzcc
+      capture[3]: bbbz
+    
+
+Bash doesn't appear to have a "global" pattern matching switch a la perl's //g option.
+
+###  [add color and better indentation to the output][40]
+
+   [40]: /content/bash-regular-expressions#comment-323883
+
+![Albert Bicchi's picture][41]
+
+   [41]: /files/linuxjournal.com/images/personicon.jpg (Albert Bicchi's picture)
+
+Submitted by [Albert Bicchi][42] (not verified) on Mon, 07/07/2008 - 21:24. 
+
+   [42]: http://bicchi.blogspot.com
+
+``
+    
+    
+    #!/bin/sh
+    
+    if [[ $# -lt 2 ]]; then
+        echo "Usage: regex PATTERN STRINGS..."
+        exit 1
+    fi
+    regex=$1
+    shift
+    echo "regex: $regex"
+    echo
+    
+    while [[ $1 ]]
+    do
+        if [[ $1 =~ $regex ]]; then
+            echo -e "\t\E[42;37m${1} - matches\E[33;0m"
+            i=1
+            n=${#BASH_REMATCH[*]}
+            while [[ $i -lt $n ]]
+            do
+                echo -e "\t\t\E[43;37mcapture[$i]: ${BASH_REMATCH[$i]}\E[33;0m"
+                let i++
+            done
+        else
+            echo -e "\t\E[41;37m${1} - does not match\E[33;0m"
+        fi
+        shift
+    done
+    
+
+###  [Is "(( $# < 2 ))" an][43]
+
+   [43]: /content/bash-regular-expressions#comment-323612
+
+![Anonymous's picture][44]
+
+   [44]: /files/linuxjournal.com/images/personicon.jpg (Anonymous's picture)
+
+Submitted by Anonymous (not verified) on Wed, 06/25/2008 - 14:06. 
+
+Is "(( $# < 2 ))" an alternative conditional expression for the line "[[ $# -lt 2 ]]"? 
+
+Could you discuss BASH expressions with [[]] (()) and their valid operators. It seems the -lt, -gt, -a,  
+etc, can be replaced with <, >, &&, etc, if used with (()) --- replacing [] with (()) (numeric) and [[]] (strings). 
+
+Thank you.
+
+PS: The captcha is really hard to read. It would be nice it there was an option to generate a new one that could possible be read by a mere human.
+
+###  [Is "(( $# < 2 ))" an][45]
+
+   [45]: /content/bash-regular-expressions#comment-323611
+
+![Anonymous's picture][46]
+
+   [46]: /files/linuxjournal.com/images/personicon.jpg (Anonymous's picture)
+
+Submitted by Anonymous (not verified) on Wed, 06/25/2008 - 14:02. 
+
+Is "(( $# < 2 ))" an alternative conditional expression for the line "[[ $# -lt 2 ]]"? 
+
+Could you discuss BASH expressions with [[]] (()) and their valid operators. It seems the -lt, -gt, -a,  
+etc, can be replaced with <, >, &&, etc, if used with (()) --- replacing [] with (()) (numeric) and [[]] (strings). 
+
+Thank you.
+
+###  [That simple?!][47]
+
+   [47]: /content/bash-regular-expressions#comment-322537
+
+![Robert de Bock's picture][48]
+
+   [48]: /files/linuxjournal.com/images/personicon.jpg (Robert de Bock's picture)
+
+Submitted by [Robert de Bock][49] (not verified) on Wed, 05/28/2008 - 10:00. 
+
+   [49]: http://meinit.nl/
+
+My god, Bash sure is a great tool! Thanks for the information.
+
+  * [Video][50]
+  * [News][51]
+  * [Blogs][52]
+  * [Reviews][53]
+  * [HOWTOs][54]
+  * [Participate][55]
+  * [Hep & Tips][56]
+  * [How to Get Linux][57]
+  * [Getting Help][58]
+
+   [50]: /video
+   [51]: /news
+   [52]: /blog
+   [53]: /tag/reviews ()
+   [54]: /tag/how-tos
+   [55]: /participate ()
+   [56]: /tag/tech-tips ()
+   [57]: /getlinux
+   [58]: /gettinghelp
+
+Loading
+
+  
+[Already a subscriber? Click here for subscriber services.][59]
+
+   [59]: http://www.linuxjournal.com/subs/customer_service
+
+## Trending Topics
+
+  * [Cloud][60]
+  * [Desktop][61]
+  * [Embedded][62]
+  * [HPC][63]
+  * [Security][64]
+  * [SysAdmin][65]
+  * [Virtualization][66]
+  * [Web Development][67]
+
+   [60]: /tag/cloud ()
+   [61]: /tag/desktop ()
+   [62]: /tag/embedded ()
+   [63]: /tag/hpc ()
+   [64]: /tag/security ()
+   [65]: /tag/sysadmin ()
+   [66]: /tag/virtualization ()
+   [67]: /tag/web-development ()
+
+  * [The Latest][68]
+  * [Popular][69]
+  * [Recent Comments][70]
+
+   [68]: /content/bash-regular-expressions?quicktabs_1=0#quicktabs-1
+   [69]: /content/bash-regular-expressions?quicktabs_1=1#quicktabs-1
+   [70]: /content/bash-regular-expressions?quicktabs_1=2#quicktabs-1
+
+[Calibre in the Cloud][71]
+Jun 04, 2012 
+
+   [71]: /content/calibre-cloud
+
+[June 2012 Issue of Linux Journal: Cool Projects][72]
+Jun 01, 2012 
+
+   [72]: /content/june-2012-issue-linux-journal-cool-projects
+
+[Calculating Day of the Week][73]
+May 30, 2012 
+
+   [73]: /content/calculating-day-week
+
+[Hack and / - Password Cracking with GPUs, Part II: Get Cracking][74]
+May 29, 2012 
+
+   [74]: /content/hack-and-password-cracking-gpus-part-ii-get-cracking
+
+[Networking Poll][75]
+May 29, 2012 
+
+   [75]: /content/networking-poll
+
+[OpenLDAP Everywhere Reloaded, Part I][76]
+May 23, 2012 
+
+   [76]: /content/openldap-everywhere-reloaded-part-i
+
+[ more ][77]
+
+   [77]: /latest
+
+  * [Calibre in the Cloud][78]
+  * [Wondershare PDF Editor is launched on Mac App Store][79]
+  * [Validate an E-Mail Address with PHP, the Right Way][80]
+  * [Tales From the Server Room: Zoning Out][81]
+  * [RSS Feeds][82]
+  * [Hack and / - Password Cracking with GPUs, Part II: Get Cracking][83]
+  * [June 2012 Issue of Linux Journal: Cool Projects][84]
+  * [Networking Poll][85]
+  * [Readers' Choice Awards 2011][86]
+  * [Python for Android][87]
+
+   [78]: /content/calibre-cloud
+   [79]: /forums/wondershare-pdf-editor-launched-mac-app-store
+   [80]: /article/9585
+   [81]: /content/tales-server-room-zoning-out
+   [82]: /rss_feeds
+   [83]: /content/hack-and-password-cracking-gpus-part-ii-get-cracking
+   [84]: /content/june-2012-issue-linux-journal-cool-projects
+   [85]: /content/networking-poll
+   [86]: /slideshow/readers-choice-2011
+   [87]: /article/10940
+
+[ more ][88]
+
+   [88]: /popular/today
+
+  * [http://www.nagelstudiohamburg][89]  
+4 hours 7 min ago
+  * [millionaire dating][90]  
+5 hours 3 min ago
+  * [millionaire dating][91]  
+5 hours 8 min ago
+  * [meet wealthy men and millionaire dating ][92]  
+5 hours 11 min ago
+  * [Nice post, congrats ;) Bye,][93]  
+5 hours 33 min ago
+  * [Convert DRM M4V to AVI][94]  
+7 hours 9 min ago
+  * [Nice post. It’s really very][95]  
+10 hours 39 min ago
+  * [complexity][96]  
+19 hours 2 min ago
+  * [That seems pretty dumb][97]  
+19 hours 59 min ago
+  * [No, this article is merely][98]  
+22 hours 59 min ago
+
+   [89]: /content/blue-drop-awards-celebrates-achievements-open-source-web-development#comment-372535
+   [90]: /content/openldap-everywhere-reloaded-part-i#comment-372534
+   [91]: /content/future-web-drupalcon-denver#comment-372533
+   [92]: /content/blue-drop-awards-celebrates-achievements-open-source-web-development#comment-372532
+   [93]: /content/blue-drop-awards-celebrates-achievements-open-source-web-development#comment-372531
+   [94]: /forums/share-some-excellent-remove-drm-free-tools#comment-372530
+   [95]: /content/blue-drop-awards-celebrates-achievements-open-source-web-development#comment-372529
+   [96]: /content/complexity-uptime-and-end-world#comment-372528
+   [97]: /content/calibre-cloud#comment-372527
+   [98]: /content/html5-audio-applications#comment-372526
+
+[![ Linux Newsletter][99]][100]
+
+   [99]: /files/linuxjournal.com/images/NewsletterBanner_T3b.jpg
+   [100]: /enewsletters
+
+[![ Linux Newsletter][101]][102]
+
+   [101]: /files/linuxjournal.com/images/SubscriberButton-June2012.png
+   [102]: /new-issue
+
+[Return to Solid State][103]
+
+   [103]: /video-ssd-editor-note
+
+[![See video][104]][105]
+
+   [104]: http://img.youtube.com/vi/YLRdqrCNwaU/0.jpg (See video)
+   [105]: /video/get-firefox-menu-button-linux
+
+[Get Firefox Menu Button in Linux][106]
+
+   [106]: /video/get-firefox-menu-button-linux
+
+[![See video][107]][108]
+
+   [107]: http://img.youtube.com/vi/EkPzt4_S3cc/0.jpg (See video)
+   [108]: /video/quick-and-dirty-ssh-tunneling
+
+[Quick and Dirty SSH Tunneling][109]
+
+   [109]: /video/quick-and-dirty-ssh-tunneling
+
+[Click here for more videos][110]
+
+   [110]: /video
+
+## Networking Poll
+
+What type of wireless access point do you use at home? : 
+
+Old School Linksys
+
+New Linksys (by Cisco)
+
+Cisco
+
+D-Link
+
+Apple
+
+Netgear
+
+ZyXel
+
+Other...
+
+What type of firewall software/appliance to you use?: 
+
+Stock Router/AP Firmware
+
+DD-WRT
+
+Tomato
+
+OpenWRT
+
+pfSense
+
+Monowall
+
+Devil Linux
+
+Astaro
+
+IPCOP
+
+FREESCO
+
+Untangle
+
+ClearOS
+
+Custom Linux
+
+Other...
+
+How many computers are on your home network?: 
+
+1 to 3
+
+4 to 6
+
+7 to 9
+
+10 or more
+
+Do you have a dedicated server on your home network?: 
+
+Yes
+
+No
+
+What is your Internet speed?: 
+
+less than 1mbps
+
+1 to 3 mbps
+
+3 to 6 mbps
+
+6 to 10 mbps
+
+10 to 15 mbps
+
+15 to 25 mbps
+
+more than 25 mbps
+
+Do you use Cable, DSL, Satellite, Cellular, or other for ISP?: 
+
+Cable
+
+DSL
+
+Satellite
+
+Cellular
+
+Fiber
+
+Other...
+
+First Name
+Last Name
+
+Address 1
+Address 2
+
+City
+State
+Zip
+
+Email
+
+[Canadian Residents][111] | [Foreign Residents][112] | [Gift Subscriptions][113] | [Customer Service][114] | [Privacy Policy][115]
+
+   [111]: https://www.pubservice.com/subnew2page.aspx?PC=LJ&PK=MPUB911&FC=CANADA&SA=P
+   [112]: https://www.pubservice.com/Subnew1.aspx?PC=LJ&PK=MPUB911&FC=UNITED%20STATES&ref=1&SA=P
+   [113]: https://www.pubservice.com/subgift.aspx?PC=LJ
+   [114]: http://www.linuxjournal.com/subs/customer_service
+   [115]: /content/privacystatement
+
+## Digital Edition
+
+  * [Subscribe/Renew][116]
+  * [Pay My Bill][117]
+  * [Customer Service][118]
+  * [Digital Downloads][119]
+  * [Gift Subscriptions][120]
+
+   [116]: https://www.pubservice.com/subnew1.aspx?PC=LJ (Subscribe to Linux Journal)
+   [117]: https://www.pubservice.com/subinfo.aspx?PC=LJ&DO=P (Pay Your Subscription Bill)
+   [118]: /subs/customer_service ()
+   [119]: http://www.linuxjournal.com/digital ()
+   [120]: https://www.pubservice.com/subgift.aspx?PC=LJ (Give a Subscription to Linux Journal)
+
+## Magazine Formats
+
+  * [PC/Mac][121]
+  * [Android][122]
+  * [iPhone/iPad][123]
+  * [EPUB][124]
+  * [Kindle][125]
+
+   [121]: /content/pdf (PC/Mac)
+   [122]: /content/android (Android App)
+   [123]: /content/ios (iPhone/iPad)
+   [124]: /content/epub (EPUB Format)
+   [125]: /content/kindle (Kindle Format)
+
+## The Store
+
+  * [Stickers][126]
+  * [T-shirts][127]
+  * [Posters][128]
+  * [Back Issues][129]
+  * [Archive CD][130]
+
+   [126]: http://lj.mybigcommerce.com/categories/Buttons-%26-Stickers/ (Buttons & Stickers)
+   [127]: http://lj.mybigcommerce.com/categories/T%252dShirts-%26-Apparel/ (T-shirts and Apparel)
+   [128]: http://lj.mybigcommerce.com/categories/Posters/ (Posters)
+   [129]: http://lj.mybigcommerce.com/categories/Back-Issues-%252d-Digital-Downloads/ (Buy Back Issues of Linux Journal)
+   [130]: http://linuxjournal.com/archive_cd (Archive CD)
+
+## About Us
+
+  * [Advertise][131]
+  * [Author Info][132]
+  * [Write a Letter][133]
+  * [FAQ][134]
+  * [Masthead][135]
+
+   [131]: /advertising (Advertise in Linux Journal)
+   [132]: /author (Write for Us)
+   [133]: /contact (Write a Letter to the Editor)
+   [134]: /aboutus/FAQ (Frequently Asked Questions)
+   [135]: /staff (Masthead)
+
+## The Site
+
+  * [Copyright][136]
+  * [RSS Feeds][137]
+  * [Privacy Policy][138]
+  * [Report Problems][139]
+  * [Contact Us][140]
+
+   [136]: /content/copyright (Copyright)
+   [137]: /rss_feeds (RSS Feeds)
+   [138]: /content/privacy-statement (Privacy Statement)
+   [139]: MAILTO:webmaster@linuxjournal.com (Report Problems)
+   [140]: /aboutus (Contact Us)
+
+Copyright © 1994 - 2011 _Linux Journal_. All rights reserved.

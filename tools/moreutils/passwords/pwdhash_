@@ -1,0 +1,69 @@
+#!/bin/sh
+
+input="$1"
+simple="$2"
+
+here=$(dirname $0)
+
+passwordstore="$HOME/.password-store"
+
+[ -d "$passwordstore" ] || {
+  echo "Warn: no 'pwdhash' director in ~/.password-store"
+ }
+
+token=$(echo "$input" | perl -pe 's/(\w+)_(\du\d\w-\w+)/$1/g' | perl -pe 's/[^a-z0-9_\-\n]+/_/g')
+
+# version: jsdfjdfjfd_3u0a-bkb , or keepass:3u0a-bkb
+version=$(echo "$input" | perl -pe 's/.+[_:](\du\d\w+\-\w+)+$/$1/g')
+
+[ -n "$version" ] || {
+   echo "Err: could not extract version from token"
+   exit 1
+}
+
+versiondir="pwdhash/$version"
+
+pwdir="$passwordstore/$versiondir"
+
+mkdir -p "$pwdir"
+
+tokenpath="$pwdir/$token"
+
+passpath="$versiondir/$token"
+
+if [ -n "$simple" ] ; then
+   "python2.7" $here/../../sw/pwdhash.py "$input"
+   exit
+fi
+
+if [ -f "$tokenpath.gpg" ] ; then
+
+   password=$(pass show $passpath)
+
+   if [ -n "$password" ] ; then
+      pass show -c $passpath
+      echo "OK(pass): password in clipboard from $passpath"
+  else
+     "python2.7" $here/../../sw/pwdhash.py "$input"
+      echo "OK(pwdhash): password in clipboard"
+  fi
+else
+   masterpass=$(pass show "$versiondir")
+
+   if [ -n "$masterpass" ] ; then
+      pass show -c "$versiondir"
+      echo "OK: I've the masterpass you can paste it"
+   else
+      echo "Sorry: Please write masterpass manually"
+   fi
+
+   #echo "python2.7" $here/../../sw/pwdhash.py "$input"
+   "python2.7" $here/../../sw/pwdhash.py "$input"
+
+   echo "OK: I've the token password from 'pwdhash' you can paste it in 'pass'"
+
+   pass insert "$passpath"
+
+   echo "$input" >  "$tokenpath.token"
+fi
+

@@ -1,0 +1,35 @@
+Errors:
+
+checking for LIBFFI... configure: error: Package requirements (libffi) were not met:
+
+No package 'libffi' found
+
+Consider adjusting the PKG_CONFIG_PATH environment variable if you
+installed software in a non-standard prefix.
+
+Alternatively, you may set the environment variables LIBFFI_CFLAGS
+and LIBFFI_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details.
+
+
+
+Error 2:
+checking for BDW_GC... configure: error: Package requirements (bdw-gc) were not met:
+
+No package 'bdw-gc' found
+
+Consider adjusting the PKG_CONFIG_PATH environment variable if you
+installed software in a non-standard prefix.
+
+Alternatively, you may set the environment variables BDW_GC_CFLAGS
+and BDW_GC_LIBS to avoid the need to call pkg-config.
+See the pkg-config man page for more details.
+
+Solutions:
+
+find /usr -iname '*libffi*' | grep pc
+export PKG_CONFIG_PATH=/path/to/libffi.pc
+
+on my mac os x 8.6:
+
+export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig:/usr/local/Cellar/libffi/3.0.10/lib/pkgconfig

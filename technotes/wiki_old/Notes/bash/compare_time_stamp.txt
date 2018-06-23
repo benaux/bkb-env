@@ -1,0 +1,13 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-01-17T10:42:33+01:00
+
+====== compare time stamp ======
+Created Tuesday 17 January 2017
+
+{{{code: lang="sh" linenumbers="True"
+if test file1 -nt file2; then
+   # file1 is newer than file2
+fi
+}}}
+r

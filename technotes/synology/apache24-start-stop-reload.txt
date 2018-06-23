@@ -1,0 +1,1 @@
+sudo reload pkg-apache24

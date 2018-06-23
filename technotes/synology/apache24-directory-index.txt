@@ -1,0 +1,37 @@
+Directory listing with Apache 24 in Synology
+============================================
+
+
+How to enable directory index so files and folder are listed
+
+
+- Set "DirectoryIndex disabled" and "Options Indexes"
+
+
+   sudo vim /usr/local/etc/apache24/sites-enabled/httpd-vhost.conf:
+
+reload configuration:
+
+   sudo reload pkg-apache24
+
+
+
+
+~~~~~
+ 
+<VirtualHost *:80 *:443>
+    ServerName docs.auxdir.com
+    SetEnv HOST docs.auxdir.com
+    DocumentRoot "/volume1/hostdir_root_ronin/servhost_root_ronin/bkb.webserv.pub/docs.auxdir.com"
+    <IfModule dir_module>
+        DirectoryIndex  index.html index.htm index.cgi index.php index.php5
+    </IfModule>
+    <Directory "/volume1/hostdir_root_ronin/servhost_root_ronin/bkb.webserv.pub/docs.auxdir.com">
+        DirectoryIndex disabled
+        Options MultiViews FollowSymLinks ExecCGI Indexes
+        AllowOverride All
+        <IfModule authz_core_module>
+            Require all granted
+        </IfModule>
+    </Directory>
+~~~~

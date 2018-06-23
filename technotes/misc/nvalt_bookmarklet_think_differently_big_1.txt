@@ -1,0 +1,33 @@
+From [nvALT Bookmarklet :: think differently big](http://jots.mypopescu.com/post/8529405944/nvalt-bookmarklet):
+
+> javascript:(function({
+> 
+>   var INSTAPAPER=true,w=window,d=document,pageSelectedTxt=w.getSelection?w.getSelection():(d.getSelection)?d.getSelection():(d.selection?d.selection.createRange().text:0),pageTitle=d.title,pageUri=w.location.href,tmplt="";
+> 
+>   tmplt="From ["+pageTitle+"]("+pageUri+"):\n\n";
+> 
+>   if(pageSelectedTxt!="") {
+> 
+>     pageSelectedTxt=">%20"+pageSelectedTxt;
+> 
+>     pageSelectedTxt=pageSelectedTxt.replace(/(\r\n|\n+|\r)/gm,"\n");
+> 
+>     pageSelectedTxt=pageSelectedTxt.replace(/\n/g,"\n>%20\n>%20");
+> 
+>     w.location.href="nvalt://make/?txt="+encodeURIComponent(tmplt+pageSelectedTxt)+"&title="+encodeURIComponent(pageTitle)
+> 
+>   }
+> 
+>   else {
+> 
+>     if(INSTAPAPER) {
+> 
+>       pageUri="http://www.instapaper.com/m?u="+encodeURIComponent(pageUri)
+> 
+>     };
+> 
+>     w.location.href="nvalt://make/?url="+encodeURIComponent(pageUri)+"&title="+encodeURIComponent(pageTitle)
+> 
+>   }
+> 
+> })();

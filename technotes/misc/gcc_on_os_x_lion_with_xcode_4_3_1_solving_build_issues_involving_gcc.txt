@@ -1,0 +1,37 @@
+From [GCC on OS X Lion with Xcode 4.3.1 - Super User](http://superuser.com/questions/400179/gcc-on-os-x-lion-with-xcode-4-3-1):
+
+> GCC on OS X Lion with Xcode 4.3.1
+> 
+
+> 	
+> 
+> After installing Xcode 4.3.1 on OS X Lion, I have lost my GCC compiler. I need this for my study. Does anyone know how I will install this? All I have been able to find was people suggesting to install Xcode 4.3.1 but with the latest Xcode build, Apple has moved the GCC compiler inside the Xcode.app and it doesn't seem to be the same version of the GCC compiler as the one bundled with previous versions of Xcode.
+> 
+> osx-lion xcode gcc
+> 
+
+> 
+> Open XCode go to preferences under downloads install command line tools
+> 
+
+> 
+> 	
+> 
+> > 
+> 	
+> 
+> There have been a couple of blog posts about how to do this recently, in the context of trying to compile Ruby 1.8.7 (mine and others). The short answer:
+> 
+> Install Command Line Tools (in Xcode: Preferences > Downloads > Components; or you can go to Apple and download them separately if you don't have/want Xcode installed) - this installs a gcc command, but it's actually clang Install Homebrew (instructions), a package manager for OS X
+> 
+> Then, install the 'dupes' homebrew repository and from it the genuine GCC 4.2 compiler:
+> 
+> brew update
+> 
+> brew tap homebrew/homebrew-dupes
+> 
+> brew install apple-gcc42
+> 
+> /usr/bin/gcc will still be i686-apple-darwin11-llvm-gcc-4.2, but /usr/local/bin/gcc-4.2 will be i686-apple-darwin11-gcc-4.2.1 (and associated tools, g++-4.2 and so forth, also in /usr/local/bin)
+> 
+> Then, you can use whatever mechanism your build process uses (for instance, setting the CC and CXX environment variables appropriately) to select those compilers rather than the clang versions.

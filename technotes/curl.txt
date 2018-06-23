@@ -1,0 +1,13 @@
+Curl
+====
+
+
+Curl: upload with ssl
+---------------------
+
+
+-T: (target) file to be transferer
+
+-k: ignore certificate error
+
+   curl --ftp-ssl -T $dir.tar.gz.gpg -k -u "ben:$passwd" "ftp://ftp.auxdir.com/"

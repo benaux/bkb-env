@@ -1,0 +1,26 @@
+
+
+
+ssh-keygen -t rsa -b 2048 -C “comment” -f /file/path
+
+
+
+Transmit public key
+
+ssh-copy-id user@123.45.56.78
+
+Or
+
+cat ~/.ssh/id_rsa.pub | ssh user@123.45.56.78 "mkdir -p ~/.ssh && cat >>  ~/.ssh/authorized_keys"
+
+
+Disable Password Login
+
+In order to do this, open up the SSH config file:
+sudo vim /etc/ssh/sshd_config
+
+
+PermitRootLogin without-password
+
+reload ssh
+

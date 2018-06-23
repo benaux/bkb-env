@@ -1,0 +1,24 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2016-12-21T12:28:00+01:00
+
+====== open ports for synergy ======
+Created Wednesday 21 December 2016
+
+Synergy: Clients cannot connect - open port
+
+
+
+via: https://blog.rickymoorhouse.co.uk/2011/10/05/firewall-rules-for-synergy-in-iptables/
+
+
+
+with the following lines in it:
+
+# Allows incoming flows for Synergy.
+-A INPUT -p tcp -m tcp --dport 24800 -j ACCEPT
+-A INPUT -p udp -m udp --dport 24800 -j ACCEPT
+
+Restart iptables for the rules to take effect
+
+sudo vim  /etc/iptables/rules.v4

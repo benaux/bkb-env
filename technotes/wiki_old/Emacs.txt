@@ -1,0 +1,12 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-01-26T08:38:21+01:00
+
+====== Emacs ======
+Created Thursday 26 January 2017
+
+http://devblog.arnebrasseur.net/2014-08-amazing-lisp-vim
+Why Vim users will switch to Emacs in the coming years.
+
+http://blog.jakubarnold.cz/2014/06/23/evil-mode-how-to-switch-from-vim-to-emacs.html
+Evil Mode: How I Switched From VIM to Emacs

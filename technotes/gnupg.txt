@@ -1,0 +1,9 @@
+Gnupg 
+=====
+
+Constant             Character   Explanation
+PUBKEY_USAGE_SIG     S           Key is good for signing
+PUBKEY_USAGE_CERT    C           Key is good for certifying other signatures
+PUBKEY_USAGE_ENC     E           Key is good for encryption
+PUBKEY_USAGE_AUTH    A           Key is good for authentication
+

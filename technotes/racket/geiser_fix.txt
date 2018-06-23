@@ -1,0 +1,18 @@
+Racket: Geiser fix
+
+
+Problem: 'geiser-racket' doesn't because some "collection missing errors"
+
+
+Cause: Geisers racket libs are not found
+
+Solution:
+
+Modify /usr/local/bin/geiser-racket:
+
+#!/bin/bash
+#|
+topdir=$(dirname $0)
+elpa_scheme=$topdir/scheme
+in_scheme=/usr/local/share/geiser
+....

@@ -1,0 +1,26 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2016-12-21T12:28:00+01:00
+
+====== keychain and fish ======
+Created Wednesday 21 December 2016
+
+# How keychain and fish shell play together 
+
+
+
+this is the only way it worked
+
+
+	set -gx HOSTNAME (hostname)
+	if status --is-interactive;
+	  eval (keychain --eval   --quiet -Q ~/.ssh/auxsend_rsa 8BB04488 )
+
+	  [ -e $HOME/.keychain/$HOSTNAME-fish ]; and . $HOME/.keychain/$HOSTNAME-fish
+	  [ -e $HOME/.keychain/$HOSTNAME-fish-gpg ]; and . $HOME/.keychain/$HOSTNAME-fish-gpg
+	end
+
+
+8BB04488 is the ID of the master gpg key
+
+

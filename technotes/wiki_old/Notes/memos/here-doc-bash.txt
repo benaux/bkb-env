@@ -1,0 +1,15 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2016-12-21T12:28:00+01:00
+
+====== here-doc-bash ======
+Created Wednesday 21 December 2016
+
+cat << EOF
+usage: up [--level <n>| -n <levels>][--help][--version]
+
+Report bugs to: 
+up home page:
+EOF
+
+thanks: http://stackoverflow.com/questions/10969953/how-to-output-a-multiline-string-in-bash

@@ -1,0 +1,15 @@
+~% FILE="example.tar.gz"
+
+~% echo "${FILE%%.*}"
+example
+
+~% echo "${FILE%.*}"
+example.tar
+
+~% echo "${FILE#*.}"
+tar.gz
+
+~% echo "${FILE##*.}"
+gz
+
+# from https://stackoverflow.com/questions/965053/extract-filename-and-extension-in-bash

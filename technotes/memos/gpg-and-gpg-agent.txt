@@ -1,0 +1,8 @@
+the combination or fish shell and gpg-agent is constant source of frustration
+
+also it doesn't interest me. so I always throw some commands around until it works. something among the lines of
+
+keychain --nogui --clear 
+  keychain --eval   --quiet -Q ~/.ssh/auxsend_acer.rsa 35827ADE
+  keychain --quiet --nogui ~/.ssh/auxsend_acer.rsa 35827ADE
+

@@ -2,7 +2,7 @@ Make Makefile
 --------------
 
 
-## Variables, Target, Source
+### Variables, Target, Source
 
    target: source
 
@@ -19,3 +19,7 @@ A simple example:
 
    all: $(CMIFILES)
       ocamlc -o hello m.cmo hello.cmo
+
+### Important make switches
+
+   -s | --silent surpress echo 

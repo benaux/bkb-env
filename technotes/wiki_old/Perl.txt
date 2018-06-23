@@ -1,0 +1,10 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-01-23T15:51:49+01:00
+
+====== Perl ======
+Created Monday 23 January 2017
+
+Good Perl literatur
+
+http://modernperlbooks.com/books/modern_perl_2014/11-what-to-avoid-in-perl.html

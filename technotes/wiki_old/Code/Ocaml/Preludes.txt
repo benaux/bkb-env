@@ -1,0 +1,10 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-01-24T09:13:21+01:00
+
+====== Preludes ======
+Created Tuesday 24 January 2017
+
+{{{code: lang="objective-caml" linenumbers="True"
+jsdfsdf
+}}}

@@ -1,0 +1,25 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-01-11T21:54:10+01:00
+
+====== import ======
+Created Wednesday 11 January 2017
+
+sub import {
+	## find out who is calling us
+	my $pkg = caller;
+
+	## while strict doesn't deal with globs, it still
+	## catches symbolic de/referencing
+	no strict 'refs';
+
+	## iterate through all the globs in the symbol table
+	foreach my $glob (keys %Foo::) {
+		## skip anything without a subroutine and 'import'
+		next if not defined *{$Foo::{$glob}}{CODE}
+				or $glob eq 'import';
+
+		## assign subroutine into caller's package
+		*{$pkg . "::$glob"} = \&{"Foo::$glob"};
+	}
+}

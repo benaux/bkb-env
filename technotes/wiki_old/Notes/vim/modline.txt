@@ -1,0 +1,10 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2016-12-21T12:28:00+01:00
+
+====== modline ======
+Created Wednesday 21 December 2016
+
+vim: setting stuff like 'filetype' with a modline (first, or last line)
+
+// vim: set ft=javascript:

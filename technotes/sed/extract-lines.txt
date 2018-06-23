@@ -1,0 +1,3 @@
+Extract line with sed
+
+sed -n 2,4p somefile.txt

@@ -1,0 +1,15 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2016-12-21T12:28:00+01:00
+
+====== match and extract field ======
+Created Wednesday 21 December 2016
+
+Perl-Oneliner: match a string and extract a field
+
+
+   mount | perl -lae '/roamstick/i && print $F[2]'
+
+   -l make newline
+   -a splitting input (explicit mit -F)
+   (-n : looping in implicit wiht -a)

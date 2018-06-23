@@ -1,0 +1,11 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2016-12-21T12:28:00+01:00
+
+====== mount airport samba share ======
+Created Wednesday 21 December 2016
+
+Ubuntu: mount airport samba share
+
+
+sudo mount.cifs //myserver.fritz.box/mysharer ~/mymountpoint -o username=username,password=password,sec=ntlm,uid=user

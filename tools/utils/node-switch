@@ -1,0 +1,103 @@
+#!/usr/local/bin/fish
+
+set -g node_user $argv[1]
+
+set -g node_target 
+if [ (count  $argv ) -eq 2 ] 
+ set  node_target $argv[2]
+end
+
+set homebase $HOME/homebase
+
+function die ; echo "Err: $argv";  exit 1;  end
+
+[ -d "$homebase" ]; or die "Err: no homebase in $homebase"
+
+set hname (hostname)
+
+
+set -g nodedir $homebase/nodedir_"$USER"_"$hname"
+[ -n "$nodedir" ] ; or  die "Err: no nodedir "
+[ -d "$nodedir" ] ; or  die "Err: no nodedir in $nodedir"
+
+function list_nodedir_subs
+  for d in "$nodedir"/* 
+     [ -d "$d" ] ; or continue
+    set bd (basename $d)
+    switch "$bd" 
+      case "$node_user*"
+         for dd in $d/*
+           echo xx $dd
+           end
+         echo $bd
+      case * 
+         continue
+    end
+  end
+end
+
+function list_nodedir
+  for d in "$nodedir"/* 
+     [ -d "$d" ] ; or continue
+    set bd (basename $d)
+    switch "$bd" 
+      case "$node_user*"
+         echo $bd
+      case * 
+         continue
+    end
+  end
+end
+
+function list_nodedir_all
+  for d in "$nodedir"/* 
+     [ -d "$d" ] ; or continue
+    set bd (basename $d)
+    switch "$bd" 
+      case "$node_user*"
+         echo $bd
+      case "*-$node_user*"
+         echo $bd
+      case * 
+         continue
+    end
+  end
+end
+
+if [ -n "$node_target" ] 
+   if  [ (string length $node_target) -eq 1 ] 
+      if [ $node_target -eq 0 ] 
+        list_nodedir  []
+      else
+        set cbdir $nodedir/"$node_user"0"$node_target"*   
+        if [ -d "$cbdir" ] 
+           cd $cbdir
+           exit 0
+        else
+           die "Err: folder $cbdir not exist"
+        end
+     end
+  else if  [ (string length $node_target) -eq 2 ] 
+      set cbdir $nodedir/*/*_$node_target
+      if [ -d "$cbdir" ] 
+         cd $cbdir
+         exit 0
+      else
+         die "Err: folder $cbdir not exist"
+      end
+  else if  string match -r '\d\d\.\d\d' "$argv"
+      set expitem  $nodedir/*"$node_user"0*/*/*$argv
+      if [ -d "$expitem" ] 
+         cd $expitem
+         exit 0
+      else
+         echo "Err: item $argv not exist"
+         exit 1
+      end
+  else
+      echo "Err: invalid arg"
+      exit 1
+   end
+else
+   list_nodedir_all  []
+end

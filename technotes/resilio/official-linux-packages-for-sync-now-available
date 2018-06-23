@@ -1,0 +1,548 @@
+<!DOCTYPE html >
+<!--[if lt IE 7 ]> <html class="no-js ie6" lang="en-US" prefix="og: http://ogp.me/ns#"> <![endif]-->
+<!--[if IE 7 ]>    <html class="no-js ie7" lang="en-US" prefix="og: http://ogp.me/ns#"> <![endif]-->
+<!--[if IE 8 ]>    <html class="no-js ie8" lang="en-US" prefix="og: http://ogp.me/ns#"> <![endif]-->
+<!--[if IE 9 ]>    <html class="no-js ie9" lang="en-US" prefix="og: http://ogp.me/ns#"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html class="no-js" lang="en-US" prefix="og: http://ogp.me/ns#"> <!--<![endif]-->
+<head>
+    <title>Official Linux Packages for Sync Now Available - Resilio Blog</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <link rel="profile" href="http://gmpg.org/xfn/11" />
+    <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="https://www.resilio.com/blog/feed" />
+    <link rel="alternate" type="text/xml" title="RSS .92" href="https://www.resilio.com/blog/feed/rss" />
+    <link rel="alternate" type="application/atom+xml" title="Atom 0.3" href="https://www.resilio.com/blog/feed/atom" />
+    <link rel="pingback" href="https://getsynccom.wpengine.com/xmlrpc.php" />
+    
+    
+<style>	
+    
+.logo-text{font-family:Lato!important;}h1,h1 p{font-size:25px !important;line-height:45px !important;letter-spacing:px !important;font-weight:!important;}h2{font-size:20px !important;line-height:30px !important;letter-spacing:px !important;font-weight:!important;}h3{font-size:17px !important;line-height:30px !important;letter-spacing:px !important;font-weight:!important;}h4{font-size:15px !important;line-height:px !important;letter-spacing:px !important;font-weight:!important;}h5{font-size:13px !important;line-height:25px !important;letter-spacing:px !important;font-weight:!important;}p,body{font-size:15px !important;line-height:30px !important;letter-spacing:px !important;}.logo-text{font-size:30px;line-height:px;letter-spacing:px;}p,body,input,.btn,textarea,.tagcloud a,.btn[type="submit"],input[type="button"],input[type="reset"],input[type="submit"],#cancel-comment-reply-link{font-family:Lato !important;}h1,h2,h3,h4,h5,.comment-author cite{font-family:Lato !important;}a{color:#e54545 !important;}blockquote{border-left:5px solid #e54545 !important;}.cats,.author-tag,.post-pagination a:hover,article .title a:hover,.comment-author a:hover,.site-description a:hover,h2.title a:hover,.logo a h1:hover,.wp-playlist-light .wp-playlist-playing .wp-playlist-item-title,.wp-playlist-dark .wp-playlist-playing .wp-playlist-item-title,.wp-playlist-light .wp-playlist-playing .wp-playlist-caption,.wp-playlist-dark .wp-playlist-playing .wp-playlist-caption{color:#e54545 !important;}h4.entry-title a,h1,h1 a,h2 a,h3,h4,h5{color:#4f4f4f !important;}body,form label{color:#4f4f4f !important;}.btn,.btn:visited{background:#e54545 !important;}.btn:hover,.btn:focus{background:#cc3e3e !important;}.subtext,.post-date,nav ul li a,#wp-calendar tbody,a.comment-edit-link,.widget_categories li,.comment-author .url-tag,blockquote cite,.entry-content .wp-playlist-item-length,.footer-bottom,.meta{color:#4f4f4f !important;}img.logo-uploaded {width:217px;}</style>
+
+<!-- This site is optimized with the Yoast SEO plugin v4.9 - https://yoast.com/wordpress/plugins/seo/ -->
+<link rel="canonical" href="https://www.resilio.com/blog/official-linux-packages-for-sync-now-available" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Official Linux Packages for Sync Now Available - Resilio Blog" />
+<meta property="og:description" content="We’ve received many requests from the Sync community to be able to install Sync on a Linux family OS in the &#8220;Linux way&#8221; &#8212; using packages and a standard tool (yum or apt-get) to get the package downloaded and installed. We’re thankful for the packages and installation scripts made by our community members (thanks to ...read more" />
+<meta property="og:url" content="https://www.resilio.com/blog/official-linux-packages-for-sync-now-available" />
+<meta property="og:site_name" content="Resilio Blog" />
+<meta property="article:publisher" content="https://business.facebook.com/resilioinc" />
+<meta property="article:tag" content="bittorrent" />
+<meta property="article:tag" content="developer" />
+<meta property="article:tag" content="featured" />
+<meta property="article:tag" content="pressroom" />
+<meta property="article:tag" content="sync" />
+<meta property="article:section" content="BitTorrent" />
+<meta property="article:published_time" content="2016-02-18T17:05:26+00:00" />
+<meta property="article:modified_time" content="2016-12-12T12:57:08+00:00" />
+<meta property="og:updated_time" content="2016-12-12T12:57:08+00:00" />
+<meta property="og:image" content="https://getsynccom.wpengine.com/wp-content/uploads/2016/02/linux.png" />
+<meta property="og:image:width" content="1028" />
+<meta property="og:image:height" content="612" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:description" content="We’ve received many requests from the Sync community to be able to install Sync on a Linux family OS in the &#8220;Linux way&#8221; &#8212; using packages and a standard tool (yum or apt-get) to get the package downloaded and installed. We’re thankful for the packages and installation scripts made by our community members (thanks to ...read more" />
+<meta name="twitter:title" content="Official Linux Packages for Sync Now Available - Resilio Blog" />
+<meta name="twitter:site" content="@resiliosync" />
+<meta name="twitter:image" content="https://getsynccom.wpengine.com/wp-content/uploads/2016/02/linux.png" />
+<meta name="twitter:creator" content="@resiliosync" />
+<!-- / Yoast SEO plugin. -->
+
+<link rel='dns-prefetch' href='//getsynccom.wpengine.com' />
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="Resilio Blog &raquo; Feed" href="https://www.resilio.com/blog/feed" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.3\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.3\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/getsynccom.wpengine.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.8"}};
+			!function(a,b,c){function d(a){var b,c,d,e,f=String.fromCharCode;if(!k||!k.fillText)return!1;switch(k.clearRect(0,0,j.width,j.height),k.textBaseline="top",k.font="600 32px Arial",a){case"flag":return k.fillText(f(55356,56826,55356,56819),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,56826,8203,55356,56819),0,0),c=j.toDataURL(),b===c&&(k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447),0,0),b=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447),0,0),c=j.toDataURL(),b!==c);case"emoji4":return k.fillText(f(55358,56794,8205,9794,65039),0,0),d=j.toDataURL(),k.clearRect(0,0,j.width,j.height),k.fillText(f(55358,56794,8203,9794,65039),0,0),e=j.toDataURL(),d!==e}return!1}function e(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i,j=b.createElement("canvas"),k=j.getContext&&j.getContext("2d");for(i=Array("flag","emoji4"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='contact-form-7-css'  href='https://getsynccom.wpengine.com/wp-content/plugins/contact-form-7/includes/css/styles.css?ver=4.8' type='text/css' media='all' />
+<link rel='stylesheet' id='wdps_googlefonts-css'  href='https://fonts.googleapis.com/css?family=Lato&#038;subset=greek,latin,greek-ext,vietnamese,cyrillic-ext,latin-ext,cyrillic' type='text/css' media='all' />
+<link rel='stylesheet' id='wdps_frontend-css'  href='https://getsynccom.wpengine.com/wp-content/plugins/post-slider-wd/css/wdps_frontend.css?ver=2.0.30' type='text/css' media='all' />
+<link rel='stylesheet' id='wdps_effects-css'  href='https://getsynccom.wpengine.com/wp-content/plugins/post-slider-wd/css/wdps_effects.css?ver=2.0.30' type='text/css' media='all' />
+<link rel='stylesheet' id='wdps_font-awesome-css'  href='https://getsynccom.wpengine.com/wp-content/plugins/post-slider-wd/css/font-awesome/font-awesome.css?ver=4.6.3' type='text/css' media='all' />
+<link rel='stylesheet' id='themeora-google-Lato:400,500,700-css'  href='https://fonts.googleapis.com/css?family=Lato:400,500,700' type='text/css' media='all' />
+<link rel='stylesheet' id='themeora-base-style-css'  href='https://getsynccom.wpengine.com/wp-content/themes/atwood/style.css?ver=4.8' type='text/css' media='all' />
+<link rel='stylesheet' id='themeora-bootstrap-css'  href='https://getsynccom.wpengine.com/wp-content/themes/atwood/css/bootstrap.min.css?ver=4.8' type='text/css' media='all' />
+<link rel='stylesheet' id='themeora-fontAwesome-css'  href='https://getsynccom.wpengine.com/wp-content/themes/atwood/css/font-awesome.min.css?ver=4.8' type='text/css' media='all' />
+<link rel='stylesheet' id='themeora-typography-css'  href='https://getsynccom.wpengine.com/wp-content/themes/atwood/css/typography.css?ver=4.8' type='text/css' media='all' />
+<link rel='stylesheet' id='themeora-theme-style-css'  href='https://getsynccom.wpengine.com/wp-content/themes/atwood/css/styles.css?ver=4.8' type='text/css' media='all' />
+<script type='text/javascript' src='https://getsynccom.wpengine.com/wp-includes/js/jquery/jquery.js?ver=1.12.4'></script>
+<script type='text/javascript' src='https://getsynccom.wpengine.com/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+<script type='text/javascript' src='https://getsynccom.wpengine.com/wp-content/plugins/post-slider-wd/js/wdps_hotspot.js?ver=2.0.30'></script>
+<script type='text/javascript' src='https://getsynccom.wpengine.com/wp-content/plugins/post-slider-wd/js/jquery.mobile.js?ver=2.0.30'></script>
+<script type='text/javascript' src='https://getsynccom.wpengine.com/wp-content/plugins/post-slider-wd/js/jquery.featureCarouselpostslider.js?ver=2.0.30'></script>
+<script type='text/javascript' src='https://getsynccom.wpengine.com/wp-content/plugins/post-slider-wd/js/wdps_frontend.js?ver=2.0.30'></script>
+<link rel='https://api.w.org/' href='https://www.resilio.com/blog/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://getsynccom.wpengine.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="https://getsynccom.wpengine.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='shortlink' href='https://www.resilio.com/blog/?p=721' />
+<link rel="alternate" type="application/json+oembed" href="https://www.resilio.com/blog/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fwww.resilio.com%2Fblog%2Fofficial-linux-packages-for-sync-now-available" />
+<link rel="alternate" type="text/xml+oembed" href="https://www.resilio.com/blog/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fwww.resilio.com%2Fblog%2Fofficial-linux-packages-for-sync-now-available&#038;format=xml" />
+<!-- start Simple Custom CSS and JS -->
+<style type="text/css">
+.contact-form-blog {
+  background-color: rgb(244,244,244);
+  padding-bottom: 20px;
+  font-size: 15px;
+}
+
+.button-blog {
+  background-color: rgb(229,69,69) !important;
+  border-color: rgb(229,69,69) !important;
+}
+
+.form-error,
+.form-error form label,
+.error {
+  color: red !important;
+  font-size: 15px;
+}
+
+.cta-headline {
+  text-align:center;
+  font-weight:bold;
+  font-size:17px;
+}
+</style>
+<!-- end Simple Custom CSS and JS -->
+<!-- start Simple Custom CSS and JS -->
+<style type="text/css">
+.menu-item li,
+.menu-item a {
+  color: #333 !important;
+  font-size: 13px !important;
+  font-weight: 600;
+  font-family: "Lato",sans-serif;
+  transition-property: color;
+  transition-duration: 0.3s;
+  transition-timing-function: ease-out;
+
+}
+
+.menu-item a:hover {
+  color: #e54545 !important;
+  transition-property: color;
+  transition-duration: 0.3s;
+  transition-timing-function: ease-in;
+
+}
+
+.menu-item a {     
+  padding: 2em !important;     
+  margin: -2em !important; 
+}
+
+
+
+
+</style>
+<!-- end Simple Custom CSS and JS -->
+<link rel="stylesheet" href="https://www.resilio.com/css/style.min.css">
+
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<!--script  src="https://www.resilio.com/js/vendor/collapse.js"></script-->
+<script  src="https://www.resilio.com/js/vendor/tab.js"></script>
+<script>window.jQuery || document.write('<script src="https://www.resilio.com/js/vendor/jquery-1.12.4.min.js"><\/script>')</script>
+<script src="https://www.resilio.com/js/vendor/pgwbrowser.js"></script>
+<script src="https://www.resilio.com/js/vendor/validate.js"></script>
+<script src="https://www.resilio.com/js/vendor/jquery.customSelect.js"></script>
+
+<!-- Facebook Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+document,'script','https://connect.facebook.net/en_US/fbevents.js');
+
+fbq('init', '1188565734519674');
+fbq('track', "PageView");
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1188565734519674&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Facebook Pixel Code -->
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-75985507-5', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<!--[if lt IE 9]>
+<script src="https://getsynccom.wpengine.com/wp-content/themes/atwood/js/html5shiv.js"></script>
+<script src="https://getsynccom.wpengine.com/wp-content/themes/atwood/js/respond.js"></script>
+<![endif]-->
+<style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #f4f4f4; }
+</style>
+<link rel="icon" href="https://getsynccom.wpengine.com/wp-content/uploads/2016/11/260x260-65x65.png" sizes="32x32" />
+<link rel="icon" href="https://getsynccom.wpengine.com/wp-content/uploads/2016/11/260x260-220x220.png" sizes="192x192" />
+<link rel="apple-touch-icon-precomposed" href="https://getsynccom.wpengine.com/wp-content/uploads/2016/11/260x260-220x220.png" />
+<meta name="msapplication-TileImage" content="https://getsynccom.wpengine.com/wp-content/uploads/2016/11/260x260.png" />
+		<style type="text/css" id="wp-custom-css">
+			/*
+You can add your own CSS here.
+
+Click the help icon above to learn more.
+*/		</style>
+	</head>
+
+<body class="post-template-default single single-post postid-721 single-format-standard custom-background">
+
+
+<div class="page-wrapper fixed_nav_yes">
+    <!-- BEGIN NAV -->
+    <nav class="primary-navigation navbar" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                  
+                <a href="https://www.resilio.com/blog" title="Resilio Blog" rel="home"><img style="width:217px;" src="https://getsynccom.wpengine.com/wp-content/uploads/2016/12/bloglogo.png" class="logo-uploaded" alt="Resilio Blog" /></a>
+                                
+                                
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="fa fa-bars"></span>
+                </button>
+            </div><!-- end navbar-header -->
+
+            <div class="navbar-collapse collapse" id="nav-spy">
+                <div class="nav-wrap">
+                    <!-- primary nav -->
+                    <ul id="menu-top-nav" class="nav navbar-nav"><li id="menu-item-706" class="first-menu-item menu-item menu-item-type-taxonomy menu-item-object-category menu-item-706"><a href="https://www.resilio.com/blog/category/usecases">Use Cases</a></li>
+<li id="menu-item-740" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-740"><a href="https://www.resilio.com/blog/category/how-to">How&nbsp;To</a></li>
+<li id="menu-item-871" class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-871"><a href="https://www.resilio.com/blog/category/developer">Developer</a></li>
+<li id="menu-item-741" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-741"><a href="https://www.resilio.com/blog/category/news">News</a></li>
+<li id="menu-item-707" class="last-menu-item menu-item menu-item-type-custom menu-item-object-custom menu-item-707"><a target="_blank" href="https://www.resilio.com">Products</a></li>
+</ul>                </div><!--end nav-wrap -->
+            </div><!-- end .navbar-collapse #nav-spy -->
+        </div>
+    </nav>
+    
+        
+    <!-- END NAV -->
+<div class="full-width-container blog-section blog-single-post individual-page">
+	<div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                                                            
+<article id="post-721" class="post-teaser styled-box post-721 post type-post status-publish format-standard has-post-thumbnail hentry category-bittorrent-downloader category-developer category-sync tag-bittorrent tag-developer-2 tag-featured tag-pressroom tag-synctag">
+            <div class="featured-image">
+                            <img width="750" height="446" src="https://getsynccom.wpengine.com/wp-content/uploads/2016/02/linux.png" class="attachment-themeora-thumbnail-span-8 size-themeora-thumbnail-span-8 wp-post-image" alt="" srcset="https://getsynccom.wpengine.com/wp-content/uploads/2016/02/linux.png 1028w, https://getsynccom.wpengine.com/wp-content/uploads/2016/02/linux-300x179.png 300w, https://getsynccom.wpengine.com/wp-content/uploads/2016/02/linux-768x457.png 768w, https://getsynccom.wpengine.com/wp-content/uploads/2016/02/linux-1024x610.png 1024w" sizes="(max-width: 750px) 100vw, 750px" />                    </div>
+        <div class="content">
+                    <h1 class="title">Official Linux Packages for Sync Now Available</h1>
+                
+        <div class="meta">Posted on 18th February, by <a href="https://www.resilio.com/blog/author/daniel" title="Posts by Daniel Kadvany" rel="author">Daniel Kadvany</a> in <a href="https://www.resilio.com/blog/category/bittorrent-downloader" rel="category tag">BitTorrent</a>, <a href="https://www.resilio.com/blog/category/developer" rel="category tag">Developer</a>, <a href="https://www.resilio.com/blog/category/sync" rel="category tag">Sync</a>        </div>        
+        <p>We’ve received many requests from the Sync community to be able to install Sync on a Linux family OS in the &#8220;Linux way&#8221; &#8212; using packages and a standard tool (yum or apt-get) to get the package downloaded and installed.</p>
+<p>We’re thankful for the packages and installation scripts made by our community members (thanks to @tuxpoldo, @Silvenga, @moe and others) that enabled this sort of installation.</p>
+<p>Now, we are happy to present official Debian-based and RPM-based Linux packages for Sync. Packages are also available on our repositories, where they will be updated once we push a new Sync version to auto-update.</p>
+<p><span id="more-721"></span></p>
+<p>To use our official Linux packages, you need to complete several simple steps:<br />
+1. Add our repository to your repo list<br />
+2. Add our PGP public key to the list of trusted keys for your installer<br />
+3. Install the package</p>
+<p>See below for detailed instructions.  If you have btsync already installed, please see this <a href="https://help.getsync.com/hc/en-us/articles/206178924">KB article</a> first.</p>
+<p><strong>Installing on Debian-based OS (Debian, Ubuntu, Zorin, Elementary)</strong></p>
+<p>Create a file called /etc/apt/sources.list.d/resilio-sync.list with the following content to register Resilio repository:</p>
+<pre><code>deb http://linux-packages.resilio.com/resilio-sync/deb resilio-sync non-free
+</code></pre>
+<p>Add a public key with the following command:</p>
+<pre><code>wget -qO - https://linux-packages.resilio.com/resilio-sync/key.asc | sudo apt-key add -
+</code></pre>
+<p>&nbsp;</p>
+<table>
+<tbody>
+<tr>
+<td>For arm64 architecture</td>
+<td>For Raspberry Pi 1</td>
+</tr>
+<tr>
+<td>
+<p class="wysiwyg-text-align-left"><code>sudo dpkg --add-architecture armhf</code><br />
+<code>sudo apt-get update</code></p>
+<p class="wysiwyg-text-align-left">In /etc/apt/sources.list change the line as follows:</p>
+<p><code>deb [arch=armhf] http://linux-packages.resilio.com/</code><code>resilio-sync/deb resilio-sync non-free</code></td>
+<td class="wysiwyg-text-align-left"><code>sudo dpkg --add-architecture armel<br />
+sudo apt-get update<br />
+sudo apt-get install resilio-sync:armel</code></td>
+</tr>
+</tbody>
+</table>
+<p>Install Sync</p>
+<pre><code>sudo apt-get update
+sudo apt-get install resilio-sync
+</code></pre>
+<h3>For RPM-based Linux (Red Hat, Fedora, CentOS, OpenSUSE)</h3>
+<p>Create file <strong>/etc/yum.repos.d/resilio-sync.repo</strong> with the following content to register Resilio repository:</p>
+<pre><code>[resilio-sync]
+name=Resilio Sync $basearch
+baseurl=http://linux-packages.resilio.com/resilio-sync/rpm/$basearch
+enabled=1
+gpgcheck=1
+</code></pre>
+<p>Add public key:</p>
+<pre><code>sudo rpm --import https://linux-packages.resilio.com/resilio-sync/key.asc
+</code></pre>
+<p>Install Sync:</p>
+<pre><code>sudo yum install resilio-sync
+</code></pre>
+<h2><a id="user-content-managing-sync" class="anchor" href="https://github.com/bt-sync/sync-package/wiki/Linux-packages#managing-sync"></a>Managing Sync</h2>
+<h3><a id="user-content-systemd" class="anchor" href="https://github.com/bt-sync/sync-package/wiki/Linux-packages#systemd"></a><span class="wysiwyg-underline"><span class="wysiwyg-font-size-large">systemd</span></span></h3>
+<p>Enable sync service automatic startup as user <strong>rslsync</strong>:</p>
+<pre><code>sudo systemctl enable </code><code>resilio-sync</code></pre>
+<p>Enable sync service as current user:</p>
+<p>edit file /usr/lib/systemd/user/resilio-sync.service and change &#8220;WantedBy=multi-user.target&#8221; to &#8220;WantedBy=default.target&#8221;. Save. Then enable the service:</p>
+<pre><code>systemctl --user enable </code><code>resilio-sync</code></pre>
+<p>Systemctl can be also run with the following arguments: <code>start, stop, enable, disable, status</code></p>
+<p>For example:</p>
+<pre><code>systemctl --user start </code><code>resilio-sync</code></pre>
+<h3><a id="user-content-sysvinit-upstart" class="anchor" href="https://github.com/bt-sync/sync-package/wiki/Linux-packages#sysvinit-upstart"></a><span class="wysiwyg-underline">sysvinit, upstart</span></h3>
+<p>Run as <strong>rslsync</strong> user:</p>
+<pre><code>sudo service </code><code>resilio-sync </code><code>start </code></pre>
+<p>Service can also be run with the following arguments: <code>start, stop, restart</code></p>
+<p>Guide on how to use Sync on linux is <a href="https://help.getsync.com/hc/en-us/articles/204762449-Guide-to-Linux">here</a>.</p>
+<p>After successful migration and verifying that setup is preserved, you can remove btsync package:</p>
+<h3>For Debian-based Linux:</h3>
+<p><code>sudo apt-get purge btsync</code></p>
+<h3>For RPM-based Linux</h3>
+<p><code>sudo yum remove btsync</code></p>
+    </div>
+</article><!-- end post-teaser -->                        <!-- begin meta area -->
+                        <div class="meta-space">
+                            <div class="styled-box post-tags"><h3>Tagged As</h3><a href="https://www.resilio.com/blog/tag/bittorrent" rel="tag">bittorrent</a><a href="https://www.resilio.com/blog/tag/developer-2" rel="tag">developer</a><a href="https://www.resilio.com/blog/tag/featured" rel="tag">featured</a><a href="https://www.resilio.com/blog/tag/pressroom" rel="tag">pressroom</a><a href="https://www.resilio.com/blog/tag/synctag" rel="tag">sync</a></div>                        </div>
+                        <!-- end meta-space area -->
+
+                        <!-- begin comments -->
+                        <div class="blog-comments styled-box mobile-stack">
+                                                    </div>
+                        <!-- end comments -->
+                                                </div><!-- end col-md-8 -->
+            
+            <!-- start sidebar -->
+<aside class="col-md-4 blog-sidebar">
+    <div class="sidebar-inner styled-box">
+        <div id="search-2" class="widget widget_search"><form method="get" class="search-form" action="https://www.resilio.com/blog/">
+<input type="text" name="s" placeholder="Search" value="" title="Search for:" />
+<button type="submit" class="btn">Go</button>
+</form></div><div id="text-3" class="widget widget_text">			<div class="textwidget"><div id="resilio-handcoded">
+
+<div id="sync_cta" style="display:none">
+<img src="https://getsynccom.wpengine.com/wp-content/uploads/2017/01/CTA-free-banner-img-308-254px.png"></img>
+<div class="cta-headline">
+Have Your Files Anywhere.
+</div>
+<div  style="text-align:center; padding:10px">
+Sync any folder to all your devices. Sync photos, videos, music, PDFs, or any other file types to/from your mobile phone, laptop, or NAS.
+</div>
+
+<div class="nav-top__link nav-download-parent " style="text-align:center; padding-top:15px; padding-bottom:15px">
+              <a class="nav-download" style="background-color:#ff4c4c; color:#ffffff; font-weight:600; padding-left:20px; padding-right:20px"  id="dl_btn" href="https://www.resilio.com/individuals/?utm_source=blog&utm_medium=ind_cta">Free Download</a>
+</div>
+</div>
+
+<div id="wg_cta" style="display:none">
+<img src="https://getsynccom.wpengine.com/wp-content/uploads/2017/01/CTA-free-banner-img-308-254px.png"></img>
+<div class="cta-headline">
+Collaborate on Large Files Faster.
+</div>
+<div  style="text-align:center; padding:10px">
+Share any folder with your team. Sync images, videos, design docs, or any other file type faster than ever before.
+</div>
+
+<div class="nav-top__link nav-download-parent " style="text-align:center; padding-top:15px; padding-bottom:15px">
+              <a class="nav-download" style="background-color:#ff4c4c; color:#ffffff; font-weight:600; padding-left:20px; padding-right:20px"  id="dl_btn" href="https://www.resilio.com/workgroups/?utm_source=blog&utm_medium=wg_cta">Try Sync for Business</a>
+</div>
+</div>
+
+
+<div id="connect_cta" style="display:none">
+<div class="contact-form-blog">
+	<div class="cta-headline">
+		Learn more about our solutions for businesses and large enterprises
+	</div>
+  <form class="salesforce-form sf-form" id="sf-form" method="post" action="https://www.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8">
+    <input type="hidden" name="oid" value="00D36000000oZDr"/>
+    <input type="hidden" name="lead_source" value="Website"/>
+    <input type="hidden" name="member_status"  id="member_status" value="Responded"/>
+    <input type="hidden" name="00N3600000DhiXS" id="00N3600000DhiXS" title="secondary lead source" value="Blog"/>
+    <input type="hidden" name="00N3600000CSnne" id="00N3600000CSnne" title="Type" value="Resilio Connect"/>
+    <input class="campaign" type="hidden" name="Campaign_ID" value=""/>
+    <div class="form-error" name="form-error">error message</div>
+
+<div style="width:90%; margin-left:10px;">
+        Name*<input type="text" style="margin-bottom:10px" name="first_name" required>
+        Email*<input type="email" style="margin-bottom:10px" name="email" id="contact_email" required>
+        Phone Number*<input type="tel"  style="margin-bottom:10px" name="phone" required>
+        What is your specific use case? Please provide us with a detailed description.*
+        <textarea rows="4" style="margin-bottom:10px" name="00N3600000CTldZ" id="itsolutions-note" required></textarea>
+</div>
+    <div class="form-error" name="form-error">error message</div>
+
+    <div class="col--12 submit__wrap">
+      <input id="" class="button button--request button-blog" type="submit" value="Contact Sales">
+    </div>
+
+  </form>
+</div> <!--/contact-form-->
+
+</div>
+
+</div>
+</div>
+		</div><div id="bcn_widget-2" class="widget widget_breadcrumb_navxt"><h3 class="">Trail</h3><div class="breadcrumbs" vocab="https://schema.org/" typeof="BreadcrumbList"><!-- Breadcrumb NavXT 5.7.0 -->
+<span property="itemListElement" typeof="ListItem"><a property="item" typeof="WebPage" title="Go to Resilio Blog." href="https://www.resilio.com/blog" class="home"><span property="name">Resilio Blog</span></a><meta property="position" content="1"></span> &gt; <span property="itemListElement" typeof="ListItem"><a property="item" typeof="WebPage" title="Go to the BitTorrent category archives." href="https://www.resilio.com/blog/category/bittorrent-downloader" class="taxonomy category"><span property="name">BitTorrent</span></a><meta property="position" content="2"></span> &gt; <span property="itemListElement" typeof="ListItem"><span property="name">Official Linux Packages for Sync Now Available</span><meta property="position" content="3"></span></div></div>		<div id="recent-posts-3" class="widget widget_recent_entries">		<h3 class="">Recent</h3>		<ul>
+					<li>
+				<a href="https://www.resilio.com/blog/system-admin-day">Celebrate System Admin Day in 3 Easy Ways </a>
+							<span class="post-date">July 28, 2017</span>
+						</li>
+					<li>
+				<a href="https://www.resilio.com/blog/p2p-always-faster">P2P is Always Faster</a>
+							<span class="post-date">June 22, 2017</span>
+						</li>
+					<li>
+				<a href="https://www.resilio.com/blog/announcing-sync-2-5">Announcing Sync 2.5</a>
+							<span class="post-date">May 11, 2017</span>
+						</li>
+					<li>
+				<a href="https://www.resilio.com/blog/essential-features-reliable-efss">Essential Features of a Reliable EFSS</a>
+							<span class="post-date">January 3, 2017</span>
+						</li>
+					<li>
+				<a href="https://www.resilio.com/blog/bidirectional-file-sync">What is Bidirectional File Sync?</a>
+							<span class="post-date">January 3, 2017</span>
+						</li>
+				</ul>
+		</div>		<div id="tag_cloud-3" class="widget widget_tag_cloud"><h3 class="">Tags</h3><div class="tagcloud"><a href="https://www.resilio.com/blog/tag/amazon-ec2" class="tag-cloud-link tag-link-77 tag-link-position-1" style="font-size: 8pt;" aria-label="amazon ec2 (1 item)">amazon ec2</a>
+<a href="https://www.resilio.com/blog/tag/api" class="tag-cloud-link tag-link-18 tag-link-position-2" style="font-size: 15.1590909091pt;" aria-label="api (15 items)">api</a>
+<a href="https://www.resilio.com/blog/tag/bittorrent" class="tag-cloud-link tag-link-65 tag-link-position-3" style="font-size: 19.6931818182pt;" aria-label="bittorrent (58 items)">bittorrent</a>
+<a href="https://www.resilio.com/blog/tag/bittorrent-sync" class="tag-cloud-link tag-link-58 tag-link-position-4" style="font-size: 22pt;" aria-label="bittorrent sync (113 items)">bittorrent sync</a>
+<a href="https://www.resilio.com/blog/tag/cloud" class="tag-cloud-link tag-link-162 tag-link-position-5" style="font-size: 9.43181818182pt;" aria-label="Cloud (2 items)">Cloud</a>
+<a href="https://www.resilio.com/blog/tag/collaborate" class="tag-cloud-link tag-link-112 tag-link-position-6" style="font-size: 10.3863636364pt;" aria-label="collaborate (3 items)">collaborate</a>
+<a href="https://www.resilio.com/blog/tag/collaboration" class="tag-cloud-link tag-link-126 tag-link-position-7" style="font-size: 9.43181818182pt;" aria-label="collaboration (2 items)">collaboration</a>
+<a href="https://www.resilio.com/blog/tag/complete-guide" class="tag-cloud-link tag-link-91 tag-link-position-8" style="font-size: 9.43181818182pt;" aria-label="complete guide (2 items)">complete guide</a>
+<a href="https://www.resilio.com/blog/tag/def-con" class="tag-cloud-link tag-link-62 tag-link-position-9" style="font-size: 9.43181818182pt;" aria-label="def con (2 items)">def con</a>
+<a href="https://www.resilio.com/blog/tag/design" class="tag-cloud-link tag-link-81 tag-link-position-10" style="font-size: 8pt;" aria-label="design (1 item)">design</a>
+<a href="https://www.resilio.com/blog/tag/dev" class="tag-cloud-link tag-link-59 tag-link-position-11" style="font-size: 15.1590909091pt;" aria-label="dev (15 items)">dev</a>
+<a href="https://www.resilio.com/blog/tag/dev-developer-sync-api" class="tag-cloud-link tag-link-61 tag-link-position-12" style="font-size: 8pt;" aria-label="dev developer sync api (1 item)">dev developer sync api</a>
+<a href="https://www.resilio.com/blog/tag/developer-2" class="tag-cloud-link tag-link-60 tag-link-position-13" style="font-size: 16.2727272727pt;" aria-label="developer (21 items)">developer</a>
+<a href="https://www.resilio.com/blog/tag/developers" class="tag-cloud-link tag-link-116 tag-link-position-14" style="font-size: 10.3863636364pt;" aria-label="Developers (3 items)">Developers</a>
+<a href="https://www.resilio.com/blog/tag/diy" class="tag-cloud-link tag-link-102 tag-link-position-15" style="font-size: 10.3863636364pt;" aria-label="DIY (3 items)">DIY</a>
+<a href="https://www.resilio.com/blog/tag/docker" class="tag-cloud-link tag-link-111 tag-link-position-16" style="font-size: 10.3863636364pt;" aria-label="docker (3 items)">docker</a>
+<a href="https://www.resilio.com/blog/tag/dropbox" class="tag-cloud-link tag-link-124 tag-link-position-17" style="font-size: 9.43181818182pt;" aria-label="dropbox (2 items)">dropbox</a>
+<a href="https://www.resilio.com/blog/tag/dropbox-alternative" class="tag-cloud-link tag-link-88 tag-link-position-18" style="font-size: 9.43181818182pt;" aria-label="dropbox alternative (2 items)">dropbox alternative</a>
+<a href="https://www.resilio.com/blog/tag/featured" class="tag-cloud-link tag-link-153 tag-link-position-19" style="font-size: 12.375pt;" aria-label="featured (6 items)">featured</a>
+<a href="https://www.resilio.com/blog/tag/featured-secondary" class="tag-cloud-link tag-link-142 tag-link-position-20" style="font-size: 10.3863636364pt;" aria-label="featured-secondary (3 items)">featured-secondary</a>
+<a href="https://www.resilio.com/blog/tag/featured-third" class="tag-cloud-link tag-link-158 tag-link-position-21" style="font-size: 9.43181818182pt;" aria-label="featured-third (2 items)">featured-third</a>
+<a href="https://www.resilio.com/blog/tag/game-developer" class="tag-cloud-link tag-link-114 tag-link-position-22" style="font-size: 9.43181818182pt;" aria-label="game developer (2 items)">game developer</a>
+<a href="https://www.resilio.com/blog/tag/hacks" class="tag-cloud-link tag-link-71 tag-link-position-23" style="font-size: 9.43181818182pt;" aria-label="Hacks (2 items)">Hacks</a>
+<a href="https://www.resilio.com/blog/tag/how-to-2" class="tag-cloud-link tag-link-30 tag-link-position-24" style="font-size: 11.1818181818pt;" aria-label="how to (4 items)">how to</a>
+<a href="https://www.resilio.com/blog/tag/how-to" class="tag-cloud-link tag-link-73 tag-link-position-25" style="font-size: 13.8863636364pt;" aria-label="How To (10 items)">How To</a>
+<a href="https://www.resilio.com/blog/tag/ios-app" class="tag-cloud-link tag-link-95 tag-link-position-26" style="font-size: 9.43181818182pt;" aria-label="iOS app (2 items)">iOS app</a>
+<a href="https://www.resilio.com/blog/tag/nas" class="tag-cloud-link tag-link-138 tag-link-position-27" style="font-size: 12.375pt;" aria-label="NAS (6 items)">NAS</a>
+<a href="https://www.resilio.com/blog/tag/paul-ellis" class="tag-cloud-link tag-link-74 tag-link-position-28" style="font-size: 8pt;" aria-label="Paul Ellis (1 item)">Paul Ellis</a>
+<a href="https://www.resilio.com/blog/tag/personal-dropbox" class="tag-cloud-link tag-link-78 tag-link-position-29" style="font-size: 8pt;" aria-label="personal dropbox (1 item)">personal dropbox</a>
+<a href="https://www.resilio.com/blog/tag/photographer" class="tag-cloud-link tag-link-67 tag-link-position-30" style="font-size: 8pt;" aria-label="photographer (1 item)">photographer</a>
+<a href="https://www.resilio.com/blog/tag/pressroom" class="tag-cloud-link tag-link-155 tag-link-position-31" style="font-size: 15.7954545455pt;" aria-label="pressroom (18 items)">pressroom</a>
+<a href="https://www.resilio.com/blog/tag/privacy" class="tag-cloud-link tag-link-36 tag-link-position-32" style="font-size: 10.3863636364pt;" aria-label="privacy (3 items)">privacy</a>
+<a href="https://www.resilio.com/blog/tag/raspberry-pi" class="tag-cloud-link tag-link-89 tag-link-position-33" style="font-size: 10.3863636364pt;" aria-label="Raspberry Pi (3 items)">Raspberry Pi</a>
+<a href="https://www.resilio.com/blog/tag/secure-cloud" class="tag-cloud-link tag-link-79 tag-link-position-34" style="font-size: 8pt;" aria-label="secure cloud (1 item)">secure cloud</a>
+<a href="https://www.resilio.com/blog/tag/security" class="tag-cloud-link tag-link-38 tag-link-position-35" style="font-size: 9.43181818182pt;" aria-label="security (2 items)">security</a>
+<a href="https://www.resilio.com/blog/tag/synctag" class="tag-cloud-link tag-link-63 tag-link-position-36" style="font-size: 20.3295454545pt;" aria-label="sync (70 items)">sync</a>
+<a href="https://www.resilio.com/blog/tag/sync-2-3" class="tag-cloud-link tag-link-177 tag-link-position-37" style="font-size: 9.43181818182pt;" aria-label="sync 2.3 (2 items)">sync 2.3</a>
+<a href="https://www.resilio.com/blog/tag/sync-api" class="tag-cloud-link tag-link-64 tag-link-position-38" style="font-size: 12.375pt;" aria-label="sync api (6 items)">sync api</a>
+<a href="https://www.resilio.com/blog/tag/sync-hack-2" class="tag-cloud-link tag-link-80 tag-link-position-39" style="font-size: 14.4431818182pt;" aria-label="sync hack (12 items)">sync hack</a>
+<a href="https://www.resilio.com/blog/tag/sync-hacks" class="tag-cloud-link tag-link-83 tag-link-position-40" style="font-size: 18.1818181818pt;" aria-label="sync hacks (37 items)">sync hacks</a>
+<a href="https://www.resilio.com/blog/tag/syncnet" class="tag-cloud-link tag-link-66 tag-link-position-41" style="font-size: 8pt;" aria-label="syncnet (1 item)">syncnet</a>
+<a href="https://www.resilio.com/blog/tag/sync-stories" class="tag-cloud-link tag-link-164 tag-link-position-42" style="font-size: 18.5795454545pt;" aria-label="sync stories (42 items)">sync stories</a>
+<a href="https://www.resilio.com/blog/tag/task-automation" class="tag-cloud-link tag-link-68 tag-link-position-43" style="font-size: 8pt;" aria-label="task automation (1 item)">task automation</a>
+<a href="https://www.resilio.com/blog/tag/tutorial" class="tag-cloud-link tag-link-105 tag-link-position-44" style="font-size: 12.375pt;" aria-label="tutorial (6 items)">tutorial</a>
+<a href="https://www.resilio.com/blog/tag/web-deployment" class="tag-cloud-link tag-link-76 tag-link-position-45" style="font-size: 9.43181818182pt;" aria-label="Web Deployment (2 items)">Web Deployment</a></div>
+</div>    </div>
+</aside>
+<!-- end blog-sidebar -->        </div><!-- end row -->
+    </div><!-- end container -->
+</div><!-- end full-width-container -->
+
+
+<footer class="full-width-container primary-footer" id="primary-footer">
+    <div class="container">
+                <div class="row">
+            <div class="col-md-12 aligncenter footer-bottom">
+                <p>Resilio 2017                </p>
+            </div>
+        </div>
+    </div><!-- end container -->
+</footer><!-- end full-width-container -->
+
+    
+</div><!-- end page wrapper -->
+
+<!-- start Simple Custom CSS and JS -->
+<script type="text/javascript">
+var display_connect = false;
+var display_sync = false;
+var display_wg = false;
+
+console.log("looking for tags...");
+$("meta[property='article:tag']").each(function(index) {
+  var tag = $(this).attr("content");
+  console.log(tag);
+  if ((tag == "api") || (tag == "sync")) {
+  	display_sync = true;
+  } else if (tag == "connect") {
+    display_connect = true;
+  } else if (tag == "workgroups") {
+    display_wg = true;
+  }
+});
+
+if (display_connect) {
+  $("#connect_cta").css("display","initial");
+} else if (display_wg) {
+  $("#wg_cta").css("display","initial");
+} else if (display_sync) {
+  $("#sync_cta").css("display","initial");
+} else {
+  var r = Math.floor((Math.random() * 3) + 1);
+  if (r == 1) $("#connect_cta").css("display","initial");
+  if (r == 2) $("#wg_cta").css("display","initial");
+  if (r == 3) $("#sync_cta").css("display","initial");
+}
+
+</script>
+<!-- end Simple Custom CSS and JS -->
+<script src="https://www.resilio.com/js/bundle.js"></script>
+
+<script type='text/javascript'>
+/* <![CDATA[ */
+var wpcf7 = {"apiSettings":{"root":"https:\/\/www.resilio.com\/blog\/wp-json\/","namespace":"contact-form-7\/v1"},"recaptcha":{"messages":{"empty":"Please verify that you are not a robot."}},"cached":"1"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://getsynccom.wpengine.com/wp-content/plugins/contact-form-7/includes/js/scripts.js?ver=4.8'></script>
+<script type='text/javascript' src='https://getsynccom.wpengine.com/wp-content/themes/atwood/js/jquery.validate.min.js'></script>
+<script type='text/javascript' src='https://getsynccom.wpengine.com/wp-content/themes/atwood/js/bootstrap.min.js'></script>
+<script type='text/javascript' src='https://getsynccom.wpengine.com/wp-content/themes/atwood/js/custom.js'></script>
+<script type='text/javascript' src='https://getsynccom.wpengine.com/wp-includes/js/wp-embed.min.js?ver=4.8'></script>
+
+</body>
+</html>

@@ -1,0 +1,19 @@
+Xterm: bigger fonts
+
+
+
+
+Eg: in ~/.Xresources
+
+xterm*font:     *-fixed-*-*-*-18-*
+
+
+From here, you can either restart X or run 
+
+   xrdb -merge ~/.Xresources 
+   
+in a terminal to update the settings
+
+
+
+via: http://askubuntu.com/questions/161652/how-to-change-the-default-font-size-of-xterm

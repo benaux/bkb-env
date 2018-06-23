@@ -1,0 +1,13 @@
+# Docker
+
+    # du -sh /var/lib/docker/*
+        695M    /var/lib/docker/aufs
+        628K    /var/lib/docker/containers
+        80K     /var/lib/docker/execdriver
+        500K    /var/lib/docker/graph
+        24M     /var/lib/docker/init
+        12K     /var/lib/docker/linkgraph.db
+        4.0K    /var/lib/docker/repositories-aufs
+        4.0K    /var/lib/docker/tmp
+        8.0K    /var/lib/docker/trust
+        4.0K    /var/lib/docker/volumes

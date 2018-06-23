@@ -1,0 +1,1181 @@
+From <http://stackoverflow.com/questions/296536/urlencode-from-a-bash-script>:
+
+[Stack Exchange][1]
+
+   [1]: http://stackexchange.com
+
+[log in][2] | [careers][3] | [chat][4] | [meta][5] | [about][6] | [faq][7]
+
+   [2]: /users/login?returnurl=%2fquestions%2f296536%2furlencode-from-a-bash-script
+   [3]: http://careers.stackoverflow.com
+   [4]: http://chat.stackoverflow.com
+   [5]: http://meta.stackoverflow.com
+   [6]: /about
+   [7]: /faq
+
+  
+
+
+[Stack Overflow][8]
+
+   [8]: /
+
+  * [Questions][9]
+  * [Tags][10]
+  * [Users][11]
+  * [Badges][12]
+  * [Unanswered][13]
+
+   [9]: /questions
+   [10]: /tags
+   [11]: /users
+   [12]: /badges
+   [13]: /unanswered
+
+  * [Ask Question][14]
+
+   [14]: /questions/ask
+
+# [URLEncode from a bash script][15]
+
+   [15]: /questions/296536/urlencode-from-a-bash-script
+
+up vote 22 down vote [favorite][16]
+
+   [16]: # (This is a favorite question (click again to undo))
+
+**10**
+
+share [g+] share [fb] share [tw]
+
+I am trying to write a bash script for testing that takes a parameter and sends it through curl to web site. I need to url encode the value to make sure that special characters are processed properly. What is the best way to do this? 
+
+Here is my basic script so far:
+    
+    #!/bin/bash
+    host=${1:?'bad host'}
+    value=$2
+    shift
+    shift
+    curl -v -d "param=${value}" http://${host}/somepath $@
+    
+
+[bash][17] [scripting][18] [urlencode][19]
+
+   [17]: /questions/tagged/bash (show questions tagged 'bash')
+   [18]: /questions/tagged/scripting (show questions tagged 'scripting')
+   [19]: /questions/tagged/urlencode (show questions tagged 'urlencode')
+
+[link][20]|[improve this question][21]
+
+   [20]: /q/296536 (short permalink to this question)
+   [21]: /posts/296536/edit
+
+asked Nov 17 '08 at 19:09
+
+[
+
+![][22]
+
+   [22]: http://www.gravatar.com/avatar/391bf3aa1af6f02f000644e540f4a948?s=32&d=identicon&r=PG
+
+][23]
+
+   [23]: /users/19130/aaron
+
+[Aaron][24]  
+1,5701615
+
+   [24]: /users/19130/aaron
+
+feedback 
+
+## 15 Answers
+
+[active][25] [oldest][26] [votes][27]
+
+   [25]: /questions/296536/urlencode-from-a-bash-script?answertab=active#tab-top (Answers with the latest activity first)
+   [26]: /questions/296536/urlencode-from-a-bash-script?answertab=oldest#tab-top (Answers in the order they were provided)
+   [27]: /questions/296536/urlencode-from-a-bash-script?answertab=votes#tab-top (Answers with the highest score first)
+
+up vote 26 down vote accepted
+
+Use Perl's `URI::Escape` module and `uri_escape` function in the second line of your bash script:
+    
+    ...
+    
+    value="$(perl -MURI::Escape -e 'print uri_escape($ARGV[0]);' "$2")"
+    ...
+    
+
+**Edit:** Fix quoting problems, as suggested by Chris Johnsen in the comments. Thanks!
+
+[link][28]|[improve this answer][29]
+
+   [28]: /a/298258 (short permalink to this answer)
+   [29]: /posts/298258/edit
+
+edited [Jan 12 '10 at 9:39][30]
+
+   [30]: /posts/298258/revisions (show all edits to this post)
+
+  
+
+
+answered Nov 18 '08 at 9:34
+
+[
+
+![][31]
+
+   [31]: http://www.gravatar.com/avatar/05d3ef5e3c3dffb7310e46caa9f7652a?s=32&d=identicon&r=PG
+
+][32]
+
+   [32]: /users/884/dubek
+
+[dubek][33]  
+826169
+
+   [33]: /users/884/dubek
+
+URI::Escape might not be installed, check my answer in that case. - [blueyed][34] Nov 10 '09 at 19:50
+
+   [34]: /users/15690/blueyed (2314 reputation)
+
+2
+ 
+
+This won't work if $2 contains an apostrophe. - [nes1983][35] Jan 1 '10 at 15:53
+
+   [35]: /users/52573/nes1983 (4566 reputation)
+
+I fixed this (use `echo`, pipe and `<>`), and now it works even when $2 contains an apostrophe or double-quotes. Thanks! - [dubek][36] Jan 3 '10 at 9:35
+
+   [36]: /users/884/dubek (826 reputation)
+
+2
+ 
+
+You do away with `echo`, too: `value="$(perl -MURI::Escape -e 'print uri_escape($ARGV[0]);' "$2")"` - [Chris Johnsen][37] Jan 3 '10 at 10:31
+
+   [37]: /users/193688/chris-johnsen (16476 reputation)
+
+Chris Johnsen's version is better. I had ${True} in my test expression and using this via echo tripped up uri_escape / Perl variable expansion. - [mm2001][38] Jan 7 '10 at 16:35
+
+   [38]: /users/19506/mm2001 (625 reputation)
+
+feedback 
+
+up vote 22 down vote
+
+Or just use `curl --data-urlencode`
+
+[link][39]|[improve this answer][40]
+
+   [39]: /a/2027690 (short permalink to this answer)
+   [40]: /posts/2027690/edit
+
+answered Jan 8 '10 at 13:05
+
+[
+
+![][41]
+
+   [41]: http://www.gravatar.com/avatar/4120eacaf35170e614df3500c0432580?s=32&d=identicon&r=PG
+
+][42]
+
+   [42]: /users/114168/jacob-r
+
+[Jacob R][43]  
+1,356517
+
+   [43]: /users/114168/jacob-r
+
+That worked great. I did have to update 'sudo port install curl' since this is a pretty new feature. - [Eric Pugh][44] May 18 '10 at 19:57
+
+   [44]: /users/158763/eric-pugh (871 reputation)
+
+Seems to only work for http POST. Documentation here: [curl.haxx.se/docs/manpage.html#--data-urlencode][45] - [Stan James][46] Apr 13 at 6:47
+
+   [45]: http://curl.haxx.se/docs/manpage.html#--data-urlencode
+   [46]: /users/59913/stan-james (152 reputation)
+
+@StanJames If you use it like so curl can also do the encoding for a GET request. `curl -G --data-urlencode "blah=df ssdf sdf" --data-urlencode "blah2=dfsdf sdfsd " http://whatever.com/whatever` - [kberg][47] May 7 at 20:52
+
+   [47]: /users/807318/kberg (61 reputation)
+
+feedback 
+
+up vote 9 down vote
+
+I find it more readable in python:
+    
+    encoded_value=$(python -c "import urllib; print urllib.quote('''$value''')")
+    
+
+the triple ' ensures that single quotes in value won't hurt. urllib is in the standard library. It work for exampple for this crazy (real world) url:
+    
+    "http://www.rai.it/dl/audio/" "1264165523944Ho servito il re d'Inghilterra - Puntata 7
+    
+
+[link][48]|[improve this answer][49]
+
+   [48]: /a/2236014 (short permalink to this answer)
+   [49]: /posts/2236014/edit
+
+answered Feb 10 '10 at 10:26
+
+[
+
+![][50]
+
+   [50]: http://www.gravatar.com/avatar/faa8ac16953af7574f2d2812cc068924?s=32&d=identicon&r=PG
+
+][51]
+
+   [51]: /users/270188/sandro
+
+[sandro][52]  
+9111
+
+   [52]: /users/270188/sandro
+
+I had some trouble with quotes and special chars with the triplequoting, this seemed to work for basically everything: encoded_value="$( echo -n "${data}" | python -c "import urllib; import sys; sys.stdout.write(urllib.quote(sys.stdin.read()))" )"; - [sequoia mcdowell][53] Nov 14 '11 at 14:33
+
+   [53]: /users/146406/sequoia-mcdowell (474 reputation)
+
+feedback 
+
+up vote 9 down vote
+
+for the sake of completeness, many solutions using sed or awk only translate a special set of characters and are hence quite large by code size and also dont translate other special characters that should be encoded.
+
+a safe way to urlencode would be to just encode every single byte - even those that would've been allowed.
+    
+    echo foobar | xxd -plain | tr -d '\n' | sed 's/\(..\)/%\1/g'
+    
+
+xxd is taking care here that the input is handled as bytes and not characters.
+
+[link][54]|[improve this answer][55]
+
+   [54]: /a/7506695 (short permalink to this answer)
+   [55]: /posts/7506695/edit
+
+answered Sep 21 '11 at 21:10
+
+[
+
+![][56]
+
+   [56]: http://www.gravatar.com/avatar/e2fa0d64ff94bb8f99068c033a9f6fa7?s=32&d=identicon&r=PG
+
+][57]
+
+   [57]: /users/784669/josch
+
+[josch][58]  
+22623
+
+   [58]: /users/784669/josch
+
+2
+ 
+
+Nicely done-- good to see a one-liner that uses just the shell. - [joelparkerhenderson][59] Sep 24 '11 at 1:10
+
+   [59]: /users/528726/joelparkerhenderson (3453 reputation)
+
+feedback 
+
+up vote 8 down vote
+
+I've found the following snippet useful to stick it into a chain of program calls, where URI::Escape might not be installed:
+    
+    perl -p -e 's/([^A-Za-z0-9])/sprintf("%%%02X", ord($1))/seg'
+    
+
+([via][60])
+
+   [60]: http://support.internetconnection.net/CODE%5FLIBRARY/Perl%5FURL%5FEncode%5Fand%5FDecode.shtml%5D
+
+[link][61]|[improve this answer][62]
+
+   [61]: /a/1710689 (short permalink to this answer)
+   [62]: /posts/1710689/edit
+
+answered Nov 10 '09 at 19:48
+
+[
+
+![][63]
+
+   [63]: http://www.gravatar.com/avatar/b152494ea58b7d2dc840468b3aa4b77a?s=32&d=identicon&r=PG
+
+][64]
+
+   [64]: /users/15690/blueyed
+
+[blueyed][65]  
+2,3141317
+
+   [65]: /users/15690/blueyed
+
+feedback 
+
+up vote 8 down vote
+
+Direct link to awk version : [http://www.shelldorado.com/scripts/cmds/urlencode][66]  
+I used it for years and it works like a charm
+
+   [66]: http://www.shelldorado.com/scripts/cmds/urlencode
+
+[link][67]|[improve this answer][68]
+
+   [67]: /a/329421 (short permalink to this answer)
+   [68]: /posts/329421/edit
+
+edited [Feb 19 '10 at 10:20][69]
+
+   [69]: /posts/329421/revisions (show all edits to this post)
+
+  
+
+
+answered Nov 30 '08 at 21:42
+
+[
+
+![][70]
+
+   [70]: http://www.gravatar.com/avatar/27d9c5c47d91350d66f51e00189ed867?s=32&d=identicon&r=PG
+
+][71]
+
+   [71]: /users/41469/matthieup
+
+[MatthieuP][72]  
+72638
+
+   [72]: /users/41469/matthieup
+
+feedback 
+
+up vote 5 down vote
+    
+    url=$(echo "$1" | sed -e 's/%/%25/g' -e 's/ /%20/g' -e 's/!/%21/g' -e 's/"/%22/g' -e 's/#/%23/g' -e 's/\$/%24/g' -e 's/\&/%26/g' -e 's/'\''/%27/g' -e 's/(/%28/g' -e 's/)/%29/g' -e 's/\*/%2a/g' -e 's/+/%2b/g' -e 's/,/%2c/g' -e 's/-/%2d/g' -e 's/\./%2e/g' -e 's/\//%2f/g' -e 's/:/%3a/g' -e 's/;/%3b/g' -e 's//%3e/g' -e 's/?/%3f/g' -e 's/@/%40/g' -e 's/\[/%5b/g' -e 's/\\/%5c/g' -e 's/\]/%5d/g' -e 's/\^/%5e/g' -e 's/_/%5f/g' -e 's/`/%60/g' -e 's/{/%7b/g' -e 's/|/%7c/g' -e 's/}/%7d/g' -e 's/~/%7e/g')
+    
+
+this will encode the string inside of $1 and output it in $url. although you don't have to put it in a var if you want. BTW didn't include the sed for tab thought it would turn it into spaces
+
+[link][73]|[improve this answer][74]
+
+   [73]: /a/4657796 (short permalink to this answer)
+   [74]: /posts/4657796/edit
+
+edited [Jan 11 '11 at 13:27][75]
+
+   [75]: /posts/4657796/revisions (show all edits to this post)
+
+[
+
+![][76]
+
+   [76]: http://www.gravatar.com/avatar/3f8912af19fe86b7b34a0b011a962460?s=32&d=identicon&r=PG
+
+][77]
+
+   [77]: /users/366904/cody-gray
+
+[Cody Gray][78]  
+52.9k647105
+
+   [78]: /users/366904/cody-gray
+
+answered Jan 11 '11 at 12:51
+
+[
+
+![][79]
+
+   [79]: http://www.gravatar.com/avatar/dd9f7814056f78336817616c3f7faf66?s=32&d=identicon&r=PG
+
+][80]
+
+   [80]: /users/571272/manoflinux
+
+[manoflinux][81]  
+5112
+
+   [81]: /users/571272/manoflinux
+
+3
+ 
+
+I get the feeling this is _not_ the recommended way to do this. - [Cody Gray][82] Jan 11 '11 at 13:27
+
+   [82]: /users/366904/cody-gray (52864 reputation)
+
+1
+ 
+
+explain your feeling please.... because I what I have stated works and I have used it in several scripts so I know it works for all the chars I listed. so please explain why someone would not use my code and use perl since the title of this is "URLEncode from a bash script" not a perl script. - [manoflinux][83] Feb 8 '11 at 2:55
+
+   [83]: /users/571272/manoflinux (51 reputation)
+
+sometimes no pearl solution is needed so this can come in handy - [Yuval Rimar][84] Oct 31 '11 at 11:31
+
+   [84]: /users/207927/yuval-rimar (322 reputation)
+
+This is not the recommended way to do this because blacklist is bad practice, and this is unicode unfriendly anyway. - [Ekevoo][85] Dec 20 '11 at 14:16
+
+   [85]: /users/98029/ekevoo (368 reputation)
+
+feedback 
+
+up vote 2 down vote
+
+For those of you looking for a solution that doesn't need perl, here is one that only needs hexdump and awk:
+    
+    url_encode() {
+     [ $# -lt 1 ] && { return; }
+    
+     encodedurl="$1";
+    
+     # make sure hexdump exists, if not, just give back the url
+     [ ! -x "/usr/bin/hexdump" ] && { return; }
+    
+     encodedurl=`
+       echo $encodedurl | hexdump -v -e '1/1 "%02x\t"' -e '1/1 "%_c\n"' |
+       LANG=C awk '
+         $1 == "20"                    { printf("%s",   "+"); next } # space becomes plus
+         $1 ~  /0[adAD]/               {                      next } # strip newlines
+         $2 ~  /^[a-zA-Z0-9.*()\/-]$/  { printf("%s",   $2);  next } # pass through what we can
+                                       { printf("%%%s", $1)        } # take hex value of everything else
+       '`
+    }
+    
+
+Stitched together from a couple of places across the net and some local trial and error. It works great!
+
+[link][86]|[improve this answer][87]
+
+   [86]: /a/3077738 (short permalink to this answer)
+   [87]: /posts/3077738/edit
+
+edited [Mar 27 at 19:28][88]
+
+   [88]: /posts/3077738/revisions (show all edits to this post)
+
+[
+
+![][89]
+
+   [89]: http://www.gravatar.com/avatar/142c3537ba70a0cadb1b241f9eb69540?s=32&d=identicon&r=PG
+
+][90]
+
+   [90]: /users/190201/ataylor
+
+[ataylor][91]  
+14.1k1032
+
+   [91]: /users/190201/ataylor
+
+answered Jun 20 '10 at 0:22
+
+[
+
+![][92]
+
+   [92]: http://www.gravatar.com/avatar/1a7d5ba9a6e9e82946e916cfe9363857?s=32&d=identicon&r=PG
+
+][93]
+
+   [93]: /users/174430/louis-marascio
+
+[Louis Marascio][94]  
+1,050313
+
+   [94]: /users/174430/louis-marascio
+
+feedback 
+
+up vote 2 down vote
+
+Here is the pure BASH answer.
+    
+    rawurlencode() {
+      local string="${1}"
+      local strlen=${#string}
+      local encoded=""
+    
+      for (( pos=0 ; pos<strlen ; pos++ )); do
+         c=${string:$pos:1}
+         case "$c" in
+            [-_.~a-zA-Z0-9] ) o="${c}" ;;
+            * )               printf -v o '%%%02x' "'$c"
+         esac
+         encoded+="${o}"
+      done
+      echo "${encoded}"    # You can either set a return variable (FASTER) 
+      REPLY="${encoded}"   #+or echo the result (EASIER)... or both... :p
+    }
+    
+
+You can use it in two ways:
+    
+    easier:  echo http://url/q?=$( rawurlencode "$args" )
+    faster:  rawurlencode "$args"; echo http://url/q?${REPLY}
+    
+
+[edited]
+
+Here's the matching rawurldecode() function, which - with all modesty - is awesome.
+    
+    # Returns a string in which the sequences with percent (%) signs followed by
+    # two hex digits have been replaced with literal characters.
+    rawurldecode() {
+    
+      # This is perhaps a risky gambit, but since all escape characters must be
+      # encoded, we can replace %NN with \xNN and pass the lot to printf -b, which
+      # will decode hex for us
+    
+      printf -v REPLY '%b' "${1//%/\\x}"
+    
+      echo "${REPLY}"    # You can either set a return variable (FASTER) 
+      REPLY="${decoded}"   #+or echo the result (EASIER)... or both... :p
+    }
+    
+
+With the matching set, we can now perform some simple tests:
+    
+    $ diff rawurlencode.inc.sh \
+            <( rawurldecode "$( rawurlencode "$( cat rawurlencode.inc.sh )" )" ) \
+            && echo Matched
+    
+    Output: Matched
+    
+
+And if you really really feel that you need an external tool (well, it will go a lot faster, and might do binary files and such...) I found this on my OpenWRT router...
+    
+    replace_value=$(echo $replace_value | sed -f /usr/lib/ddns/url_escape.sed)
+    
+
+Where url_escape.sed was a file that contained these rules:
+    
+    # sed url escaping
+    s: :%20:g
+    s:<:%3C:g
+    s:>:%3E:g
+    s:#:%23:g
+    s:%:%25:g
+    s:{:%7B:g
+    s:}:%7D:g
+    s:|:%7C:g
+    s:\\:%5C:g
+    s:\^:%5E:g
+    s:~:%7E:g
+    s:\[:%5B:g
+    s:\]:%5D:g
+    s:`:%60:g
+    s:;:%3B:g
+    s:/:%2F:g
+    s:?:%3F:g
+    s^:^%3A^g
+    s:@:%40:g
+    s:=:%3D:g
+    s:&:%26:g
+    s:\$:%24:g
+    
+
+[link][95]|[improve this answer][96]
+
+   [95]: /a/10660730 (short permalink to this answer)
+   [96]: /posts/10660730/edit
+
+edited [May 23 at 9:40][97]
+
+   [97]: /posts/10660730/revisions (show all edits to this post)
+
+  
+
+
+answered May 18 at 22:58
+
+[
+
+![][98]
+
+   [98]: http://www.gravatar.com/avatar/8a76d09978a8c7e7401f365fb9de7aee?s=32&d=identicon&r=PG
+
+][99]
+
+   [99]: /users/912236/orwellophile
+
+[Orwellophile][100]  
+934
+
+   [100]: /users/912236/orwellophile
+
+feedback 
+
+up vote 1 down vote
+
+If you wish to run `GET` request and use pure curl just add `--get` to @Jacob's solution.
+
+Here is an example:
+    
+    curl -v --get --data-urlencode "access_token=$(cat .fb_access_token)" https://graph.facebook.com/me/feed
+    
+
+[link][101]|[improve this answer][102]
+
+   [101]: /a/5117285 (short permalink to this answer)
+   [102]: /posts/5117285/edit
+
+answered Feb 25 '11 at 12:37
+
+[
+
+![][103]
+
+   [103]: http://www.gravatar.com/avatar/9bbc889e004a59ecb988a70226cdd9c1?s=32&d=identicon&r=PG
+
+][104]
+
+   [104]: /users/80869/piotr-czapla
+
+[Piotr Czapla][105]  
+4,9282250
+
+   [105]: /users/80869/piotr-czapla
+
+feedback 
+
+up vote 1 down vote
+
+Here's a one-line conversion using Lua, similar to [blueyed's answer][106] except with all the [RFC 3986 Unreserved Characters][107] left unencoded (like [this answer][108]) and spaces encoded as '+' instead of '%20' (which could probably be added to the Perl snippet using a similar technique):
+    
+       [106]: http://stackoverflow.com/questions/296536/urlencode-from-a-bash-script/1710689#1710689
+   [107]: http://www.apps.ietf.org/rfc/rfc3986.html#sec-2.3
+   [108]: http://stackoverflow.com/questions/296536/urlencode-from-a-bash-script/296556#296556
+
+url=$(echo "$1" | lua -e'print(arg[1]:gsub("([^%w%-%.%_%~ ])",function(c)return("%%%02X"):format(c:byte())end):gsub(" ","+"))')
+    
+
+Additionally, you may need to ensure that newlines in your string are converted from LF to CRLF, in which case you can insert a `gsub("\r?\n", "\r\n")` in the chain before the percent-encoding, like so:
+    
+    url=$(echo "$1" | lua -e'print(arg[1]:gsub("\r?\n", "\r\n"):gsub("([^%w%-%.%_%~ ])",function(c)return("%%%02X"):format(c:byte())end):gsub(" ","+"))')
+    
+
+[link][109]|[improve this answer][110]
+
+   [109]: /a/5835915 (short permalink to this answer)
+   [110]: /posts/5835915/edit
+
+edited [May 31 '11 at 15:54][111]
+
+   [111]: /posts/5835915/revisions (show all edits to this post)
+
+  
+
+
+answered Apr 29 '11 at 18:32
+
+[
+
+![][112]
+
+   [112]: http://www.gravatar.com/avatar/624fe53e6c12a6fd7cc6092e09c87d40?s=32&d=identicon&r=PG
+
+][113]
+
+   [113]: /users/34799/stuart-p-bentley
+
+[Stuart P. Bentley][114]  
+1,414621
+
+   [114]: /users/34799/stuart-p-bentley
+
+feedback 
+
+up vote 1 down vote
+
+Using php from a shell script:
+    
+    value="http://www.google.com"
+    encoded=$(php -r "echo rawurlencode('$value');")
+    # encoded = "http%3A%2F%2Fwww.google.com"
+    echo $(php -r "echo rawurldecode('$encoded');")
+    # returns: "http://www.google.com"
+    
+
+  1. [http://www.php.net/manual/en/function.rawurlencode.php][115]
+  2. [http://www.php.net/manual/en/function.rawurldecode.php][116]
+
+   [115]: http://www.php.net/manual/en/function.rawurlencode.php
+   [116]: http://www.php.net/manual/en/function.rawurldecode.php
+
+[link][117]|[improve this answer][118]
+
+   [117]: /a/9088459 (short permalink to this answer)
+   [118]: /posts/9088459/edit
+
+answered Jan 31 at 23:10
+
+[
+
+![][119]
+
+   [119]: http://www.gravatar.com/avatar/b01bc87327d1c6c00446b2f583365ce8?s=32&d=identicon&r=PG
+
+][120]
+
+   [120]: /users/1172685/darren-weber
+
+[Darren Weber][121]  
+412
+
+   [121]: /users/1172685/darren-weber
+
+feedback 
+
+up vote 0 down vote
+
+I knew I'd seen how to do it: [http://andy.wordpress.com/2008/09/17/urlencode-in-bash-with-perl/][122]
+
+   [122]: http://andy.wordpress.com/2008/09/17/urlencode-in-bash-with-perl/
+
+[link][123]|[improve this answer][124]
+
+   [123]: /a/296556 (short permalink to this answer)
+   [124]: /posts/296556/edit
+
+edited [Nov 17 '08 at 19:21][125]
+
+   [125]: /posts/296556/revisions (show all edits to this post)
+
+[
+
+![][126]
+
+   [126]: http://www.gravatar.com/avatar/8a00e413bafa70f08861e4807ff72483?s=32&d=identicon&r=PG
+
+][127]
+
+   [127]: /users/8709/ken-gentle
+
+[Ken Gentle][128]  
+7,70011434
+
+   [128]: /users/8709/ken-gentle
+
+answered Nov 17 '08 at 19:17
+
+[
+
+![][129]
+
+   [129]: http://www.gravatar.com/avatar/8dad5394aa63d7646e1693a8201ebca9?s=32&d=identicon&r=PG
+
+][130]
+
+   [130]: /users/23238/webclimber
+
+[webclimber][131]  
+1,2652826
+
+   [131]: /users/23238/webclimber
+
+This approach converts newlines into spaces (major). And encodes spaces as %20 instead of + (minor). - [Aaron][132] Nov 17 '08 at 21:46
+
+   [132]: /users/19130/aaron (1570 reputation)
+
+feedback 
+
+up vote 0 down vote
+
+If you don't want to depend on Perl you can also use sed:
+
+[http://www.unix.com/shell-programming-scripting/59936-url-encoding.html][133]
+
+   [133]: http://www.unix.com/shell-programming-scripting/59936-url-encoding.html
+
+[link][134]|[improve this answer][135]
+
+   [134]: /a/296630 (short permalink to this answer)
+   [135]: /posts/296630/edit
+
+answered Nov 17 '08 at 19:42
+
+[
+
+![][136]
+
+   [136]: http://www.gravatar.com/avatar/9266c30ba6c2e2aa4f9ab2dfffded965?s=32&d=identicon&r=PG
+
+][137]
+
+   [137]: /users/20840/jay
+
+[Jay][138]  
+12.4k2752
+
+   [138]: /users/20840/jay
+
+The link seems dead - [Grigory][139] Dec 23 '11 at 0:10
+
+   [139]: /users/500944/grigory (3470 reputation)
+
+feedback 
+
+up vote 0 down vote
+
+one of variants, may be ugly, but simple:
+    
+    urlencode() {
+        local data
+        if [[ $# != 1 ]]; then
+            echo "Usage: $0 string-to-urlencode"
+            return 1
+        fi
+        data="$(curl -s -o /dev/null -w %{url_effective} --get --data-urlencode "$1" "")"
+        if [[ $? != 3 ]]; then
+            echo "Unexpected error" 1>&2
+            return 2
+        fi
+        echo "${data##/?}"
+        return 0
+    }
+    
+
+[link][140]|[improve this answer][141]
+
+   [140]: /a/10797966 (short permalink to this answer)
+   [141]: /posts/10797966/edit
+
+edited [May 29 at 14:11][142]
+
+   [142]: /posts/10797966/revisions (show all edits to this post)
+
+[
+
+![][143]
+
+   [143]: http://www.gravatar.com/avatar/24780fb6df85a943c7aea0402c843737?s=32&d=identicon&r=PG
+
+][144]
+
+   [144]: /users/100297/martijn-pieters
+
+[Martijn Pieters][145]  
+11.3k31940
+
+   [145]: /users/100297/martijn-pieters
+
+answered May 29 at 11:11
+
+[
+
+![][146]
+
+   [146]: http://www.gravatar.com/avatar/5502cbefd20c2d8ef0e00224ea033a4b?s=32&d=identicon&r=PG
+
+][147]
+
+   [147]: /users/1423482/sergey
+
+[Sergey][148]  
+11
+
+   [148]: /users/1423482/sergey
+
+feedback 
+
+## Your Answer
+
+ 
+
+draft saved
+
+draft discarded
+
+[log in][149]
+
+   [149]: /users/login?returnurl=%2fquestions%2f296536%2furlencode-from-a-bash-script
+
+or
+
+Name
+
+Email required, but never shown
+
+Home Page
+
+[discard][150]
+
+   [150]: #
+
+##  Not the answer you're looking for? Browse other questions tagged [bash][151] [scripting][152] [urlencode][153] or [ask your own question][154]. 
+
+   [151]: /questions/tagged/bash (show questions tagged 'bash')
+   [152]: /questions/tagged/scripting (show questions tagged 'scripting')
+   [153]: /questions/tagged/urlencode (show questions tagged 'urlencode')
+   [154]: /questions/ask
+
+#### Hello World!
+
+This is a collaboratively edited question and answer site for **professional and enthusiast programmers**. It's 100% free, no registration required.
+
+[about »][155]   [faq »][156]
+
+   [155]: /about?mnu=1
+   [156]: /faq?mnu=1
+
+tagged
+
+[bash][157] × 12516  
+[scripting][158] × 4781  
+[urlencode][159] × 537  
+
+
+   [157]: /questions/tagged/bash (show questions tagged 'bash')
+   [158]: /questions/tagged/scripting (show questions tagged 'scripting')
+   [159]: /questions/tagged/urlencode (show questions tagged 'urlencode')
+
+asked
+
+**3 years ago**
+
+viewed
+
+**23,674 times**
+
+active
+
+**[3 days ago][160]**
+
+   [160]: ?lastactivity (2012-05-29 14:11:29Z)
+
+Get the **weekly newsletter!**
+
+  * Top questions and answers
+  * Important announcements
+  * Unanswered questions
+
+see an [example newsletter][161]
+
+   [161]: http://stackexchange.com/newsletters/newsletter?site=stackoverflow.com
+
+#### Linked
+
+[Basic Google search using a shell script][162]
+
+   [162]: /questions/5506561/basic-google-search-using-a-shell-script
+
+[Professionals Can Do It Bash + Escape][163]
+
+   [163]: /questions/5612346/professionals-can-do-it-bash-escape
+
+[How to set downtime for any specific nagios host for certain time from commandline through curl?][164]
+
+   [164]: /questions/6842683/how-to-set-downtime-for-any-specific-nagios-host-for-certain-time-from-commandli
+
+[Complete URL encoding][165]
+
+   [165]: /questions/4200423/complete-url-encoding
+
+[Sanitizing read entry in Bash][166]
+
+   [166]: /questions/8054385/sanitizing-read-entry-in-bash
+
+[Send date in URL][167]
+
+   [167]: /questions/6275407/send-date-in-url
+
+#### Related
+
+[How to check in a bash script if something is running and exit if it is][168]
+
+   [168]: /questions/927091/how-to-check-in-a-bash-script-if-something-is-running-and-exit-if-it-is
+
+[Running BASH script from iPhone app?][169]
+
+   [169]: /questions/1039207/running-bash-script-from-iphone-app
+
+[Bash script what is := for?][170]
+
+   [170]: /questions/1064280/bash-script-what-is-for
+
+[Bash script for manual routes and default gateway problem][171]
+
+   [171]: /questions/1508839/bash-script-for-manual-routes-and-default-gateway-problem
+
+[bash script - select from database into variable][172]
+
+   [172]: /questions/1636977/bash-script-select-from-database-into-variable
+
+[URLencode dates inside of a javascript function][173]
+
+   [173]: /questions/1691881/urlencode-dates-inside-of-a-javascript-function
+
+[bash script for searching from a list of files in directory][174]
+
+   [174]: /questions/1768643/bash-script-for-searching-from-a-list-of-files-in-directory
+
+[How to substitute a string in bash script][175]
+
+   [175]: /questions/1963139/how-to-substitute-a-string-in-bash-script
+
+[Calling a python function from bash script][176]
+
+   [176]: /questions/2119702/calling-a-python-function-from-bash-script
+
+[Bash script directory detection and creation][177]
+
+   [177]: /questions/2320834/bash-script-directory-detection-and-creation
+
+[Bash script not quite matching][178]
+
+   [178]: /questions/2365178/bash-script-not-quite-matching
+
+[HOWTO: Detect bash from shell script][179]
+
+   [179]: /questions/3199893/howto-detect-bash-from-shell-script
+
+[Whats wrong with this bash script?][180]
+
+   [180]: /questions/3742741/whats-wrong-with-this-bash-script
+
+[Writing to a file through a bash script][181]
+
+   [181]: /questions/3888980/writing-to-a-file-through-a-bash-script
+
+[Check if bash script was invoked from a shell or another script/application][182]
+
+   [182]: /questions/4261876/check-if-bash-script-was-invoked-from-a-shell-or-another-script-application
+
+[bash script order of execution][183]
+
+   [183]: /questions/4445846/bash-script-order-of-execution
+
+[override variable in bash script from command line][184]
+
+   [184]: /questions/4609668/override-variable-in-bash-script-from-command-line
+
+[Why should I use urlencode?][185]
+
+   [185]: /questions/4667942/why-should-i-use-urlencode
+
+[Bash script stops execution in the middle of the script without any error][186]
+
+   [186]: /questions/4761509/bash-script-stops-execution-in-the-middle-of-the-script-without-any-error
+
+[Ruby: Run script from bash script?][187]
+
+   [187]: /questions/5236471/ruby-run-script-from-bash-script
+
+[how to source a bash script from inside a csh script][188]
+
+   [188]: /questions/5311463/how-to-source-a-bash-script-from-inside-a-csh-script
+
+[Inserting text in a user prompt when executing a command from shell (bash) script?][189]
+
+   [189]: /questions/5656892/inserting-text-in-a-user-prompt-when-executing-a-command-from-shell-bash-scrip
+
+[Why is this bash script not splitting the string?][190]
+
+   [190]: /questions/6931399/why-is-this-bash-script-not-splitting-the-string
+
+[Bash Script Monitor Program for Specific Output][191]
+
+   [191]: /questions/7324588/bash-script-monitor-program-for-specific-output
+
+[Could this BASH script be improved?][192]
+
+   [192]: /questions/7682962/could-this-bash-script-be-improved
+
+[question feed][193]
+
+   [193]: /feeds/question/296536 (feed of this question and its answers)
+
+![][194]
+
+   [194]: /posts/296536/ivc/0fb1
+
+lang-bsh
+
+[about][195] | [faq][196] | [blog][197] | [chat][198] | [data][199] | [podcast][200] | [shop][201] | [legal][202] | [advertising info][203] | mobile | **[contact us][204]** | **[feedback][205]**
+
+   [195]: /about
+   [196]: /faq
+   [197]: http://blog.stackexchange.com?blb=1
+   [198]: http://chat.stackoverflow.com
+   [199]: http://data.stackexchange.com
+   [200]: http://blog.stackoverflow.com/category/podcasts/
+   [201]: http://shop.stackexchange.com/
+   [202]: http://stackexchange.com/legal
+   [203]: http://engine.adzerk.net/redirect/0/2776/2751/0/4de3c60f719c4dfcb1a57531c7050090/0
+   [204]: mailto:team@stackoverflow.com
+   [205]: http://meta.stackoverflow.com
+
+■ [stackoverflow.com][206]  ■ [api/apps][207]  ■ [careers][208]  ■ [serverfault.com][209]  ■ [superuser.com][210]  ■ [meta][211]  ■ [area 51][212]  ■ [webapps][213]  ■ [gaming][214]  ■ [ubuntu][215]  ■ [webmasters][216]  ■ [cooking][217]  ■ [game development][218]  ■ [math][219]  ■ [photography][220]  ■ [stats][221]  ■ [tex][222]  ■ [english][223]  ■ [theoretical cs][224]  ■ [programmers][225]  ■ [unix][226]  ■ [apple][227]  ■ [wordpress][228]  ■ [physics][229]  ■ [home improvement][230]  ■ [gis][231]  ■ [electronics][232]  ■ [android][233]  ■ [security][234]  ■ [bicycles][235]  ■ [dba][236]  ■ [drupal][237]  ■ [sharepoint][238]  ■ [scifi & fantasy][239]  ■ [user experience][240]  ■ [skeptics][241]  ■ [rpg][242]  ■ [judaism][243] 
+
+   [206]: http://stackoverflow.com
+   [207]: http://stackapps.com
+   [208]: http://careers.stackoverflow.com
+   [209]: http://serverfault.com
+   [210]: http://superuser.com
+   [211]: http://meta.stackoverflow.com
+   [212]: http://area51.stackexchange.com
+   [213]: http://webapps.stackexchange.com
+   [214]: http://gaming.stackexchange.com
+   [215]: http://askubuntu.com
+   [216]: http://webmasters.stackexchange.com
+   [217]: http://cooking.stackexchange.com
+   [218]: http://gamedev.stackexchange.com
+   [219]: http://math.stackexchange.com
+   [220]: http://photo.stackexchange.com
+   [221]: http://stats.stackexchange.com
+   [222]: http://tex.stackexchange.com
+   [223]: http://english.stackexchange.com
+   [224]: http://cstheory.stackexchange.com
+   [225]: http://programmers.stackexchange.com
+   [226]: http://unix.stackexchange.com
+   [227]: http://apple.stackexchange.com
+   [228]: http://wordpress.stackexchange.com
+   [229]: http://physics.stackexchange.com
+   [230]: http://diy.stackexchange.com
+   [231]: http://gis.stackexchange.com
+   [232]: http://electronics.stackexchange.com
+   [233]: http://android.stackexchange.com
+   [234]: http://security.stackexchange.com
+   [235]: http://bicycles.stackexchange.com
+   [236]: http://dba.stackexchange.com
+   [237]: http://drupal.stackexchange.com
+   [238]: http://sharepoint.stackexchange.com
+   [239]: http://scifi.stackexchange.com
+   [240]: http://ux.stackexchange.com
+   [241]: http://skeptics.stackexchange.com
+   [242]: http://rpg.stackexchange.com
+   [243]: http://judaism.stackexchange.com
+
+[][244] [][245]
+
+   [244]: http://www.peer1.com/stackoverflow
+   [245]: http://creativecommons.org/licenses/by-sa/3.0/
+
+rev 2012.5.30.2722
+
+site design / logo (C) 2012 stack exchange inc; user contributions licensed under [cc-wiki][246] with [attribution required][247]
+
+   [246]: http://creativecommons.org/licenses/by-sa/3.0/
+   [247]: http://blog.stackoverflow.com/2009/06/attribution-required/
+
+Stack Overflow works best with JavaScript enabled![][248]
+
+   [248]: http://pixel.quantserve.com/pixel/p-c1rF4kxgLUzNc.gif
+

@@ -1,0 +1,28 @@
+Problem: no wireless (wifi) after suspension (sleep)
+-----------------------------------------------------
+
+
+
+ Fix: 
+
+ sudo nmcli nm sleep false
+
+ Solution:
+
+after 15.06 Ubuntu uses systemd:
+
+   sudo service network-manager restart
+
+before:
+
+from: http://askubuntu.com/questions/452826/wireless-networking-not-working-after-resume-in-ubuntu-14-04
+
+to make this permenant :
+create a script in /etc/pm/sleep.d containg the following (and don't forget to mark the script as executable):
+
+   #!/bin/sh
+
+   case "${1}" in
+      resume|thaw)
+      nmcli nm sleep false
+   esac

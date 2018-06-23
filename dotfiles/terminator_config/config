@@ -19,7 +19,7 @@
   go_up = None
   group_all = None
   group_tab = None
-  hide_window = F8
+  hide_window = None
   insert_number = None
   insert_padded = None
   move_tab_left = None

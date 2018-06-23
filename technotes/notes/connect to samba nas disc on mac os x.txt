@@ -1,0 +1,8 @@
+
+
+
+Finder -> Go -> Connect to Server
+
+smb://servername/sharename
+
+Smb://myserv.lan.org/susan

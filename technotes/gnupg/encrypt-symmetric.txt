@@ -1,0 +1,5 @@
+gnupg: encrypt symmetric
+
+
+alice% gpg --output doc.gpg --symmetric doc
+Enter passphrase: 

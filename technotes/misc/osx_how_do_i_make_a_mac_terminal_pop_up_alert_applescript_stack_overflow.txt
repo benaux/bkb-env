@@ -1,0 +1,11 @@
+From [osx - How do I make a Mac Terminal pop-up/alert? Applescript? - Stack Overflow](http://stackoverflow.com/questions/5588064/how-do-i-make-a-mac-terminal-pop-up-alert-applescript):
+
+>  down vote accepted
+> 
+> 	
+> 
+> Use osascript, for example:
+> 
+> osascript -e 'tell app "Finder" to display dialog "Hello World"' 
+> 
+> osascript -e 'tell app "System Events" to display dialog "Hello World"'

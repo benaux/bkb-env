@@ -1,0 +1,24 @@
+Ftp
+===
+
+ftp delete_folder
+-----------------
+
+ftp: delete entire folder
+
+mdelete folder_name/*
+rmdir folder_name
+
+ftp/error_hangs-on-200-command-successful
+-----------------------------------------
+
+ftp hangs on 200 port command successfull
+
+
+occurs when working over ftps 
+
+solution : switch to passive mode
+
+   login to ftp
+
+   >passive

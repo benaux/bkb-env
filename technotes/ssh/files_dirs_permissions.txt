@@ -1,0 +1,22 @@
+# SSH: Files, Dirs and Permissions
+
+
+
+
+chmod 0750 ~/    # yeah thats the (questionable) convention
+
+   chmod 700 ~/.ssh 
+   chmod 600 ~/.ssh/*
+
+   chmod 0644 ~/.ssh/authorized_keys
+   chmod 0644 ~/.ssh/known_hosts
+
+
+on the server:
+
+   chmod 600 ~/.ssh/authorized_keys 
+
+   chmod 700 ~/.ssh/
+
+
+Note: if this is not correctly set, one error might be that the keys are not recognized (loaded)(k

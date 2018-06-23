@@ -1,0 +1,20 @@
+Synology: Apache/ Httpd
+
+=======================
+
+httpd.conf location of synology httpd
+
+here’s where the json files created by Web Station are:
+
+/var/packages/WebStation/etc
+
+You’ll find the GUI configurations inside the VirtualHost.json file found inside that folder.
+
+ 
+
+For Apache/httpd services the web server’s conf files are located here:
+
+/usr/local/etc/httpd/sites-enabled/httpd-vhost.conf
+
+
+ 

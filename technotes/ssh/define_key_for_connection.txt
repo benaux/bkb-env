@@ -1,0 +1,11 @@
+SSH: define key for connection
+
+ssh -i /home/user/.ssh/KEY user@host.com
+
+
+or in ~/.ssh/config
+
+Host mysshserver ssh.host.com
+HostName ssh.host.com
+User myusername
+IdentityFile ~/.ssh/mykeyfile

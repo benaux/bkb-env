@@ -1,0 +1,712 @@
+From <https://github.com/halgari/clojure-py>:
+
+[ ![GitHub][1] ![GitHub][2] ][3]
+
+   [1]: https://a248.e.akamai.net/assets.github.com/images/modules/header/logov7@4x.png?1337118066
+   [2]: https://a248.e.akamai.net/assets.github.com/images/modules/header/logov7@4x-hover.png?1337118066
+   [3]: https://github.com/
+
+  * [Signup and Pricing][4]
+  * [Explore GitHub][5]
+  * [Features][6]
+  * [Blog][7]
+  * [Login][8]
+
+   [4]: https://github.com/plans
+   [5]: https://github.com/explore
+   [6]: https://github.com/features
+   [7]: https://github.com/blog
+   [8]: https://github.com/login?return_to=%2Fhalgari%2Fclojure-py
+
+  * [ Watch][9][402][10]
+  * [Fork][9][26][11]
+
+   [9]: /login?return_to=%2Fhalgari%2Fclojure-py (You must be logged in to use this feature)
+   [10]: /halgari/clojure-py/watchers
+   [11]: /halgari/clojure-py/network
+
+#  public [ halgari ][12] / **[clojure-py][13]**
+
+   [12]: /halgari
+   [13]: /halgari/clojure-py
+
+  * [Code][14]
+  * [Network][15]
+  * [Pull Requests 0][16]
+  * [Issues 14][17]
+  * [Wiki][18]
+  * [Graphs][19]
+
+   [14]: /halgari/clojure-py
+   [15]: /halgari/clojure-py/network
+   [16]: /halgari/clojure-py/pulls
+   [17]: /halgari/clojure-py/issues
+   [18]: /halgari/clojure-py/wiki
+   [19]: /halgari/clojure-py/graphs
+
+Sending Request…
+
+PythonClojure
+
+  1. [ Python 52.5% ][20]
+  2. [ Clojure 47.5% ][21]
+
+   [20]: /languages/Python
+   [21]: /languages/Clojure
+
+A implementation of Clojure in pure (dynamic) Python -- [Read more][22]
+
+   [22]: #readme
+
+Sorry, but there was a problem saving your changes.
+
+Save Changes
+
+[Cancel][23]
+
+   [23]: #
+
+  * [ZIP][24]
+
+   [24]: /halgari/clojure-py/zipball/master (Download this repository as a zip file)
+
+  * [HTTP][25]
+  * [Git Read-Only][26]
+
+   [25]: https://github.com/halgari/clojure-py.git
+   [26]: git://github.com/halgari/clojure-py.git
+
+Read+Write access
+
+[clojure-py][27] / 
+
+   [27]: /halgari/clojure-py
+
+[Dismiss][28] Octotip: You've activated the _file finder_ by pressing t Start typing to filter the file list. Use ↑ and ↓ to navigate, enter to view files. 
+
+   [28]: /halgari/clojure-py/dismiss-tree-finder-help (Hide this notice forever)
+
+ name
+
+No matching files
+
+## Jump to Line
+
+Go
+
+  * [Tags 0][29]
+  * [Downloads 3][30]
+
+   [29]: /halgari/clojure-py/tags
+   [30]: /halgari/clojure-py/downloads
+
+  * [ _branch:_ master ][31]
+
+   [31]: #
+
+[][32]
+
+   [32]: javascript:;
+
+Switch Branches/Tags
+
+    * [Branches][33]
+    * [Tags][33]
+
+   [33]: #
+
+Nothing to show
+
+####  [cleanup][34]
+
+   [34]: /halgari/clojure-py/tree/cleanup
+
+####  [gh-pages][35]
+
+   [35]: /halgari/clojure-py/tree/gh-pages
+
+####  [master][36]
+
+   [36]: /halgari/clojure-py/tree/master
+
+####  [new-ns][37]
+
+   [37]: /halgari/clojure-py/tree/new-ns
+
+####  [treadle][38]
+
+   [38]: /halgari/clojure-py/tree/treadle
+
+Nothing to show
+
+  * [Files][39]
+  * [Commits][40]
+  * [Branches 5][41]
+
+   [39]: /halgari/clojure-py
+   [40]: /halgari/clojure-py/commits/master
+   [41]: /halgari/clojure-py/branches
+
+Latest commit to the **master** branch
+
+[Shortening compiler.py. Closes ][42][#118][43][.][42]
+
+   [42]: /halgari/clojure-py/commit/60c0794e72b9e7f35c679f8b3b5f20d5ea8d310f
+   [43]: https://github.com/halgari/clojure-py/issues/118 (empty body for let should be allowed)
+
+[commit 60c0794e72][44]
+
+   [44]: /halgari/clojure-py/commit/60c0794e72b9e7f35c679f8b3b5f20d5ea8d310f
+
+![][45] [anntzer][46] authored May 29, 2012
+
+   [45]: https://secure.gravatar.com/avatar/d4749d18577f8642b90f271b6aefe9fe?s=140&d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-140.png
+   [46]: /anntzer
+
+**[clojure-py][47]** / 
+
+   [47]: /halgari/clojure-py/tree/60c0794e72b9e7f35c679f8b3b5f20d5ea8d310f
+
+name age
+
+[history][48]
+
+   [48]: /halgari/clojure-py/commits/master/
+
+message 
+
+[clojure][49]
+May 29, 2012
+[Shortening compiler.py. Closes ][50][#118][51][.][50] [[anntzer][52]] 
+
+   [49]: /halgari/clojure-py/tree/60c0794e72b9e7f35c679f8b3b5f20d5ea8d310f/clojure
+   [50]: /halgari/clojure-py/commit/60c0794e72b9e7f35c679f8b3b5f20d5ea8d310f
+   [51]: https://github.com/halgari/clojure-py/issues/118 (empty body for let should be allowed)
+   [52]: /anntzer
+
+[core][53]
+April 26, 2012
+[more tests, functions, etc.][54] [[halgari][55]] 
+
+   [53]: /halgari/clojure-py/tree/60c0794e72b9e7f35c679f8b3b5f20d5ea8d310f/core
+   [54]: /halgari/clojure-py/commit/942980f313184752226a79b1fbb659892472be36
+   [55]: /halgari
+
+[doc][56]
+March 21, 2012
+[more reader tests, doc update, #= and ][57][@foo][58][ syntax handled][57] [[stirfoo][59]] 
+
+   [56]: /halgari/clojure-py/tree/60c0794e72b9e7f35c679f8b3b5f20d5ea8d310f/doc
+   [57]: /halgari/clojure-py/commit/8d6c3ccd8f99879e17c4b198a026ab746dde29d8
+   [58]: https://github.com/foo
+   [59]: /stirfoo
+
+[examples][60]
+April 24, 2012
+[a bit of work porting core.match][61] [[halgari][62]] 
+
+   [60]: /halgari/clojure-py/tree/60c0794e72b9e7f35c679f8b3b5f20d5ea8d310f/examples
+   [61]: /halgari/clojure-py/commit/4240aaafb0ebd424cdcc92e838130397c1f4cbc6
+   [62]: /halgari
+
+[tests][63]
+May 23, 2012
+[Updated macro-tests][64] [[khinsen][65]] 
+
+   [63]: /halgari/clojure-py/tree/60c0794e72b9e7f35c679f8b3b5f20d5ea8d310f/tests
+   [64]: /halgari/clojure-py/commit/525b4428ba8b2f1e334d3a6c11d6bf2beaa98e89
+   [65]: /khinsen
+
+[.gitignore][66]
+April 07, 2012
+[adding vim .swp files to .gitignore][67] [[adamfeuer][68]] 
+
+   [66]: /halgari/clojure-py/blob/60c0794e72b9e7f35c679f8b3b5f20d5ea8d310f/.gitignore
+   [67]: /halgari/clojure-py/commit/438b15e37f63867d17dcd43f63c99dc251d9110c
+   [68]: /adamfeuer
+
+[.travis.yml][69]
+March 21, 2012
+[Added travis-ci config.][70] [[exupero][71]] 
+
+   [69]: /halgari/clojure-py/blob/60c0794e72b9e7f35c679f8b3b5f20d5ea8d310f/.travis.yml
+   [70]: /halgari/clojure-py/commit/4b67acc4d819a3e388c8dfe9156063138cbc2ba0
+   [71]: /exupero
+
+[MANIFEST.in][72]
+April 09, 2012
+[fix for core-deftype not found issue][73] [[halgari][74]] 
+
+   [72]: /halgari/clojure-py/blob/60c0794e72b9e7f35c679f8b3b5f20d5ea8d310f/MANIFEST.in
+   [73]: /halgari/clojure-py/commit/d9fc95669e6eca65535730ecf88bf39425decccf
+   [74]: /halgari
+
+[NEWS.md][75]
+April 12, 2012
+[Update NEWS.md][76] [[halgari][77]] 
+
+   [75]: /halgari/clojure-py/blob/60c0794e72b9e7f35c679f8b3b5f20d5ea8d310f/NEWS.md
+   [76]: /halgari/clojure-py/commit/16524d6b9bf7247c58fcd3f7b012d4b00b3da7d6
+   [77]: /halgari
+
+[README.md][78]
+March 29, 2012
+[Update README.md][79] [[halgari][80]] 
+
+   [78]: /halgari/clojure-py/blob/60c0794e72b9e7f35c679f8b3b5f20d5ea8d310f/README.md
+   [79]: /halgari/clojure-py/commit/2db6dfb3cdf6be1720555a08cf8b803d453fd445
+   [80]: /halgari
+
+[clojure.py][81]
+March 21, 2012
+[Stop .clojurepyhist doubling every run, fixes ][82][#80][83] [[bluepeppers][84]] 
+
+   [81]: /halgari/clojure-py/blob/60c0794e72b9e7f35c679f8b3b5f20d5ea8d310f/clojure.py
+   [82]: /halgari/clojure-py/commit/a2f0668c43ed8a5cf78a158bb5177bddcd8dba15
+   [83]: https://github.com/halgari/clojure-py/issues/80 (Huge readline history file)
+   [84]: /bluepeppers
+
+[setup.py][85]
+April 09, 2012
+[ahh....releases are so much fun /sarcasm][86] [[halgari][87]] 
+
+   [85]: /halgari/clojure-py/blob/60c0794e72b9e7f35c679f8b3b5f20d5ea8d310f/setup.py
+   [86]: /halgari/clojure-py/commit/f63fb59647a530cc24983fe1ff601c37d11d2e92
+   [87]: /halgari
+
+README.md
+
+#  [][88]clojure-py
+
+   [88]: #clojure-py
+
+An implementation of Clojure in pure Python. [![Build Status][89]][90]
+
+   [89]: https://secure.travis-ci.org/halgari/clojure-py.png?branch=master
+   [90]: http://travis-ci.org/halgari/clojure-py
+
+##  [][91]Why Python?
+
+   [91]: #why-python
+
+It is our belief that static virtual machines make very poor runtimes for dynamic languages. They constrain the languages to their view of what the "world should look like" and limit the options available to language implementors. We are attempting to prove this by writing an implementation of Clojure that runs on the Python VM. We believe that with a proper dynamic JIT (like pypy) a version of clojure running on a dynamic VM can outperform its JVM and CLR counterparts. 
+
+Aside from that, there are many Python libraries like PySide (Qt GUI), numpy, scipy, and stackless that do not have JVM counterparts, or at least the Python implementations are easier to use and learn. clojure-py will integrate tightly with thy Python VM and will be able to use all of these libraries.
+
+##  [][92]Basic concepts
+
+   [92]: #basic-concepts
+
+Python builtins are available under the py/ namespace. Actual python bytecodes can be injected via py.bytecodes/OP
+
+Viewing the code at [https://github.com/halgari/clojure-py/blob/master/clojure/core.clj][93] is probably the best way to get a feeling of what is possible, and how clojure-py implements certain functions.
+
+   [93]: https://github.com/halgari/clojure-py/blob/master/clojure/core.clj
+
+One note: clojure-py implements the new "property vs calling method" design used in ClojureScript:
+    
+      (.__name__ (module)) ; same as module.__name__() in python
+    
+      (.-__name__ (module)) ; same as module.__name__ in python
+    
+
+##  [][94]How can I help?
+
+   [94]: #how-can-i-help
+
+At this point, find a need and fill it! Play around with clojure-py, start porting your favorite clojure lib, and see what is missing. Also feel free to join our [mailing list][95]. We (the clojure-py devs) normally just send out a message either we plan on working on a certain aspect of clojure-py (either through a issue report or through the mailing list). Currently there are quite a few functions in clojure.core that need porting. Drop by the mailing list and let us know what your interests are, and we'll be glad to offer suggestions and help however we can. 
+
+   [95]: http://groups.google.com/group/clojure-py-dev
+
+##  [][96]Blog
+
+   [96]: #blog
+
+From time to time, we'll post status updates, ideas and plans to this blog [http://clojure-py.blogspot.com/][97]
+
+   [97]: http://clojure-py.blogspot.com/
+
+##  [][98]Installation
+
+   [98]: #installation
+
+Install 0.1.0 release:
+    
+    easy_install clojure-py
+    clojurepy
+    
+
+To run from GitHub checkout:
+    
+    python ./clojure.py
+    
+
+##  [][99]Unit tests
+    
+       [99]: #unit-tests
+
+# (must 'easy_install nose' or 'pip install nose' first)
+    nosetests
+    
+
+##  [][100]Running
+    
+       [100]: #running
+
+clojurepy
+    
+
+##  [][101]License
+
+   [101]: #license
+
+Not endorsed by Rich Hickey, but this project contains code based on his work
+    
+    Clojure-Py
+    Copyright (c) Rich Hickey. All rights reserved.
+    The use and distribution terms for this software are covered by the
+    Eclipse Public License 1.0 (http://opensource.org/licenses/eclipse-1.0.php)
+    which can be found in the file epl-v10.html at the root of this distribution.
+    By using this software in any fashion, you are agreeing to be bound by
+    the terms of this license.
+    You must not remove this notice, or any other, from this software.
+    
+
+  
+  
+
+
+![][102]
+
+   [102]: https://a248.e.akamai.net/assets.github.com/images/spinners/octocat-spinner-64.gif?1329920549
+
+#### GitHub Links
+
+#### GitHub
+
+  * [About][103]
+  * [Blog][104]
+  * [Features][105]
+  * [Contact & Support][106]
+  * [Training][107]
+  * [GitHub Enterprise][108]
+  * [Site Status][109]
+
+   [103]: https://github.com/about
+   [104]: https://github.com/blog
+   [105]: https://github.com/features
+   [106]: https://github.com/contact
+   [107]: https://github.com/training
+   [108]: http://enterprise.github.com/
+   [109]: http://status.github.com/
+
+#### Tools
+
+  * [Gauges: Analyze web traffic][110]
+  * [Speaker Deck: Presentations][111]
+  * [Gist: Code snippets][112]
+  * [GitHub for Mac][113]
+  * [GitHub for Windows][114]
+  * [Issues for iPhone][115]
+  * [Job Board][116]
+
+   [110]: http://get.gaug.es/
+   [111]: http://speakerdeck.com
+   [112]: https://gist.github.com
+   [113]: http://mac.github.com/
+   [114]: http://windows.github.com/
+   [115]: http://mobile.github.com/
+   [116]: http://jobs.github.com/
+
+#### Extras
+
+  * [GitHub Shop][117]
+  * [The Octodex][118]
+
+   [117]: http://shop.github.com/
+   [118]: http://octodex.github.com/
+
+#### Documentation
+
+  * [GitHub Help][119]
+  * [Developer API][120]
+  * [GitHub Flavored Markdown][121]
+  * [GitHub Pages][122]
+
+   [119]: http://help.github.com/
+   [120]: http://developer.github.com/
+   [121]: http://github.github.com/github-flavored-markdown/
+   [122]: http://pages.github.com/
+
+  * [Terms of Service][123]
+  * [Privacy][124]
+  * [Security][125]
+
+   [123]: https://github.com/site/terms
+   [124]: https://github.com/site/privacy
+   [125]: https://github.com/security
+
+(C) 2012 GitHub Inc. All rights reserved.
+
+[ ![Dedicated Server][126] ][127] Powered by the [Dedicated Servers][128] and  
+> <a href="http:/www.rackspacecloud.com">Cloud Computing of Rackspace Hosting®
+
+   [126]: https://a248.e.akamai.net/assets.github.com/images/modules/footer/rackspaces_logo.png?1329521040
+   [127]: http://www.rackspace.com
+   [128]: http://www.rackspace.com 
+
+## Keyboard Shortcuts [(see all)][129]
+
+   [129]: #
+
+### Site wide shortcuts
+
+s
+    Focus site search
+
+?
+    Bring up this help dialog
+
+### Commit list
+
+j
+    Move selection down
+
+k
+    Move selection up
+
+c _or_ o _or_ enter
+    Open commit
+
+y
+    Expand URL to its canonical form
+
+### Pull request list
+
+j
+    Move selection down
+
+k
+    Move selection up
+
+o _or_ enter
+    Open issue
+
+⌘ctrl _+_ enter
+    Submit comment
+
+### Issues
+
+j
+    Move selection down
+
+k
+    Move selection up
+
+x
+    Toggle selection
+
+o _or_ enter
+    Open issue
+
+⌘ctrl _+_ enter
+    Submit comment
+
+c
+    Create issue
+
+l
+    Create label
+
+i
+    Back to inbox
+
+u
+    Back to issues
+
+/
+    Focus issues search
+
+### Issues Dashboard
+
+j
+    Move selection down
+
+k
+    Move selection up
+
+o _or_ enter
+    Open issue
+
+### Network Graph
+
+← _or_ h
+    Scroll left
+
+→ _or_ l
+    Scroll right
+
+↑ _or_ k
+    Scroll up
+
+↓ _or_ j
+    Scroll down
+
+t
+    Toggle visibility of head labels
+
+shift ← _or_ shift h
+    Scroll all the way left
+
+shift → _or_ shift l
+    Scroll all the way right
+
+shift ↑ _or_ shift k
+    Scroll all the way up
+
+shift ↓ _or_ shift j
+    Scroll all the way down
+
+### Source Code Browsing
+
+t
+    Activates the file finder
+
+l
+    Jump to line
+
+w
+    Switch branch/tag
+
+y
+    Expand URL to its canonical form
+
+### Browsing Commits
+
+⌘ctrl _+_ enter
+    Submit comment
+
+escape
+    Close form
+
+p
+    Parent commit
+
+o
+    Other parent commit
+
+## Markdown Cheat Sheet
+
+### Format Text
+
+Headers
+    
+    
+    # This is an <h1> tag
+    ## This is an <h2> tag
+    ###### This is an <h6> tag
+
+Text styles
+    
+    
+    *This text will be italic*
+    _This will also be italic_
+    **This text will be bold**
+    __This will also be bold__
+    
+    *You **can** combine them*
+    
+
+### Lists
+
+Unordered
+    
+    
+    * Item 1
+    * Item 2
+      * Item 2a
+      * Item 2b
+
+Ordered
+    
+    
+    1. Item 1
+    2. Item 2
+    3. Item 3
+       * Item 3a
+       * Item 3b
+
+### Miscellaneous
+
+Images
+    
+    
+    ![GitHub Logo](/images/logo.png)
+    Format: ![Alt Text](url)
+    
+
+Links
+    
+    
+    http://github.com - automatic!
+    [GitHub](http://github.com)
+
+Blockquotes
+    
+    
+    As Kanye West said:
+    
+    > We're living the future so
+    > the present is our past.
+    
+
+### Code Examples in Markdown
+
+Syntax highlighting with [GFM][130]
+    
+       [130]: http://github.github.com/github-flavored-markdown/ (GitHub Flavored Markdown)
+
+
+    ```javascript
+    function fancyAlert(arg) {
+      if(arg) {
+        $.facebox({div:'#foo'})
+      }
+    }
+    ```
+
+Or, indent your code 4 spaces
+    
+    
+    Here is a Python code example
+    without syntax highlighting:
+    
+        def foo:
+          if not bar:
+            return true
+
+Inline code for comments
+    
+    
+    I think you should use an
+    `<addr>` element here instead.
+
+Something went wrong with that request. Please try again. [Dismiss][131]
+
+   [131]: #
+
+## Looking for the GitHub logo?
+
+  * #### GitHub Logo
+
+[![Github_logo][132]][133] [Download][133]
+  * #### The Octocat
+
+   [132]: https://a248.e.akamai.net/assets.github.com/images/modules/about_page/github_logo.png?1315937721
+   [133]: http://github-media-downloads.s3.amazonaws.com/GitHub_Logos.zip
+
+[![Octocat][134]][135] [Download][135]
+
+   [134]: https://a248.e.akamai.net/assets.github.com/images/modules/about_page/octocat.png?1315937721
+   [135]: http://github-media-downloads.s3.amazonaws.com/Octocats.zip
+

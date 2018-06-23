@@ -1,0 +1,18 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2016-12-21T12:28:00+01:00
+
+====== encrypt-decrypt ======
+Created Wednesday 21 December 2016
+
+accepted
+	
+
+
+#Encrypt:
+
+openssl aes-256-cbc -a -salt -in secrets.txt -out secrets.txt.enc
+
+# Decrypt:
+
+openssl aes-256-cbc -d -a -in secrets.txt.enc -out secrets.txt.ne

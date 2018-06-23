@@ -1,0 +1,205 @@
+#!/usr/bin/env elvish
+
+use re
+
+hb = $E:HOME/homebase
+
+redir = $hb/redir
+
+fn is-bkb-dir [base dir]{
+  if ?( test -d $base/$dir) {
+    if (re:match 'bkb' $dir) {
+      put $true
+    } else {
+      put $false
+    }
+  } else {
+    put $false
+  }
+}
+
+fn list-bkb-after []{
+  {
+    for x [ (ls $hb) ] {
+      if (is-bkb-dir $hb $x) {
+          for xx [ (ls $hb/$x) ] {
+            if (is-bkb-dir $hb/$x $xx ) {
+               for xxx [ (ls $hb/$x/$xx) ] {
+                  if (and ?(test -d $hb/$x/$xx/$xxx) (re:match '_\dx$' $xxx)) {
+                     for xxxx [ (ls $hb/$x/$xx/$xxx) ] {
+                        if (and ?(test -d $hb/$x/$xx/$xxx/$xxxx) (re:match '_\d\d$' $xxxx)) {
+                         for xxxxx [ (ls $hb/$x/$xx/$xxx/$xxxx) ] {
+                            if (and ?(test -d $hb/$x/$xx/$xxx/$xxxx/$xxxxx) (re:match '_\d\d\.\d\d$' $xxxxx)) {
+                               echo $hb/$x/$xx/$xxx/$xxxx/$xxxxx
+                            }
+                         }
+                        }
+                     }
+
+                  } elif (and ?(test -d $hb/$x/$xx/$xxx) (re:match '_\d\d' $xxx)) {
+                     for xxxx [ (ls $hb/$x/$xx/$xxx) ] {
+                        if (and ?(test -d $hb/$x/$xx/$xxx/$xxxx) (re:match '_\d\d\.\d\d$' $xxxx)) {
+                           echo $hb/$x/$xx/$xxx/$xxxx
+                        }
+                     }
+                  }
+               }
+            }
+          }
+      }
+    }
+  } | sort
+}
+
+fn list-bkb-before []{
+  {
+    for x [ (ls $hb) ] {
+      if (is-bkb-dir $hb $x) {
+          for xx [ (ls $hb/$x) ] {
+            if (is-bkb-dir $hb/$x $xx ) {
+               for xxx [ (ls $hb/$x/$xx) ] {
+                  if (and ?(test -d $hb/$x/$xx/$xxx) (re:match '_\dx$' $xxx)) {
+                     for xxxx [ (ls $hb/$x/$xx/$xxx) ] {
+                        if (and ?(test -d $hb/$x/$xx/$xxx/$xxxx) (re:match '_\d\d$' $xxxx)) {
+                          idx = (re:find '_(\d\d)$' $xxxx)[text]
+                           echo $idx : $x/$xx/$xxx/$xxxx
+                           rm -f $redir/$xxxx
+                           ln -s  $hb/$x/$xx/$xxx/$xxxx $redir/$xxxx
+                        }
+                     }
+                  } elif (and ?(test -d $hb/$x/$xx/$xxx) (re:match '_\d\d$' $xxx)) {
+                      idx = (re:find '_(\d\d)$' $xxx)[text]
+                     echo $idx : $x/$xx/$xxx
+                           rm -f $redir/$xxx
+                           ln -s  $hb/$x/$xx/$xxx $redir/$xxx
+                  }
+               }
+            }
+          }
+      }
+    }
+  } | sort
+}
+
+fn list-bkb []{
+  {
+    for x [ (ls $hb) ] {
+      if (is-bkb-dir $hb $x) {
+          for xx [ (ls $hb/$x) ] {
+            if (is-bkb-dir $hb/$x $xx ) {
+             echo $hb/$x/$xx
+            }
+          }
+      }
+    }
+  } | sort
+}
+
+fn go-to-bkb-before [num]{
+
+   syncdir = "syncdir_"$E:USER"_"(hostname)
+   localdir = "localdir_"$E:USER"_"(hostname)
+
+   ddir = ''
+
+   try {
+      ddir =  $hb/$syncdir/*bkb*/*$num
+   } except e {
+      try {
+         ddir =  $hb/$syncdir/*bkb*/*/*$num
+      } except e {
+         try {
+            ddir =  $hb/$localdir/*bkb*/*$num
+         } except e {
+            echo "Err: could not expand bkb $num in $localdir"
+            exit 1
+         }
+      }
+   }
+   printf $ddir
+}
+
+fn go-to-bkb-after [before after]{
+
+   syncdir = "syncdir_"$E:USER"_"(hostname)
+   localdir = "localdir_"$E:USER"_"(hostname)
+
+   num = $before.$after[0]
+
+   ddir = ''
+
+   try {
+      ddir =  $hb/$syncdir/*bkb*/*_$before/*_$num
+   } except e {
+      try {
+         ddir =  $hb/$syncdir/*bkb*/*_$before'x'/*_$num.*
+      } except e {
+         try {
+            ddir =  $hb/$syncdir/*bkb*/*/*_$before/*_$num
+         } except e {
+           try {
+              ddir =  $hb/$localdir/*bkb*/*/*$num
+           } except e {
+              echo "Err: could not expand bkb $num in $localdir"
+              exit 1
+           }
+         }
+      }
+   }
+
+   printf $ddir
+}
+
+fn list-bkb-num [num]{
+
+
+   syncdir = "syncdir_"$E:USER"_"(hostname)
+   localdir = "localdir_"$E:USER"_"(hostname)
+   ddir = ''
+   try {
+      ddir =  $hb/$syncdir/*'bkb'$num*
+   } except e {
+      try {
+         ddir =  $hb/$localdir/*'bkb'$num*
+      } except e {
+         echo "Err: could not expand bkb $num in $localdir"
+         exit 1
+      }
+   }
+
+   printf $ddir 
+}
+
+
+if (eq $args [] ) {
+   list-bkb
+} else {
+   first @rest  = (explode $args[0])
+   if (eq $first '_') {
+      if (eq $rest []) {
+         list-bkb-before
+      } else {
+         before @after = (re:split '\.' (joins '' $rest))
+         if (eq $after []) {
+            go-to-bkb-before $@args
+         } else {
+            go-to-bkb-after $before $after
+         }
+     }
+   } elif (eq $first '.') {
+     if (eq $rest []) {
+         list-bkb-after
+     } else {
+       echo "Err: invalid input $args"
+       exit 1
+     }
+   } else {
+      before @after = (re:split '\.' $args[0])
+      if (eq $after []) {
+         list-bkb-num $before
+      } else {
+         go-to-bkb-after $before $after
+      }
+   }
+}
+

@@ -1,0 +1,413 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-01-17T09:14:01+01:00
+
+====== day1 ======
+Created Tuesday 17 January 2017
+Learning Racket #1: Introduction
+
+Warning: as of January 2016, I have abandoned this series (the first post was written in February 2014).
+
+I always wanted to learn myself some Lisp for greater good and what-not, and I've heard nice things about Racket (don't ask when or where, I don't remember), so it's going to be the first Lisp I learn.
+
+Also I'm tired of “how I spent one day learning [something] and found that it sucks horribly” posts, so let me state in advance that when something doesn't work as expected or sets my laptop on fire, I might react with “this is unfortunate” but nothing beyond that.
+
+Day 1
+
+Installation
+
+There's a racket package in Arch's extra repository. 50 MB, quite small for a modern language full of features and batteries included. Right?
+
+$ yaourt -S racket
+One minute later, Racket is installed. And it takes only 350 MB on my laptop, vs. 700 of GHC.
+
+Do I need an IDE? Is there an Emacs-mode for Racket? What do I do now? Aha, there's a new program on my computer – “DrRacket”. It's probably what I want.
+
+DrRacket
+
+Fucking Retina-schmetina (just kidding, I love Retina) – font is so small I can barely read. I'm almost sure it can be fixed, tho. Edit → Preferences → Font size = 21. Hm, it hasn't done anything to button labels, but at least font is readable.
+
+That's all I can say about DrRacket... for now.
+
+Looking for a tutorial
+
+Welcome to DrRacket, version 6.0 [3m].
+Language: No language chosen; memory limit: 128 MB.
+DrRacket cannot process programs until you choose a programming language.
+Either select the “Choose Language...” item in the “Language” menu, or get guidance.
+
+Yes, I need guidance!
+
+Using How to Design Programs?
+Start with Beginning Student.
+
+Fine, beginning student it shall be... No wait, it appears to be a language chooser, not a built-in tutorial. Whatever, built-in tutorials are for suckers anyway. I'll open The Racket Guide in browser and start reading.
+
+The Racket Guide: 1.1. Interacting with Racket
+
+You type a Racket expression, hit the Return key, and the answer is printed. In the terminology of Racket, this kind of calculator is called a read-eval-print loop or REPL.
+
+I love REPLs! And if it's a calculator, surely I can add 2 and 2 with it. If I recall correctly...
+
+> + 2 2
+#<procedure:+>
+2
+2
+Not enough parentheses, I guess. Okay, second try.
+
+> (+ 2 2)
+4
+Now that's better. Does it support power operator? What about bignums?
+
+> (^ 2 3)
+undefined;
+ cannot reference an identifier before its definition
+ 
+> (** 2 3)
+...same
+
+> (^^ 2 3)
+...same
+
+> (pow 2 3)
+...same
+I wonder if Tab can help me. Nope. But there's Ctrl-/, let's type pow and press it.
+
+Hang for a minute (on a new MacBook Pro!), then a list pops up (pow isn't on it). Later Ctrl-/ works flawlessly. It's probably been downloading autocompletion data or generating it or sending all my data to NSA or something.
+
+Googling “racket math operators” turns up this. Aha, it's called expt!
+
+> (expt 2 3)
+8
+
+> (expt (expt 9 100) 10)
+1747871251722651609659974619164660570529062487435188517811888011810686
+2662272754892914864698646811110756089506961452765887713684358755086475
+1441420209363848187291238008997717938152962847832052351931914268150442
+4059410890214500500647813935818925701905402605484098137956979368551025
+8252394113186439979165236770447696626286464065403356279753296192642450
+7975047086246247409110544443735530214615147534809075533015326906793309
+1699479889089824650841795567478606396975664557143737657027080403239977
+7578652968467400937123779157705360942236880491080232441391830279624844
+1107846443951684522796193522126981475341678257645550731607375198537404
+6064592546796043150737808314501684679758056905948759246368644416151863
+1380852766035958164109451575997420776176189116011851556020807717467859
+5935987949019193338996527127540312792543224796326967591264610315634395
+4375442792688936047041533537523137941310690833949767764290081333900380
+310406154723157882112449991673819054110440001
+Awesome.
+
+The following expression calls the built-in function substring with the arguments  "the boy out of the country", 4, and 7:
+
+> (substring "the boy out of the country" 4 7)
+"boy"
+Are strings just lists of characters, like in Haskell, or something else? Would substring work on an ordinary list?
+
+> (substring (0 1 2 3) 1 2)
+application: not a procedure;
+ expected a procedure that can be applied to arguments
+  given: 0
+  arguments...:
+   1
+   2
+   3
+Apparently, (0 1 2 3) is not a list but application of 0 to 1 2 3. IIRC, a little quote should do the trick:
+
+> (substring '(0 1 2 3) 1 2)
+substring: contract violation
+  expected: string?
+  given: '(0 1 2 3)
+  argument position: 1st
+  other arguments...:
+   1
+   2
+So, substring really does need a genuine string. Or am I mistaken about the quote?
+
+> (length '(0 1 2 3))
+4
+Fine, whatever. I'll learn list slicing later.
+
+What I think so far
+
+Racket's default IDE is better than GHCi and probably on par with Emacs (you almost certainly can configure Emacs to be better than anything, but it's not trivial and people don't bother, while DrRacket provides autocompletion and documentation out of the box).
+
+Racket's default help (installed on computer) is also better than Haddocks. I mean, it includes instant search for functions! (You can try it here.) There are lots of tutorials too, which means I can install racket on my laptop, turn internet connection off and have a few hours of studying without wasting time on Hacker News.
+
+Off-topic: generally, it's very important that people have goodies out of the box. Programmers are lazy, and many of them won't lift a finger to make their own lives better (unless they realise it's a real problem and make a conscious attempt to improve the situation. For instance, I had to beemind fixing small problems with my laptop – otherwise I'm pretty sure I'd still live without working hibernation and sound controls.)
+
+TRG: 1.2. Definitions and Interactions
+
+If calling (extract "the boy") is part of the main action of your program, that would go in the definitions area, too. But if it was just an example expression that you were using to explore extract, then you’d more likely leave the definitions area as above, click Run, and then evaluate (extract "the boy") in the REPL.
+
+I've just realised that I missed something very important. Very, very important.
+
+What's the shortcut for Run?
+
+Aha, Ctrl-R. While I'm at it, killing the program is Ctrl-K. These two are the most important shortcuts if you want to experiment but aren't good enough (yet) to avoid freezing the interpreter every ten minutes while you Just Wanted to Calculate Factorial of Billion, What's Wrong with That. Yes, I'm a bignum junkie.
+
+Back to definitions. Extracting the boy is boring; as I am a Haskell programmer, my first definition must be a factorial.
+
+(define (factorial n)
+  (if
+Er, how do I if?
+
+What if I select it, right-click...
+
+Search in Help Desk for "if"
+
+Yay, Help Desk!
+
+(if test-expr then-expr else-expr)
+Evaluates test-expr. If it produces any value other than #f, then then-expr is evaluated, and its results are the result for the if form. Otherwise, else-expr is evaluated, and its results are the result for the if form. The then-expr and else-expr are in tail position with respect to the if form.
+
+Examples:
+
+> (if (positive? -5) (error "doesn't get here") 2)
+2
+> (if (positive? 5) 1 (error "doesn't get here"))
+1
+> (if 'we-have-no-bananas "yes" "no")
+"yes"
+Okay, let's try.
+
+(define (factorial n)
+  (if (== n 0) 1 (* n (factorial (- n 1)))))
+Ctrl-R and...
+
+==: this match expander must be used inside match in: (== n 0)
+Fi-ine, guessing mode on. It returns bool so it probably ends with ?; can it be something like eq?.
+
+(Wow, when I point on an identifier, lines appear and show me where this identifier occurs and where it's imported from! (Note to self: I should find somewhere a huge program, open it in DrRacket and point at racket in #lang racket.))
+
+(Wow #2: a small box in the upper right corner shows me type of whatever is under cursor! That's awesome and also much faster than looking up types in ghc-mod for Emacs.)
+
+(No, wait, drawback: it doesn't show any information for user-defined functions. Pfft.)
+
+Reading the documentation for eq? now. Apparently, there are lots of different comparisons and what I actually want is equal? (or =).
+
+Here's the final version (I wonder if I've indented it properly):
+
+(define (factorial n)
+  (if (= n 0) 
+	  1 
+	  (* n (factorial (- n 1)))))
+> (factorial 100)
+9332621544394415268169923885626670049071596826438162146859296389521759
+9993229915608941463976156518286253697920827223758251185210916864000000
+000000000000000000
+
+> (factorial 100000)
+Seven minutes later and factorial of 100000 is computed and printed. (Note to self: Ctrl-K doesn't work if a menu is open... and when GUI doesn't respond, menus can't be closed.)
+
+I'll try to define Quicksort when I know a bit more about lists.
+
+What I think so far
+
+Uniform syntax is harder to read. There should be more syntax highlighting (or different fonts – what about  define in small caps, for instance?).
+
+Four different equality functions isn't a good sign. There's = for comparing numbers, eq? for testing whether two objects are the same object (in Haskell such stuff is well-hidden, and rightly so), eqv? which is the same as eq? except for numbers and characters, and equal? which works for most things. Oh, and  boolean=? specifically for booleans. And string=? for strings. And char=? for characters. C'mon, I understand why all these things exist, but why expose them?
+
+TRG: 1.3. Creating Executables
+
+A hello world program written in Haskell takes 760 kB; I wonder how big is Racket's hello world going to be, considering that I'll be sure to pack the entire RTS into it.
+
+#lang racket
+
+(print "Hello, world!")
+Now Ctrl-S and then Racket → Create Executable. First let's try “stand-alone”.
+
+$ du helloworld
+4.9M    hw
+4.9M    total
+Five MB. Now what's about “distribution”?..
+
+$ du helloworld.tgz 
+3.2M    helloworld.tgz
+3.2M    total
+Even less. But that's packed; what if I unpack it?
+
+$ du helloworld
+0   helloworld/lib/plt/helloworld/exts
+0   helloworld/lib/plt/helloworld/collects
+0   helloworld/lib/plt/helloworld
+40K helloworld/lib/plt
+3.7M    helloworld/lib
+4.9M    helloworld/bin
+8.5M    helloworld
+8.5M    total
+Still fine. I doubt I'll be creating more executables any time soon, but it's good to know anyway.
+
+Aha, look what I've found! If I define what I'm using more precisely, I can further strip the executable:
+
+#lang racket/base
+
+(print "Hello, world!")
+$ du helloworld.tgz
+1.8M    helloworld.tgz
+1.8M    total
+
+$ tar xvf helloworld.tgz 
+
+$ du helloworld
+0   helloworld/lib/plt/helloworld/exts
+0   helloworld/lib/plt/helloworld/collects
+0   helloworld/lib/plt/helloworld
+40K helloworld/lib/plt
+4.0M    helloworld/lib
+792K    helloworld/bin
+4.8M    helloworld
+4.8M    total
+TRG: 1.4. A Note to Readers with Lisp/Scheme Experience
+
+I.e. not to me.
+
+The module system is designed to avoid these problems, so start with #lang, and you’ll be happier with Racket in the long run.
+
+Hm, is it like starting with module Main where in Haskell? Okay, okay, I solemnly swear to never start a Racket file with anything but #lang, unless, of course, some new circumstances arise blah blah blah earthquakes blah blah blah too lazy to type #lang blah blah blah.
+
+TRG: 2.1. Simple Values
+
+Whoa, finished the first chapter!
+
+Numbers are written in the usual way, including fractions and imaginary numbers
+
+More tinkering reveals that:
+
+Fractionals are not bignum-y (by default):
+
+> 6.1e10000
++inf.0
+However, rationals seem to be. Also, DrRacket prints fractions in a pretty cool way.
+
+5i+3 isn't a proper number, but 3+5i and 3+5/8i are.
+
+(/ 15 6) is the same as 15/6.
+
+Unlike in Haskell, .666 is parsed as a number and equals 0.666. 42. is a number too. (But . is not.)
+
+3..4 is a valid identifier:
+
+> 3..4
+3..4: undefined;
+ cannot reference an identifier before its definition
+Booleans are #t for true and #f for false. In conditionals, however, all non-#f values are treated as true.
+
+I wonder why... Hm, it's probably useful for lookup functions: make lookup return #f if the element wasn't found, and you can use every lookup as is-member if you want to.
+
+This chapter was small and boring. Next, please!
+
+TRG: 2.2. Simple Definitions and Expressions
+
+A function is just another kind of value, though the printed form is necessarily less complete than the printed form of a number or string.
+
+Hey, how come? What about unity-of-code-and-data in Lisps? Why can't I get the S-expr corresponding to a function?
+
+But at least I can eval S-exprs, right?
+
+> (eval '(+ 1 2))
+3
+Phew.
+
+(define (nobake flavor)
+  string-append flavor "jello")
+
+> (nobake "green")
+"jello"
+Within nobake, there are no parentheses around string-append flavor "jello", so they are three separate expressions instead of one function-call expression. The expressions string-append and  flavor are evaluated, but the results are never used. Instead, the result of the function is just the result of the final expression, "jello".
+
+I bet I would've made this mistake eventually if not for this warning (and I'm not sure I won't make it anyway).
+
+The use of square brackets for cond clauses is a convention. In Racket, parentheses and square brackets are actually interchangeable, as long as ( is matched with ) and [ is matched with ]. Using square brackets in a few key places makes Racket code even more readable.
+
+It's a really neat idea. I like Racket more and more.
+
+> (twice (lambda (s) (string-append s "!"))
+		 "hello")
+"hello!!"
+Aha, lambdas! My little evil functional heart is beating merrily inside my chest. Let's see if I can write function composition at this point without cheating.
+
+(Meanwhile: I ran into this bug, which caused me to restart DrRacket.)
+
+(define (. f g)
+  (lambda (x) (f (g x))))
+Module Language: invalid module text
+  read: illegal use of `.'
+Fine, I don't remember what characters are allowed in identifiers. What about <>?
+
+(define (<> f g)
+  (lambda (x) (f (g x))))
+> ((<> (lambda (x) (+ x 1)) 
+	   (lambda (x) (* x 2))) 
+   7)
+15
+Clumsy lambdas. Can I use λ instead? I can. Cool.
+
+Hm, given that λ is just a Greek letter and not part of syntax (like in Haskell), there's probably some sneaky  define somewhere which equates λ and lambda. Can I define my own alias for lambda?
+
+(define (l v f)
+  (lambda v f))
+> ((l (x) (+ 3 x)) 7)
+x: undefined;
+ cannot reference an identifier before its definition
+This is not fai— no, wait, lambda is probably not a function at all but some macro-schmacro, and there's a list of  lambda-aliases somewhere, and a parser, and what-not, and even if it's possible to define my own alias for  lambda, it's Black Magic and definit— who am I kidding? I won't be able to go to sleep until I define l to be  lambda and I know it.
+
+[eight minutes after]
+
+It was easy! (Thanks to chapter 16 of Racket Guide.)
+
+(define-syntax-rule (l x y) 
+  (λ x y))
+> ((l (x) (+ 3 x)) 7)
+10
+There are also let and let*. The difference is that let doesn't allow later definitions reference earlier ones, and let* – does.
+
+Example:
+
+> (let* ([x (random 100)]
+		 [y (random (+ x 1))])
+	(list (+ x y) x y))
+
+'(115 99 16)
+However, we can't swap x and y lines.
+
+After reading reference on let-forms, I found that there's letrec. Will it help me?
+
+> (letrec ([y (random (+ x 1))]
+		   [x (random 100)])
+	(list (+ x y) x y))
+
++: contract violation
+  expected: number?
+  given: #<undefined>
+  argument position: 1st
+  other arguments...:
+   1
+Nope, even letrec doesn't work. But I still can write a factorial with it!
+
+> (letrec (
+	  [fac (λ (n) 
+		 (if (= 0 n)
+			 1
+			 (* n (fac (sub1 n)))))])
+	(map fac (range 10)))
+
+'(1 1 2 6 24 120 720 5040 40320 362880)
+What I think so far
+
+There should be an alternative to let with argument order reversed. I'm very used to treating local definitions as clarifying footnotes for “big picture” code, and don't want to give up this habit.
+
+I like the flexibility given by many let-forms (there are let, let*, letrec, and let-values +  let*-values + letrec-values for binding multiple outputs), but I feel that they all should've been just one let with optional modifiers.
+
+Lambdas are clumsy even with λ instead of lambda. I would've preferred something like (λx. (* x 2)) or even (* _ 2), and I'd be quite disappointed if there isn't a macro for that.
+
+Time to sleep
+
+Plans for tomorrow:
+
+honor Haskell by writing a Quicksort
+
+honor Tony Hoare by writing a true Quicksort (with mutable array)
+
+finish ch. 2 and ch. 3
+
+

@@ -1,0 +1,10 @@
+### Applescript: get window to front
+
+ my $osascript = <<END;
+tell application "System Events"
+   tell application process "$app"        
+        set frontmost to true
+       perform action "AXRaise" of (first window whose name contains "$win")
+   end tell
+end tell
+END

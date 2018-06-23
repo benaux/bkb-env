@@ -1,0 +1,660 @@
+From <http://laclefyoshi.blogspot.com/2010/10/google-chrome-ver.html>:
+
+#  [EngineeringException][1]
+
+   [1]: http://laclefyoshi.blogspot.com/
+
+SAEKI Yoshiyasu's weblog
+
+## 2010-10-23
+
+###  [Google Chrome meets AppleScript][2]
+
+   [2]: http://laclefyoshi.blogspot.com/2010/10/google-chrome-ver.html
+
+Google Chrome ver.7 or later can be controlled by AppleScript.  
+  
+Firstly, I D&Ded Google Chrome's icon on AppleScript Editor's icon. So AppleScript Editor displayed a list of commands and these descriptions in Google Chrome.  
+  
+
+  
+
+
+[![][4]][5]
+
+   [4]: http://3.bp.blogspot.com/_ggjk2-1GdpM/TMKuHh8rOEI/AAAAAAAAANM/W7H9vKmaIa0/s320/2.png
+   [5]: http://3.bp.blogspot.com/_ggjk2-1GdpM/TMKuHh8rOEI/AAAAAAAAANM/W7H9vKmaIa0/s1600/2.png
+
+  
+I tried to use some commands.  
+  
+
+    
+    -- get properties of Google Chrome
+    tell application "Google Chrome"
+     get properties of window 1
+    end tell
+    
+    
+    * * *
+    
+    {zoomed:true, miniaturized:false, name:"\"applescript\" commands - Google 検索", active tab:tab id 132 of window id 4 of application "Google Chrome", mode:"normal", miniaturizable:true, class:window, closeable:true, resizable:true, visible:true, zoomable:true, id:4, bounds:{50, 22, 1213, 796}, index:1, active tab index:13}
+    
+
+  
+
+    
+    -- get the number of tabs of window 1
+    tell application "Google Chrome"
+     get count every tab of window 1
+    end tell
+    
+    
+    * * *
+    
+    13
+    
+
+  
+
+    
+    -- get properties of fifth tab of first window
+    tell application "Google Chrome"
+     get properties of tab 5 of window 1
+    end tell
+    
+    
+    * * *
+    
+    {name:"dojo/regexp - DojoCampus - Docs", URL:"http://docs.dojocampus.org/dojo/regexp", id:13, class:tab, loading:false}
+    
+
+  
+
+    
+    -- get URL of active tab
+    tell application "Google Chrome"
+     get URL of active tab of window 1
+    end tell
+    
+    
+    * * *
+    
+    "http://docs.dojocampus.org/dojo/xhrGet"
+    
+
+  
+
+    
+    -- control tab using some commands
+    tell application "Google Chrome"
+     view source of active tab of window 1
+     save active tab of window 1
+     print active tab of window 1
+     reload active tab of window 1
+     go back active tab of window 1
+     go forward active tab of window 1
+     copy selection of active tab of window 1
+     paste selection active tab of window 1
+    end tell
+    
+
+  
+
+    
+    tell application "Google Chrome"
+     set aWin to make new window with properties {mode:"incognito"}
+     -- open window with secret mode, if with normal mode then use {mode:"normal"}
+     tell aWin
+      set newTab to make new tab with properties {URL:"http://www.facebook.com/"}
+      -- open new tab and set URL
+      tell active tab
+       -- set URL to "http://www.facebook.com/"
+       -- can also set URL here
+       repeat  -- wait completion of loading
+        set curStat to loading
+        if curStat = false then exit repeat
+        delay 0.1
+       end repeat
+      end tell
+     end tell
+    end tell
+    
+
+  
+AppleScript code can be saved as an application or used in a shell with osascript. So I can control Google Chrome automatically.  
+  
+In Terminal I got selected text on Google Chrome and translate it into Japanese with [Google Translate command-line tool][6].  
+  
+
+    
+       [6]: http://laclefyoshi.blogspot.com/2010/10/command-line-tool-for-google-translate.html
+
+$ osascript -e 'tell application "Google Chrome" to get copy selection of active tab of window 1' ; pbpaste
+    The Developer Community is more than the sum of software written, it is also the conversations that the community has; what is important, what to do next, how to improve the old.
+    $ osascript -e 'tell application "Google Chrome" to get copy selection of active tab of window 1' ; pbpaste | translation 
+    開発者のコミュニティが作成されたソフトウェアの合計よりも、それはコミュニティが持っている会話もある。何が、重要ですが、古いものを改善する方法を次に何をするか。
+    
+
+  
+In Emacs, if I want to insert selected text in Google Chrome to current buffer, I can use following command::  
+  
+
+    
+    C-u M-! osascript -e 'tell application "Google Chrome" to get copy selection of active tab of window 1' ; pbpaste
+    
+
+  
+Or, in Vim::  
+  
+
+    
+    :r! osascript -e 'tell application "Google Chrome" to get copy selection of active tab of window 1' ; pbpaste
+    
+
+  
+Excursus: [AppleScript and JavaScript for Google Chrome][7]  
+  
+Thanks. 
+
+   [7]: http://laclefyoshi.blogspot.com/2011/03/applescript-and-javascript-for-google.html
+
+Posted by Yoshiyasu SAEKI at [19:10][8] [ ![][9] ][10]
+
+   [8]: http://laclefyoshi.blogspot.com/2010/10/google-chrome-ver.html (permanent link)
+   [9]: http://img2.blogblog.com/img/icon18_edit_allbkg.gif
+   [10]: http://www.blogger.com/post-edit.g?blogID=4078805449160415851&postID=3523803465863896354&from=pencil (Edit Post)
+
+[Email This][11][BlogThis!][12][Share to Twitter][13][Share to Facebook][14]
+
+   [11]: http://www.blogger.com/share-post.g?blogID=4078805449160415851&postID=3523803465863896354&target=email (Email This)
+   [12]: http://www.blogger.com/share-post.g?blogID=4078805449160415851&postID=3523803465863896354&target=blog (BlogThis!)
+   [13]: http://www.blogger.com/share-post.g?blogID=4078805449160415851&postID=3523803465863896354&target=twitter (Share to Twitter)
+   [14]: http://www.blogger.com/share-post.g?blogID=4078805449160415851&postID=3523803465863896354&target=facebook (Share to Facebook)
+
+Labels: [applescript][15], [chrome][16], [google][17]
+
+   [15]: http://laclefyoshi.blogspot.com/search/label/applescript
+   [16]: http://laclefyoshi.blogspot.com/search/label/chrome
+   [17]: http://laclefyoshi.blogspot.com/search/label/google
+
+####  5 comments: 
+
+  1. ![][18]
+
+   [18]: http://3.bp.blogspot.com/_fEW37nR4gmk/SZ5E-KwKpxI/AAAAAAAAAAM/rur8stiMnNo/S45/head2a.jpg
+
+[Peter in Japan][19][14/12/10 14:17][20]
+
+   [19]: http://www.blogger.com/profile/11406234614984212429
+   [20]: http://laclefyoshi.blogspot.com/2010/10/google-chrome-ver.html?showComment=1292303831239#c2548167026124983469
+
+Thanks for the post, the examples are great. Was able to make a Keyboard Maestro macro that waits exactly until the current tab is done loading then executes the rest of the Macro.  
+  
+set isloading to 1  
+repeat while isloading is not false  
+tell application "Google Chrome"  
+set isloading to loading of active tab of window 1  
+end tell  
+end repeat
+
+[Reply][21][Delete][22]
+
+   [21]: javascript:;
+   [22]: http://www.blogger.com/delete-comment.g?blogID=4078805449160415851&postID=2548167026124983469
+
+  2. ![][23]
+
+   [23]: http://3.bp.blogspot.com/_fEW37nR4gmk/SZ5E-KwKpxI/AAAAAAAAAAM/rur8stiMnNo/S45/head2a.jpg
+
+[Peter in Japan][24][15/12/10 01:07][25]
+
+   [24]: http://www.blogger.com/profile/11406234614984212429
+   [25]: http://laclefyoshi.blogspot.com/2010/10/google-chrome-ver.html?showComment=1292342877020#c4436477391010154742
+
+Wow, is there ANY way to get the source of the current tab? Is refusing to work in Chrome, grr. Even with UI scripting it's not playing nice.
+
+[Reply][26][Delete][27]
+
+   [26]: javascript:;
+   [27]: http://www.blogger.com/delete-comment.g?blogID=4078805449160415851&postID=4436477391010154742
+
+  3. ![][28]
+
+   [28]: http://2.bp.blogspot.com/_ggjk2-1GdpM/TLlaBDEe2aI/AAAAAAAAAM8/CcAAxzpvUvM/S45/Me_2.JPG
+
+[laclefyoshi][29][15/12/10 08:50][30]
+
+   [29]: http://www.blogger.com/profile/09934531596280495750
+   [30]: http://laclefyoshi.blogspot.com/2010/10/google-chrome-ver.html?showComment=1292370638067#c7882545848107454992
+
+Thank you for nice macro.  
+  
+I see we can get source of a tab on current Chrome with view source, select all and copy selection .  
+  
+tell application "Google Chrome"  
+view source of active tab of window 1  
+repeat  
+set curStat to loading of active tab of window 1  
+if curStat = false then exit repeat  
+delay 0.1  
+end repeat  
+select all of active tab of window 1  
+copy selection of active tab of window 1  
+end tell  
+  
+  
+It may be that its scripting interface becomes more good later because Chrome is supported by opensource project.
+
+[Reply][31][Delete][32]
+
+   [31]: javascript:;
+   [32]: http://www.blogger.com/delete-comment.g?blogID=4078805449160415851&postID=7882545848107454992
+
+  4. ![][33]
+
+   [33]: http://4.bp.blogspot.com/_qRJQAy4n9Eo/SZ_vnT6JBoI/AAAAAAAAFx0/j53yYfJvxL4/S45/Msn.jpg
+
+[Pickachu][34][10/9/11 10:36][35]
+
+   [34]: http://www.blogger.com/profile/16193648140995869714
+   [35]: http://laclefyoshi.blogspot.com/2010/10/google-chrome-ver.html?showComment=1315618619037#c4673217753806877951
+
+Is there a way to get the output of the javascript command?
+
+[Reply][36][Delete][37]
+
+   [36]: javascript:;
+   [37]: http://www.blogger.com/delete-comment.g?blogID=4078805449160415851&postID=4673217753806877951
+
+  5. ![][38]
+
+   [38]: http://img2.blogblog.com/img/b36-rounded.png
+
+[Freud][39][31/10/11 07:26][40]
+
+   [39]: http://www.blogger.com/profile/13273459625171908654
+   [40]: http://laclefyoshi.blogspot.com/2010/10/google-chrome-ver.html?showComment=1320013564275#c7293219087725303421
+
+arigatou gozaimasu :)
+
+[Reply][41][Delete][42]
+
+   [41]: javascript:;
+   [42]: http://www.blogger.com/delete-comment.g?blogID=4078805449160415851&postID=7293219087725303421
+
+[Add comment][43]
+
+   [43]: javascript:;
+
+[Load more...][44]
+
+   [44]: javascript:;
+
+[][45]
+
+   [45]: http://www.blogger.com/comment-iframe.g?blogID=4078805449160415851&postID=3523803465863896354
+
+[Newer Post][46] [Older Post][47] [Home][48]
+
+   [46]: http://laclefyoshi.blogspot.com/2010/11/i-always-use-carbon-emacs.html (Newer Post)
+   [47]: http://laclefyoshi.blogspot.com/2010/10/command-line-tool-for-google-translate.html (Older Post)
+   [48]: http://laclefyoshi.blogspot.com/
+
+Subscribe to: [Post Comments (Atom)][49]
+
+   [49]: http://laclefyoshi.blogspot.com/feeds/3523803465863896354/comments/default
+
+[![Click here to lend your support to: Please Please Me and make a donation at www.pledgie.com !][50]][51]
+
+   [50]: http://www.pledgie.com/campaigns/13772.png?skin_name=chrome
+   [51]: http://www.pledgie.com/campaigns/13772
+
+[ ![][52] ][53]
+
+   [52]: http://img1.blogblog.com/img/icon18_wrench_allbkg.png
+   [53]: http://www.blogger.com/rearrange?blogID=4078805449160415851&widgetType=AdSense&widgetId=AdSense1&action=editWidget&sectionId=sidebar-right-1 (Edit)
+
+## Blog Archive
+
+  * [ ►  ][54] [2012][55] (11)
+
+   [54]: javascript:void(0)
+   [55]: http://laclefyoshi.blogspot.com/search?updated-min=2012-01-01T00:00:00%2B09:00&updated-max=2013-01-01T00:00:00%2B09:00&max-results=11
+
+    * [ ►  ][56] [May][57] (1)
+
+   [56]: javascript:void(0)
+   [57]: http://laclefyoshi.blogspot.com/2012_05_01_archive.html
+
+      * [Using socket API with Google Chrome Canary build][58]
+
+   [58]: http://laclefyoshi.blogspot.com/2012/05/using-socket-api-with-google-chrome.html
+
+    * [ ►  ][59] [April][60] (2)
+
+   [59]: javascript:void(0)
+   [60]: http://laclefyoshi.blogspot.com/2012_04_01_archive.html
+
+      * [flymake and checkstyle][61]
+      * [defining custom URL using URLStreamHandler][62]
+
+   [61]: http://laclefyoshi.blogspot.com/2012/04/flymake-and-checkstyle.html
+   [62]: http://laclefyoshi.blogspot.com/2012/04/extending-url-using-urlstreamhandler.html
+
+    * [ ►  ][63] [March][64] (2)
+
+   [63]: javascript:void(0)
+   [64]: http://laclefyoshi.blogspot.com/2012_03_01_archive.html
+
+      * [identifying whether a binary is 32-bit or 64-bit i...][65]
+      * [class for manipulating URL][66]
+
+   [65]: http://laclefyoshi.blogspot.com/2012/03/identifying-whether-binary-is-32-bit-or.html
+   [66]: http://laclefyoshi.blogspot.com/2012/03/class-for-manipulating-url.html
+
+    * [ ►  ][67] [February][68] (3)
+
+   [67]: javascript:void(0)
+   [68]: http://laclefyoshi.blogspot.com/2012_02_01_archive.html
+
+      * [open file and search term in vim and emacs][69]
+      * [another way of creating RAM disc in Mac][70]
+      * [af* command for treating audio files in Mac][71]
+
+   [69]: http://laclefyoshi.blogspot.com/2012/02/open-and-search-file-in-vim-and-emacs.html
+   [70]: http://laclefyoshi.blogspot.com/2012/02/another-way-of-creating-ram-disc-in-mac.html
+   [71]: http://laclefyoshi.blogspot.com/2012/02/af-command-for-treating-audio-files-in.html
+
+    * [ ►  ][72] [January][73] (3)
+
+   [72]: javascript:void(0)
+   [73]: http://laclefyoshi.blogspot.com/2012_01_01_archive.html
+
+      * [Removing margins of PDF generated by iBooks Author...][74]
+      * [Outputting data for people with tablib][75]
+      * [XMPP client for monitoring messages from im.kayac....][76]
+
+   [74]: http://laclefyoshi.blogspot.com/2012/01/removing-margins-of-pdf-generated-by.html
+   [75]: http://laclefyoshi.blogspot.com/2012/01/outputting-data-for-people-with-tablib.html
+   [76]: http://laclefyoshi.blogspot.com/2012/01/xmpp-client-for-monitoring-messages.html
+
+  * [ ►  ][77] [2011][78] (47)
+
+   [77]: javascript:void(0)
+   [78]: http://laclefyoshi.blogspot.com/search?updated-min=2011-01-01T00:00:00%2B09:00&updated-max=2012-01-01T00:00:00%2B09:00&max-results=47
+
+    * [ ►  ][79] [December][80] (2)
+
+   [79]: javascript:void(0)
+   [80]: http://laclefyoshi.blogspot.com/2011_12_01_archive.html
+
+      * [Chrome Extension: Amazon to Yahoo! Bookstore][81]
+      * [Calculation on terminal][82]
+
+   [81]: http://laclefyoshi.blogspot.com/2011/12/chrome-extension-amazon-to-yahoo.html
+   [82]: http://laclefyoshi.blogspot.com/2011/12/calculation-on-terminal.html
+
+    * [ ►  ][83] [November][84] (3)
+
+   [83]: javascript:void(0)
+   [84]: http://laclefyoshi.blogspot.com/2011_11_01_archive.html
+
+      * [Build tools for Java project][85]
+      * [py_compile in Jython][86]
+      * [Google Developer Day 2011 Tokyo][87]
+
+   [85]: http://laclefyoshi.blogspot.com/2011/11/build-tools-for-java-project.html
+   [86]: http://laclefyoshi.blogspot.com/2011/11/pycompile-in-jython.html
+   [87]: http://laclefyoshi.blogspot.com/2011/11/google-developer-day-2011-tokyo.html
+
+    * [ ►  ][88] [October][89] (3)
+
+   [88]: javascript:void(0)
+   [89]: http://laclefyoshi.blogspot.com/2011_10_01_archive.html
+
+      * [Inserting package statement with vim and emacs][90]
+      * [Tools for processing XML][91]
+      * [PerlTeX: Perl + LaTeX][92]
+
+   [90]: http://laclefyoshi.blogspot.com/2011/10/inserting-package-statement.html
+   [91]: http://laclefyoshi.blogspot.com/2011/10/tools-for-processing-xml.html
+   [92]: http://laclefyoshi.blogspot.com/2011/10/perltex-perl-latex.html
+
+    * [ ►  ][93] [September][94] (4)
+
+   [93]: javascript:void(0)
+   [94]: http://laclefyoshi.blogspot.com/2011_09_01_archive.html
+
+      * [Converting relative link to absolute link][95]
+      * [Checking if a Perl module is installed][96]
+      * [Extracting lines including the specified IP addres...][97]
+      * [compiling gc-7.1 on Mac OS X Lion, it worked?][98]
+
+   [95]: http://laclefyoshi.blogspot.com/2011/09/converting-relative-link-to-absolute.html
+   [96]: http://laclefyoshi.blogspot.com/2011/09/checking-if-perl-module-is-installed.html
+   [97]: http://laclefyoshi.blogspot.com/2011/09/extracting-lines-including-specified-ip.html
+   [98]: http://laclefyoshi.blogspot.com/2011/09/compiling-gc-71-on-mac-os-x-lion-it.html
+
+    * [ ►  ][99] [August][100] (5)
+
+   [99]: javascript:void(0)
+   [100]: http://laclefyoshi.blogspot.com/2011_08_01_archive.html
+
+      * [Xcode and github][101]
+      * [compiling gc-7.1 on Mac OS X Lion, but error][102]
+      * [Hello, Lion!][103]
+      * [Basic network analysis and visualization with igra...][104]
+      * [schema.org for people or machines][105]
+
+   [101]: http://laclefyoshi.blogspot.com/2011/08/xcode-and-github.html
+   [102]: http://laclefyoshi.blogspot.com/2011/08/compiling-gc-71-on-mac-os-x-lion-but.html
+   [103]: http://laclefyoshi.blogspot.com/2011/08/hello-lion.html
+   [104]: http://laclefyoshi.blogspot.com/2011/08/basic-network-analysis-and.html
+   [105]: http://laclefyoshi.blogspot.com/2011/08/schemaorg-for-people-or-machines.html
+
+    * [ ►  ][106] [July][107] (5)
+
+   [106]: javascript:void(0)
+   [107]: http://laclefyoshi.blogspot.com/2011_07_01_archive.html
+
+      * [DLNA in my room][108]
+      * [Protocol Buffers Inheritance][109]
+      * [Protocol Buffers][110]
+      * [An miscellaneous thoughts about Android phone][111]
+      * [Hello, Android!][112]
+
+   [108]: http://laclefyoshi.blogspot.com/2011/07/dlna-in-my-room.html
+   [109]: http://laclefyoshi.blogspot.com/2011/07/protocol-buffers-inheritance.html
+   [110]: http://laclefyoshi.blogspot.com/2011/07/protocol-buffers.html
+   [111]: http://laclefyoshi.blogspot.com/2011/07/miscellaneous-thoughts-about-android.html
+   [112]: http://laclefyoshi.blogspot.com/2011/07/hello-android.html
+
+    * [ ►  ][113] [June][114] (4)
+
+   [113]: javascript:void(0)
+   [114]: http://laclefyoshi.blogspot.com/2011_06_01_archive.html
+
+      * [java.awt.Robot with Jython][115]
+      * [Growl with Jython][116]
+      * [Menu bar application with Jython][117]
+      * [Full-text search in SQLite][118]
+
+   [115]: http://laclefyoshi.blogspot.com/2011/06/javaawtrobot-with-jython.html
+   [116]: http://laclefyoshi.blogspot.com/2011/06/growl-with-jython.html
+   [117]: http://laclefyoshi.blogspot.com/2011/06/menu-bar-application-with-jython.html
+   [118]: http://laclefyoshi.blogspot.com/2011/06/full-text-search-in-sqlite.html
+
+    * [ ►  ][119] [May][120] (4)
+
+   [119]: javascript:void(0)
+   [120]: http://laclefyoshi.blogspot.com/2011_05_01_archive.html
+
+      * [Recoding standard input and output streams][121]
+      * [Getting nanoseconds in C on FreeBSD, Linux or Mac][122]
+      * [tmpfs on Linux and Mac][123]
+      * [kqueue, monitoring file system][124]
+
+   [121]: http://laclefyoshi.blogspot.com/2011/05/recoding-standard-input-and-output.html
+   [122]: http://laclefyoshi.blogspot.com/2011/05/getting-nanoseconds-in-c-on-freebsd.html
+   [123]: http://laclefyoshi.blogspot.com/2011/05/tmpfs-on-linux-and-mac.html
+   [124]: http://laclefyoshi.blogspot.com/2011/05/kqueue-monitoring-file-system.html
+
+    * [ ►  ][125] [April][126] (5)
+
+   [125]: javascript:void(0)
+   [126]: http://laclefyoshi.blogspot.com/2011_04_01_archive.html
+
+      * [Rounding: round() and rint()][127]
+      * [Using Mercurial API][128]
+      * [The suitable size of PDF for being displayed on iP...][129]
+      * [DTerm: command-line window everywhere][130]
+      * [About suitable formats for distributing data on th...][131]
+
+   [127]: http://laclefyoshi.blogspot.com/2011/04/rounding-round-and-rint.html
+   [128]: http://laclefyoshi.blogspot.com/2011/04/using-mercurial-api.html
+   [129]: http://laclefyoshi.blogspot.com/2011/04/suitable-size-of-pdf-for-being.html
+   [130]: http://laclefyoshi.blogspot.com/2011/04/dterm-command-line-window-everywhere.html
+   [131]: http://laclefyoshi.blogspot.com/2011/04/about-suitable-formats-for-distributing.html
+
+    * [ ►  ][132] [March][133] (3)
+
+   [132]: javascript:void(0)
+   [133]: http://laclefyoshi.blogspot.com/2011_03_01_archive.html
+
+      * [AppleScript and JavaScript for Google Chrome][134]
+      * [bc: a calculator on the console][135]
+      * [Implementing MapReduce with Akka and Jython][136]
+
+   [134]: http://laclefyoshi.blogspot.com/2011/03/applescript-and-javascript-for-google.html
+   [135]: http://laclefyoshi.blogspot.com/2011/03/bc-calculator-on-console.html
+   [136]: http://laclefyoshi.blogspot.com/2011/03/implementing-mapreduce-with-akka-and.html
+
+    * [ ►  ][137] [February][138] (4)
+
+   [137]: javascript:void(0)
+   [138]: http://laclefyoshi.blogspot.com/2011_02_01_archive.html
+
+      * [Actor model in Jython][139]
+
+   [139]: http://laclefyoshi.blogspot.com/2011/02/actor-model-in-jython.html
+
+    * [ ►  ][140] [January][141] (5)
+
+   [140]: javascript:void(0)
+   [141]: http://laclefyoshi.blogspot.com/2011_01_01_archive.html
+
+  * [ ▼  ][142] [2010][143] (11)
+
+   [142]: javascript:void(0)
+   [143]: http://laclefyoshi.blogspot.com/search?updated-min=2010-01-01T00:00:00%2B09:00&updated-max=2011-01-01T00:00:00%2B09:00&max-results=11
+
+    * [ ►  ][144] [December][145] (4)
+
+   [144]: javascript:void(0)
+   [145]: http://laclefyoshi.blogspot.com/2010_12_01_archive.html
+
+    * [ ►  ][146] [November][147] (5)
+
+   [146]: javascript:void(0)
+   [147]: http://laclefyoshi.blogspot.com/2010_11_01_archive.html
+
+    * [ ▼  ][148] [October][149] (2)
+
+   [148]: javascript:void(0)
+   [149]: http://laclefyoshi.blogspot.com/2010_10_01_archive.html
+
+      * [Google Chrome meets AppleScript][150]
+      * [A Command-line Tool for Google Translate][151]
+
+   [150]: http://laclefyoshi.blogspot.com/2010/10/google-chrome-ver.html
+   [151]: http://laclefyoshi.blogspot.com/2010/10/command-line-tool-for-google-translate.html
+
+[ ![][152] ][153]
+
+   [152]: http://img1.blogblog.com/img/icon18_wrench_allbkg.png
+   [153]: http://www.blogger.com/rearrange?blogID=4078805449160415851&widgetType=BlogArchive&widgetId=BlogArchive1&action=editWidget&sectionId=sidebar-right-1 (Edit)
+
+## Search This Blog
+
+Loading...
+
+[ ![][154] ][155]
+
+   [154]: http://img1.blogblog.com/img/icon18_wrench_allbkg.png
+   [155]: http://www.blogger.com/rearrange?blogID=4078805449160415851&widgetType=CustomSearch&widgetId=CustomSearch1&action=editWidget&sectionId=sidebar-right-1 (Edit)
+
+## Subscribe To
+
+![][156] ![][157] Posts 
+
+   [156]: http://img2.blogblog.com/img/widgets/arrow_dropdown.gif
+   [157]: http://img1.blogblog.com/img/icon_feed12.png
+
+[ ![][158] ][159] [ ![][160] ][161] [ ![][162] ][163] [ ![][164] ][165] [ ![][166] Atom ][167]
+
+   [158]: http://img1.blogblog.com/img/widgets/subscribe-google.png
+   [159]: http://www.google.com/ig/add?source=bstp&feedurl=http%3A%2F%2Flaclefyoshi.blogspot.com%2Ffeeds%2Fposts%2Fdefault
+   [160]: http://img1.blogblog.com/img/widgets/subscribe-netvibes.png
+   [161]: http://www.netvibes.com/subscribe.php?url=http%3A%2F%2Flaclefyoshi.blogspot.com%2Ffeeds%2Fposts%2Fdefault
+   [162]: http://img1.blogblog.com/img/widgets/subscribe-newsgator.png
+   [163]: http://www.newsgator.com/ngs/subscriber/subext.aspx?url=http%3A%2F%2Flaclefyoshi.blogspot.com%2Ffeeds%2Fposts%2Fdefault
+   [164]: http://img1.blogblog.com/img/widgets/subscribe-yahoo.png
+   [165]: http://add.my.yahoo.com/content?url=http%3A%2F%2Flaclefyoshi.blogspot.com%2Ffeeds%2Fposts%2Fdefault
+   [166]: http://img1.blogblog.com/img/icon_feed12.png
+   [167]: http://laclefyoshi.blogspot.com/feeds/posts/default
+
+![][168] ![][169] Posts 
+
+   [168]: http://img2.blogblog.com/img/widgets/arrow_dropdown.gif
+   [169]: http://img1.blogblog.com/img/icon_feed12.png
+
+![][168] ![][170] Comments 
+
+   [170]: http://img1.blogblog.com/img/icon_feed12.png
+
+[ ![][171] ][172] [ ![][173] ][174] [ ![][175] ][176] [ ![][177] ][178] [ ![][179] Atom ][180]
+
+   [171]: http://img1.blogblog.com/img/widgets/subscribe-google.png
+   [172]: http://www.google.com/ig/add?source=bstp&feedurl=http%3A%2F%2Flaclefyoshi.blogspot.com%2Ffeeds%2F3523803465863896354%2Fcomments%2Fdefault
+   [173]: http://img1.blogblog.com/img/widgets/subscribe-netvibes.png
+   [174]: http://www.netvibes.com/subscribe.php?url=http%3A%2F%2Flaclefyoshi.blogspot.com%2Ffeeds%2F3523803465863896354%2Fcomments%2Fdefault
+   [175]: http://img1.blogblog.com/img/widgets/subscribe-newsgator.png
+   [176]: http://www.newsgator.com/ngs/subscriber/subext.aspx?url=http%3A%2F%2Flaclefyoshi.blogspot.com%2Ffeeds%2F3523803465863896354%2Fcomments%2Fdefault
+   [177]: http://img1.blogblog.com/img/widgets/subscribe-yahoo.png
+   [178]: http://add.my.yahoo.com/content?url=http%3A%2F%2Flaclefyoshi.blogspot.com%2Ffeeds%2F3523803465863896354%2Fcomments%2Fdefault
+   [179]: http://img1.blogblog.com/img/icon_feed12.png
+   [180]: http://laclefyoshi.blogspot.com/feeds/3523803465863896354/comments/default
+
+![][181] ![][182] Comments 
+
+   [181]: http://img2.blogblog.com/img/widgets/arrow_dropdown.gif
+   [182]: http://img1.blogblog.com/img/icon_feed12.png
+
+[ ![][183] ][184]
+
+   [183]: http://img1.blogblog.com/img/icon18_wrench_allbkg.png
+   [184]: http://www.blogger.com/rearrange?blogID=4078805449160415851&widgetType=Subscribe&widgetId=Subscribe1&action=editWidget&sectionId=sidebar-right-1 (Edit)
+
+## About Me
+
+[![My Photo][185]][186]
+
+   [185]: //lh5.googleusercontent.com/-xEHAXnqop_Y/AAAAAAAAAAI/AAAAAAAAAYc/SuLwm9MVzDM/s512-c/photo.jpg
+   [186]: https://plus.google.com/101384646867143843419
+
+[ Yoshiyasu SAEKI ][187]
+      
+
+[View my complete profile][187]
+
+   [187]: https://plus.google.com/101384646867143843419
+
+[ ![][188] ][189]
+
+   [188]: http://img1.blogblog.com/img/icon18_wrench_allbkg.png
+   [189]: http://www.blogger.com/rearrange?blogID=4078805449160415851&widgetType=Profile&widgetId=Profile1&action=editWidget&sectionId=sidebar-right-1 (Edit)
+
+## Followers
+
+  *[19:10]: 2010-10-23T19:10:00+09:00

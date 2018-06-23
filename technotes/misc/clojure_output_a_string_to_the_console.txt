@@ -1,0 +1,83 @@
+From <http://langref.org/clojure/strings/printing-strings/hello-world>:
+
+** **** **** **** **** **
+
+[Login][1] | [Signup][2]
+
+   [1]: /login
+   [2]: /signup
+
+[langref.org][3] - [clojure][4] 0) document.location.href=this.options[this.selectedIndex].value"> add.. all cpp csharp erlang fantom fsharp go groovy haskell java ocaml perl php python ruby scala
+
+   [3]: http://langref.org/
+   [4]: /clojure/strings/printing-strings/hello-world
+
+** **** **** **** **** **
+
+** **** **** **** **** **
+
+  * [Home][5]
+  * [All][6]
+  * [Solved][7]
+  * [Unsolved][8]
+  * * * *
+
+   [5]: /clojure
+   [6]: /clojure/all
+   [7]: /clojure/solved
+   [8]: /clojure/unsolved
+
+><li> 
+  * [Strings][9]
+  * [Numbers][10]
+  * [Regex][11]
+  * [Lists][12]
+  * [Maps][13]
+  * [Structure][14]
+  * [Files][15]
+  * [Dates][16]
+  * [OOP][17]
+  * [Networking][18]
+  * [XML][19]
+  * [Algorithms][20]
+  * [Misc][21]
+  * [Parallel][22]
+
+   [9]: /clojure/strings
+   [10]: /clojure/numbers
+   [11]: /clojure/pattern-matching
+   [12]: /clojure/lists
+   [13]: /clojure/maps
+   [14]: /clojure/program-structure
+   [15]: /clojure/files
+   [16]: /clojure/dates
+   [17]: /clojure/oop
+   [18]: /clojure/networking
+   [19]: /clojure/xml
+   [20]: /clojure/algorithms
+   [21]: /clojure/misc
+   [22]: /clojure/parallel
+
+** **** **** **** **** **
+
+  
+> <div class="google_adsense ad160x600"> <script type="textjavascript"> //
+
+_uacct = "UA-4264032-1"; _udn = "langref.org"; urchinTracker(); 
+
+   [23]: /clojure/strings
+   [24]: /clojure/strings/printing-strings
+   [25]: /clojure/strings/printing-strings/hello-world
+   [26]: /images/disk.png?1196163800
+   [27]: /clojure/strings/printing-strings/hello-world/1295
+   [28]: /images/edit.png?1196163800
+   [29]: /solutions/1295/edit
+   [30]: /clojure+cpp/strings/printing-strings/hello-world
+   [31]: /clojure+csharp/strings/printing-strings/hello-world
+   [32]: /clojure+erlang/strings/printing-strings/hello-world
+   [33]: /clojure+fantom/strings/printing-strings/hello-world
+   [34]: http://langref.org/submit/strings/printing-strings
+   [35]: mailto:rob@langref.org
+   [36]: /images/refactor-small.png?1233409755
+   [37]: http://refactor.com.au/
+

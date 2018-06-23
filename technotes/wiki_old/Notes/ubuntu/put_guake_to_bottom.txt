@@ -1,0 +1,15 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2016-12-21T12:28:00+01:00
+
+====== put guake to bottom ======
+Created Wednesday 21 December 2016
+
+Hot to make guake slide in from the bottom
+
+
+change the line in /usr/bin/guake on line ~844 from 
+
+        window_rect.y = 0
+to
+        window_rect.y = 450

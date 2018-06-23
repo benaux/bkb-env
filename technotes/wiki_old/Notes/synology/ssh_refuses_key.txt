@@ -1,0 +1,14 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2016-12-21T12:28:00+01:00
+
+====== ssh refuses key ======
+Created Wednesday 21 December 2016
+
+Synology: ssh refuses key
+
+Maybe its the permission of the home folder
+
+cd /var/services/homes/
+chown <username> <username>
+chmod 755 <username>

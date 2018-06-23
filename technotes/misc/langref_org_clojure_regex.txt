@@ -1,0 +1,82 @@
+From <http://langref.org/clojure/pattern-matching>:
+
+** **** **** **** **** **
+
+[Login][1] | [Signup][2]
+
+   [1]: /login
+   [2]: /signup
+
+[langref.org][3] - [clojure][4] 0) document.location.href=this.options[this.selectedIndex].value"> add.. all cpp csharp erlang fantom fsharp go groovy haskell java ocaml perl php python ruby scala
+
+   [3]: http://langref.org/
+   [4]: /clojure/pattern-matching
+
+** **** **** **** **** **
+
+** **** **** **** **** **
+
+  * [Home][5]
+  * [All][6]
+  * [Solved][7]
+  * [Unsolved][8]
+  * * * *
+
+   [5]: /clojure
+   [6]: /clojure/all
+   [7]: /clojure/solved
+   [8]: /clojure/unsolved
+
+><li> 
+  * [Strings][9]
+  * [Numbers][10]
+  * Regex 
+  * [Lists][11]
+  * [Maps][12]
+  * [Structure][13]
+  * [Files][14]
+  * [Dates][15]
+  * [OOP][16]
+  * [Networking][17]
+  * [XML][18]
+  * [Algorithms][19]
+  * [Misc][20]
+  * [Parallel][21]
+
+   [9]: /clojure/strings
+   [10]: /clojure/numbers
+   [11]: /clojure/lists
+   [12]: /clojure/maps
+   [13]: /clojure/program-structure
+   [14]: /clojure/files
+   [15]: /clojure/dates
+   [16]: /clojure/oop
+   [17]: /clojure/networking
+   [18]: /clojure/xml
+   [19]: /clojure/algorithms
+   [20]: /clojure/misc
+   [21]: /clojure/parallel
+
+** **** **** **** **** **
+
+  
+> <div class="google_adsense ad160x600"> <script type="textjavascript"> //
+
+_uacct = "UA-4264032-1"; _udn = "langref.org"; urchinTracker(); 
+
+   [22]: /clojure/pattern-matching
+   [23]: /clojure/pattern-matching/matching
+   [24]: /clojure/pattern-matching/matching/check-if-a-string-matches-a-regular-expression
+   [25]: /clojure/pattern-matching/matching/check-if-a-string-matches-with-groups
+   [26]: /clojure/pattern-matching/searching
+   [27]: /clojure/pattern-matching/searching/check-if-a-string-contains-a-match-to-a-regular-expression
+   [28]: /clojure/pattern-matching/searching/loop-through-a-string-matching-a-regex-and-performing-an-action-for-each-match
+   [29]: /clojure/pattern-matching/replacing
+   [30]: /clojure/pattern-matching/replacing/replace-the-first-regex-match-in-a-string-with-a-static-string
+   [31]: /clojure/pattern-matching/replacing/replace-all-regex-matches-in-a-string-with-a-static-string
+   [32]: /clojure/pattern-matching/replacing/replace-all-regex-matches-in-a-string-with-a-dynamic-string
+   [33]: http://langref.org/submit/pattern-matching
+   [34]: mailto:rob@langref.org
+   [35]: /images/refactor-small.png?1233409755
+   [36]: http://refactor.com.au/
+

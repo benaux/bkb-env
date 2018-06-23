@@ -1,0 +1,126 @@
+Scheme
+
+Scheme is a Lisp dialect popular among academics and language designers, but it can also be used to develop web applications. There is even a wiki engine written in Scheme. Maybe you just want to impress your Ruby on Rails friends with a web application written in a programming language not commonly used on the web, maybe you want to challenge yourself by writing a web application in a functional language, or maybe you work for a startup and think Scheme will give you a leg up.
+This article will show you how to compile a Scheme interpreter in your home directory and write a CGI script in Scheme.
+Contents
+ [hide] 
+	•	1 Compiling Gauche
+	•	2 Writing a CGI Script in Scheme
+	•	3 Other Scheme Implemenations
+	◦	3.1 Chicken
+	◦	3.2 Gambit
+	◦	3.3 Guile
+	◦	3.4 MIT/GNU Scheme
+	◦	3.5 Racket
+	◦	3.6 Scheme 48
+	◦	3.7 SCM
+	◦	3.8 STklos
+	•	4 See Also
+Compiling Gauche
+The following directions walk you through compiling Gauche, an implementation of Scheme specifically designed for scripting. Notes on other Scheme implementations, and whether they compile on DreamHost or not, can be found at the bottom of the article.
+Download Gauche and copy it to your home directory. Then create a directory to install it to:
+$ mkdir ~/scheme
+Unzip and untar the Gauche package you copied to your home directory. Then enter the uncompressed directory.
+$ tar -zxf Gauche-x.x.x.tgz
+$ cd Gauche-x.x.x
+Run ./configure making sure to specify the directory you created as the installation directory. Replace username with your DreamHost username.
+$ ./configure --prefix=/home/username/scheme
+$ make
+$ make install
+Writing a CGI Script in Scheme
+Create a file named scheme.cgi in one of your web directories. Use the shebang notation at the top of the script to point to where you installed Gauche. Gauche comes with a CGI and HTML library that make writing simple CGI scripts easy.
+#!/home/username/scheme/bin/gosh
+
+;; Load CGI and HTML Modules
+(use www.cgi)
+(use text.html-lite)
+;; text.tree converts the ouput of www.cgi and text.html-lite to strings
+(use text.tree)
+
+;; Write Header
+(display (tree->string (cgi-header)))
+
+;; Say Hello
+(display (tree->string (html:strong "Hello, world!")))
+Make the script executable.
+$ chmod a+x scheme.cgi
+Then visit yourdomain.com/scheme.cgi from a web browser.
+Hello, world!
+Other Scheme Implemenations
+Chicken
+Chicken is a popular Scheme implementation that compiles to C and has a large repository of additional libraries called Eggs. To compile Chicken, you have to already have an earlier version of Chicken installed with which to compile the newer version. Since Chicken is not installed by DreamHost, this is not possible. If you know a way around this and have got it to work on DreamHost, share it here.
+Gambit
+Gambit is a Scheme implementation that conforms to the R4RS, R5RS and IEEE Scheme standards. Gambit successfully compiles on DreamHost, but it doesn't have CGI and HTML libraries like Gauche.
+$ ./configure --prefix=/home/username/scheme
+$ make
+$ make install
+And use
+#!/home/username/scheme/bin/gsi
+at the top of your CGI scripts.
+Guile
+Guile is a Scheme implementation that serves as the official extension language of the GNU project. It includes powerful libraries for handling XML in the form of s-expressions (also known as SXML), support for other languages (currently Emacs Lisp and ECMAScript, with more on the way), and a virtual machine which compiles scripts to bytecode for lower memory consumption and faster execution.
+Compiling Guile on DreamHost is not for the faint of heart, however. It depends on several libraries that DreamHost does not provide:
+	•	libltdl (from GNU Libtool), which simplifies linking the Guile library with other programs, and vice versa
+	•	libgmp (from GNU MP Bignum Library), lets you create those huge numbers you've always wanted
+	•	libunistring (from GNU libunistring), so you can do awesome things like post an Esperanto translation of your site
+	•	libffi (from libffi), so you can use that awesome C hack
+It seems like a daunting list, but your server has several processors that are very fast, so it won't take too long. The other issue is that procwatch may bite you. The virtual machine actually compiles itself, and this can get a bit memory-intensive. Perhaps the DreamHost server monkeys would be kind enough to remove your memory-limiting for an hour or two so you can complete your build, but I'm impatient, so I compiled on my own machine (note: this only works if you're on the same architecture as the server, i.e. x86-64), uploaded the build directory to the server, re-ran configure to point my prefix to the right directories, and ran make install. Works like a dream!
+MIT/GNU Scheme
+MIT/GNU Scheme is a mature, stable implementation of Scheme. MIT/GNU Scheme will compile on DreamHost, but you won't be able to do CGI scripting with it, because it can't be called to interpret a CGI script with the shebang syntax. All you would be able to do is access the REPL via shell access.
+Racket
+Racket is a full-featured Scheme implementation with an IDE (DrRacket) and centralized package distribution system (PLaneT). Racket fails to compile on DreamHost because the build process consumes too much memory. Whenever you run make on it, DreamHost's procwatch daemon kills it.
+Although Racket fails to compile on DreamHost, you can install a pre-built package from the Racket download site. Choose a Linux x86_64 package that is compatible with Fedora and download the self-extracting shell script. Copy this to your user area on your DreamHost shared server and run the installation script.
+You are given a couple of choices for the kind on installation you want:
+	1.	A Unix-style distribution where Racket is installed into the /bin<code> and <code>/lib subdirectories of a location you nominate. This is handy if, for example, you have a /home/username/local directory where you install libraries and other software not provided by DreamHost.
+	2.	A non-Unix distribution where the entire package is installed into a single directory.
+It does not really matter which you choose, as long as the installation directory you nominate is within your /home/<username>/ directory. When the package is unpacked into your nominated directory, you are asked if you want to create links to the installed executables. Skip this stage because you'll want to call the Racket interpreter directly (by putting #!/path/to/mzscheme at the top of your scheme files).
+Scheme 48
+Scheme 48 is a Scheme implementation designed to be used as a testbed for experiments in implementation techniques and as an expository tool. Scheme 48 will compile on DreamHost, but you won't be able to do CGI scripting with it, because it can't be called to interpret a CGI script with the shebang syntax. All you would be able to do is access the REPL via shell access.
+SCM
+SCM runs on a wide range of systems: Amiga, Atari ST, Linux, Mac OS, MS-DOS, OS/2, Unicos, Unix, VMS, and Windows. I was unable to get SCM to compile on DreamHost. If you're able to get it compile, share the directions here.
+STklos
+STklos has an object system based on CLOS and a package system (ScmPkg) to install additional libraries. STklos successfully compiles on DreamHost.
+$ ./configure --prefix=/home/username/scheme
+$ make
+$ make install
+And use
+#!/home/username/scheme/bin/stklos-script
+at the top of your CGI scripts. You may be able to use ScmPkg to find and install CGI and HTML libraries for STklos. I have not tried or tested this on DreamHost yet.
+See Also
+	•	SBCL - How to run SBCL, an implementation of Common Lisp, another Lisp dialect
+Categories:
+	•	CGI
+	•	Scripting Languages
+	•	Web Development
+
+	•	Page
+	•	Discussion
+	•	View source
+	•	History
+	•	Log in / create account
+
+Navigation
+	•	Main Page
+	•	Recent changes
+	•	Random page
+dreamhost links
+	•	DreamHost Home
+	•	DreamHost Status
+	•	Discussion Forums
+Search
+ 
+Toolbox
+	•	What links here
+	•	Related changes
+	•	Special pages
+	•	Printable version
+	•	Permanent link
+
+
+
+	•	This page was last modified on 14 November 2011, at 19:22.
+	•	This page has been accessed 2,383 times.
+	•	Content is available under Creative Commons Attribution-Share Alike 3.0 United States License.
+	•	Privacy policy
+	•	About DreamHost
+	•	Disclaimers

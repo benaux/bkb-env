@@ -1,0 +1,17 @@
+Synergy: Clients cannot connect - open port
+
+
+
+via: https://blog.rickymoorhouse.co.uk/2011/10/05/firewall-rules-for-synergy-in-iptables/
+
+
+
+with the following lines in it:
+
+# Allows incoming flows for Synergy.
+-A INPUT -p tcp -m tcp --dport 24800 -j ACCEPT
+-A INPUT -p udp -m udp --dport 24800 -j ACCEPT
+
+Restart iptables for the rules to take effect
+
+sudo vim  /etc/iptables/rules.v4

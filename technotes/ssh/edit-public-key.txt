@@ -1,0 +1,6 @@
+how to edit a public key, add some comment
+
+
+
+.....yUPPhbKqcedpuRPJhHN/lp5MH7Q2tI/UxHvmePNHrXKk86
+XYt7RzKHjWbHRxf84GIyTlKa8yfNfFlf9oNXdtBXcsJjHIvNsBk= ThisIsAComment

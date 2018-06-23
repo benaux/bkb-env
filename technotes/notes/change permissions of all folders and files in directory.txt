@@ -1,0 +1,6 @@
+Files 
+find . -type f | xargs  chmod 0644
+
+Folders: 
+
+find . -type d | xargs  chmod 0755

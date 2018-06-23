@@ -1,0 +1,32 @@
+# fish shell
+
+## conditionals
+
+* filecheck:
+
+    if test -f notepad.txt ; echo "jsdf"; end⏎
+
+
+## switch in fish
+
+	switch (uname)
+	case Linux
+		 echo Hi Tux!
+	case '*'
+		 echo Hi, stranger!
+	end
+
+## Loops
+
+* for:
+
+   set llist 77  555 88
+   for i in $llist
+      echo  i $i
+   end
+
+* while oneliner:
+
+    ls | while read -l f  ;  echo $f; end
+or
+    for i in *; echo $i ; end 

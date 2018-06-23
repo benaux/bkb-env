@@ -1,0 +1,8 @@
+Perl-Oneliner: match a string and extract a field
+
+
+   mount | perl -lae '/roamstick/i && print $F[2]'
+
+   -l make newline
+   -a splitting input (explicit mit -F)
+   (-n : looping in implicit wiht -a)

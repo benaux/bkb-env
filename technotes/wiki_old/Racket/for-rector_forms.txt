@@ -1,0 +1,33 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-01-26T13:01:32+01:00
+
+====== for-rector forms ======
+Created Thursday 26 January 2017
+
+https://docs.racket-lang.org/guide/for.html#%28part._for_vector_and_for__vector%29
+
+===== 11.4 for/vector and for*/vector =====
+
+{{{code: lang="scheme" linenumbers="True"
+
+
+The for/vector form can be used with the same syntax as the for/list form, but the evaluated bodys go into a newly-constructed vector instead of a list:
+
+> (for/vector ([i (in-naturals 1)]
+               [chapter '("Intro" "Details" "Conclusion")])
+    (string-append (number->string i) ". " chapter))
+'#("1. Intro" "2. Details" "3. Conclusion")
+The for*/vector form behaves similarly, but the iterations are nested as in for*.
+
+The for/vector and for*/vector forms also allow the length of the vector to be constructed to be supplied in advance. The resulting iteration can be performed more efficiently than plain for/vector or for*/vector:
+
+> (let ([chapters '("Intro" "Details" "Conclusion")])
+    (for/vector #:length (length chapters) ([i (in-naturals 1)]
+                                            [chapter chapters])
+      (string-append (number->string i) ". " chapter)))
+'#("1. Intro" "2. Details" "3. Conclusion")
+If a length is provided, the iteration stops when the vector is filled or the requested iterations are complete, whichever comes first. If the provided length exceeds the requested number of iterations, then the remaining slots in the vector are initialized to the default argument of make-vector.
+
+
+}}}

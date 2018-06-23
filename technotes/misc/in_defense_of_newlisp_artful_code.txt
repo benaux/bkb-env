@@ -1,0 +1,375 @@
+# In defense of newLISP
+
+newLISP receives an unexpected level of hostility from lispers. Languages like Arc and newLISP share an enmity that stems from the assumption that these languages are in some way attempting to replace Common Lisp. This is not the case.
+
+It should be pointed out that newLISP is an interpreted language with primary emphases on low memory usage, short start-up time, and efficient implementation. In that, newLISP is exceptionally successful; the [amount of functionality][11] that has been packed into an executable of just over 250 Kb is impressive. Automatic memory management is [fast and simple][12] and requires little overhead. In terms of [speed][13], newLISP compares favorably to other interpreted languages (e.g. Perl and Python).
+
+   [11]: http://www.newlisp.org/downloads/newlisp_manual.html#functions
+   [12]: http://www.newlisp.org/MemoryManagement.html
+   [13]: http://www.newlisp.org/benchmarks/
+
+It also needs to be mentioned that newLISP is _not_ Common Lisp. The name newLISP seems to indicate that newLISP modernizes and replaces Common Lisp. The [FAQ][14] on newLISP.org does take a decidedly populist tone with regard to other lisps. This is unfortunate, because newLISP is a very [different language][15] than CL or Scheme and is not truly in competition with them.
+
+   [14]: http://www.newlisp.org/index.cgi?FAQ
+   [15]: http://www.newlisp.org/index.cgi?page=Differences_to_Other_LISPs
+
+I'd like to discuss of a few of the more significant sticking points for potential users.
+
+#### Macros
+
+newLISP is a purely interpreted language. This has some important implications in its implementation. Macros are disimilar to compiled lisps. Most importantly, there is no compile-time expansion. All expansion is performed at runtime and with the overhead of a function all. In fact, newLISP macros are more like functions with lazy evaluation.
+
+However, this does not completely diminish the power of newLISP macros. newLISP's operator, `letex`, may be used to both expand and evaluate a block of code. Using the `args` function and [implicit indexing][16], variable capture may be avoided in macros. Here is an extremely basic macro to iterate over the lines of a file using both `letex` and `args`:
+    
+       [16]: file://localhost/usr/share/doc/newlisp/newlisp_manual.html#indexing
+
+(define-macro (dolines)
+        (letex ((var (args 0 0))
+                        (file (open (args 0 1) "read"))
+                        (body (cons 'begin (rest (args)))))
+            (while (set 'var (read-line file))
+                body)
+            (close file)))
+     
+    (dolines (line "/path/to/file")
+        (println line))
+
+#### Variable capture
+
+This is a real issue when writing newLISP. The function `args` can prevent capture by functions' parameters, but there is no equivalent to Common Lisp's `gensym` to dynamically create unique symbols. Fortunately, it is not difficult to write our own:
+    
+    (define _gensym:_gensym)
+     
+    (define (gensym:gensym (ctx MAIN))
+        (if (_gensym (name ctx))
+            (let ((new-sym (string "gensym-" (_gensym (name ctx) (+ 1 (_gensym (name ctx)))))))
+                     (or (sym new-sym ctx) (gensym ctx)))
+                (begin
+                    (_gensym (name ctx) 0)
+                    (gensym ctx))))
+
+This demonstrates two other features of newLISP, contexts and dictionaries, which I will go into in more detail shortly. For now, it will suffice to explain that contexts are lexical namespaces (context symbols are typically denoted in the form `context:symbol`, similarly to CL packages) and dictionaries are a way to use contexts as an associative namespace.
+
+Note that this implementation of gensym is dependent on the maximum integer value on the system. newLISP will wrap into negatives after the max integer, so the maximum number of symbols possible to create is generally twice the value of the max integer. However, symbols that have been deleted will be recycled.
+
+#### Hash tables
+
+newLISP does not use hash tables (see [here][17] for an explanation of why). This is a show-stopper for many. Without joining the (often heated) debate over this, newLISP does provide the same functionality as a hash through its dictionaries:
+    
+       [17]: http://enfranchisedmind.com/blog/2008/02/25/problems-with-hash-tables/
+
+(define dict:dict) ; create the dictionary
+    (dict "foo" "bar") ; associates "foo" to "bar" in dict
+    (dict "foo") ; retrieves "foo" from dict
+
+Or, programmatically:
+    
+    (context dict "foo") ; => "bar"
+    (context dict "foo" "baz") ; sets foo:bar "baz"
+
+#### Dynamic scope
+
+newLISP is dynamically scoped. Because it is an interpreted language, much computation and memory is saved by avoiding the complexities of lexical scoping.
+
+newLISP's contexts do implement static scopes that can be used to create lexically enclosed modules and closures. Within the context, though, variable lookups are dynamic to the context. In the example above (gensym), `_gensym` is a context dictionary and `gensym` is a default functor (a function assigned to a symbol with the same name as its context is defined as a functor in newLISP). Within `gensym:gensym`, scope is dynamic to the gensym namespace, which is lexically isolated from the default namespace, labeled MAIN.
+
+#### Garbage collection
+
+newLISP uses a form of memory management called [ORO][18] (one reference only). From the newLISP documentation:
+
+   [18]: http://www.newlisp.org/MemoryManagement.html
+
+> Memory management in newLISP does not rely on a garbage collection algorithm. Memory is not marked or reference-counted. Instead, a decision whether to delete a newly created memory object is made right after the memory object is created.
+> 
+> Empirical studies of LISP have shown that most LISP cells are not shared and so can be reclaimed during the evaluation process. Aside from some optimizations for primitives like set, define, and eval, newLISP deletes memory objects containing intermediate evaluation results once it reaches a higher evaluation level. newLISP does this by pushing a reference to each created memory object onto a result stack. When newLISP reaches a higher evaluation level, it removes the last evaluation result's reference from the result stack and deletes the evaluation result's memory object. This should not be confused with one-bit reference counting. ORO memory management does not set bits to mark objects as sticky.
+> 
+> newLISP follows a one reference only (ORO) rule. Every memory object not referenced by a symbol or context reference is obsolete once newLISP reaches a higher evaluation level during expression evaluation. Objects in newLISP (excluding symbols and contexts) are passed by value to other functions. As a result, each newLISP object only requires one reference.
+
+The intuitive assumption is that this results in slow evaluation, but it does not. Nor is newLISP's evaluation speed burdened by a garbage collector.
+
+> newLISP's ORO rule forces newLISP to constantly allocate and then free LISP cells. newLISP optimizes this process by allocating large chunks of cell memory from the host operating system. newLISP will request LISP cells from a free cell list and then recycle those cells back into that list. As a result, only a few CPU instructions (pointer assignments) are needed to unlink a free cell or to re-insert a deleted cell.
+> 
+> The overall effect of ORO memory management is a faster evaluation time and a smaller memory and disk footprint than traditional interpreted LISP's can offer. The lack of garbage collection in newLISP more than compensates for its high frequency of cell creation/deletion. Note that under error conditions, newLISP will employ a mark and sweep algorithm to free un-referenced cells.
+
+#### Implicit indexing
+
+Implicit indexing is syntactic sugar for indexed access to elements in a list:
+    
+    (let ((lst '(1 2 3 4 5)))
+        (lst 3))
+    => 4
+
+It also works for nested lists:
+    
+    (let ((lst '(1 2 3 (4 5))))
+        (lst 3 1))
+    => 5
+
+Prospective users often remark that this syntax breaks conventional semantics and makes it far more difficult to do meta-programming. The function `nth` exists in the language and may still be used for this purpose:
+    
+    (let ((lst '(1 2 3 4 5)))
+        (nth 3 lst))
+    => 4
+
+#### Concurrency and distributed computing
+
+newLISP is not threaded. This in particular was a challenge for me. However, I have found that due to newLISP's small size and quick start-up, forking new processes is quite painless. There are few programs where one would want to start hundreds or thousands of threads, and newLISP is able to launch a large number of processes in less space than a single instance of the Python interpreter.
+
+Using the new [Cilk][19]-inspired [API][20], concurrent programming is simple, cheap, and expressive. Additionally, there are few of the challenges associated with threaded programming.
+
+   [19]: http://supertech.csail.mit.edu/cilk/
+   [20]: http://www.newlisp.org/downloads/newlisp_manual.html#multi_processing
+
+newLISP also comes with [built-in functions][21] for distributed computing, permitting forms to be easily sent to other nodes over TCP/IP for evaluation:
+    
+       [21]: http://www.newlisp.org/downloads/newlisp_manual.html#net-eval
+
+(net-eval remote-server-ip expr-to-evaluate timeout response-handler)
+
+#### Conclusion
+
+newLISP packs a lot of power into its small size. Some of its more powerful built-in features include:
+
+  * a fast, simple concurrency API
+  * regular expressions (PCRE)
+  * native C library access
+  * XML parsing
+  * pattern matching
+  * HTTP networking
+  * sockets
+  * cross platform GUI server (using Java)
+  * bayesian training and probability analysis
+  * cross platform support - newLISP uses only standard libraries
+
+newLISP does not deserve the pariah status to which many relegate it. While newLISP cannot replace a compiled language for the most intensive tasks, it remains a fun, _artful_ language and is excellent for exploratory programming and rapid prototyping, while remaining fast and powerful enough for the final product.
+
+**_Submit article_**   
+
+
+  
+[![Add to Del.icio.us][22]][23] [![Add to digg][24]][25] [![Add to DZone][26]][27] [![Add to Facebook][28]][29] [![Add to reddit][30]][31] [![Add to Stumble Upon][32]][33] [![Add to Technorati][34]][35] [![Add to Twitter][36]][37]   
+
+
+   [22]: http://www.artfulcode.net/wp-content/plugins/social-bookmarks/images/delicious.png (Add to Del.icio.us)
+   [23]: http://del.icio.us/post?url=http%3A%2F%2Fwww.artfulcode.net%2Farticles%2Fin-defense-newlisp%2F&title=In+defense+of+newLISP (Add to Del.icio.us)
+   [24]: http://www.artfulcode.net/wp-content/plugins/social-bookmarks/images/digg.png (Add to digg)
+   [25]: http://digg.com/submit?phase=2&url=http%3A%2F%2Fwww.artfulcode.net%2Farticles%2Fin-defense-newlisp%2F&title=In+defense+of+newLISP (Add to digg)
+   [26]: http://www.artfulcode.net/wp-content/plugins/social-bookmarks/images/dzone.png (Add to DZone)
+   [27]: http://www.dzone.com/links/add.html?description=In+defense+of+newLISP&url=http%3A%2F%2Fwww.artfulcode.net%2Farticles%2Fin-defense-newlisp%2F&title=In+defense+of+newLISP (Add to DZone)
+   [28]: http://www.artfulcode.net/wp-content/plugins/social-bookmarks/images/facebook.png (Add to Facebook)
+   [29]: http://www.facebook.com/sharer.php?u=http%3A%2F%2Fwww.artfulcode.net%2Farticles%2Fin-defense-newlisp%2F (Add to Facebook)
+   [30]: http://www.artfulcode.net/wp-content/plugins/social-bookmarks/images/reddit.png (Add to reddit)
+   [31]: http://reddit.com/submit?url=http%3A%2F%2Fwww.artfulcode.net%2Farticles%2Fin-defense-newlisp%2F&title=In+defense+of+newLISP (Add to reddit)
+   [32]: http://www.artfulcode.net/wp-content/plugins/social-bookmarks/images/stumbleupon.png (Add to Stumble Upon)
+   [33]: http://www.stumbleupon.com/submit?url=http%3A%2F%2Fwww.artfulcode.net%2Farticles%2Fin-defense-newlisp%2F&title=In+defense+of+newLISP (Add to Stumble Upon)
+   [34]: http://www.artfulcode.net/wp-content/plugins/social-bookmarks/images/technorati.png (Add to Technorati)
+   [35]: http://www.technorati.com/faves?add=http%3A%2F%2Fwww.artfulcode.net%2Farticles%2Fin-defense-newlisp%2F (Add to Technorati)
+   [36]: http://www.artfulcode.net/wp-content/plugins/social-bookmarks/images/twitter.png (Add to Twitter)
+   [37]: http://twitter.com/home/?status=Check+out+In+defense+of+newLISP+@+http%3A%2F%2Fwww.artfulcode.net%2Farticles%2Fin-defense-newlisp%2F (Add to Twitter)
+
+[Leave a comment][38] | [Trackback][39]
+
+   [38]: #respond
+   [39]: http://www.artfulcode.net/articles/in-defense-newlisp/trackback/
+
+Jul 15th, 2008 | Posted in [Soap box][40]
+
+   [40]: http://www.artfulcode.net/categories/soap-box/ (View all posts in Soap box)
+
+Tags: [lisp][41], [newlisp][42]
+
+   [41]: http://www.artfulcode.net/tags/lisp/
+   [42]: http://www.artfulcode.net/tags/newlisp/
+
+« [SQL library for newLISP][43] [Commenting][44] »
+
+   [43]: http://www.artfulcode.net/articles/sql-library-newlisp/
+   [44]: http://www.artfulcode.net/articles/commenting/
+
+  1. Language Enthusiast 
+
+[Reply][45] | [Quote][46]
+
+   [45]: /articles/in-defense-newlisp/?replytocom=982#respond
+   [46]: javascript:void(0);
+
+Apr 3rd, 2009 at 18:15 | [#1][47]
+
+   [47]: #comment-982
+
+> While newLISP cannot replace a compiled language for the most intensive tasks, it remains a fun, artful language and is excellent for exploratory programming and rapid prototyping, while remaining fast and powerful enough for the final product.
+
+Sounds good. What are some production usages of NewLISP?
+
+  2. [ Jeff ][48]
+
+   [48]: http://wp.artfulcode.net (Jeff)
+
+[Reply][49] | [Quote][50]
+
+   [49]: /articles/in-defense-newlisp/?replytocom=1018#respond
+   [50]: javascript:void(0);
+
+Apr 5th, 2009 at 13:57 | [#2][51]
+
+   [51]: #comment-1018
+
+I often use newlisp for glue code - the sort of thing that Perl is often used for. Updating databases from various sources, downloading files on a schedule, performing backups, etc. It is also a surprisingly efficient language for writing some complex applications, such as simple HTTP and RPC servers, web crawlers, too. It also makes a very quick CGI application, with little of the overhead of most CGIs.
+
+  3. g1i1ch 
+
+[Reply][52] | [Quote][53]
+
+   [52]: /articles/in-defense-newlisp/?replytocom=3774#respond
+   [53]: javascript:void(0);
+
+Feb 11th, 2012 at 15:25 | [#3][54]
+
+   [54]: #comment-3774
+
+I think if I remember there's a startup using it exclusively for a sentence based search engine. The creator mentioned it in an interview
+
+[http://www.softwarebyrob.com/2007/04/19/interview-with-lutz-mueller-creator-of-newlisp/][55]
+
+   [55]: http://www.softwarebyrob.com/2007/04/19/interview-with-lutz-mueller-creator-of-newlisp/
+
+###  Leave a comment 
+
+[Cancel reply][56]
+
+   [56]: /articles/in-defense-newlisp/#respond
+
+**XHTML:** You can use these tags: <a href="" title=""> <abbr title=""> <acronym title=""> <b> <blockquote cite=""> <cite> <code> <del datetime=""> <em> <i> <q cite=""> <strike> <strong> <pre lang="" line="" escaped="">
+
+Name *
+
+E-Mail * (will not be published)
+
+Website
+
+[RSS for comments on this post][57]
+
+   [57]: http://www.artfulcode.net/articles/in-defense-newlisp/feed/
+
+Notify me of follow-up comments by email.
+
+Notify me of new posts by email.
+
+Search this blog
+
+### Apropos
+
+LISPs are traditionally named using synonyms for cleverness, such as Guile or Scheme; artifice is basic to the definition. Artful code is expressive, efficient, elegant, and idiomatic, in that order.
+
+[ ![View Jeff Ober's profile on LinkedIn][58] ][59]
+
+   [58]: http://www.linkedin.com/img/webpromo/btn_myprofile_160x33.gif
+   [59]: http://www.linkedin.com/in/jeffober
+
+### Pages
+
+  * [About][60]
+  * [Projects][61]
+  * [Phorms][62]
+
+   [60]: http://www.artfulcode.net/about/
+   [61]: http://www.artfulcode.net/projects/
+   [62]: http://www.artfulcode.net/phorms/
+
+### Recent Posts
+
+  * [Newlisp modules][63]
+  * [Fixed - Blackberry OS 7][64]
+  * [My thoughts on Blackberry OS 6][65]
+  * [Blackberry Bridge and the Playbook][66]
+  * [Hacking Vim][67]
+
+   [63]: http://www.artfulcode.net/articles/newlisp-modules/ (Newlisp modules)
+   [64]: http://www.artfulcode.net/articles/fixed-blackberry-os-7/ (Fixed - Blackberry OS 7)
+   [65]: http://www.artfulcode.net/articles/my-thoughts-on-blackberry-os-6/ (My thoughts on Blackberry OS 6)
+   [66]: http://www.artfulcode.net/articles/blackberry-bridge-and-the-playbook/ (Blackberry Bridge and the Playbook)
+   [67]: http://www.artfulcode.net/articles/hacking-vim/ (Hacking Vim)
+
+### Tags
+
+[blackberry][68] [c][69] [clsql][70] [concurrency][71] [culture][72] [django][73] [emacs][74] [foop][75] [framework][76] [functional][77] [goto][78] [html][79] [java][80] [javascript][81] [jquery][82] [json][83] [lisp][84] [mysql][85] [newlisp][86] [oop][87] [perl][88] [php][89] [pike][90] [playbook][91] [python][92] [regexp][93] [releases][94] [review][95] [rim][96] [ruby][97] [Site news][98] [slime][99] [social networking][100] [sql][101] [textmate][102] [threads][103] [vim][104] [vim software][105] [web][106] [web design][107] [xml][108]
+
+   [68]: http://www.artfulcode.net/tags/blackberry/ (3 topics)
+   [69]: http://www.artfulcode.net/tags/c/ (9 topics)
+   [70]: http://www.artfulcode.net/tags/clsql/ (1 topic)
+   [71]: http://www.artfulcode.net/tags/concurrency/ (7 topics)
+   [72]: http://www.artfulcode.net/tags/culture/ (2 topics)
+   [73]: http://www.artfulcode.net/tags/django/ (8 topics)
+   [74]: http://www.artfulcode.net/tags/emacs/ (2 topics)
+   [75]: http://www.artfulcode.net/tags/foop/ (3 topics)
+   [76]: http://www.artfulcode.net/tags/framework/ (1 topic)
+   [77]: http://www.artfulcode.net/tags/functional/ (6 topics)
+   [78]: http://www.artfulcode.net/tags/goto/ (1 topic)
+   [79]: http://www.artfulcode.net/tags/html/ (2 topics)
+   [80]: http://www.artfulcode.net/tags/java/ (2 topics)
+   [81]: http://www.artfulcode.net/tags/javascript/ (3 topics)
+   [82]: http://www.artfulcode.net/tags/jquery/ (1 topic)
+   [83]: http://www.artfulcode.net/tags/json/ (1 topic)
+   [84]: http://www.artfulcode.net/tags/lisp/ (9 topics)
+   [85]: http://www.artfulcode.net/tags/mysql/ (8 topics)
+   [86]: http://www.artfulcode.net/tags/newlisp/ (38 topics)
+   [87]: http://www.artfulcode.net/tags/oop/ (3 topics)
+   [88]: http://www.artfulcode.net/tags/perl/ (2 topics)
+   [89]: http://www.artfulcode.net/tags/php/ (3 topics)
+   [90]: http://www.artfulcode.net/tags/pike/ (3 topics)
+   [91]: http://www.artfulcode.net/tags/playbook/ (1 topic)
+   [92]: http://www.artfulcode.net/tags/python/ (16 topics)
+   [93]: http://www.artfulcode.net/tags/regexp/ (2 topics)
+   [94]: http://www.artfulcode.net/tags/releases/ (5 topics)
+   [95]: http://www.artfulcode.net/tags/review/ (2 topics)
+   [96]: http://www.artfulcode.net/tags/rim/ (1 topic)
+   [97]: http://www.artfulcode.net/tags/ruby/ (1 topic)
+   [98]: http://www.artfulcode.net/tags/site-news/ (8 topics)
+   [99]: http://www.artfulcode.net/tags/slime/ (1 topic)
+   [100]: http://www.artfulcode.net/tags/social-networking/ (1 topic)
+   [101]: http://www.artfulcode.net/tags/sql/ (5 topics)
+   [102]: http://www.artfulcode.net/tags/textmate/ (1 topic)
+   [103]: http://www.artfulcode.net/tags/threads/ (7 topics)
+   [104]: http://www.artfulcode.net/tags/vim/ (1 topic)
+   [105]: http://www.artfulcode.net/tags/vim-software/ (1 topic)
+   [106]: http://www.artfulcode.net/tags/web/ (2 topics)
+   [107]: http://www.artfulcode.net/tags/web-design/ (1 topic)
+   [108]: http://www.artfulcode.net/tags/xml/ (2 topics)
+
+### Other sites
+
+  * [brool][109]
+  * [defmacro.org][110]
+  * [JJinuxLand][111]
+  * [newLISP on Facebook][112]
+  * [newLISPer][113]
+  * [Simple PHP Framework][114]
+
+   [109]: http://www.brool.com/ (A good programming blog)
+   [110]: http://www.defmacro.org/
+   [111]: http://jjinux.blogspot.com/
+   [112]: http://www.facebook.com/group.php?gid=86712207047 (Join the newLISP group on Facebook)
+   [113]: http://unbalanced-parentheses.nfshost.com/
+   [114]: http://clickontyler.com/simple-php-framework/
+
+### Software
+
+  * [Artful Code newLISP modules][115]
+  * [JoQ][116]
+  * [Phorms PHP Form Factory][117]
+  * [PHP Pipeline][118]
+
+   [115]: http://code.google.com/p/actools-newlisp/
+   [116]: http://code.google.com/p/joq/ (A fast, efficient, message broker.)
+   [117]: http://code.google.com/p/php-phorms/
+   [118]: http://code.google.com/p/php-pipeline/ (An asynchronous HTTP client for PHP.)
+
+Powered by [WordPress][119] | Theme by [NeoEase][120] | Valid [XHTML 1.1][121] and [CSS 3][122] [Top][123]
+
+   [119]: http://wordpress.org/
+   [120]: http://www.neoease.com/
+   [121]: http://validator.w3.org/check?uri=referer
+   [122]: http://jigsaw.w3.org/css-validator/check/referer?profile=css3
+   [123]: #
+
+  *[RSS]: Really Simple Syndication

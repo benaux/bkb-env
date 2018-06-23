@@ -1,0 +1,57 @@
+# Bash: variable expansion
+
+
+I only describe the expansions that are compatible to dash
+
+## Use default value
+
+
+${var:-default} 
+
+   myvar=
+   myvar=${myvar:-defaultval} 
+   echo $myvar
+
+   => defaultval
+
+
+## Substring removal
+
+filename=myfile.tar.gz
+
+
+### Remove from the BEGINNING with '#'
+
+'#'
+   ${filename#*.}   
+   Remove the *shortest* text matching the pattern from the beginning
+   removes until the first '.'
+
+   => .tar.gz
+ 
+'##'
+   ${filename##*.}
+   Remove the *longest* text matching from the beginning
+   removes until the last '.'
+
+   => gz
+
+### Remove from the ENDING with '%'
+
+'%'
+   ${filename%.*}   
+   Remove the *shortest* text matching the pattern from the ending
+   removes until the first '.'
+
+   => myfile.tar 
+
+'%%'
+   ${filename%%*.}
+   Remove the *longest* text matching from the ending 
+   removes until the last '.'
+
+   => myfile 
+
+### String length
+
+${#MYSTRING}

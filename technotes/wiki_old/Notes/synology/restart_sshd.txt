@@ -1,0 +1,15 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2016-12-21T12:28:00+01:00
+
+====== restart sshd ======
+Created Wednesday 21 December 2016
+
+SSH: restart sshd
+
+eg. after modifien /etc/sshd/config
+
+
+   synoservicectl --reload sshd
+
+   synoservicectl --restart sshd

@@ -1,0 +1,13 @@
+Vim
+====
+
+
+Most important stuff
+
+
+Search Replace
+---------------
+
+- replace sth. with a newline
+
+   Use \r instead of \n.

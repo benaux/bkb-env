@@ -1,0 +1,8 @@
+Shell: How to make uppercase lowercase ...
+
+
+echo "jsdfsj" | perl -ne 'print uc'
+
+or
+
+echo 'jsdf" | perl -pe '$_=uc'

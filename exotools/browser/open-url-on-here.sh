@@ -1,8 +1,8 @@
 #!/bin/sh
 
-tools=$HOME/tools
+moreutils=$HOME/aux/moreutils
 
-url=$($tools/moreutils/firefox/geturl.py)
+url=$($moreutils/firefox/geturl.py)
 
 
-$tools/moreutils/chrome/open-url.py "$url"
+$moreutils/chrome/open-url.py "$url"

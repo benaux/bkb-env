@@ -1,0 +1,63 @@
+Mount Webdav on Linux
+=====================
+
+
+
+
+There where some difficulties with mounting Webfdav in linux. Basically 3 settings play together:
+
+- installing davfs2
+- configuring davfs2
+- setup security of davfs2
+- configuring fstab
+- configuring groups
+- setup mount point
+
+
+this is mostly copied from: http://techiech.blogspot.ch/2013/04/mounting-webdav-directory-in-linux.html
+thanks!
+
+Mounting a WebDAV directory in Linux (Ubuntu)
+---------------------------------------------
+
+In this way you don't need to use terminal all the time to mount/umount a WebDav directory as nautilus  can be used easily. The steps are as follows.
+
+### Install davfs2
+
+	sudo apt-get install davfs2
+
+### Reconfigure davfs2 to enable to use davfs under unprivileged users
+
+	sudo dpkg-reconfigure davfs2
+
+### Edit /etc/davfs2/davfs2.conf to enable automatic credentials use. 
+
+Uncomment the line secrets ~/.davfs2/secrets
+
+### Edit ~/.davfs2/secrets file to add credentials to remote WebDav diectory.
+
+Add a line to the end of file in following style:
+
+	https://<WebDav URI>   <username> <password>
+
+Set the permission: 
+
+	chmod 600 ~/.davfs2/secrets
+
+### Add a line to /ect/fstab about the remote WebDav directory
+
+	https://<WebDav URI> <mount point> davfs user,noauto,file_mode=600,dir_mode=700 0 1
+
+### Add your user to the davfs2 group
+
+	sudo vi /etc/group
+Add your username as follows:
+
+	davfs2:x:134:<username>
+
+That's it. You can use following commands without being a root user to mount/umount
+
+# mount <mount point>
+# umount <mount point>
+You can also use nautilus to mount/umount the directory. 
+

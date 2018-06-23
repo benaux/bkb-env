@@ -1,0 +1,17 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2016-12-21T12:28:00+01:00
+
+====== error hangs-on-200-command-successful ======
+Created Wednesday 21 December 2016
+
+ftp hangs on 200 port command successfull
+
+
+occurs when working over ftps 
+
+solution : switch to passive mode
+
+   login to ftp
+
+   >passive

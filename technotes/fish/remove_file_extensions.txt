@@ -1,0 +1,9 @@
+Fish: remove file extensions
+
+
+   echo $bfile | sed 's/\.[^.]*$//'
+
+for file in $HOME/.ssh/*.pub
+   set bfile (basename $file) 
+   echo $bfile | sed 's/\.[^.]*$//'
+end

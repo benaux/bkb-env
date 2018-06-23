@@ -1,0 +1,13 @@
+#!/usr/bin/env elvish
+
+
+homebase = $E:HOME/homebase
+
+fn die [msg]{
+  echo $msg
+  exit 1
+}
+
+if (not ?( test -d $homebase ))  { die "Err: no homebase"}
+
+

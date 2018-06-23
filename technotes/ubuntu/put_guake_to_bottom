@@ -1,0 +1,8 @@
+Hot to make guake slide in from the bottom
+
+
+change the line in /usr/bin/guake on line ~844 from 
+
+        window_rect.y = 0
+to
+        window_rect.y = 450

@@ -1,0 +1,12 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2016-12-21T12:28:00+01:00
+
+====== create sshkey ======
+Created Wednesday 21 December 2016
+
+Ssh: Create a ssh key
+
+ssh-keygen -t rsa -b 4096 -C "your_email@example.com" -f ~/.ssh/mykey
+
+

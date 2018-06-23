@@ -1,0 +1,20 @@
+# Measures agains slow ssh connections
+
+
+## Disable GSSAPI Auth
+
+$ sudo vi /etc/ssh/sshd_config
+GSSAPIAuthentication no
+
+Then restart SSH server:
+
+$ sudo /etc/init.d/ssh restart (Debian, Ubuntu or Linux Mint)
+$ sudo systemctl restart sshd (Fedora)
+$ sudo service sshd restart (CentOS or RHEL)
+
+
+## Disable reverse dns lookup
+
+$ sudo vi /etc/ssh/sshd_config
+# add this line
+UseDNS no

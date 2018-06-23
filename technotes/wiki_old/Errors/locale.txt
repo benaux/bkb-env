@@ -1,0 +1,229 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2016-12-22T14:26:29+01:00
+
+====== locale ======
+Created Thursday 22 December 2016
+
+Mac OS X: ValueError: unknown locale: UTF-8 in Python
+
+PYTHON OSX MAC DJANGO UTF8 VALUEERROR LOCALE
+If you have faced the error on MacOS X, here's the quick fix - add these lines to your ~/.bash_profile:
+
+export LC_ALL=en_US.UTF-8
+
+export LANG=en_US.UTF-8
+
+
+
+
+favorite
+3
+I need to get the system locale to do a number of things, ultimately I want to translate my app using gettext. I am going to distribute it on both Linux and OSX, but I ran into problems on OSX Snow Leopard:
+
+$ python
+Python 2.5.2 (r252:60911, Jan  4 2009, 17:40:26) 
+[GCC 4.3.2] on linux2
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import locale
+>>> locale.setlocale(locale.LC_ALL, '')
+'sv_SE.UTF-8'
+>>> locale.getlocale()
+('sv_SE', 'UTF8')
+
+$ python
+Python 2.6.1 (r261:67515, Jul  7 2009, 23:51:51) 
+[GCC 4.2.1 (Apple Inc. build 5646)] on darwin
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import locale
+>>> locale.setlocale(locale.LC_ALL, '')
+'C'
+>>> locale.getlocale()
+(None, None)
+Both systems are using Swedish languages. On Linux, the environment variable LANG is already set to "sv_SE.UTF-8". If I pass that variable to python on OSX (LANG="sv_SE.UTF-8" python instead), locale is detected nicely. But shouldn't locale.getlocale()be able to fetch whatever language the operating system has? I don't want to force users to set LANG, LC_ALL or any environment variable at all.
+
+Output of locale command:
+
+$ locale
+LANG=
+LC_COLLATE="C"
+LC_CTYPE="C"
+LC_MESSAGES="C"
+LC_MONETARY="C"
+LC_NUMERIC="C"
+LC_TIME="C"
+LC_ALL=
+python osx localization osx-snow-leopard locale
+shareimprove this question
+edited Mar 8 '10 at 2:48
+
+Jon Seigel
+9,56754381
+asked Oct 27 '09 at 9:42
+
+pojo
+2,51742444
+  	 	
+what's your output of locale (in shell) in the same terminal window? – u0b34a0f6ae Oct 27 '09 at 14:07
+  	 	
+Added locale output to original post. – pojo Oct 28 '09 at 8:56
+add a comment
+5 Answers
+active oldest votes
+up vote
+3
+down vote
+accepted
+Odd on OSX (Smow Leopard 10.6.1) I get
+
+$ python
+Python 2.6.1 (r261:67515, Jul  7 2009, 23:51:51) 
+[GCC 4.2.1 (Apple Inc. build 5646)] on darwin
+Type "help", "copyright", "credits" or "license" for more information.  
+>>> import locale
+>>> locale.getlocale()
+(None, None)
+>>> locale.setlocale(locale.LC_ALL, '')
+'en_GB.UTF-8'
+>>> locale.getlocale()
+('en_GB', 'UTF8')
+Edit:
+
+I just found this on the apple python mailing list
+
+Basically it depends on what is set in your environment at run time (one of LANG, LANGUAGE, LC_ALL) I had LANG=en_GB.UTF-8 in my shell environment
+
+shareimprove this answer
+edited Oct 27 '09 at 23:51
+answered Oct 27 '09 at 10:29
+
+
+Mark
+25.2k86388
+  	 	
+Strange. In the original post I was using iTerm, but if I use Terminal.app I get an error (ValueError: unknown locale: UTF-8). The locale looks weird: 'C/UTF-8/C/C/C/C'. Maybe my system is messed up somehow, but it's a fairly fresh install of Snow Leopard. – pojo Oct 27 '09 at 11:09
+  	 	
+See my edit for why the change appears - your system is not messed up (well no more that all OSX python) - Sorry should have added this when I edited – Mark Oct 28 '09 at 12:36
+  	 	
+I saw your link now, and from what I can gather, "it can't be done" since OSX doesn't make use of LANG or LC_ALL. I was intrigued by the __CF_USER_TEXT_ENCODING variable, but it seems kind of stupid to parse that. IMO getlocale() should call the appropriate API:s and parse that for you, not rely on some environment variables. – pojo Oct 28 '09 at 13:17
+  	 	
+@pojo, and you were rather right: this is a python bug, and looks like they might end up using the native locale APIs instead of the environment vars. Alas, still unfixed. bugs.python.org/issue18378 – hmijail Mar 1 at 12:46
+add a comment
+up vote
+3
+down vote
+Looks like you can change locale by changing environment variable LC_ALL.
+
+$ export LC_ALL=C
+$ python
+Python 2.5.1 (r251:54863, Feb  6 2009, 19:02:12) 
+[GCC 4.0.1 (Apple Inc. build 5465)] on darwin
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import locale
+>>> locale.getlocale()
+(None, None)
+>>> locale.setlocale(locale.LC_ALL, "")
+'C'
+>>> locale.getlocale()
+(None, None)    
+
+$ export LC_ALL=en_GB.UTF-8
+$ python
+Python 2.5.1 (r251:54863, Feb  6 2009, 19:02:12) 
+[GCC 4.0.1 (Apple Inc. build 5465)] on darwin
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import locale
+>>> locale.getlocale()
+(None, None)
+>>> locale.setlocale(locale.LC_ALL, "")
+'en_GB.UTF-8'
+>>> locale.getlocale()
+('en_GB', 'UTF8')
+shareimprove this answer
+answered Oct 27 '09 at 13:59
+
+Anand Chitipothu
+1,83821322
+1	 	
+But I don't see the point of having to set LC_ALL explicitly this way to get my application to detect language properly. – pojo Oct 28 '09 at 8:12
+  	 	
+OSX 10.6.8 your solution worked perfectly, thanks – rdjs Sep 23 '11 at 21:03
+add a comment
+up vote
+2
+down vote
+Addmittedly a horrible hack, but I inserted this:
+
+import platform
+
+# ...
+
+# XXX horrendous OS X invalid locale hack
+if platform.system() == 'Darwin':
+	import locale
+	if locale.getlocale()[0] is None:
+		locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
+at an early point in a program of mine. After that I could run my program using unmodified shell environment on all OS'es relevant to me (my program figures out the language to be used later in it's processing anyway).
+
+shareimprove this answer
+answered Jan 11 '12 at 12:27
+
+Jacob Oscarson
+5,0492136
+  	 	
+Nice one ;) At least it gets the job done. – pojo Jan 12 '12 at 9:17
+1	 	
+Glad I could help! – Jacob Oscarson Jan 12 '12 at 9:58
+add a comment
+up vote
+1
+down vote
+From here: Try adding or editing the ~/.profile or ~/.bash_profile file for it to correctly export your locale settings upon initiating a new session.
+
+export LC_ALL=en_US.UTF-8  
+export LANG=en_US.UTF-8
+shareimprove this answer
+answered Jul 31 '13 at 9:38
+
+Renaud
+7,92525157
+  	 	
+1) The locale vars might be set by the very terminal emulation program, so this is only hiding the problem. 2) The locale vars are already being set correctly, but python is not understanding them. – hmijail Mar 1 at 12:34
+add a comment
+
+
+The summary is that Python assumes GNU-like locales and balks on (POSIXly correct) divergences like those in BSD environments (as is OS X). And the UTF8 locale exists in BSD, not in Linux, hence the problem.
+
+As for solutions or debugging: the local environment variables can be set by Terminal.app (see Preferences - Profiles - Advanced - International; similarly so for iTerm or whatever). So one can find the locale environment variables set when in a terminal window, but find the variables NOT set when running a packaged application.
+
+For some cases (like Sphinx in python 2.7 and 3.5 dying in OS X because of "ValueError: unknown locale: UTF-8"), disabling the preference checkbox to set locale environment variables is the solution.
+
+But that can cause problems in other programs: if the locale vars are not set, bash 4.3 (from MacPorts) will complain at every prompt with "warning: setlocale: LC_CTYPE: cannot change locale (): No such file or directory" ...
+
+So, given that the bug is in Python, the workaround should be probably done in the python program (as in @Jacob Oscarson's answer) or python invocation (by setting the locale vars to some adequate value).
+
+shareimprove this answer
+edited Mar 1 at 12:41
+answered Mar 1 at 12:29
+
+hmijail
+666418
+add a comment
+Your Answer
+
+
+ 
+Sign up or log in
+
+Sign up using Google
+Sign up using Facebook
+Sign up using Email and Password
+Post as a guest
+
+Name
+
+Email
+
+required, but never shown
+ Post Your Answer
+

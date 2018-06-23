@@ -1,0 +1,14 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2016-12-22T14:25:39+01:00
+
+====== Errors ======
+Created Thursday 22 December 2016
+
+Mac OS X: ValueError: unknown locale: UTF-8 in Python
+
+PYTHON OSX MAC DJANGO UTF8 VALUEERROR LOCALE
+If you have faced the error on MacOS X, here's the quick fix - add these lines to your ~/.bash_profile:
+
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8

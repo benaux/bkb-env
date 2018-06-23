@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>filesByName</key>
+	<dict>
+		<key>bashmenot_reference.txt</key>
+		<dict>
+			<key>dateAdded</key>
+			<date>2017-12-19T15:40:50Z</date>
+			<key>dateCreated</key>
+			<date>2017-07-17T18:30:09Z</date>
+			<key>dateModified</key>
+			<date>2017-07-17T18:30:09Z</date>
+			<key>label</key>
+			<integer>0</integer>
+			<key>md5</key>
+			<string>39906226a06b281fbe9660998b8d5cc5</string>
+			<key>tags</key>
+			<array>
+				<string>unread</string>
+			</array>
+			<key>title</key>
+			<string>bashmenot_reference</string>
+			<key>transientRecordID</key>
+			<integer>858</integer>
+		</dict>
+	</dict>
+	<key>folder</key>
+	<string>Files/notebooks/technotes/wiki_old/Projects/bash_projects</string>
+	<key>library</key>
+	<string>../../../../../../bkb-cloud.eflibrary</string>
+	<key>tags</key>
+	<dict>
+		<key>tagsByName</key>
+		<dict>
+			<key>unread</key>
+			<dict>
+				<key>abbreviation</key>
+				<string>●</string>
+				<key>color</key>
+				<array>
+					<real>0.29999999999999999</real>
+					<real>0.39600000000000002</real>
+					<real>0.81000000000000005</real>
+					<real>1</real>
+				</array>
+			</dict>
+		</dict>
+	</dict>
+	<key>version</key>
+	<integer>3</integer>
+</dict>
+</plist>

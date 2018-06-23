@@ -1,0 +1,650 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-01-25T00:00:00+01:00
+
+===== srfi-133 =====
+Created Wednesday 25 January 2017
+ 
+
+
+====== Title ======
+
+Vector Library (R7RS-compatible)
+
+====== Author ======
+
+John Cowan (based on SRFI 43 by Taylor Campbell)
+
+====== Issues ======
+
+None at this time.
+
+====== Table of Contents ======
+
+j
+
+====== 1. Status ======
+
+This SRFI is currently in //final// status. Here is .
+
+	* Received: 2015/12/15
+	* 60-day deadline: 2016/2/14
+	* Draft #1 published: 2015/12/16
+	* Draft #2 published: 2016/1/24
+	* Draft #3 published: 2016/1/31
+	* Draft #4 published: 2016/3/12
+	* Finalized: 2016/3/20
+	* Revised to fix errata:
+		* 2016/4/1 (Fixed description of ''vector-unfold!'')
+		* 2016/8/10 (Fixed typos.)
+		* 2016/9/2 (Reversed order of arguments to ''vector-cumulate''.)
+
+====== 2. Abstract ======
+
+This -compliant. It also provides several hooks for implementation-specific optimization as well.
+
+====== 3. Rationale ======
+
+ provides even fewer vector operations — while it provides mapping, appending, et cetera operations for lists, it specifies only nine vector manipulation operations:
+
+	* ''vector?''
+	* ''make-vector''
+	* ''vector''
+	* ''vector-length''
+	* ''vector-ref''
+	* ''vector-set!''
+	* ''vector->list''
+	* ''list->vector''
+	* ''vector-fill!''
+
+ added support for //start// and //end// arguments to ''vector->list'', ''list->vector'' and ''vector-fill!''. It also provided seven additional vector procedures, bringing vectors and lists to approximate parity:
+
+	* ''vector-copy''
+	* ''vector-copy!''
+	* ''vector-append''
+	* ''vector-map''
+	* ''vector-for-each''
+	* ''vector->string''
+	* ''string->vector''
+
+ standardized more vector procedures, all of which are included in this SRFI. Unfortunately, R7RS-small and SRFI 43 placed irreconcileable requirements on the procedures invoked by ''vector-map'' and ''vector-for-each''. This SRFI resolves that issue by changing these SRFI 43 procedures as well as ''vector-map!'', ''vector-fold'', ''vector-fold-right'', and ''vector-count'' to leave out the index argument that is passed under SRFI 43's definition.
+
+
+
+In addition, the version of ''vector-copy'' in this SRFI does not require support for a fill argument, which makes it equivalent to the R7RS-small definition.
+
+This SRFI also provides the following new procedures (some from Python, some from other sources):
+
+	* ''vector-unfold!''
+	* ''vector-unfold-right!''
+	* ''vector-append-subvectors''
+	* ''vector-cumulate''
+	* ''vector-partition''
+
+It should be noted that no vector sorting procedures are provided by this SRFI, because there already are several SRFIs for that purpose.
+
+====== 4. Procedure Index ======
+
+Here is an index of the procedures provided by this package. Those marked by //italics// are also provided in .
+
+* ** · 
+
+** ''           make-vector           vector                      vector-unfold           vector-unfold-right                      vector-copy           vector-reverse-copy                      vector-append           vector-concatenate           vector-append-subvectors                               ''
+* ** · 
+
+** ''           vector?                      vector-empty?                      vector=                               ''
+* ** · 
+
+** ''           vector-ref                      vector-length                               ''
+* ** · 
+
+** ''           vector-fold           vector-fold-right                      vector-map           vector-map!                      vector-for-each           vector-count                      vector-cumulate                               ''
+* ** · 
+
+** ''           vector-index           vector-index-right                      vector-skip           vector-skip-right                      vector-binary-search                      vector-any           vector-every                      vector-partition                               ''
+* ** · 
+
+** ''           vector-set!           vector-swap!                      vector-fill!           vector-reverse!                      vector-copy!           vector-reverse-copy!                      vector-unfold!           vector-unfold-right!                               ''
+* ** · 
+
+** ''           vector->list           reverse-vector->list                      list->vector           reverse-list->vector                      vector->string           string->vector         ''
+
+====== 5. Procedures ======
+
+In this section containing specifications of procedures, the following notation is used to specify parameters and return values:
+
+* **(f arg_{1} arg_{2} ...) -> something** Indicates a function ''f'' takes the parameters ''arg1 arg2         ...'' and returns a value of the type ''something''. If ''something'' is ''unspecified'', then ''f'' returns a single implementation-dependent value; this SRFI does not specify what it returns, and in order to write portable code, the return value should be ignored.
+
+
+* **vec** The argument in this place must be a vector, i.e. it must satisfy the predicate ''vector?''.
+
+
+* **i, j, start, size** The argument in this place must be a exact nonnegative integer, i.e. it must satisfy the predicates ''exact?'', ''integer?'' and either ''zero?'' or ''positive?''. The third case of it indicates the index at which traversal begins; the fourth case of it indicates the size of a vector.
+
+
+* **end** The argument in this place must be a exact positive integer, i.e. it must satisfy the predicates ''exact?'', ''integer?'' and ''positive?''. This indicates the index directly before which traversal will stop — processing will occur until the the index of the vector is ''end''. It is the closed right side of a range.
+
+
+* **f** The argument in this place must be a function of one or more arguments, which returns (except as noted otherwise) exactly one value.
+
+
+* **pred?** The argument in this place must be a function of one or more arguments that returns one value, which is treated as a boolean.
+
+
+* **x, y, z, seed, knil, fill, key, value ** The argument in this place may be any Scheme value.
+
+
+* **[something]** Indicates that ''something'' is an optional argument; it needn't necessarily be applied. ''Something'' needn't necessarily be one thing; for example, this usage of it is perfectly valid:
+
+''              [start [end]]         ''
+
+and is indeed used quite often.
+
+
+* **something ...** Indicates that zero or more ''something''s are allowed to be arguments.
+
+
+* **something_{1} something_{2} ... ** Indicates that at least one ''something'' must be arguments.
+
+
+* **something_{1} something_{2} ... something_{n} ** Exactly equivalent to the previous argument notation, but this also indicates that ''n'' will be used later in the procedure description.
+
+
+It should be noted that all of the procedures that iterate across multiple vectors in parallel stop iterating and produce the final result when the end of the shortest vector is reached. The sole exception is ''vector='', which automatically returns ''#f'' if the vectors' lengths vary.
+
+===== 5.1. Constructors =====
+
+==== make-vector ====
+* **  Creates and returns a vector of size ''size''. If //fill// is specified, all the elements of the vector are initialized to //fill//. Otherwise, their contents are indeterminate.
+
+Example:
+
+''           (make-vector 5 3)         ''
+''           #(3 3 3 3 3)         ''
+
+==== vector ====
+* **  Creates and returns a vector whose elements are ''x ...''.
+
+Example:
+
+''           (vector 0 1 2 3 4)         ''
+''           #(0 1 2 3 4)         ''
+
+==== vector-unfold ====
+* ** .
+
+Examples:
+
+''           (vector-unfold (λ (i x) (values x (- x 1)))                                                               10 0)         ''
+''           #(0 -1 -2 -3 -4 -5 -6 -7 -8 -9)         ''
+
+Construct a vector of the sequence of integers in the range [0,''n'').
+''           (vector-unfold values n)         ''
+''           #(0 1 2 ... n-2 n-1)         ''
+
+Copy ''vector''.
+
+''           (vector-unfold (λ (i) (vector-ref vector i))                                                               (vector-length vector))         ''
+
+
+* ** .
+
+Examples:
+
+Construct a vector of pairs of non-negative integers whose values sum to 4.
+
+''           (vector-unfold-right (λ (i x) (values (cons i x) (+ x 1))) 5 0)         ''
+''           #((0 . 4) (1 . 3) (2 . 2) (3 . 1) (4 . 0))         ''
+
+Reverse ''vector''.
+
+''           (vector-unfold-right (λ (i x)                                  (values (vector-ref vector x)                                          (+ x 1)))                                                                           (vector-length vector)                                                                           0)         ''
+
+==== vector-copy ====
+* **  Allocates a new vector whose length is ''end -         start'' and fills it with elements from ''vec'', taking elements from ''vec'' starting at index ''start'' and stopping at index ''end''. ''start'' defaults to ''0'' and ''end'' defaults to the value of ''(vector-length         vec)''. SRFI 43 provides an optional fill argument to supply values if end is greater than the length of vec. Neither R7RS-small nor this SRFI requires support for this argument.
+
+Examples:
+
+''           (vector-copy '#(a b c d e f g h i))         ''
+''           #(a b c d e f g h i)         ''
+
+''           (vector-copy '#(a b c d e f g h i) 6)         ''
+''           #(g h i)         ''
+
+''           (vector-copy '#(a b c d e f g h i) 3 6)         ''
+''           #(d e f)         ''
+
+
+* Like ''vector-copy'', but it copies the elements in the reverse order from ''vec''.
+
+==== vector-reverse-copy ====
+
+Example:
+
+''           (vector-reverse-copy '#(5 4 3 2 1 0) 1 5)         ''
+''           #(1 2 3 4)         ''
+
+==== vector-append ====
+* **  Returns a newly allocated vector that contains all elements in order from the subsequent locations in ''vec         ...''.
+
+Examples:
+
+''           (vector-append '#(x) '#(y))         ''
+''           #(x y)         ''
+
+''           (vector-append '#(a) '#(b c d))         ''
+''           #(a b c d)         ''
+
+''           (vector-append '#(a #(b)) '#(#(c)))         ''
+''           #(a #(b) #(c))         ''
+
+
+* Appends each vector in ''list-of-vectors''. This is equivalent to:
+
+''           (apply vector-append                  list-of-vectors)         ''
+
+However, it may be implemented better.
+
+Example:
+
+''           (vector-concatenate '(#(a b) #(c d)))         ''
+''           #(a b c d)         ''
+
+
+
+==== vector-append-subvectors ====
+Returns a vector that contains every element of each //vec// from //start// to //end// in the specified order. This procedure is a generalization of ''vector-append''.
+
+Example:
+
+''           (vector-append-subvectors '#(a b c d e) 0 2 '#(f g h i j) 2 4)         ''
+''           #(a b h i)         ''
+
+
+
+===== 5.2. Predicates =====
+
+==== vector? ====
+* **  Disjoint type predicate for vectors: this returns ''#t'' if ''x'' is a vector, and ''#f'' if otherwise.
+
+Examples:
+
+''           (vector? '#(a b c))         ''
+''           #t         ''
+
+''           (vector? '(a b c))         ''
+''           #f         ''
+
+''           (vector? #t)         ''
+''           #f         ''
+
+''           (vector? '#())         ''
+''           #t         ''
+
+''           (vector? '())         ''
+''           #f         ''
+
+==== vector-empty? ====
+* Returns ''#t'' if ''vec'' is empty, i.e. its length is ''0'', and ''#f'' if not.
+
+Examples:
+
+''           (vector-empty? '#(a))         ''
+''           #f         ''
+
+''           (vector-empty? '#(()))         ''
+''           #f         ''
+
+''           (vector-empty? '#(#()))         ''
+''           #f         ''
+
+''           (vector-empty? '#())         ''
+''           #t         ''
+
+==== vector= eq? ====
+* Vector structure comparator, generalized across user-specified element comparators. Vectors ''a'' and ''b'' are considered equal by ''vector='' iff their lengths are the same, and for each respective element ''Ea'' and ''Eb'', ''(elt=? Ea         Eb)'' returns a true value. ''Elt=?'' is always applied to two arguments. Element comparison must be consistent with ''eq''; that is, if ''(eq? Ea Eb)'' results in a true value, then ''(elt=? Ea         Eb)'' must also result in a true value. This may be exploited to avoid unnecessary element comparisons. (The reference implementation does, but it does not consider the situation where ''elt=?'' is in fact itself ''eq?'' to avoid yet more unnecessary comparisons.)
+
+If there are only zero or one vector arguments, ''#t'' is automatically returned. The dynamic order in which comparisons of elements and of vectors are performed is left completely unspecified; do not rely on a particular order.
+
+Examples:
+
+''           (vector= eq? '#(a b c d) '#(a b c d))         ''
+''           #t         ''
+
+''           (vector= eq? '#(a b c d) '#(a b d c))         ''
+''           #f         ''
+
+''           (vector= = '#(1 2 3 4 5) '#(1 2 3 4))         ''
+''           #f         ''
+
+''           (vector= = '#(1 2 3 4) '#(1 2 3 4))         ''
+''           #t         ''
+
+The two trivial cases.
+
+''           (vector= eq?)         ''
+''           #t         ''
+
+''           (vector= eq? '#(a))         ''
+''           #t         ''
+
+Note the fact that we don't use vector literals in the next two — it is unspecified whether or not literal vectors with the same external representation are ''eq?''.
+
+''           (vector= eq? (vector (vector 'a)) (vector (vector 'a)))         ''
+''           #f         ''
+
+''           (vector= equal? (vector (vector 'a)) (vector (vector 'a)))         ''
+''           #t         ''
+
+
+===== 5.3. Selectors =====
+
+==== vector-ref ====
+* **  Vector element dereferencing: returns the value that the location in ''vec'' at ''i'' is mapped to in the store. Indexing is based on zero. ''I'' must be within the range [0, ''(vector-length              vec)'').
+
+Example:
+
+''           (vector-ref '#(a b c d) 2)         ''
+''           c         ''
+
+==== vector-length ====
+* **  Returns the length of ''vec'', the number of locations reachable from ''vec''. (The careful word 'reachable' is used to allow for 'vector slices,' whereby ''vec'' refers to a larger vector that contains more locations that are unreachable from ''vec''. This SRFI does not define vector slices, but later SRFIs may.)
+
+Example:
+
+''           (vector-length '#(a b c))         ''
+''           3         ''
+
+
+===== 5.4. Iteration =====
+
+==== vector-fold ====
+* The fundamental vector iterator. ''Kons'' is iterated over each value in all of the vectors, stopping at the end of the shortest; ''kons'' is applied as ''           (kons state             (vector-ref              vec1 i)             (vector-ref              vec2 i)             ...)         '' where ''state'' is the current state value — the current state value begins with ''knil'', and becomes whatever ''kons'' returned on the previous iteration —, and ''i'' is the current index.
+
+The iteration is strictly left-to-right.
+
+Examples:
+
+Find the longest string's length in ''vector-of-strings''.
+		   {{{code: lang="scheme" linenumbers="True"
+(vector-fold (λ (len str)
+	(max (string-length str) len))
+	vector-of-strings)  
+}}}
+       
+
+Produce a list of the reversed elements of ''vec''.
+''           (vector-fold (λ (tail elt) (cons elt tail))                                                           '() vec)         ''
+
+Count the number of even numbers in ''vec''.
+''           (vector-fold (λ (counter n)                                                               (if (even? n) (+ counter 1) counter))                                                           0 vec)         ''
+
+==== vector-fold-right ====
+* Similar to ''vector-fold'', but it iterates right to left instead of left to right.
+
+Example:
+
+Convert a vector to a list.
+''           (vector-fold-right (λ (tail elt)                                (cons elt tail))                                                                       '() '#(a b c d))         ''
+''           (a b c d)         ''
+
+==== vector-map ====
+* **  Constructs a new vector of the shortest size of the vector arguments. Each element at index ''i'' of the new vector is mapped from the old vectors by ''(f (vector-ref               vec1               i)              (vector-ref               vec2               i)              ...)''. The dynamic order of application of ''f'' is unspecified.
+
+Examples:
+
+''           (vector-map (λ (x) (* x x))                                                         (vector-unfold                        (λ (i x) (values x (+ x 1)))                        4 1))         ''
+''           #(1 4 9 16)         ''
+
+''           (vector-map (λ (x y) (* x y))                                   (vector-unfold                              (λ (x) (values x (+ x 1)))                              5 1)                                   (vector-unfold                              (λ (x) (values x (- x 1)))                              5 5))         ''
+''           #(5 8 9 8 5)         ''
+
+''           (let ((count 0))         ''
+''                        (vector-map (λ (ignored-elt)         ''
+''                                                (set! count (+ count 1))         ''
+''                                                count)         ''
+''                                              '#(a b)))         ''
+''           #(1 2) OR #(2 1)         ''
+
+==== vector-for-each ====
+* Similar to ''vector-map'', but rather than mapping the new elements into a new vector, the new mapped elements are destructively inserted into ''vec1''. Again, the dynamic order of application of ''f'' unspecified, so it is dangerous for ''f'' to apply either ''vector-ref'' or ''vector-set!'' to ''vec1'' in ''f''.
+
+* **  Simple vector iterator: applies ''f'' to the corresponding list of parallel elements from ''vec1 vec2         ...'' in the range [0, ''length''), where ''length'' is the length of the smallest vector argument passed, In contrast with ''vector-map'', ''f'' is reliably applied to each subsequent element, starting at index 0, in the vectors.
+
+Example:
+
+''           (vector-for-each (λ (x) (display x) (newline))         ''
+''                                                '#("foo" "bar" "baz" "quux" "zot"))         ''
+Displays:
+
+
+'''
+foo
+bar
+baz
+quux
+zot
+'''
+
+
+==== vector-count ====
+* Counts the number of parallel elements in the vectors that satisfy ''pred?'', which is applied, for each index ''i'' in the range [0, ''length'') where ''length'' is the length of the smallest vector argument, to each parallel element in the vectors, in order.
+
+Examples:
+
+''           (vector-count even?                         '#(3 1 4 1 5 9 2 5 6))         ''
+''           3         ''
+
+''           (vector-count <                         '#(1 3 6 9) '#(2 4 6 8 10 12))         ''
+''           2         ''
+
+
+* Returns a newly allocated vector ''new'' with the same length as ''vec''. Each element //i// of //new// is set to the result of invoking ''f'' on //''new''_{i-1}// and //''vec''_{i}//, except that for the first call on //f//, the first argument is //knil//. The //new// vector is returned.
+
+Note that the order of arguments to ''vector-cumulate'' was changed by ''errata-3'' on 2016/9/2.
+
+
+
+Example:
+
+''           (vector-cumulate + '#(3 1 4 1 5 9 2 5 6) 0)         ''
+''           #(3 4 8 9 14 23 25 30 36)         ''
+
+
+
+
+
+===== 5.5. Searching =====
+
+==== vector-index ====
+* Finds & returns the index of the first elements in ''vec1 vec2         ...'' that satisfy ''pred?''. If no matching element is found by the end of the shortest vector, ''#f'' is returned.
+
+Examples:
+
+''           (vector-index even? '#(3 1 4 1 5 9))         ''
+''           2         ''
+
+''           (vector-index < '#(3 1 4 1 5 9 2 5 6) '#(2 7 1 8 2))         ''
+''           1         ''
+
+''           (vector-index = '#(3 1 4 1 5 9 2 5 6) '#(2 7 1 8 2))         ''
+''           #f         ''
+
+
+* Like ''vector-index'', but it searches right-to-left, rather than left-to-right, and all of the vectors //must// have the same length.
+
+==== vector-skip ====
+* Finds & returns the index of the first elements in ''vec1 vec2         ...'' that do //not// satisfy ''pred?''. If all the values in the vectors satisfy ''pred?'' until the end of the shortest vector, this returns ''#f''. This is equivalent to:
+
+''           (vector-index            (λ (x1 x2                        ...)              (not (pred? x1                                 x1                                  ...)))                                                      vec1 vec2            ...)         ''
+
+Example:
+
+''           (vector-skip number? '#(1 2 a b 3 4 c d))         ''
+''           2         ''
+
+
+* Like ''vector-skip'', but it searches for a non-matching element right-to-left, rather than left-to-right, and it is an error if all of the vectors do not have the same length. This is equivalent to:
+
+''           (vector-index-right            (λ (x1 x2                        ...)              (not (pred? x1                                 x1                                  ...)))                                                                       vec1 vec2            ...)         ''
+
+
+* Similar to ''vector-index'' and ''vector-index-right'', but instead of searching left to right or right to left, this performs a binary search. If there is more than one element of //vec// that matches //value// in the sense of //cmp//, ''vector-binary-search'' may return the index of any of them.
+''cmp'' should be a procedure of two arguments and return a negative integer, which indicates that its first argument is less than its second, zero, which indicates that they are equal, or a positive integer, which indicates that the first argument is greater than the second argument. An example ''cmp'' might be:
+
+''           (λ (char1 char2)         ''
+''             (cond ((char<? char1                                            char2)                              -1)         ''
+''                             ((char=? char1                       char2)            0)         ''
+''                             (else 1)))         ''
+
+
+* Finds the first set of elements in parallel from ''vec1 vec2         ...'' for which ''pred?'' returns a true value. If such a parallel set of elements exists, ''vector-any'' returns the value that ''pred?'' returned for that set of elements. The iteration is strictly left-to-right.
+
+
+* If, for every index ''i'' between 0 and the length of the shortest vector argument, the set of elements ''(vector-ref vec1                                                  i)             (vector-ref vec2                                                  i)             ...'' satisfies ''pred?'', ''vector-every'' returns the value that ''pred?'' returned for the last set of elements, at the last index of the shortest vector. The iteration is strictly left-to-right.
+
+
+* A vector the same size as ''vec'' is newly allocated and filled with all the elements of ''vec'' that satisfy ''pred?'' in their original order followed by all the elements that do not satisfy ''pred'', also in their original order.
+
+Two values are returned, the newly allocated vector and the index of the leftmost element that does not satisfy ''pred''.
+
+
+===== 5.7. Mutators =====
+
+
+
+ Assigns the contents of the location at ''i'' in ''vec'' to ''value''.
+
+
+
+
+
+Swaps or exchanges the values of the locations in ''vec'' at ''i'' & ''j''.
+
+
+
+
+
+ Assigns the value of every location in ''vec'' between ''start'', which defaults to ''0'' and ''end'', which defaults to the length of ''vec'', to ''fill''.
+
+
+
+
+
+Destructively reverses the contents of the sequence of locations in ''vec'' between ''start'' and ''end''. ''Start'' defaults to ''0'' and ''end'' defaults to the length of ''vec''. Note that this does not deeply reverse.
+
+
+
+
+
+ Copies the elements of vector ''from'' between ''start'' and ''end'' to vector ''to'', starting at ''at''. The order in which elements are copied is unspecified, except that if the source and destination overlap, copying takes place as if the source is first copied into a temporary vector and then into the destination. This can be achieved without allocating storage by making sure to copy in the correct direction in such circumstances.
+
+
+
+
+
+Like ''vector-copy!'', but the elements appear in ''to'' in reverse order. ''           (vector-reverse!            target            tstart            send)         '' would.
+
+
+
+
+
+Like ''vector-unfold'', but the elements are copied into the vector //vec// starting at element //start// rather than into a newly allocated vector. Terminates when //end-start// elements have been generated.
+
+
+
+
+
+Like ''vector-unfold!'', but the elements are copied in reverse order into the vector //vec// starting at the index preceding //end//.
+
+
+
+===== 5.8. Conversion =====
+
+* **  Creates a list containing the elements in ''vec'' between ''start'', which defaults to ''0'', and ''end'', which defaults to the length of ''vec''.
+
+
+* Like ''vector->list'', but the resulting list contains the elements in reverse of ''vector''.
+
+
+* **  Creates a vector of elements from ''proper-list''.
+
+
+* Like ''list->vector'', but the resulting vector contains the elements in reverse of ''proper-list''.
+
+
+* **  Creates a vector containing the elements in ''string'' between ''start'', which defaults to ''0'', and ''end'', which defaults to the length of ''string''.
+
+
+* **  Creates a string containing the elements in ''vec'' between ''start'', which defaults to ''0'', and ''end'', which defaults to the length of ''vec''. It is an error if the elements are not characters.
+
+
+====== 6. Sample Implementation ======
+
+The sample implementation is in the repository of this SRFI. It has only one non-R5RS dependency: 's ''error'' procedure, which is also provided by R7RS-small. It is in the public domain, or alternatively under the same copyright as this SRFI. The following files are provided:
+
+	* ''vectors-impl.scm'' - a modified version of the implementation of SRFI 43
+	* ''vectors.scm'' - a Chicken library showing what to export for an R5RS implementation
+	* ''vectors.sld'' - an R7RS library that excludes what R7RS-small already provides
+	* ''vectors-test.scm'' - tests using the Chicken test egg (also available on Chibi)
+
+====== 7. Acknowledgements ======
+
+These acknowledgements are copied from SRFI 43.
+
+Thanks to Olin Shivers for his wonderfully complete  who nitpicked a great deal, but also helped quite a lot in general, and helped test the reference implementation in various Scheme systems; to Michael Burschik for his numerous comments; to Sergei Egorov for helping to narrow down the procedures; to Mike Sperber for putting up with an //extremely// overdue draft; to Felix Winkelmann for continually bugging me about finishing up the SRFI so that it would be only overdue and not withdrawn; and to everyone else who gave questions, comments, thoughts, or merely attention to the SRFI.
+
+====== 8. References ======
+
+* **** //R5RS: The Revised^{5} Report on Scheme//
+* Kelsey, W. Clinger, J. Rees (editors).
+Higher-Order and Symbolic Computation, Vol. 11, No. 1, September, 1998
+and
+ACM SIGPLAN Notices, Vol. 33, No. 9, October, 1998
+Available at: http://www.schemers.org/Documents/Standards/R5RS/
+
+
+* **** //R7RS: The Revised^{7} Report on Scheme//
+* Shinn et al. (editors).
+Available at: http://r7rs.org
+
+
+* **** //SRFI: Scheme Request for Implementation//
+The SRFI website can be found at: http://srfi.schemers.org/
+The SRFIs mentioned in this document are described later.
+
+
+* **** //SRFI 1: List Library//
+A SRFI of list processing procedures, written by Olin Shivers.
+Available at: http://srfi.schemers.org/srfi-1/
+
+
+* **** //SRFI 13: String Library//
+A SRFI of string processing procedures, written by Olin Shivers.
+Available at: http://srfi.schemers.org/srfi-13/
+
+
+* **** //SRFI 23: Error Reporting Mechanism//
+A SRFI that defines a new primitive (''error'') for reporting that an error occurred, written by Stephan Houben.
+Available at: http://srfi.schemers.org/srfi-23/
+
+
+* **** //SRFI 43: Vector Library (draft)//
+The direct predecessor of this SRFI, written by Taylor Campbell.
+Available at: http://srfi.schemers.org/srfi-43/
+
+====== 9. Copyright ======
+
+Copyright (C) Taylor Campbell (2003). All rights reserved.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+----
+
+Editor: 
+

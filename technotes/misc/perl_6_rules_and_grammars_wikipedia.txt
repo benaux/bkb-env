@@ -1,0 +1,448 @@
+From <http://en.wikipedia.org/wiki/Perl_6_rules#Grammars>:
+
+# Perl 6 rules
+
+From Wikipedia, the free encyclopedia
+
+Jump to: [navigation][1], [search][2]
+
+   [1]: #mw-head
+   [2]: #p-search
+
+**Perl 6 rules** are the [regular expression][3], [pattern matching][4] and general-purpose [parsing][5] facility of [Perl 6][6], and are a core part of the language. Since Perl's pattern-matching constructs have exceeded the capabilities of [formal][7] regular expressions for some time, Perl 6 documentation refers to them exclusively as _regexes_, distancing the term from the formal definition.
+
+   [3]: /wiki/Regular_expression (Regular expression)
+   [4]: /wiki/Pattern_matching (Pattern matching)
+   [5]: /wiki/Parsing (Parsing)
+   [6]: /wiki/Perl_6 (Perl 6)
+   [7]: /wiki/Formal_language (Formal language)
+
+Perl 6 provides a superset of [Perl 5][8] features with respect to regexes, folding them into a larger framework called _rules_, which provide the capabilities of a [parsing expression grammar][9], as well as acting as a [closure][10] with respect to their lexical scope.[[1]][11] Rules are introduced with the `rule` keyword, which has a usage quite similar to subroutine definition. Anonymous rules can be introduced with the `regex` (or `rx`) keyword, or simply be used inline as regexps were in Perl 5 via the `m` (matching) or `s` (substitution) operators.
+
+   [8]: /wiki/Perl (Perl)
+   [9]: /wiki/Parsing_expression_grammar (Parsing expression grammar)
+   [10]: /wiki/Closure_(computer_science) (Closure (computer science))
+   [11]: #cite_note-0
+
+## Contents
+
+  * [1 History][12]
+  * [2 Changes from Perl 5][13]
+
+   [12]: #History
+   [13]: #Changes_from_Perl_5
+
+    * [2.1 Implicit changes][14]
+
+   [14]: #Implicit_changes
+
+  * [3 Integration with Perl][15]
+  * [4 Implementation][16]
+
+   [15]: #Integration_with_Perl
+   [16]: #Implementation
+
+    * [4.1 Keywords][17]
+    * [4.2 Modifiers][18]
+    * [4.3 Grammars][19]
+
+   [17]: #Keywords
+   [18]: #Modifiers
+   [19]: #Grammars
+
+  * [5 Examples][20]
+  * [6 References][21]
+  * [7 External links][22]
+
+   [20]: #Examples
+   [21]: #References
+   [22]: #External_links
+
+## [[edit][23]] History
+
+   [23]: /w/index.php?title=Perl_6_rules&action=edit&section=1 (Edit section: History)
+
+In _Apocalypse 5_, a document outlining the preliminary design decisions for Perl 6 pattern matching, Larry Wall enumerated 20 problems with "current regex culture". Among these were that Perl's regexes were "too compact and 'cute'", had "too much reliance on too few metacharacters", "little support for named captures", "little support for grammars", and "poor integration with [the] 'real' language".[[2]][24]
+
+   [24]: #cite_note-1
+
+Between late 2004 and mid-2005, a compiler for Perl 6 style rules was developed for the [Parrot virtual machine][25] called Parrot Grammar Engine (PGE), which was later re-named to the more generic, [Parser Grammar Engine][26]. PGE is a combination of runtime and compiler for Perl 6 style grammars that allows any parrot-based compiler to use these tools for parsing, and also to provide rules to their runtimes.
+
+   [25]: /wiki/Parrot_virtual_machine (Parrot virtual machine)
+   [26]: /wiki/Parser_Grammar_Engine (Parser Grammar Engine)
+
+Among other Perl 6 features, support for named captures was added to Perl 5.10 in 2007 [[3]][27].
+
+   [27]: #cite_note-2
+
+## [[edit][28]] Changes from Perl 5
+
+   [28]: /w/index.php?title=Perl_6_rules&action=edit&section=2 (Edit section: Changes from Perl 5)
+
+There are only six unchanged features from Perl 5's regexes:
+
+  * Literals: word characters (letters, numbers and [underscore][29]) matched literally
+  * Capturing: `(...)`
+  * Alternatives: `|`
+  * Backslash escape: `\`
+  * Repetition quantifiers: `*`, `+`, and `?`, but not `{m,n}`
+  * Minimal matching suffix: `*?`, `+?`, `??`
+
+   [29]: /wiki/Underscore (Underscore)
+
+A few of the most powerful additions include:
+
+  * The ability to reference rules using `<rulename>` to build up entire grammars.
+  * A handful of commit operators that allow the programmer to control [backtracking][30] during matching.
+
+   [30]: /wiki/Backtracking (Backtracking)
+
+The following changes greatly improve the readability of regexes:
+
+  * Simplified non-capturing groups: `[...]`, which are the same as Perl 5's: `(?:...)`
+  * Simplified code assertions: `<?{...}>`
+  * Extended regex formatting (Perl 5's `/x`) is now the default.
+
+### [[edit][31]] Implicit changes
+
+   [31]: /w/index.php?title=Perl_6_rules&action=edit&section=3 (Edit section: Implicit changes)
+
+Some of the features of Perl 5 regular expressions become more powerful in Perl 6 because of their ability to encapsulate the expanded features of Perl 6 rules. For example, in Perl 5, there were positive and negative lookahead operators `(?=...)` and `(?!...)`. In Perl 6 these same features exist, but are called `<before ...>` and `<!before ...>`.
+
+However, because `before` can encapsulate arbitrary rules, it can be used to express lookahead as a [syntactic predicate][32] for a grammar. For example, the following [parsing expression grammar][33] describes the classic [non-context-free][34] language ![ \{ a^n b^n c^n : n \ge 1 \} ][35]:
+    
+       [32]: /wiki/Syntactic_predicate (Syntactic predicate)
+   [33]: /wiki/Parsing_expression_grammar (Parsing expression grammar)
+   [34]: /wiki/Context-sensitive_grammar (Context-sensitive grammar)
+   [35]: //upload.wikimedia.org/wikipedia/en/math/0/7/9/07940b90bb6d1f016844981ffe8d83ad.png
+
+
+    S ← &(A !b) a+ B
+    A ← a A? b
+    B ← b B? c
+    
+
+In Perl 6 rules that would be:
+    
+    
+    rule S { <before <A> <!before b>> a+ <B> }
+    rule A { a <A>? b }
+    rule B { b <B>? c }
+    
+
+Of course, given the ability to mix rules and regular code, that can be simplified even further:
+    
+    
+    rule S { (a+) (b+) (c+) <{$0.elems == $1.elems == $2.elems}> }
+    
+
+However, this makes use of [assertions][36], which is a subtly different concept in Perl 6 rules but more substantially different in parsing theory, making this a semantic rather than syntactic predicate. The most important difference in practice is performance. There is no way for the rule engine to know what conditions the assertion may match, so no optimization of this process can be made.
+
+   [36]: /wiki/Assertion_(computing) (Assertion (computing))
+
+## [[edit][37]] Integration with Perl
+
+   [37]: /w/index.php?title=Perl_6_rules&action=edit&section=4 (Edit section: Integration with Perl)
+
+In many languages, regular expressions are entered as strings, which are then passed to library routines that parse and compile them into an internal state. In Perl 5, regular expressions shared some of the [lexical analysis][38] with Perl's scanner. This simplified many aspects of regular expression usage, though it added a great deal of complexity to the scanner. In Perl 6, rules are part of the grammar of the language. No separate parser exists for rules, as it did in Perl 5. This means that code, embedded in rules, is parsed at the same time as the rule itself and its surrounding code. For example, it is possible to nest rules and code without re-invoking the parser:
+    
+       [38]: /wiki/Lexical_analysis (Lexical analysis)
+
+
+    rule ab {
+     (a.) # match "a" followed by any character
+     # Then check to see if that character was "b"
+     # If so, print a message.
+     { $0 ~~ /b {say "found the b"}/ }
+    }
+    
+
+The above is a single block of Perl 6 code that contains an outer rule definition, an inner block of assertion code, and inside of that a regex that contains one more level of assertion.
+
+## [[edit][39]] Implementation
+
+   [39]: /w/index.php?title=Perl_6_rules&action=edit&section=5 (Edit section: Implementation)
+
+### [[edit][40]] Keywords
+
+   [40]: /w/index.php?title=Perl_6_rules&action=edit&section=6 (Edit section: Keywords)
+
+There are several keywords used in conjunction with Perl 6 rules:
+
+regex
+    A named or anonymous regex that ignores whitespace within the regex by default.
+token
+    A named or anonymous regex that implies the `:ratchet` modifier.
+rule
+    A named or anonymous regex that implies the `:ratchet` and `:sigspace` modifiers.
+rx
+    An anonymous regex that takes arbitrary delimiters such as `//` where regex only takes braces.
+m
+    An operator form of anonymous regex that performs matches with arbitrary delimiters.
+mm
+    Shorthand for m with the `:sigspace` modifier.
+s
+    An operator form of anonymous regex that performs substitution with arbitrary delimiters.
+ss
+    Shorthand for s with the `:sigspace` modifier.
+`/.../`
+    Simply placing a regex between slashes is shorthand for `m/.../`.
+
+Here is an example of typical use:
+    
+    
+    token word { \w+ }
+    rule phrase { <word> [ \, <word> ]* \. }
+    if $string ~~ / <phrase> \n / {
+      ...
+    }
+    
+
+### [[edit][41]] Modifiers
+
+   [41]: /w/index.php?title=Perl_6_rules&action=edit&section=7 (Edit section: Modifiers)
+
+Modifiers may be placed after any of the regex keywords, and before the delimiter. If a regex is named, the modifier comes after the name. Modifiers control the way regexes are parsed and how they behave. They are always introduced with a leading `:` character.
+
+Some of the more important modifiers include:
+
+  * `:i` or `:ignorecase` – Perform matching without respect to case.
+  * `:g` or `:global` – Perform the match more than once on a given target string.
+  * `:s` or `:sigspace` – Replace whitespace in the regex with a whitespace-matching rule, rather than simply ignoring it.
+  * `:Perl5` – Treat the regex as a Perl 5 regular expression.
+  * `:ratchet` – Never perform backtracking in the rule.
+
+For example:
+    
+    
+    regex addition :ratchet :sigspace { <term> \+ <expr> }
+    
+
+### [[edit][42]] Grammars
+
+   [42]: /w/index.php?title=Perl_6_rules&action=edit&section=8 (Edit section: Grammars)
+
+A grammar may be defined using the `grammar` operator. A grammar is essentially just a [namespace][43] for rules:
+    
+       [43]: /wiki/Namespace (Namespace)
+
+
+    grammar Str::SprintfFormat {
+     regex format_token { \%: <index>? <precision>? <modifier>? <directive> }
+     token index { \d+ \$ }
+     token precision { <flags>? <vector>? <precision_count> }
+     token flags { <[\ +0\#\-]>+ }
+     token precision_count { [ <[1-9]>\d* | \* ]? [ \. [ \d* | \* ] ]? }
+     token vector { \*? v }
+     token modifier { ll | <[lhmVqL]> }
+     token directive { <[\%csduoxefgXEGbpniDUOF]> }
+    }
+    
+
+This is the grammar used to define Perl's `[sprintf][44]` string formatting notation.
+
+   [44]: /wiki/Sprintf (Sprintf)
+
+Outside of this namespace, you could use these rules like so:
+    
+    
+    if / <Str::SprintfFormat::format_token> / { ... }
+    
+
+A rule used in this way is actually identical to the invocation of a subroutine with the extra semantics and side-effects of pattern matching (e.g., rule invocations can be backtracked).
+
+## [[edit][45]] Examples
+
+   [45]: /w/index.php?title=Perl_6_rules&action=edit&section=9 (Edit section: Examples)
+
+Here are some example rules in Perl 6:
+    
+    
+    rx { a [ b | c ] ( d | e ) f : g }
+    rx { ( ab* ) <{ $1.size % 2 == 0 }> }
+    
+
+That last is identical to:
+    
+    
+    rx { ( ab[bb]* ) }
+    
+
+## [[edit][46]] References
+
+   [46]: /w/index.php?title=Perl_6_rules&action=edit&section=10 (Edit section: References)
+
+  1. **[^][47]** Wall, Larry (June 24, 2002). ["Synopsis 5: Regexes and Rules"][48]. [http://dev.perl.org/perl6/doc/design/syn/S05.html][48]. 
+  2. **[^][49]** Wall, Larry (June 4, 2002). ["Apocalypse 5: Pattern Matching"][50]. [http://dev.perl.org/perl6/doc/design/apo/A05.html][50]. 
+  3. **[^][51]** [Perl 5.10 now available - Perl Buzz][52]
+
+   [47]: #cite_ref-0
+   [48]: http://dev.perl.org/perl6/doc/design/syn/S05.html
+   [49]: #cite_ref-1
+   [50]: http://dev.perl.org/perl6/doc/design/apo/A05.html
+   [51]: #cite_ref-2
+   [52]: http://perlbuzz.com/2007/12/perl-510-now-available.html
+
+## [[edit][53]] External links
+
+   [53]: /w/index.php?title=Perl_6_rules&action=edit&section=11 (Edit section: External links)
+
+  * [Synopsis 05][54] - The standards document covering Perl 6 regexes and rules.
+  * [Perl 6 Regex FAQ][55] - Answers a range of questions about Perl 6 regexes.
+  * [Perl 6 Regex Introduction][56] - Gentle introduction to Perl 6 regexes.
+
+   [54]: http://perlcabal.org/syn/S05.html
+   [55]: http://www.programmersheaven.com/2/Perl6-FAQ-Regex
+   [56]: http://github.com/perlpilot/perl6-docs/blob/master/intro/p6-regex-intro.pod
+
+Retrieved from "[http://en.wikipedia.org/w/index.php?title=Perl_6_rules&oldid=475633297][57]" 
+
+   [57]: http://en.wikipedia.org/w/index.php?title=Perl_6_rules&oldid=475633297
+
+[Categories][58]: 
+
+   [58]: /wiki/Special:Categories (Special:Categories)
+
+  * [Perl 6][59]
+  * [Regular expressions][60]
+
+   [59]: /wiki/Category:Perl_6 (Category:Perl 6)
+   [60]: /wiki/Category:Regular_expressions (Category:Regular expressions)
+
+##### Personal tools
+
+  * [Log in / create account][61]
+
+   [61]: /w/index.php?title=Special:UserLogin&returnto=Perl+6+rules (You are encouraged to log in; however, it is not mandatory. [o])
+
+##### Namespaces
+
+  * [Article][62]
+  * [Talk][63]
+
+   [62]: /wiki/Perl_6_rules (View the content page [c])
+   [63]: /wiki/Talk:Perl_6_rules (Discussion about the content page [t])
+
+#### 
+
+##### Variants[][64]
+
+   [64]: #
+
+##### Views
+
+  * [Read][65]
+  * [Edit][66]
+  * [View history][67]
+
+   [65]: /wiki/Perl_6_rules
+   [66]: /w/index.php?title=Perl_6_rules&action=edit (You can edit this page. 
+Please use the preview button before saving. [e])
+   [67]: /w/index.php?title=Perl_6_rules&action=history (Past versions of this page [h])
+
+##### Actions[][68]
+
+   [68]: #
+
+##### Search
+
+![Search][69]
+
+   [69]: //bits.wikimedia.org/static-1.20wmf3/skins/vector/images/search-ltr.png?303-4
+
+[][70]
+
+   [70]: /wiki/Main_Page (Visit the main page)
+
+##### Navigation
+
+  * [Main page][71]
+  * [Contents][72]
+  * [Featured content][73]
+  * [Current events][74]
+  * [Random article][75]
+  * [Donate to Wikipedia][76]
+
+   [71]: /wiki/Main_Page (Visit the main page [z])
+   [72]: /wiki/Portal:Contents (Guides to browsing Wikipedia)
+   [73]: /wiki/Portal:Featured_content (Featured content – the best of Wikipedia)
+   [74]: /wiki/Portal:Current_events (Find background information on current events)
+   [75]: /wiki/Special:Random (Load a random article [x])
+   [76]: //donate.wikimedia.org/wiki/Special:FundraiserRedirector?utm_source=donate&utm_medium=sidebar&utm_campaign=20120521SB001&uselang=en (Support us)
+
+##### Interaction
+
+  * [Help][77]
+  * [About Wikipedia][78]
+  * [Community portal][79]
+  * [Recent changes][80]
+  * [Contact Wikipedia][81]
+
+   [77]: /wiki/Help:Contents (Guidance on how to use and edit Wikipedia)
+   [78]: /wiki/Wikipedia:About (Find out about Wikipedia)
+   [79]: /wiki/Wikipedia:Community_portal (About the project, what you can do, where to find things)
+   [80]: /wiki/Special:RecentChanges (A list of recent changes in the wiki [r])
+   [81]: /wiki/Wikipedia:Contact_us (How to contact Wikipedia)
+
+##### Toolbox
+
+  * [What links here][82]
+  * [Related changes][83]
+  * [Upload file][84]
+  * [Special pages][85]
+  * [Permanent link][86]
+  * [Cite this page][87]
+
+   [82]: /wiki/Special:WhatLinksHere/Perl_6_rules (List of all English Wikipedia pages containing links to this page [j])
+   [83]: /wiki/Special:RecentChangesLinked/Perl_6_rules (Recent changes in pages linked from this page [k])
+   [84]: /wiki/Wikipedia:Upload (Upload files [u])
+   [85]: /wiki/Special:SpecialPages (A list of all special pages [q])
+   [86]: /w/index.php?title=Perl_6_rules&oldid=475633297 (Permanent link to this revision of the page)
+   [87]: /w/index.php?title=Special:Cite&page=Perl_6_rules&id=475633297 (Information on how to cite this page)
+
+##### Print/export
+
+  * [Create a book][88]
+  * [Download as PDF][89]
+  * [Printable version][90]
+
+   [88]: /w/index.php?title=Special:Book&bookcmd=book_creator&referer=Perl+6+rules (Create a book or page collection)
+   [89]: /w/index.php?title=Special:Book&bookcmd=render_article&arttitle=Perl+6+rules&oldid=475633297&writer=rl (Download a PDF version of this wiki page)
+   [90]: /w/index.php?title=Perl_6_rules&printable=yes (Printable version of this page [p])
+
+##### Languages
+
+  * [Español][91]
+
+   [91]: //es.wikipedia.org/wiki/Reglas_de_Perl_6 (Reglas de Perl 6)
+
+  * This page was last modified on 7 February 2012 at 20:07.  
+
+  * Text is available under the [Creative Commons Attribution-ShareAlike License][92][][93]; additional terms may apply. See [Terms of use][94] for details.  
+> Wikipedia&reg; is a registered trademark of the <a href="/www.wikimediafoundation.org/">Wikimedia Foundation, Inc., a non-profit organization.  
+
+  * [Contact us][95]
+
+   [92]: //en.wikipedia.org/wiki/Wikipedia:Text_of_Creative_Commons_Attribution-ShareAlike_3.0_Unported_License
+   [93]: //creativecommons.org/licenses/by-sa/3.0/
+   [94]: //wikimediafoundation.org/wiki/Terms_of_use
+   [95]: //en.wikipedia.org/wiki/Wikipedia:Contact_us
+
+  * [Privacy policy][96]
+  * [About Wikipedia][97]
+  * [Disclaimers][98]
+  * [Mobile view][99]
+
+   [96]: //wikimediafoundation.org/wiki/Privacy_policy (wikimedia:Privacy policy)
+   [97]: /wiki/Wikipedia:About (Wikipedia:About)
+   [98]: /wiki/Wikipedia:General_disclaimer (Wikipedia:General disclaimer)
+   [99]: http://en.m.wikipedia.org/w/index.php?title=Perl_6_rules&mobileaction=toggle_view_mobile
+
+  * [![Wikimedia Foundation][100]][101]
+  * [![Powered by MediaWiki][102]][103]
+
+   [100]: //bits.wikimedia.org/images/wikimedia-button.png
+   [101]: //wikimediafoundation.org/
+   [102]: //bits.wikimedia.org/static-1.20wmf3/skins/common/images/poweredby_mediawiki_88x31.png
+   [103]: //www.mediawiki.org/
+

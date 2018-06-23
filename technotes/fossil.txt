@@ -1,0 +1,13 @@
+Fossil
+======
+
+
+    fossil settings ignore-glob "*.o,*.obj,*.exe,*/fishd.*,*/*_history " --global
+
+## chiselapp
+
+    Anonymous Cloning: $ fossil clone https://chiselapp.com/user/auxsend/repository/env env.fsl
+    Authenticated Cloning: $ fossil clone https://auxsend@chiselapp.com/user/auxsend/repository/env env.fsl
+
+
+

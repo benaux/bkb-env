@@ -1,0 +1,6 @@
+with gnupg:
+
+	gpg -c filename.txt
+	
+	> Enter passphrase
+	> Repeat

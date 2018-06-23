@@ -1,0 +1,18 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2017-01-26T14:38:12+01:00
+
+====== Language ======
+Created Thursday 26 January 2017
+
+===== Vectors =====
+
+(define v (list->vector '(1 2 3)))
+(define vv #(77 55 99))
+
+(vector-set! v 0 1)
+(vector-set! v 1 2)
+(vector-set! v 2 3)
+
+
+(vector-ref v 0)
