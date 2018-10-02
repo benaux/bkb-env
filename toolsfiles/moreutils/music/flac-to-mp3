@@ -1,0 +1,20 @@
+#!/bin/sh
+
+target_default=mp3
+
+dir=$1
+target=$2
+
+[ -d "$dir" ] || { echo "usage:<dir>"; exit 1; }
+[ -n "$target" ] || target=$target_default
+
+
+for f in "$dir"/*.flac ; do
+  [ -f "$f" ] || continue
+  bf=$(basename "$f")
+  df=$(dirname "$f")
+
+  bfn=${bf%.*}
+
+   ffmpeg -i "$f" "$df/$bfn.mp3"
+done

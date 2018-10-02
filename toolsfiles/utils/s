@@ -1,0 +1,1 @@
+@files=qx(ls); foreach $f (@ARGV) { @files = grep /$f/ @files;}; print @files;

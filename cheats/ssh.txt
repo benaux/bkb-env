@@ -1,9 +1,44 @@
 SSH
-----
+===
 
-## UTILS
+## start gui on remote machine
 
-### Check ssh connection 
+   ssh superserver "DISPLAY=:0 nohup firefox"
+
+`nohup` let the app stay open after disconnect
+
+## SSH in a nutshell
+
+  ssh-keygen -t rsa -b 4096 -N '' -C "my ben@auxdir.com" -f ~/.ssh/id_rsa
+
+  eval "$(ssh-agent -s)"
+  ssh-add ~/.ssh/id_rsa
+
+  chmod 700 ~/.ssh
+  chmod 644 ~/.ssh/authorized_keys
+  chmod 644 ~/.ssh/known_hosts
+  chmod 644 ~/.ssh/config
+  chmod 600 ~/.ssh/id_rsa
+
+
+## Permissions
+
+chmod 700 ~/.ssh 
+chmod 600 ~/.ssh/*
+chmod 644 ~/.ssh/*.pub
+
+## Restart ssh
+
+### Ubntu
+   service ssh restart
+
+### Restart SSHD on mac os x
+
+   sudo launchctl stop com.openssh.sshd
+   sudo launchctl start com.openssh.sshd
+
+
+## Check ssh connection 
 
    $ ssh -q user@downhost exit
    $ echo $? -> 255
@@ -11,23 +46,12 @@ SSH
    $ ssh -q user@uphost exit
    $ echo $? ->  0
 
-ssh permissions
 
-## Permissions
-
-chmod 700 ~/.ssh && chmod 600 ~/.ssh/*
-
-.ssh 0700
-
-.ssh/*.pub   0644
-
-
-.ssh/* 0600
 
 ## Passwordless login
 
 
-### Change SSH Password
+## Change SSH Password
 
    ssh-keygen -p -f ~/.ssh/id_dsa
 
@@ -47,7 +71,7 @@ chmod 700 ~/.ssh && chmod 600 ~/.ssh/*
 
         ssh-add ~/.ssh/mykey
 
-### Forbids password authentication 
+## Forbids password authentication 
 
 Change in '/etc/ssh/sshd_config':
 
@@ -59,7 +83,7 @@ Allows password authentication from all RFC1918 private IP ranges inside LAN.
 	Match Address 10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
 		PasswordAuthentication yes
 
-### Restart SSHD on mac os x
+## Restart SSHD on mac os x
 
    sudo launchctl stop com.openssh.sshd
    sudo launchctl start com.openssh.sshd

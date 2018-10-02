@@ -1,0 +1,8 @@
+# sudo 
+
+
+## Go as admin from a standard account
+
+   su bkb  # bkb is an admin
+
+

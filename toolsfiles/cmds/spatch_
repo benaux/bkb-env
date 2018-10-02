@@ -1,0 +1,3 @@
+#!/bin/sh
+
+~/.opam/4.01.0/bin/ocamlrun  ~/local/coccinelle/coccinelle-1.0.6/spatch $@

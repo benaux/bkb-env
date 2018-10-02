@@ -1,0 +1,38 @@
+#!/usr/bin/perl
+#
+use warnings;
+
+
+sub write_artist {
+  my ($filename, $artist, $title) = @_;
+  chomp $artist;
+  chomp $filename;
+  chomp $title;
+  die "Err: no filename" unless $filename;
+  die "Err: no artist" unless $artist;
+  die "Err: no title" unless $title;
+
+  print $artist . ' TT ' . $title . "\n";
+
+  qx(id3tag --artist="$artist" --song="$title" "$filename");
+  qx(mkdir -p "$artist");
+  qx(mv "$filename" "$artist"/"$title")
+  
+}
+
+
+foreach $file (<"*.mp3">) {
+  if($file =~ /^([\w\s\&]+)\s[\-\_\~]\s*(.+)/){
+    write_artist($file, $1, $2);
+  }else{
+   if($file =~ /^([\w\s\&]+)\sin\s(.+)/){
+    write_artist($file, $1, $2);
+   }else{
+      if($file =~ /^([\w\s\&]+)[\'\|]\s*(.+)/){
+         write_artist($file, $1, $2);
+       }else{
+         die "Err: couldn't find artist in $file" . "\n";
+       }
+  }
+  }
+}

@@ -1,0 +1,14 @@
+#!/bin/sh
+
+num=$1
+
+res=$HOME/.res
+[ -f "$res" ] || { echo "Err: no res in $res"; exit 1; }
+
+
+if [ -n "$num" ] ; then
+  sed "${num}q;d" $res
+  #sed -n -e  $num $res
+else
+  cat -n $res 
+fi

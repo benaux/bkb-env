@@ -1,0 +1,12 @@
+## mdfind
+
+
+fulltext search on mac os x
+
+
+search filename : 
+
+   mdfind -name numbers.txt
+
+
+

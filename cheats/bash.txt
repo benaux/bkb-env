@@ -1,10 +1,28 @@
 Bash and utilies
 -----------------
 
+## remove dotfiles
+
+   rm -rf ..?* .[!.]* *
+
+## print n line 
+
+   sed -n '2p' < file.txt
+   
+   sed -n -e 13p file.txt
+
+
+## read user input
+
+read with default value
+read -p "Enter IP address: " -e -i "default suggestion" 
+
+( requires Bash > Bash 4.0, which is not standard on macos)
+
+
+
 ### Warn and Die
 
-warn () { echo "$*" }
- 
 die () { echo "$*";  exit 1; }
 
 ### Check for success/error

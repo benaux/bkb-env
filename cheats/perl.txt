@@ -1,6 +1,8 @@
 Perl
 ----
 
+### conditionals with the ternary operator
+   my $val = (cond) ? expr1 : expr2;
 ### grep 
    print grep { $_ =~ /$regex/ } <>;
 

@@ -1,0 +1,12 @@
+# Perl regex
+
+trim leading and trailing whitespace
+
+$str =~ s/^\s+|\s+$//g
+
+   also look in   [5vy9eykh]
+
+
+## Parse domain in url
+
+domain=$(perl -e '$ARGV[0] =~ /^((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.    ]+[^#?\s]+)(.*)?(#[\w\-]+)?$/ and print $3;' "$url")

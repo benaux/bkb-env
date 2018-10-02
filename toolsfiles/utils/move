@@ -1,0 +1,19 @@
+#!/bin/sh
+
+USAGE='<input path> <output file>'
+
+
+die () { echo $@; exit 1; }
+usage () { die "usage: $USAGE" ; }
+
+input="$1"
+output="$2"
+
+[ -n "$input" ] || usage
+[ -n "$output" ] || usage
+
+[ -f "$input" ] || die "Err: invalid input"
+
+dir=$(dirname "$input")
+
+mv "$input" "$dir"/"$output"

@@ -1,0 +1,7 @@
+# irc
+
+## resetting your password
+
+freenode
+
+/msg NickServ SENDPASS youraccountnamehere

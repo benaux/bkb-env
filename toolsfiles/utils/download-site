@@ -1,0 +1,10 @@
+#!/bin/sh
+
+url="$1"
+
+[ -n "$url" ] || { echo "usage:<url>" ; exit 1 ; }
+
+
+domain=$(perl -e '$ARGV[0] =~ /^((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+[^#?\s]+)(.*)?(#[\w\-]+)?$/ and print $3;' "$url")
+
+wget --recursive --no-clobber --page-requisites --html-extension --convert-links --restrict-file-names=windows --domains "$domain" --no-parent "$url" 

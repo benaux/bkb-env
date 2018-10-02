@@ -1,0 +1,39 @@
+#!/bin/sh
+
+USAGE='[-i] <search> <replace> <file>|<dir>'
+
+die () { echo $@; exit 1; }
+usage () { echo "usage: $USAGE"; exit 1; }
+
+ignore_case=
+
+if [ "$1" = "-i" ] ; then
+   ignore_case="$1"
+   shift
+fi
+
+search="$1"
+replace="$2"
+file_dir="$3"
+[ -n "$search" ] || usage 
+[ -n "$replace" ] || usage 
+[ -n "$file_dir" ] || usage 
+
+if [ -n "$ignore_case" ] ; then
+  if [ -f "$file_dir" ] ; then
+    perl -p -i -e "s/$search/$replace/gi" "$file_dir"
+  elif [ -d "$file_dir" ] ; then
+    find "$file_dir" -type f -exec perl -p -i -e "s/$search/$replace/gi" {} \;
+   else
+     die "Err: file/dir not exist"
+   fi
+else
+  if [ -f "$file_dir" ] ; then
+    perl -p -i -e "s/$search/$replace/g" "$file_dir"
+  elif [ -d "$file_dir" ] ; then
+    find "$file_dir" -type f -exec perl -p -i -e "s/$search/$replace/g" {} \;
+   else
+     die "Err: file/dir not exist"
+   fi
+fi
+

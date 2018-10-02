@@ -1,0 +1,109 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+use Data::Dumper;
+#
+#
+#
+sub main {
+  my ($url) = @_; 
+
+  my ($pandoc_vers) = qx(pandoc -v);
+  chomp $pandoc_vers;
+  #die "Err: needs elinks >= 12.x ($version)" unless ($version =~ /^ELinks\s0\.12/);
+  ask_url($url, [$url]);
+
+}
+sub ask_url {
+  my ($url, $urls) = @_; 
+
+
+  my $elinks_out = "$ENV{HOME}/.elinks-out";
+  open (my $efh, '<', $elinks_out ) || die "Err: couldn read elinks_out in $elinks_out";
+  my @lns = <$efh>;
+  close $efh;
+
+  die "Err: couldn't fetch url" unless @lns;
+
+# for some reason terminal hit a 'reset' if gathering the result with qx()
+  `elinks -remote "openUrl($url)"`;
+
+  die "Err: could not connect to elinks remote " if $?;
+
+  my %res;
+  my $i = 0;
+  foreach (@lns){
+    chomp;
+    $i++;
+    my ($id, $link ) = split ' ', $_;
+    $res{$id} = $link;
+  }
+  handle_input(\%res,$urls);
+}
+
+
+sub handle_input {
+  my ($res, $urls) = @_;
+
+  print "Link nr or URL please: \n";
+  my $input;
+  while ( chomp ( $input = <STDIN>) && not (length $input )){
+    print "Empty input please try again\n";
+
+  }
+  chomp $input;
+
+  die "Err: no input " unless $input;
+
+  if ($input =~ /\w\w+/){
+    my $link = $res->{$input};
+
+    #die 'll ' . $link;
+    if( $link){
+      push @$urls, $link;
+      ask_url($link, $urls);
+    }else{
+      my ($err) = "Warn invalid input - no link found with $input" . Dumper $res ;
+
+      my $stderr = "$ENV{HOME}/.stderr";
+      open (my $errfh, '>', $stderr) || die "Err: could not write to stderr";
+      print $errfh $err;
+      close $errfh;
+
+      die $err;
+
+    }
+
+# recursive ...
+  }else{
+    if($input){
+      if($input eq 'b'){
+        my ($last) = pop @$urls;
+        my ($prev) = pop @$urls;
+         ask_url($prev, $urls);
+      }else{
+       die 'TODO';
+     }
+    }else{
+       die 'TODO';
+   }
+
+    my $chn = scalar ( split '', $input);
+    if($chn < 3) {
+      if (($input eq 'f') or ($input eq 'b')){
+         qx(tmux send-keys -t out:browser C-$input );
+      }else{
+         qx(tmux send-keys -t out:browser "$input" );
+      }
+     handle_input();
+    }else{
+      exec("$ENV{HOME}/tools/moreutils/web/askurl $input");
+    }
+
+  }
+}
+
+ 
+die "usage:<url>" unless @ARGV;
+main(@ARGV) if not caller(); 

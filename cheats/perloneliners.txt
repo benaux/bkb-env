@@ -8,6 +8,10 @@ cat /etc/hosts | perl -sne '/localhost/ && print $d ' /etc/hosts -- -d='"success
 
 perl -se  '/whatever/ && print  for <>' -- -u=diamond /etc/hosts 
 
+### simple replace
+
+echo 'xx' | perl -pe 's/x/y/g'  # prints 'yy'
+
 
 ### Looping: 
 

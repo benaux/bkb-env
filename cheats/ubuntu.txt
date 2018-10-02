@@ -1,0 +1,17 @@
+# ubuntu
+
+## ubuntu version
+
+   lsb_release -a
+
+## Wifi no longer running, no networks listed
+
+   sudo service network-manager restart
+
+
+## fix networking problem
+
+
+   service network-manager stop
+   rm /var/lib/NetworkManager/NetworkManager.state
+   service network-manager start

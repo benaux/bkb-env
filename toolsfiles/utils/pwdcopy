@@ -1,0 +1,15 @@
+#!/bin/sh
+
+
+os=$(uname)
+
+
+case "$os" in
+  Darwin)
+    pwd | pbcopy
+    ;;
+  *)
+    echo "Err: os $os not implemented yet"
+    ;;
+esac
+

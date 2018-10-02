@@ -1,0 +1,310 @@
+   [1]VIM > [2]Vim - Mac
+   __________________
+   Search
+   (*) everywhere
+   ( ) only in this topic
+   Search [3]Advanced Search
+
+How do I open a file from the Terminal into MacVim's current window?
+
+   [<] [4]Previous Topic [5]Next Topic [>]
+
+   classic Classic [6]list [7]List [8]threaded [9]Threaded
+   This topic has been pinned in Vim - Mac.
+   cD
+   cD
+   [lock_sm.png] Locked 6 messages Options
+   [10]Andrew Stewart
+   [11]Reply | [12]Threaded
+   Open this post in threaded view
+   cD
+   cD
+   |
+   Selected post
+
+How do I open a file from the Terminal into MacVim's current window?
+
+   [13]Andrew Stewart online
+   Hello,
+   Following up on my question yesterday, how do I open a file from the
+   Terminal into MacVim's current window?
+   For example, let's say I have various splits open onto various buffers
+   in MacVim; I go to the Terminal and type `mvim README`.  I expect to
+   see the file README loaded into the Vim-window I was working in before
+   I switched to the Terminal.  I actually see the file README loaded
+   into a whole new MacVim-window.
+   I have set the MacVim preference "Open files from applications" to "in
+   the current window and set the arglist".  This give the behaviour I
+   want when double-clicking in the Finder -- but doesn't for the
+   Terminal.
+   Any ideas?
+   Thanks and regards,
+   Andy Stewart
+   ------
+   [14]http://airbladesoftware.com
+   --
+   You received this message from the "vim_mac" maillist.
+   Do not top-post! Type your reply below the text you are replying to.
+   For more information, visit [15]http://www.vim.org/maillist.php
+   To unsubscribe from this group, send email to
+   vim_mac+unsubscribegooglegroups.com or reply to this email with the
+   words "REMOVE ME" as the subject.
+   [16]Andrew Stewart
+   [17]Reply | [18]Threaded
+   Open this post in threaded view
+   cD
+   cD
+   |
+   Selected post
+
+Re: How do I open a file from the Terminal into MacVim's current window?
+
+   [19]Andrew Stewart online
+   > I have set the MacVim preference "Open files from applications" to
+   "in
+   > the current window and set the arglist".  This give the behaviour I
+   > want when double-clicking in the Finder -- but doesn't for the
+   > Terminal.
+   Aha: making use of the above, I can get the result I want.  In the
+   Terminal:
+       $ open "mvim://open?url=file:///path/to/file"
+   And this respects the MacVim preference.
+   If there's a more direct way I'd like to hear it...but for now this
+   will do.
+   Cheers,
+   Andy Stewart
+   --
+   You received this message from the "vim_mac" maillist.
+   Do not top-post! Type your reply below the text you are replying to.
+   For more information, visit [20]http://www.vim.org/maillist.php
+   To unsubscribe from this group, send email to
+   vim_mac+unsubscribegooglegroups.com or reply to this email with the
+   words "REMOVE ME" as the subject.
+   [21]Björn Winckler
+   [22]Reply | [23]Threaded
+   Open this post in threaded view
+   cD
+   cD
+   |
+   Selected post
+
+Re: How do I open a file from the Terminal into MacVim's current window?
+
+   [24]Björn Winckler online
+   On 24 March 2010 12:50, Andrew Stewart wrote:
+   >> I have set the MacVim preference "Open files from applications" to
+   "in
+   >> the current window and set the arglist".  This give the behaviour I
+   >> want when double-clicking in the Finder -- but doesn't for the
+   >> Terminal.
+   >
+   > Aha: making use of the above, I can get the result I want.  In the
+   > Terminal:
+   >
+   >    $ open "mvim://open?url=file:///path/to/file"
+   >
+   > And this respects the MacVim preference.
+   >
+   > If there's a more direct way I'd like to hear it...but for now this
+   > will do.
+   If you have the above preference set it is enough to simply use:
+   open -a MacVim.app filename1 filename2
+   etc.
+   If you have several windows open and want to specify which one to open
+   a file in you need to use the --remote and --servername arguments to
+   the "mvim" script (see ":h mvim"), e.g.
+   mvim --servername VIM --remote filename
+   (The server name can be gleaned from the window title.)
+   Björn
+   --
+   You received this message from the "vim_mac" maillist.
+   Do not top-post! Type your reply below the text you are replying to.
+   For more information, visit [25]http://www.vim.org/maillist.php
+   To unsubscribe from this group, send email to
+   vim_mac+unsubscribegooglegroups.com or reply to this email with the
+   words "REMOVE ME" as the subject.
+   [26]Andrew Stewart
+   [27]Reply | [28]Threaded
+   Open this post in threaded view
+   cD
+   cD
+   |
+   Selected post
+
+Re: How do I open a file from the Terminal into MacVim's current window?
+
+   [29]Andrew Stewart online
+   On 24 Mar 2010, at 21:30, björn wrote:
+   >> In the Terminal:
+   >>
+   >>    $ open "mvim://open?url=file:///path/to/file"
+   >>
+   >> And this respects the MacVim preference.
+   >>
+   >> If there's a more direct way I'd like to hear it...but for now this
+   >> will do.
+   >
+   > If you have the above preference set it is enough to simply use:
+   >
+   > open -a MacVim.app filename1 filename2
+   >
+   > etc.
+   Oh yes, so it does.
+   So to summarise, given a MacVim instance in the background, and focus
+   in the Terminal:
+   * `open -a MacVim.app filename1` will open filename1 in the existing
+   MacVim window.
+   * `mvim filename1` will open filename1 in a new MacVim window.
+   Presumably the mvim URL handler opens in the existing (rather than a
+   new) MacVim window because it wraps the `open -a` mechanism?
+   > If you have several windows open and want to specify which one to
+   open
+   > a file in you need to use the --remote and --servername arguments to
+   > the "mvim" script (see ":h mvim"), e.g.
+   >
+   > mvim --servername VIM --remote filename
+   >
+   > (The server name can be gleaned from the window title.)
+   That's useful to know, thank you.
+   Cheers,
+   Andy
+   -------
+   [30]http://airbladesoftware.com
+   --
+   You received this message from the "vim_mac" maillist.
+   Do not top-post! Type your reply below the text you are replying to.
+   For more information, visit [31]http://www.vim.org/maillist.php
+   To unsubscribe from this group, send email to
+   vim_mac+unsubscribegooglegroups.com or reply to this email with the
+   words "REMOVE ME" as the subject.
+   [32]Björn Winckler
+   [33]Reply | [34]Threaded
+   Open this post in threaded view
+   cD
+   cD
+   |
+   Selected post
+
+Re: How do I open a file from the Terminal into MacVim's current window?
+
+   [35]Björn Winckler online
+   On 25 March 2010 18:47, Andrew Stewart wrote:
+   >
+   > So to summarise, given a MacVim instance in the background, and focus
+   in the
+   > Terminal:
+   >
+   > * `open -a MacVim.app filename1` will open filename1 in the existing
+   MacVim
+   > window.
+   > * `mvim filename1` will open filename1 in a new MacVim window.
+   >
+   > Presumably the mvim URL handler opens in the existing (rather than a
+   new)
+   > MacVim window because it wraps the `open -a` mechanism?
+   Yes, using the "open" is like opening from Finder.
+   MacVim works like this: each window runs its own Vim process.  Opening
+   a file from Finder results in the MacVim app getting a request to open
+   a file (mvim:// handler requests also end up here).  At this point
+   MacVim will look at your preferences and respect those.  When opening
+   a file from Terminal (with "mvim") you are actually starting a new Vim
+   process manually and this process connects to the MacVim app which
+   responds by opening up a new window.  This is why "mvim" always opens
+   a new window.  (Maybe this is too much information, but there you go.)
+   Björn
+   --
+   You received this message from the "vim_mac" maillist.
+   Do not top-post! Type your reply below the text you are replying to.
+   For more information, visit [36]http://www.vim.org/maillist.php
+   To unsubscribe from this group, send email to
+   vim_mac+unsubscribegooglegroups.com or reply to this email with the
+   words "REMOVE ME" as the subject.
+   [37]Andrew Stewart
+   [38]Reply | [39]Threaded
+   Open this post in threaded view
+   cD
+   cD
+   |
+   Selected post
+
+Re: How do I open a file from the Terminal into MacVim's current window?
+
+   [40]Andrew Stewart online
+   On 26 Mar 2010, at 16:08, björn wrote:
+   > MacVim works like this: each window runs its own Vim process.
+   Opening
+   > a file from Finder results in the MacVim app getting a request to
+   open
+   > a file (mvim:// handler requests also end up here).  At this point
+   > MacVim will look at your preferences and respect those.  When opening
+   > a file from Terminal (with "mvim") you are actually starting a new
+   Vim
+   > process manually and this process connects to the MacVim app which
+   > responds by opening up a new window.  This is why "mvim" always opens
+   > a new window.  (Maybe this is too much information, but there you
+   go.)
+   On the contrary, it's good to know exactly how this all works.  Thanks
+
+   for taking the time to type it all out.
+   It makes perfect sense now.
+   Regards,
+   Andy Stewart
+   ------
+   [41]http://airbladesoftware.com
+   --
+   You received this message from the "vim_mac" maillist.
+   Do not top-post! Type your reply below the text you are replying to.
+   For more information, visit [42]http://www.vim.org/maillist.php
+   To unsubscribe from this group, send email to
+   vim_mac+unsubscribegooglegroups.com or reply to this email with the
+   words "REMOVE ME" as the subject.
+   « [43]Return to Vim - Mac  |  1 view|%1 views
+   [44]Free forum by Nabble [45]Edit this page
+
+References
+
+   1. file:///
+   2. file:///Vim-Mac-f1212217.html
+   3. file:///template/NamlServlet.jtp?macro=adv_search_page&node=1220082
+   4. http://vim.1045645.n5.nabble.com/Problem-setting-bold-fonts-via-gvimrc-tp1220102.html
+   5. http://vim.1045645.n5.nabble.com/Interacting-with-a-Ruby-program-tp1220088.html
+   6. javascript:void(0)
+   7. javascript:void(0)
+   8. javascript:void(0)
+   9. javascript:void(0)
+  10. file:///template/NamlServlet.jtp?macro=user_nodes&user=69771
+  11. file:///template/NamlServlet.jtp?macro=reply&node=1220082
+  12. javascript:void(0)
+  13. http://vim.1045645.n5.nabble.com/template/NamlServlet.jtp?macro=user_nodes&user=69771
+  14. http://airbladesoftware.com/
+  15. http://www.vim.org/maillist.php
+  16. file:///template/NamlServlet.jtp?macro=user_nodes&user=69771
+  17. file:///template/NamlServlet.jtp?macro=reply&node=1220083
+  18. javascript:void(0)
+  19. http://vim.1045645.n5.nabble.com/template/NamlServlet.jtp?macro=user_nodes&user=69771
+  20. http://www.vim.org/maillist.php
+  21. file:///template/NamlServlet.jtp?macro=user_nodes&user=49240
+  22. file:///template/NamlServlet.jtp?macro=reply&node=1220084
+  23. javascript:void(0)
+  24. http://vim.1045645.n5.nabble.com/template/NamlServlet.jtp?macro=user_nodes&user=49240
+  25. http://www.vim.org/maillist.php
+  26. file:///template/NamlServlet.jtp?macro=user_nodes&user=69771
+  27. file:///template/NamlServlet.jtp?macro=reply&node=1220085
+  28. javascript:void(0)
+  29. http://vim.1045645.n5.nabble.com/template/NamlServlet.jtp?macro=user_nodes&user=69771
+  30. http://airbladesoftware.com/
+  31. http://www.vim.org/maillist.php
+  32. file:///template/NamlServlet.jtp?macro=user_nodes&user=49240
+  33. file:///template/NamlServlet.jtp?macro=reply&node=1220086
+  34. javascript:void(0)
+  35. http://vim.1045645.n5.nabble.com/template/NamlServlet.jtp?macro=user_nodes&user=49240
+  36. http://www.vim.org/maillist.php
+  37. file:///template/NamlServlet.jtp?macro=user_nodes&user=69771
+  38. file:///template/NamlServlet.jtp?macro=reply&node=1220087
+  39. javascript:void(0)
+  40. http://vim.1045645.n5.nabble.com/template/NamlServlet.jtp?macro=user_nodes&user=69771
+  41. http://airbladesoftware.com/
+  42. http://www.vim.org/maillist.php
+  43. http://vim.1045645.n5.nabble.com/Vim-Mac-f1212217.html
+  44. https://www.nabble.com/
+  45. file:///template/NamlServlet.jtp?macro=macro_viewer&id=classic_forum_topic%21nabble%3Atopic.naml&base=nabble.view.web.template.ServletNamespace

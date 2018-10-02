@@ -1,6 +1,12 @@
 Tmux
 ----
 
+## Tmux and environment variables
+
+update environment with 
+
+   tmux setenv BAR 33 
+
 ### Name of the current session:
 
     tmux display-message -p '#S'

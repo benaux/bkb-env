@@ -1,0 +1,24 @@
+# Xcrun
+
+
+## Find the right Clang path for iOS cross-compilation
+
+   xcrun -sdk iphoneos -find clang
+
+# result: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang
+
+
+## List Simulators
+
+   xcrun simctl list
+
+## Install App bundle in simulator
+
+   xcrun simctl install booted /Users/shashi/Library/Developer/Xcode/DerivedData/CLI-dxasphjukowuptcqxzbmyaqgpbqp/Build/Products/Debug-iphoneos/CLI.app
+
+
+## Sdk path
+
+   xcrun --sdk iphoneos --show-sdk-path
+
+/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS11.4.sdk

@@ -1,0 +1,12 @@
+# Perl:  for loop
+
+
+ITS: Initialize Test Step
+
+for (INITIALIZE; TEST; STEP) {
+    BODY;
+}
+
+for (my $i=0; $i <= 9; $i++) {
+     print "$i\n";
+}

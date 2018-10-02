@@ -6,7 +6,7 @@ Applescript
 #### Applescript in Bash with Heredocs
 
    text="Hello world"
-   osascript <<EOF
+   osascript -e <<EOF
    say "$text" using "Alex"
    EOF
 

@@ -1,0 +1,11 @@
+#!/bin/sh
+
+
+if tmux has-session -t co; then
+   if [ -n "$1" ] ; then
+    tmux send-keys -t co "cd $1" Enter
+  else
+    cwd=$(pwd)
+    tmux send-keys -t co "cd $cwd" Enter
+  fi
+fi

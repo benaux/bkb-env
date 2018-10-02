@@ -1,0 +1,6 @@
+#!/bin/sh
+
+if tmux has-session -t out ; then
+  perl ~/tools/moreutils/web/askurl $@
+  tmux select-window -t out:browser
+fi

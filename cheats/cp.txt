@@ -1,0 +1,9 @@
+# cp
+
+
+## Copy symbolic links
+
+linux:  cp --preserve=links , scp -P 
+
+
+mac: cp -a

@@ -1,0 +1,40 @@
+# Xcode
+
+(alot is taken from: https://medium.com/the-traveled-ios-developers-guide/ios-simulator-power-ups-407060863b3c)
+
+
+Print Xcode environment
+
+   xcode-select --print-path
+
+
+Switch Xcode tools
+
+   sudo xcode-select -switch (the path to Xcode)/Xcode.app
+
+
+Record a video from the simulator
+
+   xcrun simctl io booted recordVideo (filename).(extension
+
+
+Take a screenshot from the simulator
+
+   xcrun simctl io booted screenshot myScreenShot.png
+
+
+Show Device List
+
+   xcrun simctl list
+
+Result (booted show active simulator)
+   iPhone .. ID (Booted) 
+
+
+Work with URL Schemes
+
+   xcrun simctl openurl booted https://www.dreaminginbinary.co/
+
+   xcrun simctl openurl booted sms: #Open Messages
+
+   xcrun simctl openurl booted sms:1-417-323-2345

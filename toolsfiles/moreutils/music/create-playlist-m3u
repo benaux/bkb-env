@@ -1,0 +1,11 @@
+#!/bin/sh
+
+dir="$1"
+
+find "$dir" -iname '*.mp3' | while read mp3; do
+#for mp3 in "$dir"/*mp3 ; do
+  [ -f "$mp3" ] || continue
+  echo $mp3
+done
+
+

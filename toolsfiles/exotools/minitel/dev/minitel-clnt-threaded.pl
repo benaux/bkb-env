@@ -1,0 +1,46 @@
+use warnings; use strict;
+
+$| = 1; # Autoflush
+
+use IO::Socket;
+use IO::Select;
+
+my $socket = IO::Socket::INET->new(
+                 PeerAddr    => 'localhost',
+                 PeerPort    =>  7777,
+                 Proto       => 'tcp',
+                 Timeout     =>  1
+             )
+             or die "Could not connect";
+
+
+my $select = IO::Select->new();
+
+$select -> add (\*STDIN);  # Does not work on Windows! [ http://stackoverflow.com/a/1701458/180275 ]
+$select -> add ($socket);
+
+while (1) {
+   while (my @ready = $select -> can_read) {
+
+      foreach my $fh (@ready) {
+
+      if ($fh == $socket) {
+         my $buf = <$socket>;
+         if($buf){
+         print "\033[2J";
+         print "\033[0;0H";
+         print "\n";
+         print $buf;
+         print "------------\n";
+         #       exit;
+         }
+       }
+       else {
+
+         my $buf = <STDIN>;
+         print $socket $buf
+       }
+      }
+  }
+   print "$!\n";
+}

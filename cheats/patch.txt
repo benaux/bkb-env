@@ -1,0 +1,14 @@
+# Patch
+
+
+Preview patch
+
+   git apply --stat my.patch
+
+dry run (detect error
+
+   git apply --check  my.patch
+
+finally
+
+   git apply my.patch

@@ -1,6 +1,11 @@
 Vim
 ----
 
+## show special whitespace character
+
+set listchars=tab:»\ ,extends:›,precedes:‹,nbsp:·,trail:·
+set list
+
 ### Editing
 
     open file read-only: vim -R

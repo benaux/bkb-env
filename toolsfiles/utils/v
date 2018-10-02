@@ -1,0 +1,22 @@
+#!/bin/sh
+
+inp="$1"
+
+
+os=$(uname)
+
+
+case "$os" in
+  Darwin)
+    [ -f "$inp" ] || touch "$inp"
+    open -a MacVim "$inp"
+    ;;
+  *)
+    echo "Err: os $os not implemented yet"
+    exit 1
+    ;;
+esac
+
+
+
+

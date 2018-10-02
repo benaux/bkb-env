@@ -1,0 +1,271 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html><head><title>Example: Extracting Links from Arbitrary HTML (Perl &amp; LWP)</title>
+
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" >
+
+<script type="text/javascript">var lwp_pageid="ch06_06"; var lwp_lastmod=
+
+  Time-stamp: 2007-04-16 15:32:05 AKDT sburke@cpan.org;  </script>
+
+<link rel="stylesheet" type="text/css" href="lwpstyle.css" />
+
+</head>
+
+<body id=ch06_06 class=lwp lwp_ch06_06 lang=en-US >
+
+<noscript><p align=center>^ <a href=file:///diskbase_skyfall01/syncdir_bkb_skyfall/aux-bkb.repos_user-data.pub/bkb-env_52/toolsfiles/moreutils/web/out.html>[aa] [aa] Perl and LWP</a> ^</p></noscript>
+
+<script type="text/javascript" src="./lwp_nav.js"></script>
+
+
+
+<h2 class="sect1">6.6. Example: Extracting Links from Arbitrary HTML</h2>
+
+
+
+<p>Suppose that the links we
+
+<a name="INDEX-394" class="ipoint"
+
+></a><a name="INDEX-395" class="ipoint"
+
+></a>want to check are in a remote HTML
+
+local bookmark file. Suppose, in fact, that a representative section
+
+looks like this:
+
+</p>
+
+
+
+<pre class="code">&lt;p&gt;Dear Diary,
+
+&lt;br&gt;I was listening to &lt;a href="http://www.freshair.com"&gt;Fresh
+
+Air&lt;/a&gt; the other day and they had &lt;a href
+
+="http://www.cs.Helsinki.FI/u/torvalds/"&gt;Linus Torvalds&lt;/a&gt; on,
+
+and he was going on about how he wrote some kinda
+
+&lt;a href="http://www.linux.org/"&gt;program&lt;/a&gt; or something.  If
+
+hes so smart, why didnt he write something useful, like &lt;a
+
+href="why_I_love_tetris.html"&gt;Tetris&lt;/a&gt; or &lt;a href="../minesweeper_hints/"
+
+&gt;Minesweeper&lt;/a&gt;, huh?</pre>
+
+
+
+<p>In the case of the bookmarks, we noted that links were each alone on
+
+a line, all absolute, and each capturable with <tt class="literal">m/
+
+HREF="([^"\s]+)" /</tt>. But none of those things are true here!
+
+Some links (such as <tt class="literal">href="why_I_love_tetris.html"</tt>)
+
+are relative, some lines have more than one link in them, and one
+
+link even has a newline between its <tt class="literal">href</tt> attribute
+
+name and its <tt class="literal">="..."</tt> attribute value.
+
+</p>
+
+
+
+matter of applying them to a whole document (instead of to individual
+
+lines) and also making the regexp a bit more permissive:
+
+</p>
+
+
+
+<pre class="code">while ( $document =~ m/\s+href\s*=\s*"([^"\s]+)"/gi ) {
+
+  my $url = $1;
+
+  ...
+
+}</pre>
+
+
+
+<p>(The <tt class="literal">/g</tt> modifier
+
+("g" originally for
+
+"globally") on the regexp tries to
+
+match the pattern as many times as it can, each time picking up where
+
+the last match left off.)
+
+</p>
+
+
+
+<p><a href=file:///diskbase_skyfall01/syncdir_bkb_skyfall/aux-bkb.repos_user-data.pub/bkb-env_52/toolsfiles/moreutils/web/out.html>[ab] [ab] Example 6-5</a> shows this basic idea fleshed out to
+
+include support for fetching a remote document, matching each
+
+<a name="INDEX-396" class="ipoint"
+
+></a>link in it, making each absolute, and
+
+calling a checker routine (currently a placeholder) on it.
+
+</p>
+
+
+
+<a name="perllwp-CHP-6-EX-5"></a><div class="example">
+
+<h4 class="objtitle">Example 6-5. diary-link-checker </h4>
+
+<pre class="code">#!/usr/bin/perl -w
+
+# diary-link-checker - check links from diary page
+
+
+
+use strict;
+
+use LWP;
+
+
+
+my $doc_url = "http://chichi.diaries.int/stuff/diary.html";
+
+my $document;
+
+my $browser;
+
+init_browser( );
+
+
+
+{  # Get the page whose links we want to check:
+
+  my $response = $browser-&gt;get($doc_url);
+
+    unless $response-&gt;is_success;
+
+  $document = $response-&gt;content;
+
+  $doc_url = $response-&gt;base;
+
+  # In case we need to resolve relative URLs later
+
+}
+
+
+
+while ($document =~ m/href\s*=\s*"([^"\s]+)"/gi) {
+
+  my $absolute_url = absolutize($1, $doc_url);
+
+  check_url($absolute_url);
+
+}
+
+
+
+sub absolutize {
+
+  my($url, $base) = @_;
+
+  use URI;
+
+  return URI-&gt;new_abs($url, $base)-&gt;canonical;
+
+}
+
+
+
+sub init_browser {
+
+  $browser = LWP::UserAgent-&gt;new;
+
+  # ...And any other initialization we might need to do...
+
+  return $browser;
+
+}
+
+
+
+sub check_url {
+
+  # A temporary placeholder...
+
+  print "I should check $_[0]
+";
+
+}</pre>
+
+</div>
+
+
+
+<p>When run, this prints:</p>
+
+
+
+<pre class="code"><b class="emphasis-bold">I should check http://www.freshair.com/</b>
+
+<b class="emphasis-bold">I should check http://www.cs.Helsinki.FI/u/torvalds/</b>
+
+<b class="emphasis-bold">I should check http://www.linux.org/</b>
+
+<b class="emphasis-bold">I should check http://chichi.diaries.int/stuff/why_I_love_tetris.html</b>
+
+<b class="emphasis-bold">I should check http://chichi.diaries.int/minesweeper_hints/</b></pre>
+
+
+
+<p>So our <tt class="literal">while</tt>
+
+<tt class="literal">(</tt><em class="replaceable"><tt>regexp</tt></em><tt class="literal">)</tt>
+
+loop is indeed <a name="INDEX-397" class="ipoint"
+
+></a>successfully matching all five links in the
+
+document. (Note that our <tt class="literal">absolutize</tt> routine is
+
+correctly making the URLs absolute, as with turning
+
+<em class="emphasis">why_I_love_tetris.html</em> into
+
+<em class="emphasis">http://chichi.diaries.int/stuff/why_I_love_tetris.html</em>
+
+and <em class="emphasis">../minesweeper_hints/</em> into
+
+<em class="emphasis">http://chichi.diaries.int/minesweeper_hints/</em> by
+
+using the URI class that we explained in <a href=file:///diskbase_skyfall01/syncdir_bkb_skyfall/aux-bkb.repos_user-data.pub/bkb-env_52/toolsfiles/moreutils/web/out.html>[ac] [ac] Chapter 4, "URLs"</a><em class="emphasis">.</em>) 
+
+</p>
+
+
+
+matching and absolutizing links correctly, we can drop in the
+
+<tt class="literal">check_url</tt> routine from the <a href=file:///diskbase_skyfall01/syncdir_bkb_skyfall/aux-bkb.repos_user-data.pub/bkb-env_52/toolsfiles/moreutils/web/out.html>[ad] [ad] Example 6-4</a>, and it will actually check the URLs that the
+
+our placeholder <tt class="literal">check_url</tt> routine promised
+
+</p>
+
+
+
+<script type="text/javascript">endpage();</script>
+
+</body></html>
+

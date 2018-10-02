@@ -10,6 +10,7 @@ set shell=/bin/sh
 let mapleader=","
 let maplocalleader=","
 
+set modelines=1
 
 set nu
 set noerrorbells
@@ -53,11 +54,9 @@ au VimEnter * hi! link Conceal Statement
 au VimEnter * set conceallevel=2
 set ruler
 
-au BufReadPost *.w set syntax=perl
 
 " Faster buffer switch
 nnoremap <Leader>b :ls<CR>:b<Space>
-
 
 
 syntax enable
@@ -65,3 +64,11 @@ set smartindent
 set tabstop=2
 set shiftwidth=2
 set expandtab
+
+au BufReadPost *.w set syntax=perl
+autocmd BufReadPost *.org call OrgModeHi('perl', 'perl')
+autocmd BufReadPost *.org call OrgModeHi('bash', 'sh')
+autocmd BufReadPost *.org call OrgModeHi('emacs-lisp', 'lisp')
+
+syn region JakeTitle start="<<" end=">>"
+highlight JakeTitle ctermbg=black ctermfg=yellow

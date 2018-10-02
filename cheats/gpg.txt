@@ -1,6 +1,18 @@
 Gpg / gnupg / pgp
 ------------------
 
+## is my gpg-agent running
+check the exit code of 
+
+   gpg-connect-agent /bye
+
+## kill gpg  agent
+
+   gpgconf --kill gpg-agent
+
+## reload restart gpg-agent
+
+   gpg-connect-agent reloadagent /bye
 
 gpg -k # list public keys
 

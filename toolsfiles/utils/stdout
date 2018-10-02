@@ -1,0 +1,30 @@
+#!/bin/sh
+
+stdout=$HOME/.stdout
+
+die () { echo $@;  exit 1; }
+
+[ -f "$stdout" ] || die "Err: no stdout $stdout";
+
+out="$(cat $stdout)"
+
+[ -n "$out" ] || die "Err: no contents in $stdout"
+
+dir=
+multiple=
+for d in $out ;do 
+   if [ -n "$dir" ] ; then
+     multiple=1
+   else
+      dir=1
+   fi
+done
+
+if [ -z "$dir" ]; then
+  echo ""
+elif  [ -n "$multiple" ] ; then
+   cat "$stdout" | fzf
+else
+  cat $stdout
+fi
+

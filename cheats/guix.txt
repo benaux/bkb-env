@@ -1,0 +1,7 @@
+# Gnu Guix
+
+( lots of helpfull info was taken from: https://github.com/pjotrp/guix-notes/blob/master/INSTALL.org) 
+
+## Locale
+
+"warning: failed to install locale: Invalid argument"

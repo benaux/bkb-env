@@ -1,0 +1,46 @@
+#!/bin/sh
+
+vers=$1
+
+os=$(uname)
+
+die () { echo $@; exit 1; }
+
+[ -n "$vers" ] || die "usage: <java version 6|7|8|9|10>"
+
+darwin_switcher () {
+
+  case "$vers" in
+    9|10)
+      echo "$vers"
+      ;;
+    6|7|8)
+      echo 1."$vers"
+      ;;
+    *)
+      die "Err: java version $vers not implemented"
+      ;;
+     esac
+}
+
+jdir=
+case "$os" in
+  Darwin)
+    vers=$(darwin_switcher)
+    [ "$?" -eq 0 ] || die "$vers"
+    jdir=$(/usr/libexec/java_home -v "$vers")
+#    [ "$?" -eq 0 ] || die "Err: no jdir for version $vers"
+    ;;
+  *)
+    die "Err: for os $os not yet implemented"
+    ;;
+esac
+
+if [ -d "$jdir" ] ; then
+  echo $jdir
+  exit 0
+else
+  die "Err: no dir with name $jdir"
+fi
+
+

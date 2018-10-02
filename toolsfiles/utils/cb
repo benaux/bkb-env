@@ -1,0 +1,40 @@
+#!/bin/sh
+
+inp=$1
+
+decimals=$HOME/decimals
+
+die () { echo $@; exit 1; }
+
+[ -d "$decimals" ] || die "Err: no decimals dir "
+
+match=
+for m in $(ls $decimals/ | grep -i $inp) ; do
+  if [ -n "$match" ] ; then
+    die "Err: more than 1 match"
+  else
+   match=$m
+ fi
+done
+
+if [ -n "$match" ] ; then
+   if [ -d "$decimals/$match" ] ; then
+     cd $decimals/$match
+   else
+     die "Err: directory $decimals/$match not exist"
+   fi
+else
+  die "Err: no match for $inp"
+fi
+
+
+# {
+#   for link in $decimals/* ; do
+#     [ -L "$link" ] || continue
+#     [ -d "$link" ] || continue
+#     bl=$(basename $link)
+#     echo $bl
+#   done
+# } | grep -i $inp
+
+

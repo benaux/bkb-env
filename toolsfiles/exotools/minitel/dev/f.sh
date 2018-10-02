@@ -1,0 +1,1 @@
+find ~/Downloads -iname '*fuck*'

@@ -1,0 +1,7 @@
+# xdotool
+
+
+send keystrokes from mac to linux 
+
+
+xdotool search --desktop 0 "Terminator" windowactivate  && xdotool key "a"

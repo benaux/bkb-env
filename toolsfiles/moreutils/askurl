@@ -1,0 +1,59 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+use Data::Dumper;
+#
+#
+#
+my $url = $ARGV[0];
+
+die "usage:<url>" unless $url;
+
+my ($version) = qx(elinks -version);
+chomp $version;
+die "Err: needs elinks >= 12.x ($version)" unless ($version =~ /^ELinks\s0\.12/);
+
+my @lns = qx(elinks -dump $url);
+die "Err: couldn't fetch url" unless @lns;
+
+
+# for some reason terminal hit a 'reset' if gathering the result with qx()
+`elinks -remote "openUrl($url)"`;
+
+die "Err: could not connect to elinks remote " if $?;
+
+my $kip;
+my %res;
+
+foreach (@lns){
+  chomp;
+    if($kip){
+        if(/\s+(\d+)\.\s+(.*)/){
+            $res{$1} = $2;
+        }else {
+            die "Err: couldnot parse data" . $_;
+        }
+    }
+    if (/\s*Visible links\s*$/){
+        $kip = 1;
+    }
+}
+
+print "Link number xplease: \n";
+my $input = <STDIN>;
+chomp $input;
+
+die "bye" unless $input;
+
+die 'fff' . Dumper %res;
+
+my $link = $res{$input};
+#use Data::Dumper;
+
+die "Err: invalid input - no link found " unless $link;
+
+# recursive ...
+exec("$ENV{HOME}/tools/moreutils/web/askurl $link");
+
+ 

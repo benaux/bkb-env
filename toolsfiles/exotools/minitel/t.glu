@@ -1,0 +1,3 @@
+let { assert } = import! std.test
+
+assert(1==1)

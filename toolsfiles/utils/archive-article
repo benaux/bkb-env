@@ -1,0 +1,99 @@
+#!/usr/local/bin/bash
+# because bash on mac os x not work with read -i
+
+#debug_url='http://tagi.ch'
+
+target_dir=$1
+url_arg=$2
+
+
+## ----- library -------
+os=$(uname)
+die () { echo $@; exit 1; }
+clip () {
+  case "$os" in
+    Darwin) printf "$1" | pbcopy ;;
+    *) die "Err: os $os not impl" ;;
+  esac
+}
+## ---------------------
+
+base32date=$HOME/tools/utils/base32date
+[ -f "$base32date" ] || die "Err: the 'util' '$base32date' is not in ~/tools/utils/"
+
+[ -n "$target_dir" ] || die "usage: <target dir>"
+mkdir -p "$target_dir"
+
+html_temp_file=$(mktemp)
+
+url=
+if [ -n "$debug_url" ] ; then
+  url="$debug_url"
+else
+  if [ -n "$url_arg" ] ; then
+    url="$url_arg"
+  else
+     read -p "Enter url: " url
+  fi
+fi
+
+[ -n "$url" ] || die "Err: no url given"
+
+wget "$url" -O $html_temp_file
+
+[ -f "$html_temp_file" ] || die "Err: no html_temp_file in $html_temp_file"
+
+txt_temp_file=$(mktemp)
+elinks -dump "$html_temp_file" > "$txt_temp_file"
+#pandoc -f html -t markdown -o "$txt_temp_file" "$html_temp_file"
+
+[ -f "$txt_temp_file" ] || die "Err: no txt_temp_file in $txt_temp_file"
+
+origtitle="$(perl -n -e '/\<title\>(.+?)\<\/title\>/ && print $1' $html_temp_file)"
+
+read -p "Enter title: " -e -i "$origtitle" title
+
+[ -n "$title" ] || die "Err: no title"
+
+filetitle=$(perl -e '$ARGV[0] =~ s/[^a-zA-Z0-9]+/ /g; $ARGV[0] =~ s/^\s+|\s+$//g;  print(lc($ARGV[0]))' "$title")
+
+basetag=$(basename "$target_dir")
+echo ""
+echo "Please enter some space separated tags for title '$title': "
+read -e -i "webarc $basetag " tags 
+
+day=$(date +%d) month=$(date +%m) year=$(date +%Y) hour=$(date +%H) minute=$(date +%M)
+date32=$(${base32date} ${year}${month}${day}${hour}${minute})
+
+html_path="$target_dir"/"$filetitle -- $tags -$date32".html
+[ -f "$html_path" ] && die "Err: html_path '$html_path' exists"
+
+txt_path=
+if [ -n "$tags" ] ; then
+   txt_path="$target_dir"/"$filetitle -_${date32}".txt
+else
+   txt_path="$target_dir"/"$filetitle -_${date32}".txt
+fi
+[ -f "$txt_path" ] && die "Err: txt path exists in '$txt_path'"
+
+{
+  echo '---'
+  echo "title: $origtitle"
+  echo "url: $url"
+  echo "date: $day.$month.$year $hour:$minute"
+  echo "tags: $tags"
+  echo "---"
+  echo ""
+  cat "$txt_temp_file"
+} > "$txt_path"
+
+mv "$html_temp_file" "$html_path"
+
+clip "$html_path" 
+
+echo ""
+echo "Done! (txt path in clipboard)"
+echo "txt: $txt_path"
+echo "html: $html_path"
+
+

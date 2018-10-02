@@ -1,0 +1,23 @@
+#!/bin/sh
+
+
+num=$1
+
+[ -n "$num" ] || {
+  echo "usage: <num>"
+  exit 1
+}
+
+decimals=$HOME/decimals/bkb
+
+item=$(echo $decimals/*_$num)
+
+
+if [ -f "$item" ] ; then
+   echo "$item"
+elif [ -d "$item" ] ; then
+   echo "$item"
+else
+ echo "Err: could not find $item"
+ exit 1
+fi

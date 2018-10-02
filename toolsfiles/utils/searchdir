@@ -1,0 +1,28 @@
+#!/bin/sh
+
+name=$1
+shift
+#dir=$1
+#shift
+
+awkbin=
+if [ -f "/usr/local/Cellar/awk/20121220/bin/awk" ] ; then
+  awkbin=/usr/local/Cellar/awk/20121220/bin/awk
+else
+  awkbin=$(which awk)
+fi
+
+ress="$(mdfind -name $name | while read i ; do [ -d "$i" ] && echo $i; done)" 
+
+{
+  if [ -n "$1" ] ; then
+    perl -e '$f=shift;@files=split(/\n/,$f);foreach $f (@ARGV) { @files = grep /$f/i ,@files;};foreach(@files){print $_ . "\n"}'  "$ress" $@
+  else
+    for i in  $ress; do
+      echo $i
+    done
+  fi
+} | tee $HOME/.res
+
+exit
+

@@ -1,0 +1,8 @@
+# Grep
+
+## Only search in specific paths
+
+   grep -lir --include '*.scm' 'searchterm' ~/r/mypath
+
+
+

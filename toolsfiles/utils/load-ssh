@@ -1,0 +1,50 @@
+#!/bin/sh
+
+USAGE='<path to ssh key>'
+
+keypath=$1
+
+keyname=$(basename $keypath)
+keydir=$(dirname $keypath)
+
+
+die () { echo $@; exit 1; }
+
+[ -n "$keypath" ] || die "usage: $USAGE"
+[ -f "$keypath" ] || die "usage: $USAGE"
+
+
+ext=${keyname##.*}
+pubkey= privkey=
+if [ "$ext" = 'pub' ] ; then
+  privname=${keyname%.*}
+  privkey=$keydir/$privname
+  pubkey=$keypath
+else
+  privkey=$keypath
+  pubkey="$keypath.pub"
+fi
+  
+[ -f "$privkey" ] || die "Err: no priv key '$privkey' found"
+[ -f "$pubkey" ] || die "Err: no pub key '$pubkey' found"
+
+comment=$(perl -a -F'==' -e 'print $F[1]' $pubkey)
+
+[ -n "$comment" ] || die "Err: no comment from pubkey '$pubkey'"
+
+command=$(perl -e '@f=split(/\s*::\s*/, $ARGV[0]); print $f[1];' "$comment") 
+
+[ -n "$command" ] || die "Err: no command from pubkey '$pubkey'"
+
+echo "Ok: try to fetch password with command '$command'"
+${command}
+
+if [ "$?" -eq "0" ] ; then
+  echo "OK: password fetched"
+else
+  echo "WARN: password not fetched"
+fi
+
+echo ""
+
+ssh-add "$privkey"

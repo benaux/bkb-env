@@ -1,0 +1,7 @@
+# Perl: break out of loop
+
+  for my $entry (@array){
+     if ($entry eq "text"){
+        last;
+     }
+  }

@@ -1,0 +1,76 @@
+#!/usr/bin/env bash
+
+input="$1"
+
+here=$(dirname $0)
+
+passwordstore="$HOME/.password-store"
+
+OS=$(uname)
+ die () { echo $@; exit 1; }
+
+py=/usr/local/bin/python
+pwdhash_py=$HOME/tools/sw/pwdhash.py
+[ -f "$pwdhash_py" ] || die "Err: no pwdhash.py in $pwdhash_py"
+
+[ -d "$passwordstore" ] || {
+  echo "Warn: no 'pwdhash' director in ~/.password-store"
+ }
+
+clipcopy (){
+  case "$OS" in
+    Darwin) printf $@ | pbcopy ;;
+    *) die "TODO(clipcopy): for $OS" ;;
+   esac
+}
+
+#token: 
+# from pwdhash 'login:apple,#kbd_u3a0-bkb'      
+# -> login_apple_kbd
+
+token=$(echo "$input" | perl -pe 's/(\w+)_(u\d\w\d-\w+)/$1/g' | perl -pe 's/[^a-z0-9_\-\n]+/_/g')
+
+# version: jsdfjdfjfd_3u0a-bkb , or keepass:3u0a-bkb
+version=$(echo "$input" | perl -pe 's/.+[_:].*(u\d\w\d+\-\w+)+$/$1/g')
+
+[ -n "$version" ] || {
+   echo "Err: could not extract version from token"
+   exit 1
+}
+
+[ "$version" = "$input" ] && die "Err: no valid version"
+
+versiondir="pwdhash/$version"
+
+pwdir="$passwordstore/$versiondir"
+
+mkdir -p "$pwdir"
+
+tokenpath="$pwdir/$token"
+
+pass_tokenpath="$versiondir/$token"
+
+password=
+if [ -f "$tokenpath.gpg" ] ; then
+
+   password=$(pass show $pass_tokenpath)
+
+   if [ -n "$password" ] ; then
+      clipcopy "$password"
+      echo "OK(pass): password in clipboard from $pass_tokenpath"
+      exit 
+   fi
+fi
+
+masterpass=$(pass show "$versiondir")
+
+if [ -z "$masterpass" ] ; then
+    echo "Sorry: Please write masterpass manually"
+    read -s masterpass
+fi
+
+password=$(${py} "$pwdhash_py" "$input" "$masterpass")
+
+[ -n "$password" ] || die "Err: could not fetch password"
+
+clipcopy "$password"

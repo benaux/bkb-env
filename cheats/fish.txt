@@ -1,0 +1,9 @@
+fish shell
+==========
+
+
+## history on macos
+
+~/.local/share/fish/fish_history for 2.3.0 and later
+
+~/.config/fish/fish_history  

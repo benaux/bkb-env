@@ -1,6 +1,22 @@
 Android Development
 --------------------
 
+## problem with the emulator
+
+QT errors, panic , etc
+
+solution: take the correct path (not the old one), sth. like ~/opt/android-sdk/emulator/
+
+
+## Installing Android sdk
+
+target: sdk that can be used on its own and by the IDE:
+
+1. Installing Android Studio
+2. Moving sdk in ~/Library/Android/sdk to ~/opt/android-sdk
+3. update locatation in Appereance -. Env. Variables
+
+
 ### list Emulators
 
 emulator -list-avds

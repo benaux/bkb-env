@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Refreshing Browsers over SSH - AlexNisnevich.blog</title>
+    
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" id="googlefonts-css" href="http://fonts.googleapis.com/css?family=Coustard%7CActor&amp;ver=3.9.1" type="text/css" media="all">
+    <link rel="stylesheet" media="screen" href="/blog/stylesheets/screen.css" type="text/css" />
+    
+    <link href="http://feeds.feedburner.com/alexnisnevich" rel="alternate" title="AlexNisnevich.blog" type="application/atom+xml" />
+    
+    
+    <!-- google analytics async -->
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-345959-11']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    
+
+  </head>
+  <body>
+    <div id="page">
+      <div id="header">
+        <a href="/blog">AlexNisnevich.blog</a>
+        <a href="/portfolio" class="secondary_link">.portfolio</a>
+        <a href="/resume" class="secondary_link">.resume</a>
+      </div>
+      <div id="body">
+        <h2>Refreshing Browsers over SSH</h2>
+        <div class="postdate">Posted on 25 Jul 2012</div>
+
+<div class="post">
+<p>Today I was faced with the challenge of having to refresh a Chrome browser window on a networked Ubuntu machine via SSH. (Admittedly, I could have walked over to the computer in question and hit F5, but where's the fun in that?) This seemed like it would be simple, but I immediately ran into problems.</p>
+
+<h3>Opening Chrome</h3>
+
+<p>My first thought was to see if Google Chrome's <a href="http://peter.sh/experiments/chromium-command-line-switches/">command-line interface</a> has any support for interacting with existing windows, but unfortunately it doesn't. Oh well - if the browser is set to remember the last opened tabs, then it should just be a matter of closing and reopening the window: once I SSH in,</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">sudo killall chrome
+google-chrome <span class="p">&amp;</span> &gt; /dev/null</code></pre></div>
+
+
+<p>should be all it takes, right?</p>
+
+<p>Well, not quite:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">(</span>chromium-browser:3217<span class="o">)</span>: Gtk-WARNING **: cannot open display:</code></pre></div>
+
+
+<p>Hmm, Chrome refuses to start because it can't find a display. Since we're logged in remotely, we'll need to manually set the display to be the one that is currently being used:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">export </span><span class="nv">DISPLAY</span><span class="o">=</span>:0.0</code></pre></div>
+
+
+<p>After this, running <code>google-chrome</code> works. So far, so good.</p>
+
+<p>Now comes the next problem: the original window was full screen. Could I make the new instance be full screen as well?</p>
+
+<h3>Making it full screen</h3>
+
+<p>Suprisingly, there is no command-line switch for full-screen mode! The closest I could find was <a href="http://peter.sh/experiments/chromium-command-line-switches/#app">--app</a>, which didn't seem to do anything. Well, if we can't start the browser in full screen, can we at least make the window full screen after it starts?</p>
+
+<p>Here the <a href="http://www.semicomplete.com/projects/xdotool/">xdotool</a> keyboard/mouse simulator package can come in handy - we can use it to mimic an F11 keypress as follows:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># You might need to sudo apt-get install xdotool</span>
+xdotool search chrome windowactivate --sync key F11</code></pre></div>
+
+
+<p>Now all that's left is the matter of timing: we should only run <code>xdotool</code> once Chrome's window has opened, so let's give it a few seconds:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">sleep 2</code></pre></div>
+
+
+<h3>Putting it all together</h3>
+
+<p>The full sequence of commands to run is:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">export </span><span class="nv">DISPLAY</span><span class="o">=</span>:0.0
+sudo killall chrome
+google-chrome <span class="p">&amp;</span> &gt; /dev/null
+sleep 2
+xdotool search chrome windowactivate --sync key F11</code></pre></div>
+
+
+<p>Since I don't want to have to enter this every time I need to refresh the browser, I saved this into a shell file on the remote machine at <code>~/local/bin/google-chrome-fullscreen</code> and assigned appropriate permissions. Now, to refresh chrome on that machine, all I need to run is:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">ssh &lt;host&gt; <span class="s1">&#39;google-chrome-fullscreen &gt; /dev/null&#39;</span></code></pre></div>
+
+
+<p>(The <code>&gt; /dev/null</code> is necessary, apparently because otherwise the SSH session hangs while waiting for output.)</p>
+
+<h3>What about other browsers?</h3>
+
+<p>Similar method should work for other browsers. A generic browser-refresh script that works for me is:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#!/bin/sh</span>
+<span class="c"># refresh_fullscreen</span>
+
+<span class="nb">export </span><span class="nv">DISPLAY</span><span class="o">=</span>:0.0
+sudo killall <span class="nv">$1</span>
+<span class="nv">$1</span> <span class="p">&amp;</span> &gt; /dev/null
+sleep 2
+xdotool search <span class="nv">$1</span> windowactivate --sync key F11</code></pre></div>
+
+
+<p>where the usage is</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">refresh_fullscreen &lt;browser name or path&gt;</code></pre></div>
+
+
+<p>I've tried this with Firefox and Chromium and it seems to work fine, but your mileage may vary.</p>
+
+</div>
+
+
+<div id="related">
+  <h2>Related Posts</h2>
+  <ul class="posts">
+    
+      <li><span>01 Oct 2014</span> - <a href="/blog/2014/10/01/setting_up_flask_on_ec2.html">Setting up a Flask application on EC2 Ubuntu with Apache + mod_wsgi</a></li>
+    
+      <li><span>25 Mar 2013</span> - <a href="/blog/2013/03/25/steam_on_linux.html">My Experience with Steam for Linux (64-bit Linux Mint Debian Edition)</a></li>
+    
+      <li><span>19 Feb 2013</span> - <a href="/blog/2013/02/19/face_tracking_with_open_cv_and_a_usb_missile_launcher.html">Face Tracking with OpenCV and a USB Missile Launcher</a></li>
+    
+  </ul>
+</div>
+
+
+
+<div id="comments">
+  <h2>Comments</h2>
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+    var disqus_identifier = "/2012/07/25/browsers_and_ssh.html";
+    (function() {
+     var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+     dsq.src = 'http://alex-nisnevich-blog.disqus.com/embed.js';
+     (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript=alex-nisnevich-blog">comments powered by Disqus.</a></noscript>
+  <a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+
+      </div>
+      <div id="footer">
+        <span>alex [dot] nisnevich [at] gmail [dot] com</span>
+      </div>
+    </div>
+
+  
+    <a href="http://github.com/AlexNisnevich"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub" /></a>
+  
+
+    <script type="text/javascript" src="javascripts/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_CHTML"></script>
+
+    <script>
+      // helpers
+      jQuery.fn.reverse = [].reverse; // add reverse() to jQuery
+
+      // tags on index page
+      $("document").ready(function () {
+        $(".tag").click(function () {
+          if ($(this).hasClass("selected")) {
+            $("#archive").removeClass("filtered");
+            $(".tag").removeClass("selected");
+            $("#archive li").show();
+            window.location = '';
+          } else {
+            $("#archive").addClass("filtered");
+            $(".tag").addClass("selected");
+            $("#archive li").hide();
+            $("#archive li[data-tag=" + $(this).text() + "]").show();
+            window.location.hash = $(this).text();
+          }
+        })
+
+        // indicating new years on index page
+        var lastDate = null;
+        $("#archive time").reverse().each(function () {
+          var date = $(this).text().split("-")[0];
+          var rest = $(this).text().split("-").slice(1).join("-");
+          if (date != lastDate) {
+            lastDate = date;
+            $(this).html("<strong>" + date + "</strong>-" + rest);
+          }
+        });
+      });
+
+      // enable MathJax
+      MathJax.Hub.Config({
+        tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+        }
+      });
+      MathJax.Hub.Queue(function() {
+          var all = MathJax.Hub.getAllJax(), i;
+          for(i=0; i < all.length; i += 1) {
+              all[i].SourceElement().parentNode.className += ' has-jax';
+          }
+      });
+    </script>
+  </body>
+</html>

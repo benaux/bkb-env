@@ -1,0 +1,31 @@
+---
+title: print without newline
+via: https://stackoverflow.com/questions/493386/how-to-print-without-newline-or-space
+--- 
+
+
+
+	import sys
+	sys.stdout.write('.')
+
+You may also need to call
+
+sys.stdout.flush()
+to ensure stdout is flushed immediately.
+
+Python 2.6+
+From Python 2.6 you can import the print function from Python 3:
+
+from __future__ import print_function
+This allows you to use the Python 3 solution below.
+
+Python 3
+In Python 3, the print statement has been changed into a function. In Python 3, you can instead do:
+
+print('.', end='')
+This also works in Python 2, provided that you've used from __future__ import print_function.
+
+If you are having trouble with buffering, you can flush the output by adding flush=True keyword argument:
+
+print('.', end='', flush=True)
+share

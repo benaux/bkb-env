@@ -2,10 +2,10 @@
 
 # probably needs gpg
 
-pwuser='ben_2P0a.pwc'
+pwuser='ben_p2a0.pwc'
 
 # boot different stuff like: tmux, ssh keys into cache, 
-twikpw=$HOME/aux/tools/moreutils/cipher/twikpw
+twikpw=$HOME/tools/moreutils/cipher/twikpw
 [ -f "$twikpw" ] || { echo "Err: pw command in $twikpw not available"; exit 1; }
 
 # pwx=$HOME/tools/utils/pw
